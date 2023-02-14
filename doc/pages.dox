@@ -1,0 +1,40 @@
+/** 
+
+\page structure Library structure
+
+The overall library is thought to be simple to use and relies on class hierarchies. 
+This allows to use the same functions to detect (or render) any kind of patterns. 
+
+The library is composed of two main distinct branches which are:
+
+- Pattern detection (for pose estimation)
+- Pattern generation (for image rendering and layout exporting)
+
+Different types of patterns are available in both branches.
+
+The class hierarchies for the detection and the generation of patterns are presented in the figure below:
+
+![Hierarchy of the Vernier library](images/schemaHierarchy.png)
+
+Two class factories enable to create detectors or renderers from a JSON filename given as an input to the class. 
+
+All the JSON files must have the right entries to describe a pattern. Here is the example of a JSON file for a periodic pattern:
+
+```
+{
+    "PeriodicPattern": {           // name of the pattern class
+        "description": "Pattern created with Vernier library",
+        "date": "2020",
+        "author": "FEMTO-ST",
+        "unit": "micrometer",      // unit of the pattern period
+        "margin": 0.0,
+        "period": 20.0,            // wave length of the physical pattern
+        "nRows": 137,              // number of rows of the pattern
+        "nCols": 137,              // number of columns of the pattern 
+        "copyright": "Copyright (c) 2018-2023 ENSMM, UFC, CNRS."
+    }
+}
+```
+
+
+*/

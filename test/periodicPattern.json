@@ -1,0 +1,13 @@
+{
+    "PeriodicPattern": {
+        "description": "Example of periodic pattern",
+        "date": "2022",
+        "author": "FEMTO-ST",
+        "unit": "micrometer",
+        "margin": 0.0,
+        "period": 15.0,
+        "nRows": 81,
+        "nCols": 61,
+        "copyright": "Copyright (c) 2018-2022 UBFC, ENSMM, UFC, CNRS."
+    }
+}

@@ -1,0 +1,44 @@
+/* 
+ * This file is part of the VERNIER Library.
+ *
+ * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ */
+
+#ifndef CUSTOMPATTERNLAYOUT_HPP
+#define CUSTOMPATTERNLAYOUT_HPP
+
+#include "PatternLayout.hpp"
+
+namespace Vernier {
+
+    /** \brief Layout class for custom patterns (not periodic)
+     *  
+     */
+    class CustomPatternLayout : public PatternLayout {
+    protected:
+
+        std::vector<Rectangle> dots;
+        std::vector<double> dotsIntensity;
+
+        void writeJSON(std::ofstream & file);
+
+        void readJSON(rapidjson::Value & document);
+
+    public:
+
+        CustomPatternLayout();
+
+        void resize();
+
+        /** Initializes a pattern from a CSV file */
+        virtual void loadFromCSV(std::string filename);
+
+        double getIntensity(double x, double y);
+
+        void toRectangleVector(std::vector<Rectangle>& rectangleList);
+
+    };
+
+}
+
+#endif
