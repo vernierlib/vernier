@@ -259,11 +259,8 @@ namespace Vernier {
         }
     }
 
-#ifdef USE_OPENCV
-
     void PatternLayout::saveToPNG(std::string filename) {
         throw Exception("saveToPNG is not implemented for " + this->classname);
     }
-#endif // USE_OPENCV
 
 }

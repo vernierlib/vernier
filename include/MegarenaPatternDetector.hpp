@@ -28,7 +28,6 @@ namespace Vernier {
         int length1, length2;
         Thumbnail thumbnail;
         int codePosition1, codePosition2;
-        Eigen::ArrayXXcd pattern;
         Plane plane1Save, plane2Save;
 
         void readJSON(rapidjson::Value& document);
@@ -156,7 +155,10 @@ namespace Vernier {
         std::vector<Pose> getAll3DPoses();
         
         void showControlImages();
+        
+        int getInt(const std::string & attribute);
 
+        void* getObject(const std::string & attribute);
 
     };
 }

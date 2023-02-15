@@ -15,8 +15,8 @@ int main() {
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose of the pattern in the camera frame for rendering
-    double x = -2 * 15.0;
-    double y = -3 * 15.0;
+    double x = -200 * 15.0;
+    double y = -300 * 15.0;
     double z = 100;
     double rz = 0.23;
     double ry = 0.01;
@@ -30,7 +30,6 @@ int main() {
     ArrayXXd array(1024, 1024);
     patternRenderer.renderPerspectiveProjection(patternPose, array);
 
-    // Converting the array in opencv mat and showing it
-    imshow(layout->getDescription() + " (" + filename + ")", array2image(array));
-    waitKey();
+    // Showing the array (with OpenCV)
+    arrayShow(layout->getDescription() + " (" + filename + ")", array);
 }

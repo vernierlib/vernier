@@ -37,9 +37,7 @@ namespace Vernier {
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
 
-#ifdef USE_OPENCV
         void saveToPNG(std::string filename = "");
-#endif // USE_OPENCV
 
     };
 

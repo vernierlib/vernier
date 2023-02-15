@@ -32,7 +32,7 @@ int main() {
     detector->setDouble("sigma", 3);
     detector->setDouble("cropFactor", 0.4);
     detector->setDouble("pixelPeriod", 7);
-    detector->compute(array);
+    detector->compute(img);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
@@ -41,19 +41,6 @@ int main() {
     cout << "Camera-to-pattern transformation matrix:" << endl << detector->get2DPose().getCameraToPatternTransformationMatrix() << endl;
     cout << "------------------------------------------------------------------" << endl;
     cout << "Pattern-to-camera transformation matrix:" << endl << detector->get2DPose().getPatternToCameraTransformationMatrix() << endl;
-
-    
-    MegarenaPatternDetector *megarenaDetector = (MegarenaPatternDetector*)detector;
-    Eigen::VectorXd sequence = megarenaDetector->getThumbnail().getSequence1();
-    cout << "Sequence 1:" << sequence << endl;
-
-   
-    ofstream fichier("code.csv");
-    for (int i = 0; i<sequence.rows(); i++) {
-        fichier << sequence(i) <<"; ";
-    }
-    fichier.close();
-    
     
     // Showing image and its spectrum
     detector->showControlImages();

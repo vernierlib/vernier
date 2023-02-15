@@ -157,9 +157,8 @@ namespace Vernier {
         }
     }
 
-#ifdef USE_OPENCV
-
     void MegarenaPatternLayout::saveToPNG(std::string filename) {
+#ifdef USE_OPENCV
         int colStart = (int) (regionOfInterest.x / dotSize);
         int colStop = (int) ((regionOfInterest.x + regionOfInterest.width) / dotSize);
         int rowStart = (int) (regionOfInterest.y / dotSize);
@@ -177,8 +176,9 @@ namespace Vernier {
             filename = classname + ".png";
         }
         cv::imwrite(filename, image);
-    }
+#else
+        std::cout << "OpenCV is required to save PNG files." << std::endl;
 #endif // USE_OPENCV
-
+    }
 
 }

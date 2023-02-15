@@ -38,9 +38,7 @@ namespace Vernier {
 
         double getIntensity(double x, double y);
 
-#ifdef USE_OPENCV
         void saveToPNG(std::string filename = "");
-#endif // USE_OPENCV
 
         Rectangle getRegionOfInterest() const {
             return regionOfInterest;

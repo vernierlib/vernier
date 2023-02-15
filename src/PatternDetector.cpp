@@ -55,7 +55,7 @@ namespace Vernier {
         Eigen::ArrayXXd patternImage = mPatternMatrix.array();
         compute(patternImage);
     }
-
+ 
 #ifdef USE_OPENCV 
     void PatternDetector::compute(cv::Mat& image) {
         cv::Mat grayImage;
@@ -70,7 +70,8 @@ namespace Vernier {
         
         Eigen::MatrixXd patternMatrix;
         cv::cv2eigen(grayImage, patternMatrix);
-        Eigen::ArrayXXd patternArray(patternMatrix.rows(), patternMatrix.cols());
+        Eigen::ArrayXXd patternArray;
+        patternArray = patternMatrix.array();
         compute(patternArray);
     }
 #endif // USE_OPENCV
@@ -83,7 +84,7 @@ namespace Vernier {
         throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
-    double PatternDetector::getInt(const std::string & attribute) {
+    int PatternDetector::getInt(const std::string & attribute) {
         throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 

@@ -12,7 +12,6 @@ namespace Vernier {
     MegarenaPatternDetector::MegarenaPatternDetector()
     : PeriodicPatternDetector() {
         classname = "MegarenaPattern";
-        std::cout << "contructeur" << std::endl;
     }
 
 #ifdef USE_OPENCV
@@ -98,21 +97,14 @@ namespace Vernier {
     }
 
     void MegarenaPatternDetector::compute(Eigen::ArrayXXd& pattern) {
-        std::cout << "compute 1" << std::endl;
-        this->pattern = pattern;
         resize(pattern.rows(), pattern.cols());
-        std::cout << "compute 2" << std::endl;
-
         PeriodicPatternDetector::compute(pattern);
-        std::cout << "compute 3" << std::endl;
-
         computeAbsolutePose(pattern);
     }
 
 #ifdef USE_OPENCV
 
     void MegarenaPatternDetector::computePerspective(Eigen::ArrayXXd& pattern) {
-        this->pattern = pattern;
         resize(pattern.rows(), pattern.cols());
 
         PeriodicPatternDetector::computePerspective(pattern);
@@ -286,12 +278,12 @@ namespace Vernier {
 
     void MegarenaPatternDetector::showControlImages() {
 #ifdef USE_OPENCV  
-       // cv::imshow("Thumbnails", array2image(this->thumbnail.getThumbnailArray()));
-       //this->thumbnail.guiCodeDirection();
-        this->thumbnail.guiDisplayCode();
+        // cv::imshow("Thumbnails", array2image(this->thumbnail.getThumbnailArray()));
+        //this->thumbnail.guiCodeDirection();
+        //this->thumbnail.guiDisplayCode();
+        cv::imshow("Thumbnail",array2image(this->thumbnail.getThumbnailArray()));
 #endif // USE_OPENCV
         PeriodicPatternDetector::showControlImages();
-
     }
 
     void MegarenaPatternDetector::readJSON(rapidjson::Value& document) {
@@ -346,4 +338,29 @@ namespace Vernier {
             }
         }
     }
+
+    int MegarenaPatternDetector::getInt(const std::string & attribute) {
+        if (attribute == "codePosition1") {
+            return codePosition1;
+        } else if (attribute == "codePosition2") {
+            return codePosition2;
+        } else {
+            return PeriodicPatternDetector::getInt(attribute);
+        }
+    }
+
+    void* MegarenaPatternDetector::getObject(const std::string & attribute) {
+        if (attribute == "bitSequence") {
+            return &bitSequence;
+        } else if (attribute == "decoding") {
+            return &decoding;
+        } else if (attribute == "thumbnail") {
+            return &thumbnail;
+        } else {
+            return PatternDetector::getObject(attribute);
+        }
+    }
+
+
+
 }

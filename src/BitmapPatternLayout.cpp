@@ -82,9 +82,10 @@ namespace Vernier {
         }
     }
 
-#ifdef USE_OPENCV
+
 
     void BitmapPatternLayout::loadFromPNG(std::string filename, double period) {
+#ifdef USE_OPENCV        
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
         image1.convertTo(image, CV_8U);
         resize(period, image.rows, image.cols);
@@ -96,8 +97,10 @@ namespace Vernier {
                 bitmap(row, col) = (int) (image.at<char>(row, col) != 0);
             }
         }
-    }
+#else
+        std::cout << "OpenCV is required to load PNG files." << std::endl;
 #endif // USE_OPENCV
+    }
 
     void BitmapPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         rectangleList.clear();

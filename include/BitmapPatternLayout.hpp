@@ -31,10 +31,8 @@ namespace Vernier {
 
         void resize(double dotSize, int nRows, int nCols);
 
-#ifdef USE_OPENCV
-        /** Initializes a pattern from a PNG file with given period*/
+        /** Initializes a pattern from a PNG file with given period (requires OpenCV) */
         virtual void loadFromPNG(std::string filename, double period);
-#endif //USE_OPENCV
 
         double getIntensity(double x, double y);
 

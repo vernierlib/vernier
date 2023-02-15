@@ -59,10 +59,8 @@ namespace Vernier {
         /** Creates a JSON file corresponding to the pattern layout */
         void saveToJSON(std::string filename = "");
 
-#ifdef USE_OPENCV
-        /** Creates a PNG file corresponding to the pattern layout */
+        /** Creates a PNG file corresponding to the pattern layout (requires OpenCV) */
         virtual void saveToPNG(std::string filename = "");
-#endif // USE_OPENCV
 
         /** Initializes a pattern layout from a JSON file */
         void loadFromJSON(std::string filename);

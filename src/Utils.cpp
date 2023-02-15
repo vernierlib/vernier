@@ -9,12 +9,6 @@
 namespace Vernier {
 
 #ifdef USE_OPENCV
-
-    void drawPixel(cv::Mat& image, int x, int y, const cv::Scalar& color) {
-        //cv::rectangle(image, cv::Point(x, y), cv::Point(x, y), color);
-        throw Exception("Error in drawPixel");
-    }
-
     void drawCameraFrame(cv::Mat& image) {
         int cx = image.cols / 2;
         int cy = image.rows / 2;
@@ -56,8 +50,16 @@ namespace Vernier {
         spectrumAbs = array.abs();
         return array2image(spectrumAbs);
     }
-
 #endif // USE_OPENCV
+    
+    void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {
+#ifdef USE_OPENCV     
+        cv::imshow(windowTitle, array2image(array));
+        cv::waitKey();
+#else
+        std::cout << "OpenCV is required to show arrays." << std::endl;
+#endif // USE_OPENCV
+    }
 
     Eigen::ArrayXXd readPGMData(std::string filename, int& numrows, int& numcols) {
         int row = 0, col = 0;

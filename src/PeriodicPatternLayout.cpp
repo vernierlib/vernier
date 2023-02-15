@@ -84,9 +84,10 @@ namespace Vernier {
         }
     }
 
-#ifdef USE_OPENCV
+
 
     void PeriodicPatternLayout::saveToPNG(std::string filename) {
+#ifdef USE_OPENCV        
         cv::Mat image(2 * nRows, 2 * nCols, CV_8U);
         for (int col = 0; col < image.cols; col++) {
             double x = col * dotSize - originX;
@@ -99,7 +100,9 @@ namespace Vernier {
             filename = classname + ".png";
         }
         cv::imwrite(filename, image);
-    }
+#else
+        std::cout << "OpenCV is required to save PNG files." << std::endl;
 #endif // USE_OPENCV
+    }
 
 }

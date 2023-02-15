@@ -58,12 +58,12 @@ namespace Vernier {
     }
 
     void QRColumnPattern::draw(cv::Mat& image, cv::Scalar color) {
-        drawPixel(image, col, yA, color);
-        drawPixel(image, col, yB, color);
-        drawPixel(image, col, yC, color);
-        drawPixel(image, col, yD, color);
-        drawPixel(image, col, yE, color);
-        drawPixel(image, col, yF, color);
+//        drawPixel(image, col, yA, color);
+//        drawPixel(image, col, yB, color);
+//        drawPixel(image, col, yC, color);
+//        drawPixel(image, col, yD, color);
+//        drawPixel(image, col, yE, color);
+//        drawPixel(image, col, yF, color);
     }
 
     QRRowPattern::QRRowPattern(int row) : row(row) {
@@ -115,12 +115,12 @@ namespace Vernier {
     }
 
     void QRRowPattern::draw(cv::Mat& image, cv::Scalar color) {
-        drawPixel(image, xA, row, color);
-        drawPixel(image, xB, row, color);
-        drawPixel(image, xC, row, color);
-        drawPixel(image, xD, row, color);
-        drawPixel(image, xE, row, color);
-        drawPixel(image, xF, row, color);
+//        drawPixel(image, xA, row, color);
+//        drawPixel(image, xB, row, color);
+//        drawPixel(image, xC, row, color);
+//        drawPixel(image, xD, row, color);
+//        drawPixel(image, xE, row, color);
+//        drawPixel(image, xF, row, color);
     }
 
     bool QRRowPattern::isCrossing(QRColumnPattern& colPattern) {

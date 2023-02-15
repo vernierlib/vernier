@@ -110,6 +110,8 @@ namespace Vernier {
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
         cv::waitKey();
+#else
+        std::cout << "OpenCV is required to show the control images." << std::endl;
 #endif // USE_OPENCV
     }
 

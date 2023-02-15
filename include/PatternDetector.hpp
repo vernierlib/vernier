@@ -84,7 +84,7 @@ namespace Vernier {
         virtual double getDouble(const std::string & attribute);
 
         /** Returns the attribute value corresponding to the given name */
-        virtual double getInt(const std::string & attribute);
+        virtual int getInt(const std::string & attribute);
 
         /** Returns the attribute value corresponding to the given name */
         virtual std::string getString(const std::string & attribute);
