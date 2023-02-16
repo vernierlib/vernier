@@ -30,6 +30,6 @@ int main() {
     ArrayXXd array(1024, 1024);
     patternRenderer.renderPerspectiveProjection(patternPose, array);
 
-    // Showing the array (with OpenCV)
+    // Showing the array
     arrayShow(layout->getDescription() + " (" + filename + ")", array);
 }

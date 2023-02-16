@@ -11,7 +11,7 @@ int main() {
     string filename = "megarenaPattern";
     PatternLayout* layout = Layout::loadFromJSON(filename + ".json");
 
-    // Writing the layout in a SVG file
+    // Writing the layout in a PNG file
     layout->saveToPNG(filename + ".png");
 
     cout << filename + ".png generation completed." << endl;

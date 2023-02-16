@@ -15,26 +15,26 @@ int main() {
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose for rendering
-    double x = 6.0;
-    double y = 3.0;
+    double x = 0.0;
+    double y = 0.0;
     double z = 10000;
     double alpha = 0.2;
-    double beta = 0.5;
-    double gamma = 0.3;
+    double beta = 0.3;
+    double gamma = 0.4;
     double pixelSize = 2.0;
     Pose patternPose = Pose(x, y, z, alpha, beta, gamma, pixelSize);
     cout << "------------------------------------------------------------------" << endl;
     cout << "Pattern pose:     " << patternPose.toString() << endl;
 
     // Rendering
-    Eigen::ArrayXXd array(512, 512);
+    ArrayXXd array(512, 512);
     double focalLength = 10000.0;
     layout->renderPerspectiveProjection(patternPose, focalLength, array);
  
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->setDouble("sigma", 3);
+    detector->setDouble("sigma", 6);
     detector->setDouble("cropFactor", 0.4);
     detector->setDouble("pixelPeriod", 7);
     detector->compute(array);

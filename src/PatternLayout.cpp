@@ -221,7 +221,8 @@ namespace Vernier {
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
-                Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
+                //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
+                Eigen::Vector3d pointImage(col, row, 1);
                 Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
                 outputImage(row, col) = this->getIntensity(pointPattern.x(), pointPattern.y());
             }
@@ -229,6 +230,12 @@ namespace Vernier {
     }
 
     void PatternLayout::renderPerspectiveProjection(Pose pose, double focalLength, Eigen::ArrayXXd & outputImage) {
+        if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
+            throw Exception("The number of rows must be positive and even.");
+        }
+        if (outputImage.cols() <= 0 || outputImage.cols() % 2 == 1) {
+            throw Exception("The number of columns must be positive and even.");
+        }
 
         double cx = outputImage.cols() / 2.0;
         double cy = outputImage.rows() / 2.0;
@@ -251,7 +258,8 @@ namespace Vernier {
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
-                Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
+                //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
+                Eigen::Vector3d pointImage(col, row, 1);
                 Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
                 pointPattern /= pointPattern.z();
                 outputImage(row, col) = this->getIntensity(pointPattern.x(), pointPattern.y());

@@ -73,10 +73,10 @@ namespace Vernier {
 
         /** Renders an image with an orthographic projection defined by:
          * 
-         *       [ u ]   [ 1  0  0  cx ]         [ x ]
-         *   s * [ v ] = [ 0  1  0  cy ] * cTp * [ y ]
-         *       [ 1 ]   [ 0  0  0   1 ]         [ z ]
-         *                                       [ 1 ]
+         *       [ u ]   [ 1/s  0    0  cx ]         [ x ]
+         *       [ v ] = [ 0    1/s  0  cy ] * cTp * [ y ]
+         *       [ 1 ]   [ 0    0    0   1 ]         [ z ]
+         *                                           [ 1 ]
          * 
          *   with cx and cy the coordinates of the image center and s the scale factor (pixel size)
          * 
@@ -87,12 +87,12 @@ namespace Vernier {
 
         /** Renders an image with a perspective projection defined by the pinhole camera model:
          * 
-         *        [ u ]   [ f  0  cx  0 ]         [ x ]
-         *    s * [ v ] = [ 0  f  cy  0 ] * cTp * [ y ]
-         *        [ 1 ]   [ 0  0   1  0 ]         [ z ]
-         *                                        [ 1 ]
+         *        [ u ]   [ f/s  0  cx  0 ]         [ x ]
+         *        [ v ] = [ 0  f/s  cy  0 ] * cTp * [ y ]
+         *        [ 1 ]   [ 0    0   1  0 ]         [ z ]
+         *                                          [ 1 ]
          * 
-         *   with cx and cy the coordinates of the image center, f the focal length and s the scale factor (pixel size)
+         *   with cx and cy the coordinates of the image center, f the focal length (metric) and s the scale factor (pixel size)
          * 
          *	\param pose: pattern pose (defines cTp)
          *	\param outputImage: any size double array 

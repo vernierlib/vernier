@@ -26,6 +26,6 @@ int main() {
     ArrayXXd array(512, 512);
     patternRenderer.renderOrthographicProjection(patternPose, array);
 
-    // Showing the array (with OpenCV)
+    // Showing the array
     arrayShow(layout->getDescription() + " (" + filename + ")", array);
 }

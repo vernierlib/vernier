@@ -60,27 +60,22 @@ namespace Vernier {
          */
         double getAngle();
 
-        /** Returns the position of the plane at the center of this one
-         */
-        //double getPosition(double physicalPeriod, double row, double col);
-
-        /** Returns the position of the pattern in micrometers. It can return either the relative or the absolute position
+        /** Returns the position of the pattern in the same unit that the period length. It can return either the relative or the absolute position
          *
-         *	\param physicalPeriod: physical period of the pattern in micrometers
+         *	\param physicalPeriod: physical period of the pattern
          *	\param row: row where the position is computed
          *	\param col: column where the position is computed
          *	\param codePosition: (optionnal) position of the pattern in the code
          */
         double getPosition(double physicalPeriod, double row = 0.0, double col = 0.0, int codePosition = 0);
 
-        /** Returns the position of the pattern in pixel. It can return either the relative or the absolute position
+        /** Returns the position of the pattern in pixels. It can return either the relative or the absolute position
          *
-         *	\param physicalPeriod: physical period of the pattern in micrometers
          *	\param row: row where the position is computed
          *	\param col: column where the position is computed
          *	\param codePosition: (optionnal) position of the pattern in the code
          */
-        double getPositionPixels(double physicalPeriod, double row = 0.0, double col = 0.0, int codePosition = 0);
+        double getPositionPixels(double row = 0.0, double col = 0.0, int codePosition = 0);
 
         /** Take the three coefficients and apply a negative sens
          *	i.e. take a*x + b*y + c = z

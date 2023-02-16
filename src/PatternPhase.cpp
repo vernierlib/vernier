@@ -11,7 +11,7 @@ namespace Vernier {
     PatternPhase::PatternPhase() {
         this->peaksSearchMethod = 2;
         this->pixelPeriod = 0.0;
-        setSigma(5);
+        setSigma(3);
     }
 
     PatternPhase::PatternPhase(int nRows, int nCols) : PatternPhase() {
@@ -404,10 +404,12 @@ namespace Vernier {
 
         cv::rectangle(image, cv::Rect(regressionPlane.getColOffset(), regressionPlane.getRowOffset(), regressionPlane.getNColsCropped(), regressionPlane.getNRowsCropped()), cv::Scalar(255, 0, 0));
 
-//        int cx = image.cols / 2;
-//        int cy = image.rows / 2;
-//        cv::line(image, cv::Point(0, cy), cv::Point(image.cols, cy), cv::Scalar(255, 0, 0));
-//        cv::line(image, cv::Point(cx, 0), cv::Point(cx, image.rows), cv::Scalar(255, 0, 0));
+        int cx = image.cols / 2;
+        int cy = image.rows / 2;
+        //        cv::line(image, cv::Point(0, cy), cv::Point(image.cols, cy), cv::Scalar(255, 0, 0));
+        //        cv::line(image, cv::Point(cx, 0), cv::Point(cx, image.rows), cv::Scalar(255, 0, 0));
+        cv::line(image, cv::Point(cx - 20, cy), cv::Point(cx + 20, cy), cv::Scalar(255, 0, 0));
+        cv::line(image, cv::Point(cx, cy - 20), cv::Point(cx, cy + 20), cv::Scalar(255, 0, 0));
 
         return image;
     }

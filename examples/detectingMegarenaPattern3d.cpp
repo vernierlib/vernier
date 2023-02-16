@@ -26,14 +26,12 @@ int main() {
     cout << "Pattern pose:     " << patternPose.toString() << endl;
     
     // Rendering
-    Eigen::ArrayXXd array(512, 512);
+    ArrayXXd array(512, 512);
     layout->renderOrthographicProjection(patternPose, array);
 
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->setDouble("sigma", 3);
-    detector->setDouble("cropFactor", 0.4);
     detector->setDouble("pixelPeriod", 7);
     detector->compute(array);
 

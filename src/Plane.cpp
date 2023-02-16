@@ -37,7 +37,8 @@ namespace Vernier {
     }
 
     double Plane::getPhase(double row, double col) {
-        double phiCenter = planeCoefficients.x() * (col - 0.5) + planeCoefficients.y() * (row - 0.5) + planeCoefficients.z();
+        //double phiCenter = planeCoefficients.x() * (col - 0.5) + planeCoefficients.y() * (row - 0.5) + planeCoefficients.z(); // Le 0.5 permet de recaler au centre de l'image entre les deux pixels du milieu
+        double phiCenter = planeCoefficients.x() * col + planeCoefficients.y() * row + planeCoefficients.z();
         return phiCenter;
     }
 
@@ -46,8 +47,7 @@ namespace Vernier {
     }
 
     double Plane::getPosition(double physicalPeriod, double row, double col, int codePosition) {
-        double long phiCenter = planeCoefficients.x() * (col - 0.5) + planeCoefficients.y() * (row - 0.5) + planeCoefficients.z(); // Le 0.5 permet de recaler au centre de l'image entre les deux pixels du milieu
-
+        double phiCenter = getPhase(row, col);
         if (physicalPeriod != 0) {
             return physicalPeriod * (phiCenter / (2.0 * PI) + (double) abs(codePosition));
         } else {
@@ -55,8 +55,8 @@ namespace Vernier {
         }
     }
 
-    double Plane::getPositionPixels(double physicalPeriod, double row, double col, int codePosition) {
-        double long phiCenter = planeCoefficients.x() * (col - 0.5) + planeCoefficients.y() * (row - 0.5) + planeCoefficients.z();
+    double Plane::getPositionPixels(double row, double col, int codePosition) {
+        double phiCenter = getPhase(row, col);
         return (1 / (sqrt(pow(planeCoefficients(0), 2) + pow(planeCoefficients(1), 2)))) * (phiCenter + (double) abs(codePosition));
     }
 

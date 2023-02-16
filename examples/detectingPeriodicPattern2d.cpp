@@ -14,7 +14,7 @@ int main() {
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose for rendering
-    double x = 6.0;
+    double x = 5.0;
     double y = 3.0;
     double alpha = 0.2;
     double pixelSize = 2.0;
@@ -23,14 +23,12 @@ int main() {
     cout << "Pattern pose:   " << patternPose.toString() << endl;
 
     // Rendering
-    Eigen::ArrayXXd array(512, 512);
+    ArrayXXd array(512, 512);
     layout->renderOrthographicProjection(patternPose, array);
 
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->setDouble("sigma", 3);
-    detector->setDouble("cropFactor", 0.4);
     detector->compute(array);
 
     // Printing results 
