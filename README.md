@@ -17,7 +17,7 @@ The [documentation](https://vernierlib.github.io/) is automatically generated fr
 
 The Vernier library is cross-platform and required a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
 
-* Visual C++ 2017/2019 on Windows (64-bit)
+* Visual C++ 2019/2022 on Windows (64-bit)
 <!--- * GNU C++ 3.8.x on Cygwin -->
 * Clang 14.0 on Mac OS X (64-bit)
 
@@ -25,18 +25,23 @@ Users can build and run the unit tests on their platform/compiler.
 
 ## Installation
 
-The library uses following software as its dependencies:
+The library uses [CMake](https://cmake.org/) as a general build tool and 
+[Doxygen](http://www.doxygen.org) to generate the documentation
 
-* [CMake](https://cmake.org/) as a general build tool
-* (optional) [Doxygen](http://www.doxygen.org) to build documentation
-* (optional) [FFTW](https://www.fftw.org/) for improved performance 
-* (optional) [OpenCV](https://opencv.org/) for compatibility and GUI
-
-Many other packages are included inside the repositories ([see all dependencies](3rdparty/README.md)).
+Many packages are included inside the repositories ([see all dependencies](3rdparty/README.md)).
 
 ### Windows instructions
 
-The package comes with all binaries files for Windows 64bits including OpenCV and FFTW ones.
+The package comes with all binaries files for Windows 64bits except OpenCV ones.
+
+First you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
+
+1. Download the OpenCV release from [https://opencv.org/releases/](https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-windows.exe)
+2. Unpack the self-extracting archive in a local directory, for example `C:\lib\opencv`
+3. Set the environment variables as follows:
+	- Go to `Control Panel -> System and Security -> System Advanced System Settings -> Environment Variables`
+	- Add a new user variable with name `OpenCV_DIR` and value `C:\lib\opencv\build`
+<!---     - Edit the user variable Path and add a new directory `C:\lib\opencv\build\x64\vc16\bin` (location of the dll files) -->
 
 To get everything running with Visual Studio (and other EDI):
 
@@ -52,12 +57,16 @@ Alternatively, you can use VS Code.
 With Linux, some dependencies must be installed first using homebrew:
 
 	> sudo apt-get install cmake eigen libtool libmatio
-	
-Optionnally you may installed OpenCV and FFTW (recommanded):
 
-	> sudo apt-get install opencv fftw
+Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
 
-Then, open a terminal and go to the directory of the package
+	> sudo apt-get install opencv
+
+Optionnally you may install OpenCV and FFTW (recommanded for speed):
+
+	> sudo apt-get install fftw
+
+Finally, open a terminal and go to the directory of the package
 
 	> mkdir build
 	> cd build
@@ -69,12 +78,16 @@ Then, open a terminal and go to the directory of the package
 With OSX, some dependencies must be installed first using homebrew:
 
 	% brew install autoconfig automake cmake eigen libtool libmatio
-	
-Optionnally you may installed OpenCV and FFTW (recommanded):
 
-	% brew install opencv fftw
+Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
 
-Then, open a terminal and go to the directory of the package
+	% brew install opencv
+
+Optionnally you may install OpenCV and FFTW (recommanded for speed):
+
+	% brew install fftw
+
+Finally, open a terminal and go to the directory of the package
 
 	% mkdir build
 	% cd build
