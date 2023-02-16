@@ -30,7 +30,7 @@ namespace Vernier {
             double* src = image64d.ptr<double>(row);
             uchar* dst = image8u.ptr<uchar>(row);
             for (int col = 0; col < image64d.cols; ++col) {
-                char value;
+                uchar value;
                 if (src[col] >= 1.0) {
                     value = (uchar) 255;
                 } else if (src[col] <= 0.0) {
