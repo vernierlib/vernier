@@ -11,13 +11,13 @@ using namespace Eigen;
 int main() {
 
     // Loading the layout
-    string filename = "periodicPattern.json";
+    string filename = "megarenaPattern.json";
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose for rendering
-    double x = 0.0;
-    double y = 0.0;
-    double z = 10000;
+    double x = -200.0*15;
+    double y = -300.0*15;
+    double z = 5000;
     double alpha = 0.2;
     double beta = 0.3;
     double gamma = 0.4;
@@ -28,14 +28,14 @@ int main() {
 
     // Rendering
     ArrayXXd array(512, 512);
-    double focalLength = 10000.0;
+    double focalLength = 5000.0;
     layout->renderPerspectiveProjection(patternPose, focalLength, array);
  
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->setDouble("sigma", 6);
-    detector->setDouble("cropFactor", 0.4);
+    detector->setDouble("sigma", 5);
+    detector->setDouble("cropFactor", 0.8);
     detector->setDouble("pixelPeriod", 7);
     detector->compute(array);
 
