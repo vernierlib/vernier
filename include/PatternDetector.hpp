@@ -26,7 +26,8 @@ namespace Vernier {
         std::string date;
         std::string author;
         std::string unit;
-
+        bool orthographicProjection;
+        
         virtual void readJSON(rapidjson::Value& document);
 
         friend class Detector;
@@ -48,10 +49,11 @@ namespace Vernier {
         /** Initializes a pattern detector from a JSON file */
         void loadFromJSON(std::string filename);
 
-        /** Estimates the pose of the pattern in an image stored in a double array */
+        /** Estimates the pose of the pattern in an image stored in a double array          
+         */
         virtual void compute(Eigen::ArrayXXd& image) = 0;
 
-        /** Estimates the pose of the pattern in the image stored in a char array
+        /** Estimates the pose of the pattern in the image stored in a char array 
          *
          * @param data: pointer to the data of the pattern
          * @param rows: number of rows of the given data array
@@ -61,20 +63,20 @@ namespace Vernier {
 
 #ifdef USE_OPENCV
         /** Estimates the pose of the pattern in the image stored in a OpenCV Mat */
-        virtual void compute(cv::Mat& image); 
+        void compute(cv::Mat& image);
 #endif // USE_OPENCV
-        
+
         /** Display the images to check the pattern detector working 
          * (do nothing if OpenCV is not available) */
         virtual void showControlImages() = 0;
 
         /** Returns the 2D pose of the pattern */
         virtual Pose get2DPose() = 0;
-        
+
         /** Returns the most likely 3D pose of the pattern */
         virtual Pose get3DPose() = 0;
 
-        /** Returns the four possible 3D pose the pattern */      
+        /** Returns the four possible 3D pose the pattern */
         virtual std::vector<Pose> getAll3DPoses() = 0;
 
         /** Returns the attribute address corresponding to the given name */
@@ -97,6 +99,12 @@ namespace Vernier {
 
         /** Sets the attribute value corresponding to the given name */
         virtual void setString(const std::string & attribute, std::string value);
+        
+        /** Tells the detector to estimate the pose with a perspective projection */
+        void setPerspectiveMode(bool isPerspective = true);
+        
+        /** Tells the detector to estimate the pose with an orthographic projection */
+        void setOrthographicMode(bool isOrthographic = true);
 
     };
 

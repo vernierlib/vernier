@@ -100,6 +100,84 @@ namespace Vernier {
 #endif 
     }
 
+    void PatternPhase::computePhaseGradients(int& betaSign, int& gammaSign) {
+#ifdef USE_OPENCV     
+        // Direction 1
+        int sideOffset = regressionPlane.getColOffset();
+        Eigen::ArrayXXd phaseCropped = unwrappedPhase1.block(sideOffset, sideOffset, unwrappedPhase1.rows() - 2 * sideOffset, unwrappedPhase1.cols() - 2 * sideOffset);
+
+        cv::Mat phase1img(phaseCropped.rows(), phaseCropped.cols(), CV_64FC1, phaseCropped.data());
+        cv::Mat phaseResult(phase1img.rows, phase1img.cols, CV_64FC1);
+
+        double a = plane1.getA();
+        double b = plane1.getB();
+
+        cv::Mat phaseDerived(phase1img.rows - 1, phase1img.cols - 1, CV_64FC1);
+        cv::Mat sobelX, sobelY;
+
+        for (int i = 0; i < phase1img.rows - 1; i++) {
+            for (int j = 0; j < phase1img.cols - 1; j++) {
+                double dXdU = -(phaseCropped(i + 1, j) - phaseCropped(i, j)) * a / (pow(a, 2) + pow(b, 2));
+                double dYdU = (phaseCropped(i, j + 1) - phaseCropped(i, j)) * b / (pow(a, 2) + pow(b, 2));
+                phaseDerived.at<double>(i, j) = dXdU + dYdU;
+            }
+        }
+
+        cv::Sobel(phaseDerived, sobelX, CV_64F, 1, 0);
+        double mean = cv::mean(sobelX)[0];
+        betaSign = (mean > 0) - (mean < 0);
+
+        //std::cout << "mean first direction SOBEL : " << mean << std::endl;
+        //cv::normalize(phaseDerived, phaseDerived, 1, 0, cv::NORM_MINMAX);
+        //cv::imshow("phase 1 derived", phaseDerived);
+
+        // Direction 2
+        phaseCropped = unwrappedPhase2.block(sideOffset, sideOffset, unwrappedPhase2.rows() - 2 * sideOffset, unwrappedPhase2.cols() - 2 * sideOffset);
+        cv::Mat phase2img(phaseCropped.rows(), phaseCropped.cols(), CV_64FC1, phaseCropped.data());
+        cv::Mat phase2HSV;
+        cv::Mat phase2BGR;
+        cv::normalize(phase2img, phase2img, 255, 0, cv::NORM_MINMAX);
+        phase2img.convertTo(phase2BGR, CV_8UC3);
+        cv::cvtColor(phase2BGR, phase2BGR, cv::COLOR_GRAY2BGR);
+
+        a = plane2.getA();
+        b = plane2.getB();
+
+        //cv::applyColorMap(phase2BGR, phase2HSV, cv::COLORMAP_VIRIDIS);
+        //cv::line(phase2HSV, cv::Point(phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Point(3 * phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Scalar(255, 255, 255), 1);
+        //cv::line(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 4), cv::Point(phase2HSV.cols / 2, 3 * phase2HSV.rows / 4), cv::Scalar(255, 255, 255), 1);
+        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(3 * phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Scalar(255, 255, 255), 3);
+        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2, 3 * phase2HSV.rows / 4), cv::Scalar(255, 255, 255), 3);
+        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2 + 30.0 / a, phase2HSV.rows / 2 + 30.0 / b), cv::Scalar(0, 0, 255), 3);
+        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2 - 30.0 / b, phase2HSV.rows / 2 + 30.0 / a), cv::Scalar(0, 0, 255), 3);
+        //cv::imshow("phase 2", phase2HSV);
+        //cv::imwrite("D:/Nextcloud2/classic3Dpatterns/analysis_scripts/perspectivePhaseEvolution/phaseMap.png", phase2HSV);
+
+        for (int i = 0; i < phase1img.rows - 1; i++) {
+            for (int j = 0; j < phase1img.cols - 1; j++) {
+                double dXdV = -(phaseCropped(i + 1, j) - phaseCropped(i, j)) * a / (pow(a, 2) + pow(b, 2));
+                double dYdV = (phaseCropped(i, j + 1) - phaseCropped(i, j)) * b / (pow(a, 2) + pow(b, 2));
+                phaseDerived.at<double>(i, j) = dXdV + dYdV;
+            }
+        }
+
+        cv::Sobel(phaseDerived, sobelY, CV_64F, 0, 1);
+        double mean2 = cv::mean(sobelY)[0];
+
+        //std::cout << "mean second direction SOBEL : " << mean2 << std::endl;
+        gammaSign = (mean2 > 0) - (mean2 < 0);
+
+#else
+        std::cout << "OpenCV is required to compute phase gradients." << std::endl;
+        betaSign = 1;
+        gammaSign = 1;
+#endif // USE_OPENCV
+    }
+
+
+
+
+
 #ifdef USE_OPENCV
 
     void PatternPhase::computeWeakPerspective(Eigen::ArrayXXd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod) {

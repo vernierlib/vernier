@@ -19,6 +19,7 @@ namespace Vernier {
         double physicalPeriod;
         PatternPhase patternPhase;
         Plane plane1, plane2;
+        int betaSign, gammaSign;
 
         void readJSON(rapidjson::Value& document);
 
@@ -43,9 +44,8 @@ namespace Vernier {
 
         std::vector<Pose> getAll3DPoses();
 
-#ifdef USE_OPENCV
-        void computePerspective(Eigen::ArrayXXd& array);
-#endif // USE_OPENCV
+        /** Returns the 3D pose of the pattern (assuming a perspective projection with a pin-hole camera model) */
+        Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
 
         /** return the reference to the pattern phase class */
         PatternPhase * getPatternPhase() {

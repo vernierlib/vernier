@@ -107,7 +107,8 @@ namespace Vernier {
     void MegarenaPatternDetector::computePerspective(Eigen::ArrayXXd& pattern) {
         resize(pattern.rows(), pattern.cols());
 
-        PeriodicPatternDetector::computePerspective(pattern);
+        this->setPerspectiveMode();
+        PeriodicPatternDetector::compute(pattern);
 
         plane1 = PeriodicPatternDetector::getPlane1();
         plane2 = PeriodicPatternDetector::getPlane2();

@@ -33,18 +33,14 @@ namespace Vernier {
 
         plane1 = patternPhase.getPlane1();
         plane2 = patternPhase.getPlane2();
+
+        if (orthographicProjection) {
+            betaSign = 1;
+            gammaSign = 1;
+        } else {
+            patternPhase.computePhaseGradients(betaSign, gammaSign);
+        }
     }
-
-#ifdef USE_OPENCV
-
-    void PeriodicPatternDetector::computePerspective(Eigen::ArrayXXd& array) {
-        int betaSign, gammaSign;
-        patternPhase.computeWeakPerspective(array, betaSign, gammaSign, patternPhase.getPixelPeriod());
-
-        plane1 = patternPhase.getPlane1();
-        plane2 = patternPhase.getPlane2();
-    }
-#endif // USE_OPENCV
 
     Pose PeriodicPatternDetector::get2DPose() {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
@@ -56,7 +52,10 @@ namespace Vernier {
     }
 
     Pose PeriodicPatternDetector::get3DPose() {
-        return getAll3DPoses()[0];
+        Pose pose = getAll3DPoses()[0];
+        pose.beta *= betaSign;
+        pose.gamma *= gammaSign;
+        return pose;
     }
 
     std::vector<Pose> PeriodicPatternDetector::getAll3DPoses() {

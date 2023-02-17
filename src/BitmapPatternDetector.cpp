@@ -183,7 +183,8 @@ namespace Vernier {
         PeriodicPatternDetector::setSigma(0.0001);
 //        PeriodicPatternDetector::resize(nRows, nCols);
 
-        PeriodicPatternDetector::computePerspective(pattern);
+        this->setPerspectiveMode();
+        PeriodicPatternDetector::compute(pattern);
 
         computeAbsolutePose(pattern);
     }

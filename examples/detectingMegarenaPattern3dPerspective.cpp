@@ -19,7 +19,7 @@ int main() {
     double y = -300.0*15;
     double z = 5000;
     double alpha = 0.2;
-    double beta = 0.3;
+    double beta = -0.3;
     double gamma = 0.4;
     double pixelSize = 2.0;
     Pose patternPose = Pose(x, y, z, alpha, beta, gamma, pixelSize);
@@ -37,17 +37,12 @@ int main() {
     detector->setDouble("sigma", 5);
     detector->setDouble("cropFactor", 0.8);
     detector->setDouble("pixelPeriod", 7);
+    detector->setPerspectiveMode();
     detector->compute(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
-    cout << "Estimated pose 0: " << detector->getAll3DPoses()[0].toString() << endl;
-    cout << "------------------------------------------------------------------" << endl;
-    cout << "Estimated pose 1: " << detector->getAll3DPoses()[1].toString() << endl;
-    cout << "------------------------------------------------------------------" << endl;
-    cout << "Estimated pose 2: " << detector->getAll3DPoses()[2].toString() << endl;
-    cout << "------------------------------------------------------------------" << endl;
-    cout << "Estimated pose 3: " << detector->getAll3DPoses()[3].toString() << endl;
+    cout << "Estimated pose: " << detector->get3DPose().toString() << endl;
 
     // Showing image and is spectrum
     detector->showControlImages();

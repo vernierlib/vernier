@@ -9,6 +9,7 @@
 namespace Vernier {
 
     PatternDetector::PatternDetector() {
+        orthographicProjection = true;
     }
 
     void PatternDetector::readJSON(rapidjson::Value& document) {
@@ -132,5 +133,13 @@ namespace Vernier {
         }
     }
 
+    void PatternDetector::setPerspectiveMode(bool isPerspective) {
+        this->orthographicProjection = !isPerspective;
+    }
+        
+    /** Tells the detector to estimate the pose with an orthographic projection */
+    void PatternDetector::setOrthographicMode(bool isOrthographic) {
+        this->orthographicProjection = isOrthographic;
+    }
 }
 

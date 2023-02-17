@@ -73,6 +73,11 @@ namespace Vernier {
          *	\param image: image of a pattern in an ArrayXXcd form
          */
         void compute(Eigen::ArrayXXcd& image);
+        
+        /** Computes the phase gradients to find the sign of the out-of-plane 
+         * angles (works only with perspective projection)
+         */
+        void computePhaseGradients(int& betaSign, int& gammaSign);
 
 #ifdef USE_OPENCV
         void computeWeakPerspective(Eigen::ArrayXXd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod);
