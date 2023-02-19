@@ -62,7 +62,7 @@ Then, you may install OpenCV (optionnal but higly recommanded for GUI and image 
 
 	> sudo apt-get install opencv
 
-Optionnally you may install OpenCV and FFTW (recommanded for speed):
+Optionnally you may install FFTW (recommanded for speed):
 
 	> sudo apt-get install fftw
 
@@ -83,7 +83,7 @@ Then, you may install OpenCV (optionnal but higly recommanded for GUI and image 
 
 	% brew install opencv
 
-Optionnally you may install OpenCV and FFTW (recommanded for speed):
+Optionnally you may install FFTW (recommanded for speed):
 
 	% brew install fftw
 
