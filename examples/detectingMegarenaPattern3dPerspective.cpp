@@ -15,8 +15,8 @@ int main() {
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose for rendering
-    double x = -200.0*15;
-    double y = -300.0*15;
+    double x = -200.0 * 15;
+    double y = -300.0 * 15;
     double z = 5000;
     double alpha = 0.2;
     double beta = -0.3;
@@ -30,7 +30,7 @@ int main() {
     ArrayXXd array(512, 512);
     double focalLength = 5000.0;
     layout->renderPerspectiveProjection(patternPose, focalLength, array);
- 
+
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
@@ -43,7 +43,11 @@ int main() {
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
     cout << "Estimated pose: " << detector->get3DPose().toString() << endl;
+    cout << "------------------------------------------------------------------" << endl;
 
     // Showing image and is spectrum
     detector->showControlImages();
+    cout << "Press <Enter> to exit..." << endl;
+    cin.get();
+
 }

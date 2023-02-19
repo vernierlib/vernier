@@ -38,7 +38,10 @@ int main() {
     cout << "Camera-to-pattern transformation matrix:" << endl << detector->get2DPose().getCameraToPatternTransformationMatrix() << endl;
     cout << "------------------------------------------------------------------" << endl;
     cout << "Pattern-to-camera transformation matrix:" << endl << detector->get2DPose().getPatternToCameraTransformationMatrix() << endl;
+    cout << "------------------------------------------------------------------" << endl;
 
-    // Showing image and its spectrum
+    // Showing image and is spectrum
     detector->showControlImages();
+    cout << "Press <Enter> to exit..." << endl;
+    cin.get();
 }

@@ -21,7 +21,7 @@ int main() {
     Pose patternPose = Pose(x, y, alpha, pixelSize);
     cout << "------------------------------------------------------------------" << endl;
     cout << "Pattern pose:   " << patternPose.toString() << endl;
-    
+
     // Rendering
     ArrayXXd array(512, 512);
     layout->renderOrthographicProjection(patternPose, array);
@@ -39,7 +39,10 @@ int main() {
     cout << "Camera-to-pattern transformation matrix:" << endl << detector->get2DPose().getCameraToPatternTransformationMatrix() << endl;
     cout << "------------------------------------------------------------------" << endl;
     cout << "Pattern-to-camera transformation matrix:" << endl << detector->get2DPose().getPatternToCameraTransformationMatrix() << endl;
-    
+    cout << "------------------------------------------------------------------" << endl;
+
     // Showing image and its spectrum
     detector->showControlImages();
+    cout << "Press <Enter> to exit..." << endl;
+    cin.get();
 }

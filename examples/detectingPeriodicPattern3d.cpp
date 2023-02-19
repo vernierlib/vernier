@@ -43,7 +43,10 @@ int main() {
     cout << "Estimated pose 2: " << detector->getAll3DPoses()[2].toString() << endl;
     cout << "------------------------------------------------------------------" << endl;
     cout << "Estimated pose 3: " << detector->getAll3DPoses()[3].toString() << endl;
+    cout << "------------------------------------------------------------------" << endl;
 
-    // Showing image and its spectrum
+    // Showing image and is spectrum
     detector->showControlImages();
+    cout << "Press <Enter> to exit..." << endl;
+    cin.get();
 }
