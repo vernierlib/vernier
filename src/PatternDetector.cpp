@@ -56,8 +56,9 @@ namespace Vernier {
         Eigen::ArrayXXd patternImage = mPatternMatrix.array();
         compute(patternImage);
     }
- 
+
 #ifdef USE_OPENCV 
+
     void PatternDetector::compute(cv::Mat& image) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
@@ -68,7 +69,7 @@ namespace Vernier {
 
         grayImage.convertTo(grayImage, CV_64F);
         cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
-        
+
         Eigen::MatrixXd patternMatrix;
         cv::cv2eigen(grayImage, patternMatrix);
         Eigen::ArrayXXd patternArray;
@@ -77,16 +78,35 @@ namespace Vernier {
     }
 #endif // USE_OPENCV
 
+    void PatternDetector::setPerspectiveMode(bool isPerspective) {
+        this->orthographicProjection = !isPerspective;
+    }
+
+    /** Tells the detector to estimate the pose with an orthographic projection */
+    void PatternDetector::setOrthographicMode(bool isOrthographic) {
+        this->orthographicProjection = isOrthographic;
+    }
+
     void* PatternDetector::getObject(const std::string & attribute) {
-            throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     double PatternDetector::getDouble(const std::string & attribute) {
-        throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     int PatternDetector::getInt(const std::string & attribute) {
-        throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+    }
+
+    bool PatternDetector::getBool(const std::string & attribute) {
+        if (attribute == "orthographicProjection") {
+            return orthographicProjection;
+        } else if (attribute == "perspectiveProjection") {
+            return !orthographicProjection;
+        } else {
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+        }
     }
 
     std::string PatternDetector::getString(const std::string & attribute) {
@@ -103,16 +123,26 @@ namespace Vernier {
         } else if (attribute == "unit") {
             return unit;
         } else {
-            throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
         }
     }
 
     void PatternDetector::setDouble(const std::string & attribute, double value) {
-        throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
     }
 
     void PatternDetector::setInt(const std::string & attribute, int value) {
-        throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+    }
+
+    void PatternDetector::setBool(const std::string & attribute, bool value) {
+        if (attribute == "orthographicProjection") {
+            orthographicProjection = value;
+        } else if (attribute == "perspectiveProjection") {
+            orthographicProjection = !value;
+        } else {
+            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        }
     }
 
     void PatternDetector::setString(const std::string & attribute, std::string value) {
@@ -129,17 +159,9 @@ namespace Vernier {
         } else if (attribute == "unit") {
             unit = value;
         } else {
-            throw Exception("The attribute " + attribute + " is not accessible or defined in class " + classname + ".");
+            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
         }
     }
 
-    void PatternDetector::setPerspectiveMode(bool isPerspective) {
-        this->orthographicProjection = !isPerspective;
-    }
-        
-    /** Tells the detector to estimate the pose with an orthographic projection */
-    void PatternDetector::setOrthographicMode(bool isOrthographic) {
-        this->orthographicProjection = isOrthographic;
-    }
 }
 

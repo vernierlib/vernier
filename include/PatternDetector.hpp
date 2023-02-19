@@ -27,7 +27,7 @@ namespace Vernier {
         std::string author;
         std::string unit;
         bool orthographicProjection;
-        
+
         virtual void readJSON(rapidjson::Value& document);
 
         friend class Detector;
@@ -79,6 +79,12 @@ namespace Vernier {
         /** Returns the four possible 3D pose the pattern */
         virtual std::vector<Pose> getAll3DPoses() = 0;
 
+        /** Tells the detector to estimate the pose with a perspective projection */
+        void setPerspectiveMode(bool isPerspective = true);
+
+        /** Tells the detector to estimate the pose with an orthographic projection */
+        void setOrthographicMode(bool isOrthographic = true);
+
         /** Returns the attribute address corresponding to the given name */
         virtual void* getObject(const std::string & attribute);
 
@@ -87,6 +93,9 @@ namespace Vernier {
 
         /** Returns the attribute value corresponding to the given name */
         virtual int getInt(const std::string & attribute);
+
+        /** Returns the attribute value corresponding to the given name */
+        virtual bool getBool(const std::string & attribute);
 
         /** Returns the attribute value corresponding to the given name */
         virtual std::string getString(const std::string & attribute);
@@ -98,13 +107,10 @@ namespace Vernier {
         virtual void setInt(const std::string & attribute, int value);
 
         /** Sets the attribute value corresponding to the given name */
+        virtual void setBool(const std::string & attribute, bool value);
+
+        /** Sets the attribute value corresponding to the given name */
         virtual void setString(const std::string & attribute, std::string value);
-        
-        /** Tells the detector to estimate the pose with a perspective projection */
-        void setPerspectiveMode(bool isPerspective = true);
-        
-        /** Tells the detector to estimate the pose with an orthographic projection */
-        void setOrthographicMode(bool isOrthographic = true);
 
     };
 
