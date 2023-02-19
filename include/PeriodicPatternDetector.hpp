@@ -28,7 +28,6 @@ namespace Vernier {
         /** Constructs a detector for periodic patterns
          *
          * \param physicalPeriod: physical period of the pattern
-         * \param approxPixelPeriod: approximate length of one period in pixels
          */
         PeriodicPatternDetector(double physicalPeriod = 1.0);
 

@@ -16,7 +16,6 @@ namespace Vernier {
     /** \brief Uses a given periodic array and its phases planes, computes the thumbnail used as a model-reduction*/
     class Thumbnail {
     private:
-        int width, height;
         int orderMin1, orderMin2;
         int length1, length2;
         Eigen::VectorXd codeOrientation;
@@ -25,7 +24,6 @@ namespace Vernier {
         Eigen::VectorXd numberWhiteRefDots1, cumulWhiteRefDots1, numberBackRefDots1, cumulBackRefDots1, numberCodingDots1, cumulCodingDots1, meanCodingDots1, meanBackRefDots1, meanWhiteRefDots1;
         Eigen::VectorXd numberWhiteRefDots2, cumulWhiteRefDots2, numberBackRefDots2, cumulBackRefDots2, numberCodingDots2, cumulCodingDots2, meanCodingDots2, meanBackRefDots2, meanWhiteRefDots2;
         int MSB1, MSB2;
-        Plane plane1, plane2;
         Cell cell;
 
     public:
@@ -81,6 +79,7 @@ namespace Vernier {
         /** Graphical feedback of thumbnail*/
 #ifdef USE_OPENCV
         /** Method used to display the thumbnail*/
+        cv::Mat getMeanDotsImage(int rectWidth = 10);
         void guiMeanDots(cv::Mat& thumbnailImg);
 
         void drawThumbnailDetection(cv::Mat& thumbnailImg);

@@ -104,6 +104,8 @@ namespace Vernier {
         cv::Mat getPeaksImage();
         
         cv::Mat getFringesImage();
+        
+        cv::Mat getImage();
 #endif // USE_OPENCV
 
         /** Returns the shifted spectrum */

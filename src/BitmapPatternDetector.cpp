@@ -324,15 +324,15 @@ namespace Vernier {
         return plane2;
     }
 
-    void BitmapPatternDetector::removeNanFromArray(Eigen::ArrayXXd& image) {
-        for (int i = 0; i < image.rows(); i++) {
-            for (int j = 0; j < image.cols(); j++) {
-                if (isnan(image(i, j))) {
-                    image(i, j) = 0;
-                }
-            }
-        }
-    }
+//    void BitmapPatternDetector::removeNanFromArray(Eigen::ArrayXXd& image) {
+//        for (int i = 0; i < image.rows(); i++) {
+//            for (int j = 0; j < image.cols(); j++) {
+//                if (isnan(image(i, j))) {
+//                    image(i, j) = 0;
+//                }
+//            }
+//        }
+//    }
 
     void BitmapPatternDetector::takeSnapshot(Eigen::ArrayXXcd& snapshot, double radius, double xCenter, double yCenter) {
         if (isInverted) {

@@ -39,12 +39,12 @@ namespace Vernier {
         bool isSymetric, isInverted;
         int thumbLength1, thumbLength2;
 
-        /** Remove all the "Not A Number" terms of an array 
-         *
-         *   \param image: input image array with NaN to be removed
-         *
-         **/
-        void removeNanFromArray(Eigen::ArrayXXd &image);
+//        /** Remove all the "Not A Number" terms of an array 
+//         *
+//         *   \param image: input image array with NaN to be removed
+//         *
+//         **/
+//        void removeNanFromArray(Eigen::ArrayXXd &image);
 
         /** Takes a snapchot of an overall image to keep only a rectangle of interest centered around the periodic pattern bitmap 
          *

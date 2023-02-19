@@ -9,19 +9,20 @@
 namespace Vernier {
 
 #ifdef USE_OPENCV
+
     void drawCameraFrame(cv::Mat& image) {
         int cx = image.cols / 2;
         int cy = image.rows / 2;
         cv::line(image, cv::Point(cx, cy), cv::Point(cx + cx / 5, cy), cv::Scalar(0, 0, 255));
         cv::line(image, cv::Point(cx, cy), cv::Point(cx, cy + cy / 5), cv::Scalar(0, 255, 0));
     }
-    
+
     cv::Mat array2image(Eigen::ArrayXXd array) {
         array -= array.minCoeff();
         array /= array.maxCoeff();
         Eigen::MatrixXd matrix;
         matrix = array.array();
-  
+
         cv::Mat image64d;
         cv::eigen2cv(matrix, image64d);
         cv::Mat image8u(image64d.rows, image64d.cols, CV_8UC4);
@@ -51,7 +52,7 @@ namespace Vernier {
         return array2image(spectrumAbs);
     }
 #endif // USE_OPENCV
-    
+
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {
 #ifdef USE_OPENCV     
         cv::imshow(windowTitle, array2image(array));
@@ -139,4 +140,13 @@ namespace Vernier {
         }
     }
 
+    void removeNanFromArray(Eigen::ArrayXXd& array) {
+        for (int i = 0; i < array.rows(); i++) {
+            for (int j = 0; j < array.cols(); j++) {
+                if (isnan(array(i, j))) {
+                    array(i, j) = 0;
+                }
+            }
+        }
+    }
 }

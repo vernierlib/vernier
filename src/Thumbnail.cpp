@@ -373,6 +373,46 @@ namespace Vernier {
 
 #ifdef USE_OPENCV
 
+    cv::Mat Thumbnail::getMeanDotsImage(int rectWidth) {
+        //----------------------------------------------------------------------
+        // feedback sur l'intensit� des points
+        //----------------------------------------------------------------------
+        Eigen::ArrayXXd meanWhiteDots = cumulWhiteDots / numberWhiteDots;
+        Eigen::ArrayXXd meanBackgroundDots = cumulBackgroundDots / numberBackgroundDots;
+
+        cv::Mat thumbnailImg(meanWhiteDots.cols() * rectWidth, meanWhiteDots.rows() * rectWidth, CV_64FC4);
+
+
+        //        cv::Mat  thumbnailImg=array2image(cumulWhiteDots);
+        //        cv::resize(thumbnailImg, thumbnailImg, cv::Size(meanWhiteDots.rows() * rectWidth, meanWhiteDots.cols() * rectWidth));
+
+        for (int col = 0; col < meanWhiteDots.cols(); col++) {
+            for (int row = 0; row < meanWhiteDots.rows(); row++) {
+                int xPos = row * rectWidth; // transposition
+                int yPos = col * rectWidth;
+                double colorDot = meanWhiteDots(row, col);
+                //                if (meanWhiteDots(row, col)>meanBackgroundDots(row, col)) {
+                //                    colorDot = 1;
+                //                } else {
+                //                    colorDot = 0;
+                //                }
+
+
+
+                // double colorDot = numberWhiteDots(row, col)/(numberWhiteDots(row, col)+numberBackgroundDots(row, col));
+
+
+
+                cv::Scalar cvColorDot = cv::Scalar(colorDot, colorDot, colorDot);
+                cv::rectangle(thumbnailImg, cv::Point2d(xPos, yPos), cv::Point2d(xPos + rectWidth, yPos + rectWidth), cvColorDot, cv::FILLED);
+            }
+        }
+
+        //cv::normalize(thumbnailImg, thumbnailImg, 1, 0, cv::NORM_MINMAX);
+
+        return thumbnailImg;
+    }
+
     void Thumbnail::guiMeanDots(cv::Mat& thumbnailImg) {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points

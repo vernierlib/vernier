@@ -491,6 +491,11 @@ namespace Vernier {
 
         return image;
     }
+    
+    cv::Mat PatternPhase::getImage() {
+        cv::Mat image = array2image(spatial);
+        return image;
+    }
 #endif //USE_OPENCV
 
     Eigen::ArrayXXcd & PatternPhase::getSpectrum() {
