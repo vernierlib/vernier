@@ -32,19 +32,18 @@ namespace Vernier {
             unwrappedPhase1.resize(nRows, nCols);
             unwrappedPhase2.resize(nRows, nCols);
             spectrum.resize(nRows, nCols);
-
         }
     }
 
     void PatternPhase::compute(Eigen::ArrayXXd& image) {
         spatial.resize(image.rows(), image.cols());
-        spatial.real() = image.array();
+        spatial.real() = image;
         compute(spatial);
     }
 
     void PatternPhase::compute(Eigen::ArrayXXcd& patternArray) {
         resize(patternArray.rows(), patternArray.cols());
-
+        
         fft.compute(patternArray, spectrum);
         Spectrum::shift(spectrum, spectrumShifted);
         spectrumFiltered1 = spectrumShifted;

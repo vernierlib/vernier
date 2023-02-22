@@ -17,7 +17,7 @@ namespace Vernier {
         cv::line(image, cv::Point(cx, cy), cv::Point(cx, cy + cy / 5), cv::Scalar(0, 255, 0));
     }
 
-    cv::Mat array2image(Eigen::ArrayXXd array) {
+    cv::Mat array2image(Eigen::ArrayXXd & array) {
         array -= array.minCoeff();
         array /= array.maxCoeff();
         Eigen::MatrixXd matrix;
@@ -38,7 +38,7 @@ namespace Vernier {
                     value = (uchar) 0;
                 } else {
                     value = (uchar) (src[col]*255);
-                }
+                } 
                 dst[4 * col] = dst[4 * col + 1] = dst[4 * col + 2] = value;
                 dst[4 * col + 3] = (uchar) 255;
             }
@@ -46,8 +46,8 @@ namespace Vernier {
         return image8u;
     }
 
-    cv::Mat array2image(Eigen::ArrayXXcd array) {
-        Eigen::ArrayXXd spectrumAbs(array.rows(), array.cols());
+    cv::Mat array2image(Eigen::ArrayXXcd & array) {
+        Eigen::ArrayXXd spectrumAbs;
         spectrumAbs = array.abs();
         return array2image(spectrumAbs);
     }

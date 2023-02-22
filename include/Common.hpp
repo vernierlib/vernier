@@ -10,15 +10,16 @@
 // preventing the definitions of min and max as macros somewhere in windows.h
 #define NOMINMAX  
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <stddef.h>
+#include <cstdio>
+#include <cstdlib>
+#include <cstddef>
 #include <iostream>
 #include <fstream>
 #include <sstream>
 #include <exception>
 #include <string>
-#include <math.h>
+#include <cmath>
+#include <complex>
 #include <ctime>
 #include <vector>
 #include <algorithm>

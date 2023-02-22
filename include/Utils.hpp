@@ -31,9 +31,9 @@ namespace Vernier {
 #ifdef USE_OPENCV
     void drawCameraFrame(cv::Mat & image);
 
-    cv::Mat array2image(Eigen::ArrayXXd array);
+    cv::Mat array2image(Eigen::ArrayXXd & array);
 
-    cv::Mat array2image(Eigen::ArrayXXcd array);
+    cv::Mat array2image(Eigen::ArrayXXcd & array);
 #endif // USE_OPENCV
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);
