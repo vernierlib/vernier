@@ -105,4 +105,24 @@ namespace Vernier {
 #endif // USE_OPENCV
     }
 
+    double PeriodicPatternLayout::getDouble(const std::string & attribute) {
+        if (attribute == "physicalPeriod" || attribute == "period") {
+            return period;
+        } else if (attribute == "dotSize") {
+            return dotSize;
+        } else {
+            return PatternLayout::getDouble(attribute);
+        }
+    }
+
+    int PeriodicPatternLayout::getInt(const std::string & attribute) {
+       if (attribute == "nRows") {
+            return nRows;
+        } else if (attribute == "dotSize") {
+            return nCols;
+        } else {
+            return PatternLayout::getInt(attribute);
+        }
+    }
+    
 }

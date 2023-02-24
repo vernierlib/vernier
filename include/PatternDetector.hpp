@@ -84,6 +84,20 @@ namespace Vernier {
 
         /** Tells the detector to estimate the pose with an orthographic projection */
         void setOrthographicMode(bool isOrthographic = true);
+        
+        bool isOrthographicMode();
+        
+        bool isPerspectiveMode();
+
+        std::string getAuthor();
+
+        std::string getDate();
+
+        std::string getDescription();
+
+        std::string getUnit();
+
+        std::string getClassname();
 
         /** Returns the attribute address corresponding to the given name */
         virtual void* getObject(const std::string & attribute);

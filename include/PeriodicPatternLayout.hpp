@@ -38,6 +38,11 @@ namespace Vernier {
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
 
         void saveToPNG(std::string filename = "");
+        
+        double getDouble(const std::string & attribute);
+
+        int getInt(const std::string & attribute);
+
 
     };
 

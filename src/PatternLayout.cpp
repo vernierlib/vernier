@@ -271,4 +271,141 @@ namespace Vernier {
         throw Exception("saveToPNG is not implemented for " + this->classname);
     }
 
+    std::string PatternLayout::getAuthor() {
+        return author;
+    }
+
+    std::string PatternLayout::getDate() {
+        return date;
+    }
+
+    std::string PatternLayout::getDescription() {
+        return description;
+    }
+
+    std::string PatternLayout::getUnit() {
+        return unit;
+    }
+
+    std::string PatternLayout::getClassname() {
+        return classname;
+    }
+
+    double PatternLayout::getOriginX() {
+        return originX;
+    }
+
+    double PatternLayout::getOriginY() {
+        return originY;
+    }
+
+    double PatternLayout::getMargin() {
+        return margin;
+    }
+
+    double PatternLayout::getHeight() {
+        return height;
+    }
+
+    double PatternLayout::getWidth() {
+        return width;
+    }
+
+    void PatternLayout::setAuthor(std::string author) {
+        this->author = author;
+    }
+
+    void PatternLayout::setDate(std::string date) {
+        this->date = date;
+    }
+
+    void PatternLayout::setDescription(std::string description) {
+        this->description = description;
+    }
+
+    void PatternLayout::setUnit(std::string unit) {
+        this->unit = unit;
+    }
+
+    void PatternLayout::setMargin(double margin) {
+        this->margin = margin;
+    }
+
+    void* PatternLayout::getObject(const std::string & attribute) {
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+    }
+
+    double PatternLayout::getDouble(const std::string & attribute) {
+        if (attribute == "originX") {
+            return originX;
+        } else if (attribute == "originY") {
+            return originY;
+        } else if (attribute == "margin") {
+            return margin;
+        } else if (attribute == "width") {
+            return width;
+        } else if (attribute == "height") {
+            return height;
+        } else {
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+        }
+    }
+
+    int PatternLayout::getInt(const std::string & attribute) {
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+    }
+
+    bool PatternLayout::getBool(const std::string & attribute) {
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+    }
+
+    std::string PatternLayout::getString(const std::string & attribute) {
+        if (attribute == "classname") {
+            return classname;
+        } else if (attribute == "date") {
+            return date;
+        } else if (attribute == "description") {
+            return description;
+        } else if (attribute == "author") {
+            return author;
+        } else if (attribute == "unit") {
+            return unit;
+        } else {
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
+        }
+    }
+
+    void PatternLayout::setDouble(const std::string & attribute, double value) {
+        if (attribute == "margin") {
+            margin = value;
+        } else {
+            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        }
+    }
+
+    void PatternLayout::setInt(const std::string & attribute, int value) {
+        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+    }
+
+    void PatternLayout::setBool(const std::string & attribute, bool value) {
+        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+    }
+
+    void PatternLayout::setString(const std::string & attribute, std::string value) {
+        if (attribute == "classname") {
+            classname = value;
+        } else if (attribute == "date") {
+            date = value;
+        } else if (attribute == "description") {
+            description = value;
+        } else if (attribute == "author") {
+            author = value;
+        } else if (attribute == "unit") {
+            unit = value;
+        } else {
+            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        }
+    }
+
+
 }

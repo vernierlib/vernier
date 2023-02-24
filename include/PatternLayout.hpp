@@ -101,65 +101,62 @@ namespace Vernier {
          */
         void renderPerspectiveProjection(Pose pose, double focalLength, Eigen::ArrayXXd & outputImage);
 
-        std::string getAuthor() const {
-            return author;
-        }
+        std::string getAuthor();
 
-        std::string getDate() const {
-            return date;
-        }
+        std::string getDate();
 
-        std::string getDescription() const {
-            return description;
-        }
+        std::string getDescription();
 
-        std::string getUnit() const {
-            return unit;
-        }
+        std::string getUnit();
 
-        std::string getClassname() const {
-            return classname;
-        }
+        std::string getClassname();
 
-        double getOriginX() const {
-            return originX;
-        }
+        double getOriginX();
 
-        double getOriginY() const {
-            return originY;
-        }
+        double getOriginY();
 
-        double getMargin() const {
-            return margin;
-        }
+        double getMargin();
 
-        double getHeight() const {
-            return height;
-        }
+        double getHeight();
 
-        double getWidth() const {
-            return width;
-        }
+        double getWidth();
 
-        void setAuthor(std::string author) {
-            this->author = author;
-        }
+        void setAuthor(std::string author);
 
-        void setDate(std::string date) {
-            this->date = date;
-        }
+        void setDate(std::string date);
 
-        void setDescription(std::string description) {
-            this->description = description;
-        }
+        void setDescription(std::string description);
 
-        void setUnit(std::string unit) {
-            this->unit = unit;
-        }
+        void setUnit(std::string unit);
 
-        void setMargin(double margin) {
-            this->margin = margin;
-        }
+        void setMargin(double margin);
+
+        /** Returns the attribute address corresponding to the given name */
+        virtual void* getObject(const std::string & attribute);
+
+        /** Returns the attribute value corresponding to the given name */
+        virtual double getDouble(const std::string & attribute);
+
+        /** Returns the attribute value corresponding to the given name */
+        virtual int getInt(const std::string & attribute);
+
+        /** Returns the attribute value corresponding to the given name */
+        virtual bool getBool(const std::string & attribute);
+
+        /** Returns the attribute value corresponding to the given name */
+        virtual std::string getString(const std::string & attribute);
+
+        /** Sets the attribute value corresponding to the given name */
+        virtual void setDouble(const std::string & attribute, double value);
+
+        /** Sets the attribute value corresponding to the given name */
+        virtual void setInt(const std::string & attribute, int value);
+
+        /** Sets the attribute value corresponding to the given name */
+        virtual void setBool(const std::string & attribute, bool value);
+
+        /** Sets the attribute value corresponding to the given name */
+        virtual void setString(const std::string & attribute, std::string value);
 
     };
 

@@ -108,7 +108,7 @@ namespace Vernier {
 #ifdef USE_OPENCV  
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
-        cv::waitKey(1);
+        cv::waitKey();
 #else
         std::cout << "OpenCV is required to show the control images." << std::endl;
 #endif // USE_OPENCV
@@ -153,7 +153,7 @@ namespace Vernier {
     }
 
     double PeriodicPatternDetector::getDouble(const std::string & attribute) {
-        if (attribute == "physicalPeriod") {
+        if (attribute == "physicalPeriod" || attribute == "period") {
             return physicalPeriod;
         } else if (attribute == "sigma") {
             return patternPhase.getSigma();

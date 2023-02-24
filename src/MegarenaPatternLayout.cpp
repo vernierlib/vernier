@@ -181,4 +181,22 @@ namespace Vernier {
 #endif // USE_OPENCV
     }
 
+    Rectangle MegarenaPatternLayout::getRegionOfInterest() {
+        return regionOfInterest;
+    }
+
+    void MegarenaPatternLayout::setRegionOfInterest(Rectangle regionOfInterest) {
+        this->regionOfInterest = regionOfInterest;
+    }
+
+    void* MegarenaPatternLayout::getObject(const std::string & attribute) {
+        if (attribute == "regionOfInterest") {
+            return &regionOfInterest;
+        } else if (attribute == "bitSequence") {
+            return &bitSequence;
+        } else {
+            return PatternLayout::getObject(attribute);
+        }
+    }
+
 }

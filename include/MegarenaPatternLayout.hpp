@@ -40,13 +40,12 @@ namespace Vernier {
 
         void saveToPNG(std::string filename = "");
 
-        Rectangle getRegionOfInterest() const {
-            return regionOfInterest;
-        }
+        Rectangle getRegionOfInterest();
 
-        void setRegionOfInterest(Rectangle regionOfInterest) {
-            this->regionOfInterest = regionOfInterest;
-        }
+        void setRegionOfInterest(Rectangle regionOfInterest);
+        
+        void* getObject(const std::string & attribute);
+
 
     };
 

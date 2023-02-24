@@ -87,6 +87,34 @@ namespace Vernier {
         this->orthographicProjection = isOrthographic;
     }
 
+    bool PatternDetector::isOrthographicMode() {
+        return orthographicProjection;
+    }
+
+    bool PatternDetector::isPerspectiveMode() {
+        return !orthographicProjection;
+    }
+
+    std::string PatternDetector::getAuthor() {
+        return author;
+    }
+
+    std::string PatternDetector::getDate() {
+        return date;
+    }
+
+    std::string PatternDetector::getDescription() {
+        return description;
+    }
+
+    std::string PatternDetector::getUnit() {
+        return unit;
+    }
+
+    std::string PatternDetector::getClassname() {
+        return classname;
+    }
+
     void* PatternDetector::getObject(const std::string & attribute) {
         throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
