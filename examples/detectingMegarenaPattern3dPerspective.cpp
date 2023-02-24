@@ -47,7 +47,4 @@ int main() {
 
     // Showing image and is spectrum
     detector->showControlImages();
-    cout << "Press <Enter> to exit..." << endl;
-    cin.get();
-
 }
