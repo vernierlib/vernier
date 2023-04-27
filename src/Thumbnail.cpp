@@ -390,7 +390,8 @@ namespace Vernier {
             for (int row = 0; row < meanWhiteDots.rows(); row++) {
                 int xPos = row * rectWidth; // transposition
                 int yPos = col * rectWidth;
-                double colorDot = meanWhiteDots(row, col);
+                //double colorDot = meanWhiteDots(row, col);
+                double colorDot = meanWhiteDots(row, col)-meanBackgroundDots(row, col);
                 //                if (meanWhiteDots(row, col)>meanBackgroundDots(row, col)) {
                 //                    colorDot = 1;
                 //                } else {
@@ -851,4 +852,34 @@ namespace Vernier {
             }
         }
     }
+    
+    void Thumbnail::rotate270() {
+        numberWhiteDots.transposeInPlace();
+        numberWhiteDots.rowwise().reverseInPlace();
+        cumulWhiteDots.transposeInPlace();
+        cumulWhiteDots.rowwise().reverseInPlace();
+        numberBackgroundDots.transposeInPlace();
+        numberBackgroundDots.rowwise().reverseInPlace();
+        cumulBackgroundDots.transposeInPlace();
+        cumulBackgroundDots.rowwise().reverseInPlace();
+       
+    }
+    
+    void Thumbnail::rotate180() {
+        numberWhiteDots.reverseInPlace();
+        cumulWhiteDots.reverseInPlace();
+        numberBackgroundDots.reverseInPlace();
+        cumulBackgroundDots.reverseInPlace();
+    }
+    
+    void Thumbnail::rotate90() {
+        numberWhiteDots.transposeInPlace();
+        numberWhiteDots.colwise().reverseInPlace();
+        cumulWhiteDots.transposeInPlace();
+        cumulWhiteDots.colwise().reverseInPlace();
+        numberBackgroundDots.transposeInPlace();
+        numberBackgroundDots.colwise().reverseInPlace();
+        cumulBackgroundDots.transposeInPlace();
+        cumulBackgroundDots.colwise().reverseInPlace();
+   }
 }

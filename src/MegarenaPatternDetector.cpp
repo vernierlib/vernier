@@ -60,18 +60,25 @@ namespace Vernier {
         plane2Save = plane2;
 
         if (codePosition1 >= 0 && codePosition2 >= 0) {
-            // no change		
+            // no change	
+            std::cout<<"code1>0 && code2>0"<<std::endl;
         } else if (codePosition1 < 0 && codePosition2 >= 0) {
             std::swap(codePosition1, codePosition2);
             std::swap(plane1, plane2);
             plane2.revertCoefficients();
+            //std::cout<<"code1<0 && code2>0"<<std::endl;
+            thumbnail.rotate270();
         } else if (codePosition1 >= 0 && codePosition2 < 0) {
             std::swap(codePosition1, codePosition2);
             std::swap(plane1, plane2);
             plane1.revertCoefficients();
+            //std::cout<<"code1>0 && code2<0"<<std::endl;
+            thumbnail.rotate90();
         } else {
             plane1.revertCoefficients();
             plane2.revertCoefficients();
+            //std::cout<<"code1<0 && code2<0"<<std::endl;
+            thumbnail.rotate180();
         }
 
     }

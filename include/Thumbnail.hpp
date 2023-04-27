@@ -126,6 +126,10 @@ namespace Vernier {
 
 
         double computeSTD2(Eigen::ArrayXXd image);
+        
+        void rotate90();
+        void rotate180();
+        void rotate270();
     };
 }
 #endif // !THUMBNAIL_HPP
