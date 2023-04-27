@@ -61,7 +61,7 @@ namespace Vernier {
 
         if (codePosition1 >= 0 && codePosition2 >= 0) {
             // no change	
-            std::cout<<"code1>0 && code2>0"<<std::endl;
+            //std::cout<<"code1>0 && code2>0"<<std::endl;
         } else if (codePosition1 < 0 && codePosition2 >= 0) {
             std::swap(codePosition1, codePosition2);
             std::swap(plane1, plane2);
