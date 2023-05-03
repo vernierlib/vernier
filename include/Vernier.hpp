@@ -31,6 +31,6 @@
 #include "Detector.hpp"
 #include "BitmapPatternLayout.hpp"
 #include "Layout.hpp"
-#include "PatternRenderer.hpp"
+
 
 #endif

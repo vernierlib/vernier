@@ -14,21 +14,18 @@ int main() {
     string filename = "megarenaPattern.json";
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
-    // Setting the pose of the pattern in the camera frame for rendering
-    double x = -200 * 15.0;
-    double y = -300 * 15.0;
-    double z = 100;
-    double rz = 0.23;
-    double ry = 0.01;
-    double rx = 0.02;
-    Pose patternPose = Pose(x, y, z, rz, ry, rx);
+    // Setting the pose for rendering
+    double x = -6000.0;
+    double y = -3000.0;
+    double alpha = 0.2;
+    double beta = 0.3;
+    double gamma = 0.4;
+    double pixelSize = 2.0;
+    Pose patternPose = Pose(x, y, 0, alpha, beta, gamma, pixelSize);
 
     // Rendering
-    double pixelSize = 1.5;
-    double focalLength = 50.0;
-    PatternRenderer patternRenderer(layout, pixelSize, focalLength);
-    ArrayXXd array(1024, 1024);
-    patternRenderer.renderPerspectiveProjection(patternPose, array);
+    ArrayXXd array(512, 512);
+    layout->renderOrthographicProjection(patternPose, array);
 
     // Showing the array
     arrayShow(layout->getDescription() + " (" + filename + ")", array);
