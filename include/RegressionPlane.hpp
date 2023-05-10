@@ -53,6 +53,8 @@ namespace Vernier {
          *
          */
         Plane compute(const Eigen::ArrayXXd& unwrappedPhase);
+        
+        Plane computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask);
 
         /** Sets the ratio of pixels to crop from the border*/
         void setCropFactor(double cropFactor);

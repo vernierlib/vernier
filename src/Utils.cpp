@@ -51,6 +51,23 @@ namespace Vernier {
         spectrumAbs = array.abs();
         return array2image(spectrumAbs);
     }
+    
+    Eigen::ArrayXXd image2array(cv::Mat & image) {
+        cv::Mat grayImage;
+        if (image.channels() > 1) {
+            cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
+        } else {
+            grayImage = image;
+        }
+
+        grayImage.convertTo(grayImage, CV_64F);
+        cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
+        Eigen::MatrixXd patternMatrix;
+        cv::cv2eigen(grayImage, patternMatrix);
+        Eigen::ArrayXXd patternArray;
+        patternArray = patternMatrix.array();
+        return patternArray;
+    }
 #endif // USE_OPENCV
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {

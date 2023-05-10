@@ -54,6 +54,30 @@ namespace Vernier {
         return Plane(planeCoefficients);
     }
 
+    Plane RegressionPlane::computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask) {
+        resize(unwrappedPhase.rows(), unwrappedPhase.cols());
+        Eigen::Vector3d planeCoefficients;
+        Eigen::Vector3d vecMean;
+
+        phaseCropped = unwrappedPhase.block(rowOffset, colOffset, unwrappedPhase.rows() - 2 * rowOffset, unwrappedPhase.cols() - 2 * colOffset);
+        Eigen::ArrayXXd maskCropped = mask.block(rowOffset, colOffset, unwrappedPhase.rows() - 2 * rowOffset, unwrappedPhase.cols() - 2 * colOffset);
+
+        Eigen::ArrayXXd meshColMasked = meshCol.cwiseProduct(maskCropped);
+        Eigen::ArrayXXd meshRowMasked = meshRow.cwiseProduct(maskCropped);
+
+        vecMean.x() = meshColMasked.cwiseProduct(phaseCropped).mean();
+        vecMean.y() = meshRowMasked.cwiseProduct(phaseCropped).mean();
+        vecMean.z() = phaseCropped.mean();
+
+        Eigen::Matrix3d matMeanMasked;
+        matMeanMasked << meshColMasked.cwiseProduct(meshColMasked).mean(), meshColMasked.cwiseProduct(meshRowMasked).mean(), meshColMasked.mean(),
+                meshColMasked.cwiseProduct(meshRowMasked).mean(), meshRowMasked.cwiseProduct(meshRowMasked).mean(), meshRowMasked.mean(),
+                meshColMasked.mean(), meshRowMasked.mean(), 1;
+
+        planeCoefficients = matMeanMasked.inverse() * vecMean;
+        return Plane(planeCoefficients);
+    }
+
     void RegressionPlane::setCropFactor(double cropFactor) {
         if (cropFactor < 0 || cropFactor >= 1.0) {
             throw Exception("Can't resize a RegressionPlane with cropFactor<0 or cropFactor>=1.0");

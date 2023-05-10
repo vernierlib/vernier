@@ -171,7 +171,7 @@ namespace Vernier {
         } else if (attribute == "thumbnail") {
             return &thumbnail;
         } else {
-            return PatternDetector::getObject(attribute);
+            return PeriodicPatternDetector::getObject(attribute);
         }
     }
 

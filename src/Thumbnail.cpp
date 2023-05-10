@@ -117,8 +117,10 @@ namespace Vernier {
             sequence2(numberWhiteDots.cols() - 1) = 0;
         }
 
-        codeIntensity1.resize(stopIndex1 - startIndex1, 3);
-        codeIntensity2.resize(stopIndex2 - startIndex2, 3);
+//        codeIntensity1.resize(stopIndex1 - startIndex1, 3); // Antoine version but wrong size in some case
+//        codeIntensity2.resize(stopIndex2 - startIndex2, 3);
+        codeIntensity1.resize(numberWhiteDots.rows(), 3); // Guillaume fix 
+        codeIntensity2.resize(numberWhiteDots.rows(), 3);
         codeIntensity1.setConstant(0.0);
         codeIntensity2.setConstant(0.0);
 
@@ -126,6 +128,7 @@ namespace Vernier {
 
         //Pour contraste:
         Eigen::VectorXd contrastVec1;
+        //std::cout << "meanCodingDots1.rows() " << meanCodingDots1.rows() << std::endl;
 
         for (int index1 = startIndex1; index1 < stopIndex1; index1++) {
             if (index1 % 3 != coding1 % 3) {
@@ -170,6 +173,7 @@ namespace Vernier {
                     sequence1(index1) = 1;
                 }
             }
+            //std::cout << "Index1 " << index1 << std::endl;
         }
 
         // sequence 2
@@ -391,7 +395,7 @@ namespace Vernier {
                 int xPos = row * rectWidth; // transposition
                 int yPos = col * rectWidth;
                 //double colorDot = meanWhiteDots(row, col);
-                double colorDot = meanWhiteDots(row, col)-meanBackgroundDots(row, col);
+                double colorDot = meanWhiteDots(row, col) - meanBackgroundDots(row, col);
                 //                if (meanWhiteDots(row, col)>meanBackgroundDots(row, col)) {
                 //                    colorDot = 1;
                 //                } else {
@@ -852,7 +856,7 @@ namespace Vernier {
             }
         }
     }
-    
+
     void Thumbnail::rotate270() {
         numberWhiteDots.transposeInPlace();
         numberWhiteDots.rowwise().reverseInPlace();
@@ -862,16 +866,16 @@ namespace Vernier {
         numberBackgroundDots.rowwise().reverseInPlace();
         cumulBackgroundDots.transposeInPlace();
         cumulBackgroundDots.rowwise().reverseInPlace();
-       
+
     }
-    
+
     void Thumbnail::rotate180() {
         numberWhiteDots.reverseInPlace();
         cumulWhiteDots.reverseInPlace();
         numberBackgroundDots.reverseInPlace();
         cumulBackgroundDots.reverseInPlace();
     }
-    
+
     void Thumbnail::rotate90() {
         numberWhiteDots.transposeInPlace();
         numberWhiteDots.colwise().reverseInPlace();
@@ -881,5 +885,5 @@ namespace Vernier {
         numberBackgroundDots.colwise().reverseInPlace();
         cumulBackgroundDots.transposeInPlace();
         cumulBackgroundDots.colwise().reverseInPlace();
-   }
+    }
 }

@@ -9,7 +9,7 @@
 namespace Vernier {
 
     PatternPhase::PatternPhase() {
-        this->peaksSearchMethod = 2;
+        this->peaksSearchMethod = 0;
         this->pixelPeriod = 0.0;
         setSigma(3);
     }
@@ -49,8 +49,8 @@ namespace Vernier {
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
 
-        if (pixelPeriod != 0) {
-            Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, pixelPeriod);
+        if (pixelPeriod == 0.0) {
+            Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
         } else {
             switch (peaksSearchMethod) {
                 case 0:
@@ -63,7 +63,7 @@ namespace Vernier {
                     Spectrum::mainPeakPerimeter(spectrumShifted, mainPeak1, mainPeak2);
                     break;
                 default:
-                    Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
+                    Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, pixelPeriod);;
                     break;
             }
         }
@@ -81,7 +81,7 @@ namespace Vernier {
         plane1 = regressionPlane.compute(unwrappedPhase1);
 
         this->pixelPeriod = plane1.getPixelicPeriod();
-
+        
         // Compute second plase from peak 2
         gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
         ifft.compute(spectrumFiltered2, phase2);
@@ -92,7 +92,7 @@ namespace Vernier {
         Spatial::quartersUnwrapPhase(unwrappedPhase2);
 
         plane2 = regressionPlane.compute(unwrappedPhase2);
-
+        
 #ifndef USE_FFTW
         // plane1.setC(-plane1.getC());   // supprimé le 19/11/2022 quelle différence avec oouda fft ?
         // plane2.setC(-plane2.getC());

@@ -69,7 +69,6 @@ namespace Vernier {
 
         grayImage.convertTo(grayImage, CV_64F);
         cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
-
         Eigen::MatrixXd patternMatrix;
         cv::cv2eigen(grayImage, patternMatrix);
         Eigen::ArrayXXd patternArray;

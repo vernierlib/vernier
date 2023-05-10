@@ -246,15 +246,16 @@ namespace Vernier {
         std::complex<double> complexValue;
         double norm;
 
-        for (int col = source.cols() / 2 + 10; col < source.cols(); col++) {
-            for (int row = source.rows() / 2 - 20; row < source.rows(); row++) {
-                complexValue = source(row, col);
-                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+        for (int col = 1; col < source.cols()-1; col++) {
+            for (int row = source.rows()/2; row < source.rows()-1; row++) {
+                //complexValue = source(row, col);
+                //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+                norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
                 if (norm > maxValue) {
                     maxValue = norm;
                     mainPeak1.x() = col;
                     mainPeak1.y() = row;
-                    mainPeak1.z() = 1;
+                    mainPeak1.z() = norm;
                 }
             }
         }
@@ -262,19 +263,70 @@ namespace Vernier {
 
         maxValue = 0;
 
-        for (int col = 0; col < source.cols(); col++) {
-            for (int row = source.rows() / 2 + 2; row < source.rows(); row++) {
-                complexValue = source(row, col);
-                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+        for (int col = 1; col < source.cols()-1; col++) {
+            for (int row = source.rows()/2; row < source.rows()-1; row++) {
+                //complexValue = source(row, col);
+                //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+                norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
                 if (norm > maxValue) {
                     maxValue = norm;
                     mainPeak2.x() = col;
                     mainPeak2.y() = row;
-                    mainPeak2.z() = 1;
+                    mainPeak2.z() = norm;
                 }
             }
         }
+        
+        if (mainPeak1.x()<mainPeak2.x()) {
+            std::swap(mainPeak1,mainPeak2);
+        }
+        
+//        std::cout<<"Image size"<<source.rows()<<"x"<<source.cols()<<std::endl;
+//        
+//        std::cout<<"Peak 1"<<mainPeak1<<std::endl;
+//        std::cout<<"Peak 2"<<mainPeak2<<std::endl;
+//        
+        
+        
     }
+
+    //    void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
+    //        int offsetMin = source.rows() / 100.0;
+    //        source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
+    //
+    //        double maxValue = 0;
+    //        std::complex<double> complexValue;
+    //        double norm;
+    //
+    //        for (int col = source.cols() / 2 + 10; col < source.cols(); col++) {
+    //            for (int row = source.rows() / 2 - 20; row < source.rows(); row++) {
+    //                complexValue = source(row, col);
+    //                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+    //                if (norm > maxValue) {
+    //                    maxValue = norm;
+    //                    mainPeak1.x() = col;
+    //                    mainPeak1.y() = row;
+    //                    mainPeak1.z() = 1;
+    //                }
+    //            }
+    //        }
+    //        source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
+    //
+    //        maxValue = 0;
+    //
+    //        for (int col = 0; col < source.cols(); col++) {
+    //            for (int row = source.rows() / 2 + 2; row < source.rows(); row++) {
+    //                complexValue = source(row, col);
+    //                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+    //                if (norm > maxValue) {
+    //                    maxValue = norm;
+    //                    mainPeak2.x() = col;
+    //                    mainPeak2.y() = row;
+    //                    mainPeak2.z() = 1;
+    //                }
+    //            }
+    //        }
+    //    }
 
     void Spectrum::mainPeak4Search(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
 

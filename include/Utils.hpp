@@ -34,6 +34,8 @@ namespace Vernier {
     cv::Mat array2image(Eigen::ArrayXXd & array);
 
     cv::Mat array2image(Eigen::ArrayXXcd & array);
+    
+    Eigen::ArrayXXd image2array(cv::Mat & image);
 #endif // USE_OPENCV
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);
