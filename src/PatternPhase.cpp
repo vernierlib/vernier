@@ -554,6 +554,7 @@ namespace Vernier {
     }
 
     void PatternPhase::setPixelPeriod(double periodLengthInPixel) {
+        this->peaksSearchMethod = 4;
         this->pixelPeriod = periodLengthInPixel;
     }
 
