@@ -48,7 +48,7 @@ namespace Vernier {
 
         std::vector<Pose> getAll3DPoses();
         
-        void showControlImages();
+        void showControlImages(int delay = -1);
         
         /** Returns the computed thumbnail of the image given to the megarena detector
          */

@@ -108,7 +108,7 @@ namespace Vernier {
         return thumbnail;
     }
 
-    void MegarenaPatternDetector::showControlImages() {
+    void MegarenaPatternDetector::showControlImages(int delay) {
 #ifdef USE_OPENCV       
         cv::imshow("Thumbnail", this->thumbnail.getMeanDotsImage());
 #endif // USE_OPENCV

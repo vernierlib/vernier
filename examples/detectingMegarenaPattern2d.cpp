@@ -29,7 +29,7 @@ int main() {
     // Detecting and estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->setDouble("pixelPeriod", 7);
+    //detector->setDouble("pixelPeriod", 7);
     detector->compute(array);
 
     // Printing results 

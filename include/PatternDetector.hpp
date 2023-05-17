@@ -68,7 +68,7 @@ namespace Vernier {
 
         /** Display the images to check the pattern detector working 
          * (do nothing if OpenCV is not available) */
-        virtual void showControlImages() = 0;
+        virtual void showControlImages(int delay = -1) = 0;
 
         /** Returns the 2D pose of the pattern */
         virtual Pose get2DPose() = 0;

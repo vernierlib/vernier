@@ -69,7 +69,7 @@ namespace Vernier {
         /** Returns the phase plane corresponding to the second direction of the pattern */
         Plane getPlane2();
 
-        void showControlImages();
+        void showControlImages(int delay = -1);
 
         Eigen::ArrayXXd getUnwrappedPhase1();
 
