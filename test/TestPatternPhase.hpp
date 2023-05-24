@@ -9,7 +9,6 @@
 
 #include "Vernier.hpp"
 #include "PeriodicPatternLayout.hpp"
-#include "PatternRenderer.hpp"
 #include "eigen-matio/MatioFile.hpp"
 #include <random>
 
@@ -117,8 +116,7 @@ namespace Vernier {
             int size = 1024;
 
             PeriodicPatternLayout layout(period / 2.0, 437, 437);
-            PatternRenderer patternRenderer(&layout, 1, 1);
-
+            
             Eigen::ArrayXXd array(size, size);
             Eigen::ArrayXXcd patternArray(size, size);
 
@@ -130,7 +128,7 @@ namespace Vernier {
             double yPosition = dist2(rd);
             double alphaOrientation = dist3(rd);
 
-            patternRenderer.renderOrthographicProjection(Pose(xPosition, yPosition, 1000, alphaOrientation, 0.0, 0.0), array);
+            layout.renderOrthographicProjection(Pose(xPosition, yPosition, 1000, alphaOrientation, 0.0, 0.0, 1.0), array);
             patternArray.real() = array;
 
             PatternPhase phaseRetrieving(size, size);

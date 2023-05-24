@@ -46,18 +46,17 @@ namespace Vernier {
             double alpha = 0.1;
             double beta = 1.0;
             double gamma = 0.0;
-            Pose patternPose = Pose(x, y, 0, alpha, beta, gamma);
+            double pixelSize = 2.0;
+            Pose patternPose = Pose(x, y, 0, alpha, beta, gamma, pixelSize);
 
             Eigen::ArrayXXd array(1024, 512);
-            double pixelSize = 2.0;
             Eigen::ArrayXXcd spatial;
             Eigen::ArrayXXcd spectrum;
             Eigen::ArrayXXcd spectrumShifted;
             Eigen::ArrayXXd spectrumAbs;
             FourierTransform ft;
 
-            PatternRenderer patternRenderer(layout, pixelSize);
-
+            
             std::cout << "------------------------------------------------------------------" << std::endl;
 
             for (gamma = 0.0; gamma < 0.3; gamma += 0.01) {
@@ -65,7 +64,7 @@ namespace Vernier {
                 std::cout << "Pattern pose: " << patternPose.toString() << std::endl;
 
                 // Rendering
-                patternRenderer.renderOrthographicProjection(patternPose, array);
+                layout->renderOrthographicProjection(patternPose, array);
 
                 // Showing image
                 cv::imshow("Spatial", array2image(array));

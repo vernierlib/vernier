@@ -28,7 +28,6 @@
 #include "TestQRMarkerDetector.hpp"
 
 #include "TestPattern.hpp"
-#include "TestPatternRenderer.hpp"
 
 #include "TestBufferedReader.hpp"
 #include "TestUtils.hpp"
