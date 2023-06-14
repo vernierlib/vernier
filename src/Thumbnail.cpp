@@ -96,7 +96,7 @@ namespace Vernier {
         int startIndex2 = 0;
         int stopIndex1 = numberWhiteDots.rows();
         int stopIndex2 = numberWhiteDots.cols();
-
+        
         if (coding1 == 0) {
             startIndex1 = 1;
             sequence1(0) = 0;
@@ -120,7 +120,7 @@ namespace Vernier {
 //        codeIntensity1.resize(stopIndex1 - startIndex1, 3); // Antoine version but wrong size in some case
 //        codeIntensity2.resize(stopIndex2 - startIndex2, 3);
         codeIntensity1.resize(numberWhiteDots.rows(), 3); // Guillaume fix 
-        codeIntensity2.resize(numberWhiteDots.rows(), 3);
+        codeIntensity2.resize(numberWhiteDots.cols(), 3);
         codeIntensity1.setConstant(0.0);
         codeIntensity2.setConstant(0.0);
 
@@ -128,8 +128,7 @@ namespace Vernier {
 
         //Pour contraste:
         Eigen::VectorXd contrastVec1;
-        //std::cout << "meanCodingDots1.rows() " << meanCodingDots1.rows() << std::endl;
-
+        
         for (int index1 = startIndex1; index1 < stopIndex1; index1++) {
             if (index1 % 3 != coding1 % 3) {
                 sequence1(index1) = 0;
@@ -230,14 +229,13 @@ namespace Vernier {
         computeThumbnail(plane1, plane2, patternArray, PI / 4.0);
 
         cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
-
         this->codeOrientation = cell.getCodeOrientation();
 
         //cv::Mat codingCellImage(10, 10, CV_64FC3);
         //cell.guiDisplayCell(codingCellImage);
         //cv::imshow("coding cell", codingCellImage);
         getCodeSequence();
-
+        
         int coding1 = codeOrientation(0);
         int coding2 = codeOrientation(1);
         int missing1 = codeOrientation(2);
