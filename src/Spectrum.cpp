@@ -260,6 +260,7 @@ namespace Vernier {
             }
         }
         source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
+        source.block((source.rows()-mainPeak1.y()) - 4, (source.cols()-mainPeak1.x()) - 4, 8, 8) = 0;
 
         maxValue = 0;
 
