@@ -33,12 +33,19 @@ namespace Vernier {
         /** Constructs an empty detector for megarena periodic patterns */
         MegarenaPatternDetector();
         
-        /** Constructs a detector for megarena periodic patterns with a specific bit seuquence
+        /** Constructs a detector for megarena patterns with a specific bit sequence
          *
          *	\param bitSequence: encoded sequence of the megarena pattern
          *	\param physicalPeriod: physical period of the pattern used to build it
          */
         MegarenaPatternDetector(Eigen::ArrayXXi bitSequence, double physicalPeriod = 1.0);
+        
+        /** Constructs a detector for megarena patterns with a specific code size
+         *
+         *	\param physicalPeriod: physical period of the pattern used to build it
+         *	\param codeSize: size of the code
+         */
+        MegarenaPatternDetector(double physicalPeriod, int codeSize);
 
         ~MegarenaPatternDetector() = default;
 

@@ -24,10 +24,12 @@ namespace Vernier {
     MegarenaPatternLayout::MegarenaPatternLayout(double period, int codeSize) {
         if (codeSize == 8) {
             initializeBitSequence8(bitSequence);
+        } else if (codeSize == 10) {
+            initializeBitSequence10(bitSequence);
         } else if (codeSize == 12) {
             initializeBitSequence12(bitSequence);
         } else {
-            throw Exception("The file is not a valid megarena pattern file, the code size must be 8 or 12.");
+            throw Exception("The code size must be 8, 10, or 12.");
         }
         classname = "MegarenaPattern";
         resize(period, bitSequence);
@@ -90,10 +92,12 @@ namespace Vernier {
             int codeSize = document["codeSize"].GetInt();
             if (codeSize == 8) {
                 initializeBitSequence8(bitSequence);
+            } else if (codeSize == 10) {
+                initializeBitSequence10(bitSequence);
             } else if (codeSize == 12) {
                 initializeBitSequence12(bitSequence);
             } else {
-                throw Exception("The file is not a valid megarena pattern file, the code size must be 8 or 12.");
+                throw Exception("The file is not a valid megarena pattern file, the code size must be 8, 10, or 12.");
             }
         } else {
             throw Exception("The file is not a valid megarena pattern file, the code size is missing or has a wrong format.");

@@ -29,14 +29,14 @@ namespace Vernier {
             ArrayXXd array(512, 512);
             PatternDetector* detector;
             detector = Detector::loadFromJSON(filename);
-            detector->setDouble("pixelPeriod", 7);
+            //detector->setDouble("pixelPeriod", 7);
 
-            for (double alpha = -3.0; alpha <= 3.0; alpha += 0.5) {
+            for (int n=1;n<=10;n++) {
 
                 // Setting the pose for rendering
-                double x = -323;//-15 * 400.0;
-                double y = -15 * 200.0;
-                //double alpha = -0.2;
+                double alpha = 2 * PI * rand() / RAND_MAX - PI;
+                double x = -layout->getWidth() * rand() / RAND_MAX;
+                double y = -layout->getHeight() * rand() / RAND_MAX;
                 double pixelSize = 2.0;
                 Pose patternPose = Pose(x, y, alpha, pixelSize);
                 cout << "------------------------------------------------------------------" << endl;

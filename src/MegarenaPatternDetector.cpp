@@ -20,6 +20,20 @@ namespace Vernier {
         this->physicalPeriod = physicalPeriod;
         this->bitSequence = bitSequence;
     }
+    
+    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize) : PeriodicPatternDetector() {
+        if (codeSize == 8) {
+            initializeBitSequence8(bitSequence);
+        } else if (codeSize == 10) {
+            initializeBitSequence10(bitSequence);
+        } else if (codeSize == 12) {
+            initializeBitSequence12(bitSequence);
+        } else {
+            throw Exception("The code size must be 8, 10, or 12.");
+        }
+        classname = "MegarenaPattern";
+        this->physicalPeriod = physicalPeriod;
+    }
 
     void MegarenaPatternDetector::compute(Eigen::ArrayXXd& pattern) {
         resize(pattern.rows(), pattern.cols());
@@ -141,10 +155,12 @@ namespace Vernier {
             int codeSize = document["codeSize"].GetInt();
             if (codeSize == 8) {
                 initializeBitSequence8(bitSequence);
+            } else if (codeSize == 10) {
+                initializeBitSequence10(bitSequence);
             } else if (codeSize == 12) {
                 initializeBitSequence12(bitSequence);
             } else {
-                throw Exception("The file is not a valid megarena pattern file, the code size must be 8 or 12.");
+                throw Exception("The file is not a valid megarena pattern file, the code size must be 8, 10, or 12.");
             }
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");

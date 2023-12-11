@@ -62,9 +62,13 @@ namespace Vernier {
             file << "width=\"" << rectangleList[i].width << "\" ";
             file << "height=\"" << rectangleList[i].height << "\" ";
             file << "fill=\"black\" />" << std::endl;
+            if (i % (rectangleList.size()/100) == 0) {
+                std::cout<< " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            }
         }
         file << "</svg>" << std::endl;
         file.close();
+        std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
 
     void PatternLayout::saveToLayoutEditorMacro(std::string filename) {
@@ -89,9 +93,13 @@ namespace Vernier {
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin) << "," << -1000 * (rectangleList[i].y + margin) << ");" << std::endl;
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin + rectangleList[i].width) << "," << -1000 * (rectangleList[i].y + margin + rectangleList[i].height) << ");" << std::endl;
             file << "layout->drawing->box();" << std::endl;
+            if (i % (rectangleList.size()/100) == 0) {
+                std::cout<< " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            }
         }
         file << "}" << std::endl;
         file.close();
+        std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
 
     void PatternLayout::saveToCSV(std::string filename) {
