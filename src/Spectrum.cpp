@@ -55,7 +55,8 @@ namespace Vernier {
                 }
             }
         }
-
+        //std::cout<< "Peak value (circle method) : " << maxValue/source.cols()/source.rows() <<std::endl;
+        
         Eigen::Matrix3d KTotal;
 
         KTotal << 0.0, -(double) source.cols() / (double) source.rows(), (double) source.cols(),
@@ -239,12 +240,12 @@ namespace Vernier {
     }
 
     void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
-        int offsetMin = source.rows() / 100.0;
+        int offsetMin = source.rows() / 100.0; // MAGIC NUMBER
         source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
 
-        double maxValue = 0;
+        double maxValue = -1.0;
         std::complex<double> complexValue;
-        double norm;
+        double norm = 0.0;
 
         for (int col = 1; col < source.cols()-1; col++) {
             for (int row = source.rows()/2; row < source.rows()-1; row++) {
@@ -255,10 +256,15 @@ namespace Vernier {
                     maxValue = norm;
                     mainPeak1.x() = col;
                     mainPeak1.y() = row;
-                    mainPeak1.z() = norm;
+                    mainPeak1.z() = norm/source.cols()/source.rows()/5;
                 }
             }
         }
+        //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
+        if (mainPeak1.z() < 1e-5) { // MAGIC NUMBER
+            throw Exception("Houston, we have a problem here, the first peak has not be found.");
+        }
+        
         source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
         source.block((source.rows()-mainPeak1.y()) - 4, (source.cols()-mainPeak1.x()) - 4, 8, 8) = 0;
 
@@ -273,7 +279,7 @@ namespace Vernier {
                     maxValue = norm;
                     mainPeak2.x() = col;
                     mainPeak2.y() = row;
-                    mainPeak2.z() = norm;
+                    mainPeak2.z() = norm/source.cols()/source.rows()/5;
                 }
             }
         }

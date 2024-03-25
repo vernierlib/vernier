@@ -78,12 +78,14 @@ namespace Vernier {
          *       [ 1 ]   [ 0    0    0   1 ]         [ z ]
          *                                           [ 1 ]
          * 
-         *   with cx and cy the coordinates of the image center and s the scale factor (pixel size)
+         *   with cx and cy the coordinates of the principal point (in pixels) and s the scale factor (pixel size)
          * 
-         *	\param pose: pattern pose (defines cTp)
+         *	\param pose: pattern pose (defines cTp and the scale factor)
          *	\param outputImage: any size double array 
+         *      \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         *
          */
-        void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage);
+        void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         /** Renders an image with a perspective projection defined by the pinhole camera model:
          * 
@@ -92,14 +94,15 @@ namespace Vernier {
          *        [ 1 ]   [ 0    0   1  0 ]         [ z ]
          *                                          [ 1 ]
          * 
-         *   with cx and cy the coordinates of the image center, f the focal length (metric) and s the scale factor (pixel size)
+         *   with cx and cy the coordinates of the principal point (in pixels), f the focal length (metric) and s the scale factor (pixel size)
          * 
-         *	\param pose: pattern pose (defines cTp)
+         *	\param pose: pattern pose (defines cTp and the scale factor)
          *	\param outputImage: any size double array 
-         *  
-         *   cx and cy are calculated to be the image center coordinates.
+         *      \param focalLength: focal length of the camera
+         *      \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         * 
          */
-        void renderPerspectiveProjection(Pose pose, double focalLength, Eigen::ArrayXXd & outputImage);
+        void renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         std::string getAuthor();
 

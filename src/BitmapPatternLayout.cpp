@@ -16,10 +16,28 @@ namespace Vernier {
         classname = "BitmapPattern";
         resize(period, nRows, nCols);
     }
+    
+    BitmapPatternLayout::BitmapPatternLayout(std::string filename, double period) {
+#ifdef USE_OPENCV        
+        cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
+        image1.convertTo(image, CV_8U);
+        resize(period, (image.rows + 1) / 2, (image.cols + 1) / 2);
+        description = "Bitmap pattern created from " + filename;
+
+        bitmap = Eigen::ArrayXXi::Zero(image.rows, image.cols);
+        for (int col = 0; col < image.cols; col++) {
+            for (int row = 0; row < image.rows; row++) {
+                bitmap(row, col) = (int) (image.at<char>(row, col) != 0);
+            }
+        }
+#else
+        std::cout << "OpenCV is required to load PNG files." << std::endl;
+#endif // USE_OPENCV
+    }
 
     void BitmapPatternLayout::resize(double period, int nRows, int nCols) {
         PeriodicPatternLayout::resize(period, nRows, nCols);
-        bitmap.resize(nRows, nCols);
+        bitmap.resize(2 * nRows - 1, 2 * nCols - 1);
     }
 
     void BitmapPatternLayout::writeJSON(std::ofstream & file) {
@@ -66,10 +84,10 @@ namespace Vernier {
         }
 
         resize(period, nRows, nCols);
-        for (rapidjson::SizeType row = 0; row < nRows; row++) {
+        for (rapidjson::SizeType row = 0; row < 2 * nRows - 1; row++) {
             const rapidjson::Value& value = document["bitmap"][row];
-            if (value.IsArray() && value.Size() == nCols) {
-                for (rapidjson::SizeType col = 0; col < nCols; col++) {
+            if (value.IsArray() && value.Size() == 2 * nCols - 1) {
+                for (rapidjson::SizeType col = 0; col < 2 * nCols - 1; col++) {
                     if (value[col].IsInt()) {
                         bitmap(row, col) = value[col].GetInt();
                     } else {
@@ -82,32 +100,12 @@ namespace Vernier {
         }
     }
 
-
-
-    void BitmapPatternLayout::loadFromPNG(std::string filename, double period) {
-#ifdef USE_OPENCV        
-        cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
-        image1.convertTo(image, CV_8U);
-        resize(period, image.rows, image.cols);
-        description = "Bitmap pattern created from " + filename;
-
-        bitmap = Eigen::ArrayXXi::Zero(image.rows, image.cols);
-        for (int col = 0; col < image.cols; col++) {
-            for (int row = 0; row < image.rows; row++) {
-                bitmap(row, col) = (int) (image.at<char>(row, col) != 0);
-            }
-        }
-#else
-        std::cout << "OpenCV is required to load PNG files." << std::endl;
-#endif // USE_OPENCV
-    }
-
     void BitmapPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         rectangleList.clear();
         for (int col = 0; col < bitmap.cols(); col++) {
-            double x = col * period;
+            double x = col * dotSize;
             for (int row = 0; row < bitmap.rows(); row++) {
-                double y = row * period;
+                double y = row * dotSize;
                 if (bitmap(row, col)) {
                     rectangleList.push_back(Rectangle(x, y, dotSize, dotSize));
                 }
@@ -119,15 +117,40 @@ namespace Vernier {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {
-            int col = std::floor((x + originX) / period);
-            int row = std::floor((y + originY) / period);
-            if (col < 0 || row < 0 || col >= nCols || row >= nRows) {
+            int col = std::floor((x + originX) / dotSize);
+            int row = std::floor((y + originY) / dotSize);
+            if (col < 0 || row < 0 || col >= bitmap.cols() || row >= bitmap.rows()) {
                 return 0;
             } else {
-                double periodicIntensity = (1 + cos(2 * PI * x / period)) * (1 + cos(2 * PI * y / period)) / 4;
-                return (bitmap(row, col) * periodicIntensity);
+                return bitmap(row, col); // *PeriodicPatternLayout::getIntensity(x,y);
             }
         }
+    }
+
+    int BitmapPatternLayout::numberOfWrongEdges() {
+        int n = 0;
+        for (int col = 0; col < bitmap.cols() - 1; col++) {
+            for (int row = 0; row < bitmap.rows() - 1; row++) {
+                n += (col % 2)*(bitmap(row, col) > bitmap(row, col + 1)) + ((col + 1) % 2)*(bitmap(row, col) < bitmap(row, col + 1));
+                n += (row % 2)*(bitmap(row, col) > bitmap(row + 1, col)) + ((row + 1) % 2)*(bitmap(row, col) < bitmap(row + 1, col));
+            }
+        }
+        return n;
+    }
+
+    bool BitmapPatternLayout::hasWrongEdges() {
+        return (numberOfWrongEdges() != 0);
+    }
+    
+    int BitmapPatternLayout::numberOfCorrectEdges() {
+        int n = 0;
+        for (int col = 0; col < bitmap.cols() - 1; col++) {
+            for (int row = 0; row < bitmap.rows() - 1; row++) {
+                n += (col % 2)*(bitmap(row, col) < bitmap(row, col + 1)) + ((col + 1) % 2)*(bitmap(row, col) > bitmap(row, col + 1));
+                n += (row % 2)*(bitmap(row, col) < bitmap(row + 1, col)) + ((row + 1) % 2)*(bitmap(row, col) > bitmap(row + 1, col));
+            }
+        }
+        return n;
     }
 
 }

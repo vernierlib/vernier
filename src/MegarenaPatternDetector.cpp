@@ -43,7 +43,7 @@ namespace Vernier {
 
     void MegarenaPatternDetector::computeAbsolutePose(Eigen::ArrayXXd& pattern) {
         double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
-        patternPhase.setPixelPeriod(approxPixelPeriod);
+        //patternPhase.setPixelPeriod(approxPixelPeriod);
 
         length1 = (pattern.rows() / (approxPixelPeriod));
         length2 = (pattern.cols() / (approxPixelPeriod));

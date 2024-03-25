@@ -4,17 +4,17 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#ifndef BITMAPPATTERNLAYOUT_HPP
-#define BITMAPPATTERNLAYOUT_HPP
+#ifndef FINGERPRINTPATTERNLAYOUT_HPP
+#define FINGERPRINTPATTERNLAYOUT_HPP
 
 #include "PeriodicPatternLayout.hpp"
 
 namespace Vernier {
 
-    /** \brief Layout class for bitmap patterns 
+    /** \brief Layout class for finger print patterns 
      *  
      */
-    class BitmapPatternLayout : public PeriodicPatternLayout {
+    class FingerprintPatternLayout : public PeriodicPatternLayout {
     protected:
 
         Eigen::ArrayXXi bitmap;
@@ -25,14 +25,14 @@ namespace Vernier {
 
     public:
 
-        BitmapPatternLayout();
+        FingerprintPatternLayout();
 
-        BitmapPatternLayout(double period, int nRows, int nCols);
-
-        /** Construct a pattern from a PNG file with given period (requires OpenCV) */
-        BitmapPatternLayout(std::string filename, double period);
+        FingerprintPatternLayout(double period, int nRows, int nCols);
 
         void resize(double dotSize, int nRows, int nCols);
+
+        /** Initializes a pattern from a PNG file with given period (requires OpenCV) */
+        virtual void loadFromPNG(std::string filename, double period);
 
         double getIntensity(double x, double y);
 
@@ -45,12 +45,6 @@ namespace Vernier {
         int getDot(int row, int col) {
             return bitmap(row, col);
         }
-        
-        int numberOfWrongEdges();
-        
-        bool hasWrongEdges();
-        
-        int numberOfCorrectEdges();
     };
 
 }

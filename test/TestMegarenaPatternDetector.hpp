@@ -37,14 +37,13 @@ namespace Vernier {
                 double alpha = 2 * PI * rand() / RAND_MAX - PI;
                 double x = -layout->getWidth() * rand() / RAND_MAX;
                 double y = -layout->getHeight() * rand() / RAND_MAX;
-                double pixelSize = 2.0;
+                double pixelSize = 1.0;
                 Pose patternPose = Pose(x, y, alpha, pixelSize);
                 cout << "------------------------------------------------------------------" << endl;
                 cout << "Pattern pose:   " << patternPose.toString() << endl;
 
                 // Rendering
                 layout->renderOrthographicProjection(patternPose, array);
-
                 // Detecting and estimating the pose of the pattern
                 detector->compute(array);
 

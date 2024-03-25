@@ -200,7 +200,7 @@ namespace Vernier {
         readJSON(document.MemberBegin()->value);
     };
 
-    void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage) {
+    void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
             throw Exception("The number of rows must be positive and even.");
         }
@@ -208,12 +208,14 @@ namespace Vernier {
             throw Exception("The number of columns must be positive and even.");
         }
 
-        double cx = outputImage.cols() / 2.0;
-        double cy = outputImage.rows() / 2.0;
+        if (principalPoint(0)<0) {
+            principalPoint(0) = outputImage.cols() / 2.0;
+            principalPoint(1) = outputImage.rows() / 2.0;
+        }
 
         Eigen::MatrixXd cameraMatrix(3, 4);
-        cameraMatrix << 1 / pose.pixelSize, 0, 0, cx,
-                0, 1 / pose.pixelSize, 0, cy,
+        cameraMatrix << 1 / pose.pixelSize, 0, 0, principalPoint(0),
+                0, 1 / pose.pixelSize, 0, principalPoint(1),
                 0, 0, 0, 1;
 
         Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
@@ -237,20 +239,22 @@ namespace Vernier {
         }
     }
 
-    void PatternLayout::renderPerspectiveProjection(Pose pose, double focalLength, Eigen::ArrayXXd & outputImage) {
+    void PatternLayout::renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
             throw Exception("The number of rows must be positive and even.");
         }
         if (outputImage.cols() <= 0 || outputImage.cols() % 2 == 1) {
             throw Exception("The number of columns must be positive and even.");
         }
-
-        double cx = outputImage.cols() / 2.0;
-        double cy = outputImage.rows() / 2.0;
+        
+        if (principalPoint(0)<0) {
+            principalPoint(0) = outputImage.cols() / 2.0;
+            principalPoint(1) = outputImage.rows() / 2.0;
+        }
 
         Eigen::MatrixXd cameraMatrix(3, 4);
-        cameraMatrix << focalLength / pose.pixelSize, 0, cx, 0,
-                0, focalLength / pose.pixelSize, cy, 0,
+        cameraMatrix << focalLength / pose.pixelSize, 0, principalPoint(0), 0,
+                0, focalLength / pose.pixelSize, principalPoint(1), 0,
                 0, 0, 1, 0;
 
         Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
