@@ -29,7 +29,7 @@ int main() {
     // Rendering
     ArrayXXd array(512, 512);
     double focalLength = 5000.0;
-    layout->renderPerspectiveProjection(patternPose, focalLength, array);
+    layout->renderPerspectiveProjection(patternPose, array, focalLength);
 
     // Estimating the pose of the pattern
     PatternDetector* detector;

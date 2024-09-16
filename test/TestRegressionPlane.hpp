@@ -1,13 +1,14 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef TESTREGRESSIONPLANE_HPP
 #define TESTREGRESSIONPLANE_HPP
 
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
 namespace Vernier {
@@ -39,7 +40,7 @@ namespace Vernier {
             std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
         }
 
-        static void main3() { // deprecated
+        static void main3() { // the coefficients in the mat file are wrong !!!!!
             int sideOffset = 250;
             Eigen::ArrayXXd unwrapCenterMatlab(1, 1);
             Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDONLY);
@@ -78,7 +79,7 @@ namespace Vernier {
             Eigen::MatrixXd planeCoeff(3, 1);
             planeCoeff << plane.getA(), plane.getB(), plane.getC();
 
-            std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
+            //std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
 
             UNIT_TEST(areEqual(planeCoeffRef, planeCoeff));
 
@@ -87,34 +88,9 @@ namespace Vernier {
             planeCoeffRef << 0, 2, 10;
             planeCoeff << plane.getA(), plane.getB(), plane.getC();
 
-            std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
+            //std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
 
             UNIT_TEST(areEqual(planeCoeffRef, planeCoeff));
-        }
-
-        static void test3() { // deprecated
-
-            Eigen::ArrayXXd unwrapCenterMatlab(1, 1);
-            Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDONLY);
-            file.read_mat("unwrapCenterMatlab", unwrapCenterMatlab);
-
-            int sideOffset = 250;
-            Eigen::ArrayXXd intermediaryMatrix;
-            intermediaryMatrix = unwrapCenterMatlab.block(sideOffset, sideOffset, unwrapCenterMatlab.rows() - 2 * sideOffset, unwrapCenterMatlab.cols() - 2 * sideOffset);
-            RegressionPlane leastSquaresPlane; //(intermediaryMatrix.cols(), intermediaryMatrix.rows());
-
-            Plane plane = leastSquaresPlane.compute(intermediaryMatrix);
-
-            Eigen::Vector3d coefficients;
-            coefficients = plane.getCoefficients();
-
-            Eigen::MatrixXd coeffMatrix(3, 1);
-            coeffMatrix << coefficients(0), coefficients(1), coefficients(2);
-
-            Eigen::MatrixXd planeCoeffRef(1, 1);
-            file.read_mat("planeCoefficients", planeCoeffRef);
-
-            UNIT_TEST(areEqual(planeCoeffRef, coeffMatrix));
         }
 
         static double speed(unsigned long testCount) {

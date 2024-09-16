@@ -4,14 +4,14 @@
  * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
-#include "TestShift.hpp"
+#include "TestPatternLayout.hpp"
 
 using namespace Vernier;
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    TestShift::runAllTests();
+    Vernier::TestPatternLayout::runAllTests();
 
     return EXIT_SUCCESS;
 }

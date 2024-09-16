@@ -1,18 +1,19 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
-#ifndef TESTPATTERN_HPP
-#define TESTPATTERN_HPP
+#ifndef TESTPATTERNLAYOUT_HPP
+#define TESTPATTERNLAYOUT_HPP
 
 #include "Layout.hpp"
-#include "eigen-matio/MatioFile.hpp"
+#include "UnitTest.hpp"
+#include <fstream>
 
 namespace Vernier {
 
-    class TestPattern {
+    class TestPatternLayout {
     public:
 
         static void main() {
@@ -57,8 +58,7 @@ namespace Vernier {
 
 #ifdef USE_OPENCV
         static void main3() {
-            BitmapPatternLayout layout;
-            layout.loadFromPNG("femto.png", 9);
+            BitmapPatternLayout layout("femto.png", 9);
             layout.saveToSVG();
             layout.saveToCSV();
             layout.saveToPNG();
@@ -104,37 +104,46 @@ namespace Vernier {
 
 #ifdef USE_OPENCV
         static void runAllTests() {
+            
             PeriodicPatternLayout layout1(9, 17, 17);
             layout1.saveToJSON();
-            layout1.loadFromJSON("PeriodicPattern.json");            
+            layout1.loadFromJSON("PeriodicPattern.json");
+            remove("PeriodicPattern.json");
             UNIT_TEST(1);
 
             QRCodePatternLayout layout2(10, 37);
             layout2.saveToJSON();
             layout2.saveToCSV();
-            layout2.loadFromJSON("QRCodePattern.json");          
+            layout2.loadFromJSON("QRCodePattern.json");
+            remove("QRCodePattern.json");
             UNIT_TEST(2);
 
-            Eigen::MatioFile file("testfiles/newMask12Bits_x3_2pi.mat", MAT_ACC_RDONLY);
-            Eigen::ArrayXXi bitSequence(1, 1);
-            file.read_mat("bit_sequence_codee", bitSequence);
-            
-            MegarenaPatternLayout layout3(4.5, bitSequence);
+            MegarenaPatternLayout layout3(4.5, 12);
             layout3.saveToJSON();
             layout3.loadFromJSON("MegarenaPattern.json");
+            remove("MegarenaPattern.json");
             UNIT_TEST(3);
             
-            BitmapPatternLayout layout4;
+            FingerprintPatternLayout layout4;
             layout4.loadFromPNG("testfiles/femto.png", 9);
-            layout4.saveToJSON();
-            layout4.loadFromJSON("BitmapPattern.json");
+            layout4.saveToJSON("FingerprintPattern.json");
+            layout4.loadFromJSON("FingerprintPattern.json");
+            remove("FingerprintPattern.json");
             UNIT_TEST(4);
             
-            CustomPatternLayout layout5;
-            layout5.loadFromCSV("QRCodePattern.csv");
-            layout5.saveToJSON();
-            layout5.loadFromJSON("CustomPattern.json");
+            BitmapPatternLayout layout5("testfiles/femto.png", 9);
+            layout5.saveToJSON("BitmapPattern.json");
+            layout5.loadFromJSON("BitmapPattern.json");
+            remove("BitmapPattern.json");
             UNIT_TEST(5);
+            
+            CustomPatternLayout layout6;
+            layout6.loadFromCSV("QRCodePattern.csv");
+            layout6.saveToJSON();
+            layout6.loadFromJSON("CustomPattern.json");
+            remove("CustomPattern.json");
+            UNIT_TEST(6);
+            
         }       
 #endif // USE_OPENCV
         

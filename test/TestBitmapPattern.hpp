@@ -8,6 +8,7 @@
 #define TESTBITMAPPATTERN_HPP
 
 #include "Layout.hpp"
+#include "UnitTest.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
 namespace Vernier {

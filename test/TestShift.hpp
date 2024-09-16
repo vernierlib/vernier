@@ -1,13 +1,14 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef TESTSHIFTFOURIERTRANSFORM_HPP
 #define TESTSHIFTFOURIERTRANSFORM_HPP
 
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
 
 namespace Vernier {
 

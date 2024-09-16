@@ -8,6 +8,7 @@
 #define TESTPATTERNRENDERING_HPP
 
 //#include <opencv2/highgui.hpp>
+#include "UnitTest.hpp"
 #include "PatternRendering.hpp"
 #include "FourierTransform.hpp"
 #include "Spectrum.hpp"

@@ -8,6 +8,7 @@
 #define TESTPATTERNDETECTOR_HPP
 
 #include "QRCodePatternCannyDetector.hpp"
+#include "UnitTest.hpp"
 
 #include "Detector.hpp"
 #include "Layout.hpp"

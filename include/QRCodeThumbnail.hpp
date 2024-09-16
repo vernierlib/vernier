@@ -12,6 +12,11 @@
 #include "PatternPhase.hpp"
 
 namespace Vernier {
+    
+    const int QRCODE_33P = 33;
+    const int QRCODE_37P = 37;
+    const int QRCODE_39P = 39;
+    
 #ifdef USE_OPENCV
 
     class QRCodeThumbnail {

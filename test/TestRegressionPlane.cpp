@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #include "TestRegressionPlane.hpp"
@@ -11,12 +11,7 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    try {
-        TestRegressionPlane::runAllTests();
-    } catch (const Exception& e) {
-        cout << e.what() << endl;
-        return EXIT_FAILURE;
-    }
+    TestRegressionPlane::runAllTests();
 
     return EXIT_SUCCESS;
 }

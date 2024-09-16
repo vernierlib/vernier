@@ -8,12 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    try {
-        Vernier::TestBitmapPattern::runAllTests();
-    } catch (const Vernier::Exception& e) {
-        std::cout << e.what() << std::endl;
-        return EXIT_FAILURE;
-    }
+    Vernier::TestBitmapPattern::runAllTests();
 
     return EXIT_SUCCESS;
 }

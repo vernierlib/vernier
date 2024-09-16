@@ -8,6 +8,8 @@
 #define TESTEIGEN_HPP
 
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
+
 #include "MatioFile.hpp"
 
 namespace Vernier {

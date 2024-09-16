@@ -9,6 +9,7 @@
 
 //#include <opencv2/highgui.hpp>
 #include "PatternProjection.hpp"
+#include "UnitTest.hpp"
 #include <random>
 
 namespace Vernier {

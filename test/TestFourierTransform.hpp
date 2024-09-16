@@ -1,13 +1,14 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef TESTFOURIERTRANSFORM_HPP
 #define TESTFOURIERTRANSFORM_HPP
 
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
 #include <complex>
 #include <random>
 
@@ -56,7 +57,7 @@ namespace Vernier {
             Eigen::ArrayXXd spectrumAbs;
             FourierTransform ft;
 
-            
+
             std::cout << "------------------------------------------------------------------" << std::endl;
 
             for (gamma = 0.0; gamma < 0.3; gamma += 0.01) {

@@ -16,12 +16,13 @@ namespace Vernier {
 
     MegarenaPatternLayout::MegarenaPatternLayout(double period, Eigen::ArrayXXi & bitSequence)
     : PeriodicPatternLayout() {
-        ASSERT(bitSequence.rows() == 1 && bitSequence.cols() > 0);
         classname = "MegarenaPattern";
+        description = "Custom code MegarenaPattern";
         resize(period, bitSequence);
     }
 
-    MegarenaPatternLayout::MegarenaPatternLayout(double period, int codeSize) {
+    MegarenaPatternLayout::MegarenaPatternLayout(double period, int codeSize)
+    : PeriodicPatternLayout() {
         if (codeSize == 8) {
             initializeBitSequence8(bitSequence);
         } else if (codeSize == 10) {
@@ -31,11 +32,15 @@ namespace Vernier {
         } else {
             throw Exception("The code size must be 8, 10, or 12.");
         }
+        if (period < 0.0) {
+            throw Exception("The period must be positive.");
+        }
         classname = "MegarenaPattern";
+        description = toString(codeSize) + "-bits MegarenaPattern";
         resize(period, bitSequence);
     }
 
-    void MegarenaPatternLayout::resize(double dotSize, Eigen::ArrayXXi & bitSequence) {
+    void MegarenaPatternLayout::resize(double period, Eigen::ArrayXXi & bitSequence) {
         if (bitSequence.rows() != 1) {
             throw Exception("The bit sequence must have a single row");
         }
@@ -47,8 +52,8 @@ namespace Vernier {
         this->dotSize = 0.5 * period;
         this->nRows = bitSequence.cols();
         this->nCols = bitSequence.cols();
-        width = period * nCols;
-        height = period * nRows;
+        width = period * nCols - dotSize;
+        height = period * nRows - dotSize;
         this->bitSequence = bitSequence;
         originX = 0.5 * dotSize;
         originY = 0.5 * dotSize;
@@ -147,8 +152,8 @@ namespace Vernier {
         if (x<-0.5 * period || y<-0.5 * period || x > width || y > height) {
             return 0;
         } else {
-            int col = std::floor((x + originX) / period);
-            int row = std::floor((y + originY) / period);
+            int col = (int)((x + dotSize) / period) ;
+            int row = (int)((y + dotSize) / period) ;
             if (col < 0 || row < 0 || col >= nCols || row >= nRows) {
                 return 0;
             } else {

@@ -8,6 +8,7 @@
 #define TESTQRCODEPOSEESTIMATION_HPP
 
 #include "QRCodePoseEstimation.hpp"
+#include "UnitTest.hpp"
 #include <iomanip>
 
 namespace Vernier {

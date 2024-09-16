@@ -14,14 +14,21 @@ namespace Vernier {
         classname = "MegarenaPattern";
     }
 
-    MegarenaPatternDetector::MegarenaPatternDetector(Eigen::ArrayXXi bitSequence, double physicalPeriod)
-    : PeriodicPatternDetector() {
+    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, Eigen::ArrayXXi bitSequence)
+    : PeriodicPatternDetector(physicalPeriod) {
+        if (bitSequence.rows() != 1) {
+            throw Exception("The bit sequence must have a single row");
+        }
+        if (bitSequence.cols() <= 0) {
+            throw Exception("The bit sequence must have at least one column.");
+        }
         classname = "MegarenaPattern";
-        this->physicalPeriod = physicalPeriod;
         this->bitSequence = bitSequence;
+        decoding.resize(bitSequence);
     }
     
-    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize) : PeriodicPatternDetector() {
+    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize) 
+    : PeriodicPatternDetector(physicalPeriod) {
         if (codeSize == 8) {
             initializeBitSequence8(bitSequence);
         } else if (codeSize == 10) {
@@ -32,7 +39,7 @@ namespace Vernier {
             throw Exception("The code size must be 8, 10, or 12.");
         }
         classname = "MegarenaPattern";
-        this->physicalPeriod = physicalPeriod;
+        decoding.resize(bitSequence);
     }
 
     void MegarenaPatternDetector::compute(Eigen::ArrayXXd& pattern) {
@@ -125,6 +132,7 @@ namespace Vernier {
     void MegarenaPatternDetector::showControlImages(int delay) {
 #ifdef USE_OPENCV       
         cv::imshow("Thumbnail", this->thumbnail.getMeanDotsImage());
+        cv::moveWindow("Thumbnail", patternPhase.getNCols()*2,0);
 #endif // USE_OPENCV
         PeriodicPatternDetector::showControlImages();
     }

@@ -1,13 +1,13 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef COMMON_HPP
 #define COMMON_HPP
 
-// preventing the definitions of min and max as macros somewhere in windows.h
+// preventing the definitions of min and max as macros somewhere in <windows.h>
 #define NOMINMAX  
 
 #include <cstdio>
@@ -39,7 +39,6 @@
 
 #include "Exception.hpp"
 #include "Utils.hpp"
-#include "UnitTest.hpp"
 
 #include "Pose.hpp"
 #include "Plane.hpp"

@@ -1,13 +1,14 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef TESTPATTERNPHASE_HPP
 #define TESTPATTERNPHASE_HPP
 
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
 #include "PeriodicPatternLayout.hpp"
 #include "eigen-matio/MatioFile.hpp"
 #include <random>
@@ -59,10 +60,10 @@ namespace Vernier {
             patternPhase.setSigma(1);
             patternPhase.compute(array);
 
-            std::cout << "Plane 1 position : \n" << -patternPhase.getPlane1().getPosition(period) << std::endl;
-            std::cout << "Plane 2 position : \n" << -patternPhase.getPlane2().getPosition(period) << std::endl;
-            std::cout << "Plane 1 angle : \n" << patternPhase.getPlane1().getAngle() << std::endl;
-            std::cout << "Plane 2 angle : \n" << patternPhase.getPlane2().getAngle() - PI / 2 << std::endl;
+//            std::cout << "Plane 1 position : \n" << -patternPhase.getPlane1().getPosition(period) << std::endl;
+//            std::cout << "Plane 2 position : \n" << -patternPhase.getPlane2().getPosition(period) << std::endl;
+//            std::cout << "Plane 1 angle : \n" << patternPhase.getPlane1().getAngle() << std::endl;
+//            std::cout << "Plane 2 angle : \n" << patternPhase.getPlane2().getAngle() - PI / 2 << std::endl;
 
 //            cv::imshow("Image", array2image(array));
 //            cv::imshow("Spectrum", patternPhase.getControlImage());

@@ -8,6 +8,7 @@
 #define TESTQRMARKERDETECTOR_HPP
 
 #include "QRMarkerDetector.hpp"
+#include "UnitTest.hpp"
 
 namespace Vernier {
 	class TestQRMarkerDetector {

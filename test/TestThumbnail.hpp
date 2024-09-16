@@ -5,6 +5,8 @@
  */
 
 #include "Thumbnail.hpp"
+#include "UnitTest.hpp"
+
 
 #ifndef TESTHUMBNAIL_HPP
 #define TESTTHUMBNAIL_HPP

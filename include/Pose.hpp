@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef POSE_HPP
@@ -94,9 +94,6 @@ namespace Vernier {
         Eigen::Matrix4d getPatternToCameraTransformationMatrix();
 
     };
-
-    // Eigen::Matrix4d pose2d(double x, double y, double alpha); // obsolete
-    // Eigen::Matrix4d pose3d(double x, double y, double z, double alpha, double beta, double gamma); // obsolete
 
 }
 

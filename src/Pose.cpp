@@ -1,17 +1,19 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #include "Pose.hpp"
 
 namespace Vernier {
 
-    Pose::Pose() : Pose(0.0, 0.0, 0.0, 0.0, 0.0, 0.0) {
+    Pose::Pose()
+    : Pose(0.0, 0.0, 0.0, 0.0, 0.0, 0.0) {
     }
 
-    Pose::Pose(double x, double y, double alpha, double pixelSize) : Pose(x, y, 0.0, alpha, 0.0, 0.0, pixelSize) {
+    Pose::Pose(double x, double y, double alpha, double pixelSize)
+    : Pose(x, y, 0.0, alpha, 0.0, 0.0, pixelSize) {
         is3D = false;
     }
 

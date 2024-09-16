@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #include "Plane.hpp"
@@ -37,7 +37,6 @@ namespace Vernier {
     }
 
     double Plane::getPhase(double row, double col) {
-        //double phiCenter = planeCoefficients.x() * (col - 0.5) + planeCoefficients.y() * (row - 0.5) + planeCoefficients.z(); // Le 0.5 permet de recaler au centre de l'image entre les deux pixels du milieu
         double phiCenter = planeCoefficients.x() * col + planeCoefficients.y() * row + planeCoefficients.z();
         return phiCenter;
     }

@@ -1,13 +1,14 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
 #ifndef TESTBUFFEREDREADER_HPP
 #define TESTBUFFEREDREADER_HPP
 
 #include "BufferedReader.hpp"
+#include "UnitTest.hpp"
 #include "rapidjson/document.hpp"
 
 #include <fstream>
@@ -85,9 +86,8 @@ namespace Vernier {
             if (document.MemberBegin()->name.GetString() != std::string("BitmapPatternLayout")) {// && document["class"].GetString().compare == std::string("bitmapPattern").) {
                 throw Exception(filename + " is not a valid bitmap pattern file.");
             }
-            //rapidjson::Value& value = document["BitmapPatternLayout"];
+            
             rapidjson::Value& value = document.MemberBegin()->value;
-
             if (value.HasMember("description") && value["description"].IsString()) {
                 description = value["description"].GetString();
             } else {
@@ -202,21 +202,11 @@ namespace Vernier {
                 UNIT_TEST(a[i].GetInt() == testedArray[i]);
             }
 
-            //            UNIT_TEST(document["mat"].IsArray());
-            //            for (rapidjson::SizeType i = 0; i < document["mat"].Size(); i++) {// Uses SizeType instead of size_t
-            //                const rapidjson::Value& ligne = document["mat"][i];
-            //                UNIT_TEST(ligne.IsArray());
-            //                for (rapidjson::SizeType j = 0; j < ligne.Size(); j++) {
-            //                    UNIT_TEST(ligne[j].GetInt() == testedArray[i]);
-            //                }
-            //            }
-
             remove("runAllTestFile.json");
         }
 
         static double speed(unsigned long testCount) {
-
-            return 0;
+            return -1;
         }
 
     };

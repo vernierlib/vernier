@@ -10,6 +10,9 @@ namespace Vernier {
 
     PeriodicPatternDetector::PeriodicPatternDetector(double physicalPeriod)
     : PatternDetector() {
+        if (physicalPeriod < 0.0) {
+            throw Exception("The period must be positive.");
+        }
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
     }
@@ -45,7 +48,7 @@ namespace Vernier {
     Pose PeriodicPatternDetector::get2DPose() {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
-        double alpha = plane2.getAngle() - PI / 2;
+        double alpha = angleInPiPi(plane2.getAngle() - PI / 2);
         double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
 
         return Pose(x, y, alpha, pixelSize);
@@ -86,7 +89,7 @@ namespace Vernier {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
 
-        alpha = plane2.getAngle() - PI / 2;
+        alpha = angleInPiPi(plane2.getAngle() - PI / 2);
 
         std::vector<Pose> poseVec = {Pose(x, y, 0, alpha, beta11, gamma11, 1.0 / sqrt(s_2)),
             Pose(x, y, 0, alpha, beta11, gamma12, 1.0 / sqrt(s_2)),
@@ -106,9 +109,11 @@ namespace Vernier {
 
     void PeriodicPatternDetector::showControlImages(int delay) {
 #ifdef USE_OPENCV  
-        cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
-        if (delay != 0) {
+        cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
+        cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
+        cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getNCols(), 0);
+        if (delay < 0) {
             cv::waitKey(delay);
         }
 #else

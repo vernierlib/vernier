@@ -1,12 +1,11 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018 CNRS, ENSMM, UFC.
  */
 
-#pragma once
-
 #include "Vernier.hpp"
+#include "UnitTest.hpp"
 
 using namespace Vernier;
 using namespace cv;
@@ -57,13 +56,13 @@ namespace Vernier {
 
             // Showing image and is spectrum
             PatternPhase *patternPhase = (PatternPhase*) (detector->getObject("patternPhase"));
-            imshow(layout->getDescription() + " (" + filename + ")", array2image(array));
-            imshow("Phase 1 (wrapped)", array2image(patternPhase->getPhase1()));
-            imshow("Phase 2 (wrapped)", array2image(patternPhase->getPhase2()));
+            arrayShow(layout->getDescription() + " (" + filename + ")", array);
+            //arrayShow("Phase 1 (wrapped)", patternPhase->getPhase1());
+            //arrayShow("Phase 2 (wrapped)", patternPhase->getPhase2());
             //imshow("Spectrum", array2image(patternPhase->getSpectrum()));
-           // imshow("spectrumFiltered1", array2image(patternPhase->getSpectrumPeak1()));
-           // imshow("spectrumFiltered2", array2image(patternPhase->getSpectrumPeak2()));
-            
+            // imshow("spectrumFiltered1", array2image(patternPhase->getSpectrumPeak1()));
+            // imshow("spectrumFiltered2", array2image(patternPhase->getSpectrumPeak2()));
+
             detector->showControlImages();
             //imshow("Spectrum GUI", patternPhase->getControlImage());
             waitKey();
@@ -75,14 +74,14 @@ namespace Vernier {
             //            PatternLayout* layout = Layout::loadFromJSON(filename);
             //
             // Setting the pose of the pattern in the camera frame for rendering
-//    srand(time(NULL));
-//    double x = 7.0 * rand() / RAND_MAX; // 6.0
-//    double y = 7.0 * rand() / RAND_MAX; // 3.0
-//    double alpha = 0.2 * PI * rand() / RAND_MAX; // 0.3;
-//    double beta = 0.2 * PI * rand() / RAND_MAX; // 0.2;
-//    double gamma = 0.2 * PI * rand() / RAND_MAX; // 0.4;
-//    double pixelSize = 2.0;
-//    Pose patternPose = Pose(x, y, 0, alpha, beta, gamma, pixelSize);
+            //    srand(time(NULL));
+            //    double x = 7.0 * rand() / RAND_MAX; // 6.0
+            //    double y = 7.0 * rand() / RAND_MAX; // 3.0
+            //    double alpha = 0.2 * PI * rand() / RAND_MAX; // 0.3;
+            //    double beta = 0.2 * PI * rand() / RAND_MAX; // 0.2;
+            //    double gamma = 0.2 * PI * rand() / RAND_MAX; // 0.4;
+            //    double pixelSize = 2.0;
+            //    Pose patternPose = Pose(x, y, 0, alpha, beta, gamma, pixelSize);
             //            // Setting the pose of the pattern in the camera frame for rendering
             //            double x = 5.0;
             //            double y = 4.0;
@@ -129,44 +128,47 @@ namespace Vernier {
             //            imshow("Spectrum", detector->getGuiSpectrum());
             //            waitKey();
         }
-        
+
         static void test2d() {
+            START_UNIT_TEST;
+
             // Constructing the layout
-            PatternLayout* layout = new PeriodicPatternLayout(15,81,61);
+            double physicalPeriod = randomDouble(5.0, 10.0);
+            PatternLayout* layout = new PeriodicPatternLayout(physicalPeriod, 81, 61);
+            cout << "  Physical period: " << physicalPeriod << endl;
 
             // Setting the pose of the pattern in the camera frame for rendering
-            double x = 6.0;
-            double y = 3.0;
-            double alpha = 0.2;
-            double pixelSize = 2.0;
+            double x = randomDouble(0.0, physicalPeriod / 2.01);
+            double y = randomDouble(0.0, physicalPeriod / 2.01);
+            double alpha = randomDouble(0, PI / 2);
+            double pixelSize = randomDouble(1.0, 1.1);
             Pose patternPose = Pose(x, y, alpha, pixelSize);
-             cout << "Pattern pose: " << patternPose.toString() << endl;
-            
+            cout << "  Pattern pose:   " << patternPose.toString() << endl;
+
             // Rendering
             Eigen::ArrayXXd array(512, 512);
             layout->renderOrthographicProjection(patternPose, array);
+//            arrayShow(layout->getDescription(), array);
 
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
-            detector = new PeriodicPatternDetector(15);
+            detector = new PeriodicPatternDetector(physicalPeriod);
             detector->compute(array);
             Pose estimatedPose = detector->get2DPose();
 
             // Printing results 
-            cout << "Estimation of pattern pose: " << estimatedPose.toString() << endl;
-            
-            UNIT_TEST(areEqual(patternPose.x, estimatedPose.x, 0.001))
-            UNIT_TEST(areEqual(patternPose.y, estimatedPose.y, 0.001))
-            UNIT_TEST(areEqual(patternPose.alpha, estimatedPose.alpha, 0.001))
+            cout << "  Estimated pose: " << estimatedPose.toString() << endl;
+
+            TEST_EQUALITY(patternPose, estimatedPose, 0.01)
         }
 
         static void runAllTests() {
-            test2d();
+            REPEAT_TEST(test2d(), 10)
         }
 
         static double speed(unsigned long testCount) {
 
-            return 0.0;
+            return -1;
         }
 
 
