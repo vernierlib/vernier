@@ -241,6 +241,8 @@ namespace Vernier {
 
     void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
         int offsetMin = source.rows() / 100.0; // MAGIC NUMBER
+        if (offsetMin < 20) 
+            offsetMin = 20;
         source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
 
         double maxValue = -1.0;
@@ -262,6 +264,8 @@ namespace Vernier {
         }
         //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
         if (mainPeak1.z() < 1e-5) { // MAGIC NUMBER
+            //cv::imshow("Peaks not found", array2image(source) );
+            //cv::waitKey();
             throw Exception("Houston, we have a problem here, the first peak has not be found.");
         }
         

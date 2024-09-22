@@ -45,6 +45,7 @@ namespace Vernier {
         resize(patternArray.rows(), patternArray.cols());
         
         fft.compute(patternArray, spectrum);
+        
         Spectrum::shift(spectrum, spectrumShifted);
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
@@ -463,7 +464,7 @@ namespace Vernier {
 
     cv::Mat PatternPhase::getFringesImage() {
         cv::Mat image = array2image(spatial);
-
+        
         for (int row = 0; row < image.rows; ++row) {
             uchar *dst = image.ptr<uchar>(row);
             for (int col = 0; col < image.cols; ++col) {

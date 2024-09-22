@@ -9,33 +9,23 @@
 namespace Vernier {
 #ifdef USE_OPENCV
 
-    QRCodePoseEstimation::QRCodePoseEstimation() {
+    QRCodePoseEstimation::QRCodePoseEstimation(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+        resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 
-    QRCodePoseEstimation::QRCodePoseEstimation(double physicalPeriod, int size, int numberHalfPeriods) {
-        resize(size, physicalPeriod, numberHalfPeriods);
-    }
-
-    void QRCodePoseEstimation::setPhysicalPeriod(double physicalPeriod) {
-        this->physicalPeriod = physicalPeriod;
-    }
-
-    void QRCodePoseEstimation::setNumberHalfPeriods(int numberHalfPeriods) {
-        this->numberHalfPeriods = numberHalfPeriods;
-    }
-
-    void QRCodePoseEstimation::resize(int size, double physicalPeriod, int numberHalfPeriods) {
-        this->size = size;
+    void QRCodePoseEstimation::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+        ASSERT(snapshotSize % 2 == 0);
+        ASSERT(physicalPeriod > 0.0);
+        ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
+        this->snapshotSize = snapshotSize;
         this->physicalPeriod = physicalPeriod;
         this->numberHalfPeriods = numberHalfPeriods;
-        snapshot.resize(size, size);
-        patternPhase.resize(size, size);
-        this->pixelPeriodMin = 4;
-        this->pixelPeriodMax = 100;
+        snapshot.resize(snapshotSize, snapshotSize);
+        patternPhase.resize(snapshotSize, snapshotSize);
     }
 
-    void QRCodePoseEstimation::takeSnapshot(int x, int y, int radius, cv::Mat image) {
-        snapshot.real().setConstant(0);
+    void QRCodePoseEstimation::takeSnapshot(int x, int y, cv::Mat image) {
+        snapshot.setConstant(0);
         if (image.channels() > 1) {
             cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
         }
@@ -43,79 +33,75 @@ namespace Vernier {
         cv::Mat snap64f;
         image.convertTo(snap64f, CV_64FC1);
         snap64f /= 256;
-
+        int radius = snapshotSize / 2;
         for (int col = -radius; col < radius; col++) {
             for (int row = -radius; row < radius; row++) {
-                double distanceToCenter = sqrt((row + 0.5) * (row + 0.5) + (col + 0.5) * (col + 0.5));
+                double distanceToCenter = sqrt((row + 0.5) * (row + 0.5) + (col + 0.5) * (col + 0.5)); // +0.5 A VERIFIER MAIS PAS CRITIQUE 
                 double hanning = (1 + cos(PI * distanceToCenter / radius)) / 2;
                 if (distanceToCenter < radius && y + row > 0 && x + row > 0 && y + row < snap64f.rows && x + row < snap64f.cols) {
-                    snapshot.real()(size / 2 + row, size / 2 + col) = hanning * snap64f.at<double>(y + row, x + col);
+                    snapshot.real()(radius + row, radius + col) = hanning * snap64f.at<double>(y + row, x + col);
                 }
             }
         }
     }
 
     void QRCodePoseEstimation::compute(cv::Mat& image) {
-        //ASSERT(image.type()==CV_64F);
 
         detector.compute(image);
+
         for (int i = 0; i < detector.codes.size(); i++) {
+
             QRCode code = detector.codes[i];
 
-            if ((int) code.getRadius() > size / 2) {
+            if ((int) code.getRadius()*2 > snapshotSize) {
                 throw Exception("The QRCode is too large for pose estimation: increase the snapshot size.");
             }
-            if ((int) code.getRadius() < 37) {
+            if ((int) code.getRadius() < numberHalfPeriods) {
                 throw Exception("The QRCode is too tiny for pose estimation: increase the picture quality size.");
             }
 
-            double xCenter = code.getCenter().x;
-            double yCenter = code.getCenter().y;
-
-            double x = xCenter;
-            double y = yCenter;
-
-            takeSnapshot(x, y, (int) code.getRadius(), image);
-
-            Pose pose;
-            pose.is3D = false;
-
-            patternPhase.setPixelPeriod(29);
+            int centerX = (int) code.center.x;
+            int centerY = (int) code.center.y;
+            takeSnapshot(centerX, centerY, image);      
             patternPhase.compute(snapshot);
 
-            //patternPhase.computeQRCode(snapshot);
-
-            Plane plane1 = patternPhase.getPlane1();
-            Plane plane2 = patternPhase.getPlane2();
-
-            //cv::namedWindow("spectrum", cv::WINDOW_FREERATIO);
-            //cv::imshow("spectrum" + std::to_string(i), Spectrum::draw(PeriodicPatternPositioning.spectrumShifted, PeriodicPatternPositioning.mainPeak1, PeriodicPatternPositioning.mainPeak2));
-
-            double periodSize = plane1.getPixelicPeriod();
-
-            if (physicalPeriod != 0) {
-                this->pixelSize = physicalPeriod / periodSize;
-
-                pose.x = xCenter*pixelSize;
-                pose.y = yCenter*pixelSize;
+            double alpha;
+            double dx, dy;
+            double diffAngle = angleInPiPi(patternPhase.getPlane1().getAngle() - code.getAngle());
+            if (diffAngle >= -PI / 4 && diffAngle <= PI / 4) {
+                alpha = patternPhase.getPlane1().getAngle();
+                dx = -patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
+                dy = -patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
+            } else if (diffAngle >= 3 * PI / 4 || diffAngle <= -3 * PI / 4) {
+                alpha = patternPhase.getPlane1().getAngle() + PI;
+                dx = +patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
+                dy = +patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
+            } else if (diffAngle >= PI / 4 && diffAngle <= 3 * PI / 4) {
+                alpha = patternPhase.getPlane1().getAngle() - PI / 2;
+                dx = patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
+                dy = -patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
             } else {
-                this->pixelSize = 1;
-
-                pose.x = code.getCenter().x * pixelSize;
-                pose.y = code.getCenter().y * pixelSize;
+                alpha = patternPhase.getPlane1().getAngle() + PI / 2;
+                dx = -patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
+                dy = patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
             }
 
-            pose.alpha = plane1.getAngle();
+            double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+            double xImg = (centerX - image.cols / 2);
+            double yImg = (centerY - image.rows / 2);
+            double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
+            double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
 
-            //std::cout << "pose number " << i << "  at" << pose.toString() << std::endl;
+            Pose pose = Pose(x, y, alpha, pixelSize);
 
-            if (numberHalfPeriods == 37) {
-                unsigned long number = readNumber(code, image, periodSize / 2.0);
+            if (numberHalfPeriods == 37) { // MAGIC NUMBER !!
+                unsigned long number = readNumber(code, image, patternPhase.getPixelPeriod() / 2.0);
 
                 codes.insert(std::make_pair(number, pose));
             } else {
-                codes[0] = pose;
+                codes.insert(std::make_pair(i, pose));
             }
+            
         }
     }
 
@@ -165,14 +151,10 @@ namespace Vernier {
         return number;
     }
 
-    void QRCodePoseEstimation::drawPose(cv::Mat& image) {
-        detector.draw(image);
-
+    void QRCodePoseEstimation::drawPose(cv::Mat & image) {
         for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
-            cv::line(image, cv::Point(it->second.x / pixelSize - 5, it->second.y / pixelSize), cv::Point(it->second.x / pixelSize + 5, it->second.y / pixelSize), cv::Scalar(0, 255, 0), 2);
-            cv::line(image, cv::Point(it->second.x / pixelSize, it->second.y / pixelSize - 5), cv::Point(it->second.x / pixelSize, it->second.y / pixelSize + 5), cv::Scalar(0, 255, 0), 2);
-            cv::putText(image, std::to_string(it->first), cv::Point(it->second.x / pixelSize + 5, it->second.y / pixelSize - 5), cv::FONT_HERSHEY_COMPLEX, 1, cv::Scalar(255, 255, 255), 3);
-            //it->second.draw(image);
+            double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
+            it->second.draw(image, length, std::to_string(it->first));
         }
     }
 
@@ -184,12 +166,26 @@ namespace Vernier {
             cv::eigen2cv(snapMatrix, snap64f);
             cv::imshow("snapshot " + std::to_string(it->first), snap64f);
             snap64f *= 255;
-            cv::imwrite("snapshot.png", snap64f);
+            //cv::imwrite("snapshot.png", snap64f);
         }
     }
 
     double QRCodePoseEstimation::getPixelSize() {
-        return pixelSize;
+        return patternPhase.getPixelPeriod();
     }
+
+    void QRCodePoseEstimation::showControlImages() {
+        //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
+        //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
+        cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
+        //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());
+    }
+
+
+
+
+
+
+
 #endif //USE_OPENCV
 }

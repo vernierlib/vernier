@@ -72,22 +72,22 @@ namespace Vernier {
             throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
         }
         if (document.HasMember("bitmap") && document["bitmap"].IsArray()) {
-            nRows = document["bitmap"].Size();
+            nRows = (document["bitmap"].Size()+1)/2;
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");
         }
 
         if (document["bitmap"][0].IsArray() && document["bitmap"][0].Size() > 0) {
-            nCols = document["bitmap"][0].Size();
+            nCols = (document["bitmap"][0].Size()+1)/2;
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the first row of the bitmap has a wrong format.");
         }
 
         resize(period, nRows, nCols);
-        for (rapidjson::SizeType row = 0; row < 2 * nRows - 1; row++) {
+        for (rapidjson::SizeType row = 0; row < bitmap.rows(); row++) {
             const rapidjson::Value& value = document["bitmap"][row];
-            if (value.IsArray() && value.Size() == 2 * nCols - 1) {
-                for (rapidjson::SizeType col = 0; col < 2 * nCols - 1; col++) {
+            if (value.IsArray() && value.Size() == bitmap.cols()) {
+                for (rapidjson::SizeType col = 0; col < bitmap.cols(); col++) {
                     if (value[col].IsInt()) {
                         bitmap(row, col) = value[col].GetInt();
                     } else {

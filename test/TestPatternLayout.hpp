@@ -101,7 +101,7 @@ namespace Vernier {
             layout.saveToJSON("testCustomPattern.json");
             std::cout << "Genération terminée" << std::endl;
         }
-
+        
 #ifdef USE_OPENCV
         static void runAllTests() {
             

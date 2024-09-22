@@ -14,50 +14,41 @@ namespace Vernier {
 #ifdef USE_OPENCV
 
     class QRCodePoseEstimation {
-    private:
-        int nRows, nCols, sideOffset;
-        double sigmaPercent, hyperGaussianOrder;
-        double pixelPeriodMin, pixelPeriodMax;
-        double pixelicPeriod;
-        PatternPhase patternPhase;
-        Eigen::ArrayXXcd snapshot;
-
+        
     protected:
-        double physicalPeriod;
-        int size;
-
-        void takeSnapshot(int x, int y, int radius, cv::Mat image);
-
-
-    public:
-        QRCodeDetector detector;
-        double pixelSize;
+        
+        Eigen::ArrayXXcd snapshot;   
         int numberHalfPeriods;
+        double physicalPeriod;
+        int snapshotSize;
 
+        void takeSnapshot(int x, int y, cv::Mat image);
+        
+        unsigned long readNumber(QRCode& code, cv::Mat& image, double dotSize);
+   
+  public:
+        
+        QRCodeDetector detector;
+        PatternPhase patternPhase;
+        
         /** Map of detected codes (key map = code number) */
         std::map<int, Pose> codes;
 
-        //QRCodePoseEstimation();
-
-        QRCodePoseEstimation();
-
         /** Constructs a pose estimator for periodic QR codes
          *
-         *	\param physicalPeriod: physical period of the dots contained in the QR code
-         *	\param size: maximal size of the QR code in pixels
-         *	\param numberHalfPeriods: number of hlaf periods contained in the QR along one direction. New (numbered) QR codes contain 37 half periods while old contain 37.
+         *	\param physicalPeriod: physical period between the dots of the QR code
+         *	\param snapshotSize: maximal size of the QR code in pixels
+         *	\param numberHalfPeriods: number of half periods contained in the QR along one direction.
          */
-        QRCodePoseEstimation(double physicalPeriod, int size = 128, int numberHalfPeriods = 37);
-
-        void setPhysicalPeriod(double physicalPeriod);
-
-        void setNumberHalfPeriods(int numberHalfPeriods);
+        QRCodePoseEstimation(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 37);
 
         /** Prepares the different required objects for processing
          *
-         *	\param size: approximate size of the QR code in pixels
+          *	\param physicalPeriod: physical period between the dots of the QR code
+         *	\param snapshotSize: maximal size of the QR code in pixels
+         *	\param numberHalfPeriods: number of half periods contained in the QR along one direction.
          */
-        void resize(int size, double physicalPeriod, int numberHalfPeriods);
+        void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
 
         /** Estimate the pose of a QR code in a image
          *
@@ -66,17 +57,18 @@ namespace Vernier {
          */
         void compute(cv::Mat& image);
 
-        unsigned long readNumber(QRCode& code, cv::Mat& image, double dotSize);
-
+        
         /** Draws all the found patterns in a image (analysis must have been done before)
          *
          *	\param image: image of any types
          */
-        void drawPose(cv::Mat& image);
+        void drawPose(cv::Mat& image); 
 
-        void drawSnapshot();
+        void drawSnapshot(); // a supprimer
 
-        double getPixelSize();
+        double getPixelSize(); // a supprimer
+        
+        void showControlImages();
 
     };
 #endif // USE_OPENCV

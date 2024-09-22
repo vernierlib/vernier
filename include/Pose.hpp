@@ -51,7 +51,7 @@ namespace Vernier {
          *	\param x: translation along X axis (in the same unit than the period of the pattern)
          *	\param y: translation along Y axis (in the same unit than the period of the pattern)
          *	\param alpha: rotation angle about the Z axis (in radian)
-         *  \param pixelSize: pixel-to-millimeter scale factor
+         *      \param pixelSize: pixel-to-millimeter scale factor
          */
         Pose(double x, double y, double alpha, double pixelSize = 1.0);
 
@@ -63,13 +63,13 @@ namespace Vernier {
          *	\param alpha: rotation angle about the Z axis (in radian)
          *	\param beta: rotation angle about the Y intrinsic axis (in radian)
          *	\param gamma: rotation angle about the X intrinnsic axis (in radian)
-         *  \param pixelSize: pixel-to-millimeter scale factor
+         *      \param pixelSize: pixel-to-millimeter scale factor
          */
         Pose(double x, double y, double z, double alpha, double beta, double gamma, double pixelSize = 1.0);
 
         /** Returns a string describing the pose
          */
-        std::string toString();
+        std::string toString() const;
 
         /** Returns the transformation matrix from the camera to the pattern frames defined by:
          * 
@@ -93,8 +93,12 @@ namespace Vernier {
          */
         Eigen::Matrix4d getPatternToCameraTransformationMatrix();
 
+        void draw(cv::Mat & image, double length = -1.0, std::string name ="");
+        
     };
 
+    std::ostream& operator<<(std::ostream& os, const Pose& p);    
+    
 }
 
 #endif

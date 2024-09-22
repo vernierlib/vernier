@@ -11,7 +11,8 @@ using namespace std;
 
 int main(int argc, char** argv) {
 
-    Vernier::TestPatternLayout::runAllTests();
+    //TestPatternLayout::main4();
+    TestPatternLayout::runAllTests();
 
     return EXIT_SUCCESS;
 }

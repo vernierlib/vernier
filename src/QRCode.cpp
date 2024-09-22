@@ -35,6 +35,8 @@ namespace Vernier {
             std::swap(right, bottom);
             rightDirection = right - top;
         }
+        
+        this->center = cv::Point2d((right.x + bottom.x) / 2.0, (right.y + bottom.y) / 2.0);
     }
 
     double QRCode::getAngle() {
@@ -42,30 +44,22 @@ namespace Vernier {
         return atan2(rightDirection.y, rightDirection.x);
     }
 
-    cv::Point2d QRCode::getCenter() {
-        this->center = cv::Point2d((right.x + bottom.x) / 2.0, (right.y + bottom.y) / 2.0);
-        return center;
-    }
-
     void QRCode::draw(cv::Mat& image) {
         cv::line(image, top, right, cv::Scalar(0, 0, 255), 2);
         cv::line(image, top, bottom, cv::Scalar(0, 255, 0), 2);
-        //cv::putText(image, Vernier::toString(number), center, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 4);
+        cv::circle(image, center, 5, cv::Scalar(255, 0, 0), -1);
     }
 
     std::string QRCode::toString() {
-        return "[ t=(" + Vernier::toString(top.x) + "," + Vernier::toString(top.y)
-                + "), r=(" + Vernier::toString(right.x) + "," + Vernier::toString(right.y)
-                + "), b=(" + Vernier::toString(bottom.x) + "," + Vernier::toString(bottom.y) + " ]";
+        return "[ top=(" + Vernier::toString(top.x) + "," + Vernier::toString(top.y)
+                + "), right=(" + Vernier::toString(right.x) + "," + Vernier::toString(right.y)
+                + "), bottom=(" + Vernier::toString(bottom.x) + "," + Vernier::toString(bottom.y) + " ]";
     }
 
     double QRCode::getRadius() {
-        int dotCount = (int) (cv::norm(top - right));
+        int dotCount = (int) (cv::norm(bottom - right)/2.0);
         return dotCount;
     }
 
-    double QRCode::getPeriod() {
-        return (cv::norm(top - right) / 15);
-    }
 #endif
 }

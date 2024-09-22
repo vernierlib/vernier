@@ -13,6 +13,8 @@ namespace Vernier {
     void drawCameraFrame(cv::Mat& image) {
         int cx = image.cols / 2;
         int cy = image.rows / 2;
+        cv::line(image, cv::Point(0, cy), cv::Point(image.cols, cy), cv::Scalar(128, 128, 128));
+        cv::line(image, cv::Point(cx, 0), cv::Point(cx, image.rows), cv::Scalar(128, 128, 128));
         cv::line(image, cv::Point(cx, cy), cv::Point(cx + cx / 5, cy), cv::Scalar(0, 0, 255));
         cv::line(image, cv::Point(cx, cy), cv::Point(cx, cy + cy / 5), cv::Scalar(0, 255, 0));
     }
@@ -75,7 +77,7 @@ namespace Vernier {
         cv::Mat image = array2image(array);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
-        cv::waitKey();
+        //cv::waitKey();
 #else
         std::cout << "OpenCV is required to show arrays." << std::endl;
 #endif // USE_OPENCV

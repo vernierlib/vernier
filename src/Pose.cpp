@@ -21,14 +21,14 @@ namespace Vernier {
         this->x = x;
         this->y = y;
         this->z = z;
-        this->alpha = alpha;
-        this->beta = beta;
-        this->gamma = gamma;
+        this->alpha = angleInPiPi(alpha);
+        this->beta = angleInPiPi(beta);
+        this->gamma = angleInPiPi(gamma);
         this->pixelSize = pixelSize;
         is3D = true;
     }
 
-    std::string Pose::toString() {
+    std::string Pose::toString() const {
         if (is3D) {
             return "[ x=" + Vernier::toString(x) + "; y=" + Vernier::toString(y) + "; z=" + Vernier::toString(z)
                     + "; alpha=" + Vernier::toString(alpha) + "; beta=" + Vernier::toString(beta) + "; gamma=" + Vernier::toString(gamma)
@@ -71,6 +71,26 @@ namespace Vernier {
                     0, 0, 0, 1;
         }
         return pTc;
+    }
+
+    void Pose::draw(cv::Mat & image, double length, std::string name) {
+        if (length < 0.0) {
+            length = image.cols / 4;
+        }
+        Eigen::Matrix4d cTp = getCameraToPatternTransformationMatrix();
+        double xImg = cTp(0, 3) / pixelSize + image.cols / 2;
+        double yImg = cTp(1, 3) / pixelSize + image.rows / 2;
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha), yImg + length * sin(alpha)), cv::Scalar(0, 0, 255));
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha + PI / 2), yImg + length * sin(alpha + PI / 2)), cv::Scalar(0, 255, 0));
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha), yImg - length * sin(alpha)), cv::Scalar(128, 128, 128));
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha + PI / 2), yImg - length * sin(alpha + PI / 2)), cv::Scalar(128, 128, 128));
+        cv::putText(image, name, cv::Point(xImg + 5, yImg - 5), cv::FONT_HERSHEY_COMPLEX, 1, cv::Scalar(0, 0, 255), 1);
+
+    }
+
+    std::ostream& operator<<(std::ostream& os, const Pose& p) {
+        os << p.toString();
+        return os;
     }
 
 }

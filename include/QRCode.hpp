@@ -33,11 +33,7 @@ namespace Vernier {
 
         double getRadius();
 
-        double getPeriod();
-
         double getAngle();
-
-        cv::Point2d getCenter();
     };
 #endif // USE_OPENCV
 }
