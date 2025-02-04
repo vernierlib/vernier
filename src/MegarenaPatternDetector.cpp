@@ -1,11 +1,11 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UFC.
  */
 
 #include "MegarenaPatternDetector.hpp"
-#include "MegarenaBitSequences.cpp"
+#include "MegarenaBitSequence.hpp"
 
 namespace Vernier {
 
@@ -29,15 +29,7 @@ namespace Vernier {
     
     MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize) 
     : PeriodicPatternDetector(physicalPeriod) {
-        if (codeSize == 8) {
-            initializeBitSequence8(bitSequence);
-        } else if (codeSize == 10) {
-            initializeBitSequence10(bitSequence);
-        } else if (codeSize == 12) {
-            initializeBitSequence12(bitSequence);
-        } else {
-            throw Exception("The code size must be 8, 10, or 12.");
-        }
+        MegarenaBitSequence::generate(codeSize, bitSequence);
         classname = "MegarenaPattern";
         decoding.resize(bitSequence);
     }
@@ -161,14 +153,10 @@ namespace Vernier {
             }
         } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {
             int codeSize = document["codeSize"].GetInt();
-            if (codeSize == 8) {
-                initializeBitSequence8(bitSequence);
-            } else if (codeSize == 10) {
-                initializeBitSequence10(bitSequence);
-            } else if (codeSize == 12) {
-                initializeBitSequence12(bitSequence);
+            if (codeSize >= 4 && codeSize <=12) {
+                MegarenaBitSequence::generate(codeSize, bitSequence);
             } else {
-                throw Exception("The file is not a valid megarena pattern file, the code size must be 8, 10, or 12.");
+                throw Exception("The file is not a valid megarena pattern file, the code size must between 4 and 12.");
             }
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");

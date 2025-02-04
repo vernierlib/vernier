@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef TESTQRCODEDETECTOR_HPP
@@ -20,96 +20,96 @@ public:
     static void main() {
         Mat image = imread("testfiles/QRCode/code23.png");
 
-        QRCodeDetector codeDetector;
+        QRCodeDetector detector;
 
-        codeDetector.markerDetector.lowCannyThreshold = 200;
-        codeDetector.markerDetector.highCannyThreshold = 400;
+        detector.fiducialDetector.lowCannyThreshold = 200;
+        detector.fiducialDetector.highCannyThreshold = 400;
 
-        codeDetector.compute(image);
-        codeDetector.draw(image);
-        cout << codeDetector.toString() << endl;
+        detector.compute(image);
+        detector.draw(image);
+        cout << detector.toString() << endl;
 
-        imshow("Edges", codeDetector.markerDetector.cannyImage);
+        imshow("Edges", detector.fiducialDetector.cannyImage);
         imshow("Image", image);
 
         waitKey(0);
     }
 
     static void runAllTests() {
-        QRCodeDetector codeDetector;
+        QRCodeDetector detector;
         Mat image;
 
         image = imread("testfiles/QRCode/code11.jpg");
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code12.jpg");
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code13.jpg");
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code14.jpg");
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code15.jpg");
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code16.jpg");
-        codeDetector.markerDetector.lowCannyThreshold = 500;
-        codeDetector.markerDetector.highCannyThreshold = 600;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.fiducialDetector.lowCannyThreshold = 500;
+        detector.fiducialDetector.highCannyThreshold = 600;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code17.jpg");
-        codeDetector.markerDetector.lowCannyThreshold = 100;
-        codeDetector.markerDetector.highCannyThreshold = 200;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.fiducialDetector.lowCannyThreshold = 100;
+        detector.fiducialDetector.highCannyThreshold = 200;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);
 
         image = imread("testfiles/QRCode/code18.jpg");
         erode(image, image, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)), Point(-1, -1), 3);
-        codeDetector.markerDetector.lowCannyThreshold = 50;
-        codeDetector.markerDetector.highCannyThreshold = 100;
-        UNIT_TEST(codeDetector.codes.size() == 1);
+        detector.fiducialDetector.lowCannyThreshold = 50;
+        detector.fiducialDetector.highCannyThreshold = 100;
+        UNIT_TEST(detector.codes.size() == 1);
         
         image = imread("testfiles/QRCode/code19.png");
-        codeDetector.markerDetector.lowCannyThreshold = 100;
-        codeDetector.markerDetector.highCannyThreshold = 200;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 1);        
+        detector.fiducialDetector.lowCannyThreshold = 100;
+        detector.fiducialDetector.highCannyThreshold = 200;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 1);        
 
         image = imread("testfiles/QRCode/code23.png");
-        codeDetector.markerDetector.lowCannyThreshold = 200;
-        codeDetector.markerDetector.highCannyThreshold = 400;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 2);        
+        detector.fiducialDetector.lowCannyThreshold = 200;
+        detector.fiducialDetector.highCannyThreshold = 400;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 2);        
 
         image = imread("testfiles/QRCode/code31.jpg");
-        codeDetector.markerDetector.lowCannyThreshold = 50;
-        codeDetector.markerDetector.highCannyThreshold = 100;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 3);
+        detector.fiducialDetector.lowCannyThreshold = 50;
+        detector.fiducialDetector.highCannyThreshold = 100;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 3);
 
         image = imread("testfiles/QRCode/code61.jpg");
-        codeDetector.markerDetector.lowCannyThreshold = 120;
-        codeDetector.markerDetector.highCannyThreshold = 200;
-        codeDetector.compute(image);
-        UNIT_TEST(codeDetector.codes.size() == 6);
+        detector.fiducialDetector.lowCannyThreshold = 120;
+        detector.fiducialDetector.highCannyThreshold = 200;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 6);
     }
 
     static double speed(unsigned long testCount) {
-        QRCodeDetector codeDetector;
+        QRCodeDetector detector;
         Mat image;
         image = imread("testfiles/QRCode/code12.jpg");
 
         tic();
         for (unsigned long i = 0; i < testCount; i++) {
-            codeDetector.compute(image);
+            detector.compute(image);
         }
         return toc(testCount);
     }

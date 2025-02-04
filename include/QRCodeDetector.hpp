@@ -1,18 +1,39 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef QRCODEDETECTOR_HPP
 #define QRCODEDETECTOR_HPP
 
-#include "QRMarkerDetector.hpp"
-#include "QRCode.hpp"
-#include <map>
+#include "QRFiducialDetector.hpp"
 
 namespace Vernier {
 #ifdef USE_OPENCV
+    
+    class QRCode {
+    public:
+
+        cv::Point2d top, right, bottom, center;
+
+        /** Constructs a default QRCode */
+        QRCode() {
+        };
+
+        /** Constructs a QRCode based on three markers */
+        QRCode(QRFiducialPattern& marker0, QRFiducialPattern& marker1, QRFiducialPattern& marker2);
+
+        /** Draws the code in an image */
+        void draw(cv::Mat& image);
+
+        /** Converts into a string */
+        std::string toString();
+
+        double getRadius();
+
+        double getAngle();
+    };
 
     class QRCodeDetector {
     private:
@@ -26,13 +47,13 @@ namespace Vernier {
 
     public:
 
-        QRMarkerDetector markerDetector;
+        QRFiducialDetector fiducialDetector;
 
         /** Vector of detected codes (unsort) */
         std::vector<QRCode> codes;
 
         /** Constructs a detector for QR codes */
-        QRCodeDetector() : markerDetector() {
+        QRCodeDetector() : fiducialDetector() {
         };
 
         /** Detects QR codes in an image */

@@ -1,0 +1,13 @@
+{
+    "MegarenaPattern": {
+        "description": "Example of 12-bits megarena pattern",
+        "date": "2022",
+        "author": "FEMTO-ST",
+        "unit": "micrometer",
+        "margin": 0.000000000000000,
+        "period": 15.0,
+        "regionOfInterest": [1000.000000000000000, 1000.000000000000000, 3000.000000000000000, 2000.000000000000000 ],
+        "codeSize": 12,
+        "copyright": "Copyright (c) 2018-2023 ENSMM, UFC, CNRS."
+    }
+}

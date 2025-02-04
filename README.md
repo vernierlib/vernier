@@ -54,7 +54,7 @@ Alternatively, you can use VS Code.
 
 ### Linux instructions
 
-With Linux, some dependencies must be installed first using homebrew:
+With Linux, some dependencies must be installed first using apt-get:
 
 	> sudo apt-get install cmake eigen libtool libmatio
 

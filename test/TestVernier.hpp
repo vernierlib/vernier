@@ -25,7 +25,7 @@
 
 #include "TestPatternDetector.hpp"
 #include "TestQRCodeDetector.hpp"
-#include "TestQRMarkerDetector.hpp"
+#include "TestQRFiducialDetector.hpp"
 
 #include "TestPatternLayout.hpp"
 
