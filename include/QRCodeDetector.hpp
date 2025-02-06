@@ -21,10 +21,10 @@ namespace Vernier {
         QRCode() {
         };
 
-        /** Constructs a QRCode based on three markers */
+        /** Constructs a QRCode based on three fiducial patterns */
         QRCode(QRFiducialPattern& marker0, QRFiducialPattern& marker1, QRFiducialPattern& marker2);
 
-        /** Draws the code in an image */
+        /** Draws the QRCode in an image */
         void draw(cv::Mat& image);
 
         /** Converts into a string */
