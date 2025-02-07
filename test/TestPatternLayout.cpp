@@ -151,7 +151,7 @@ void runAllTests() {
     remove("MegarenaPattern.json");
     UNIT_TEST(3);
 
-    StampMarkerLayout layout4;
+    FingerprintPatternLayout layout4;
     layout4.loadFromPNG("data/femto.png", 9);
     layout4.saveToJSON("FingerprintPattern.json");
     layout4.loadFromJSON("FingerprintPattern.json");

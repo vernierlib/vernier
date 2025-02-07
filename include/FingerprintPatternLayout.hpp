@@ -4,17 +4,17 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#ifndef STAMPLAYOUT_HPP
-#define STAMPLAYOUT_HPP
+#ifndef FINGERPRINTPATTERNLAYOUT_HPP
+#define FINGERPRINTPATTERNLAYOUT_HPP
 
-#include "PeriodicPatternLayout.hpp"
+#include "BitmapPatternLayout.hpp"
 
 namespace vernier {
 
-    /** \brief Layout class for stamp markers 
+    /** \brief Layout class for fingerprint patterns 
      *  
      */
-    class StampMarkerLayout : public PeriodicPatternLayout {
+    class FingerprintPatternLayout : public BitmapPatternLayout {
     protected:
 
         Eigen::ArrayXXi bitmap;
@@ -25,13 +25,13 @@ namespace vernier {
 
     public:
 
-        StampMarkerLayout();
+        FingerprintPatternLayout();
 
-        StampMarkerLayout(double period, int nRows, int nCols);
+        FingerprintPatternLayout(double period, int nRows, int nCols);
 
         void resize(double dotSize, int nRows, int nCols);
 
-        /** Initializes a pattern from a PNG file with given period (requires OpenCV) */
+        /** Initializes a pattern from a PNG file with given period */
         virtual void loadFromPNG(std::string filename, double period);
 
         double getIntensity(double x, double y);
