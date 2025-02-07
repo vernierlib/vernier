@@ -56,7 +56,7 @@ void runAllTests() {
 
 void test12bits() {
     Eigen::ArrayXXi bitSequence(1, 1);
-    Eigen::MatioFile file("testfiles/newMask12Bits_x3_2pi.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/newMask12Bits_x3_2pi.mat", MAT_ACC_RDONLY);
     file.read_mat("bit_sequence_codee", bitSequence);
     file.close();
     std::random_device rd;
@@ -78,7 +78,7 @@ void test12bits() {
 
 double speedFindCode(unsigned long testCount) {
     Eigen::ArrayXXi bitSequence(1, 1);
-    Eigen::MatioFile file2("testfiles/newMask12Bits_x3_2piNormalized.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file2("data/newMask12Bits_x3_2piNormalized.mat", MAT_ACC_RDONLY);
     file2.read_mat("bit_sequence_codee", bitSequence);
 
     Eigen::ArrayXXd codeSample(56, 1);

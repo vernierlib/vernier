@@ -27,4 +27,4 @@ foreach(file ${TESTS})
   
 endforeach(file)
 
-add_subdirectory(testfiles)
+add_subdirectory(data)

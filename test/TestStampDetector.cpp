@@ -15,7 +15,7 @@ using namespace cv;
 
 void main1() {
 
-    string filename = "testfiles/stamp/stamp2.png";
+    string filename = "data/stamp/stamp2.png";
     Mat grayImage, image = imread(filename);
     imageTo8UC1(image, grayImage);
 
@@ -103,7 +103,7 @@ void testFile(string filename, int markerCount) {
 
 
 //double speed(unsigned long testCount) {
-//        Mat image = imread("testfiles/QRCode/code31.jpg", -1);
+//        Mat image = imread("data/QRCode/code31.jpg", -1);
 //
 //        HPCodeDetector poses = HPCodeDetector(15.5, 256, 37);
 //        poses.detector.fiducialDetector.lowCannyThreshold = 50;
@@ -127,7 +127,7 @@ int main(int argc, char** argv) {
 
     START_UNIT_TEST;
 
-    testFile("testfiles/stamp/stamp2.png", 2);
+    testFile("data/stamp/stamp2.png", 2);
 
     return EXIT_SUCCESS;
 }

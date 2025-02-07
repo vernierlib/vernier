@@ -16,7 +16,7 @@ using namespace std;
 void main1() {
 
     Eigen::ArrayXXcd mireMatrix;
-    cv::Mat image = cv::imread("testfiles/im_1.png", 0);
+    cv::Mat image = cv::imread("data/im_1.png", 0);
     imshow("Image", image);
     Eigen::MatrixXd intermediaryMatrix;
     cv::cv2eigen(image, intermediaryMatrix);
@@ -79,14 +79,14 @@ void runAllTests2() {
     Eigen::ArrayXXcd mireMatrix;
     Eigen::MatrixXd planeCoefficientsReference(1, 1);
 
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDONLY);
     file.read_mat("planeCoefficients", planeCoefficientsReference);
 
     PatternPhase phaseRetrieving;
     phaseRetrieving.setSigma(5);
     phaseRetrieving.setPixelPeriod(15);
 
-    cv::Mat image = cv::imread("testfiles/im_1.png", 0);
+    cv::Mat image = cv::imread("data/im_1.png", 0);
     Eigen::MatrixXd intermediaryMatrix;
     cv::cv2eigen(image, intermediaryMatrix);
     mireMatrix = intermediaryMatrix.array();

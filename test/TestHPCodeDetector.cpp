@@ -15,7 +15,7 @@ using namespace cv;
 
 void main1() {
 
-    Mat image = cv::imread("testfiles/QRCode/code31.jpg");
+    Mat image = cv::imread("data/QRCode/code31.jpg");
 
     HPCodeDetector estimator(15.5, 256, 37);
 
@@ -44,13 +44,13 @@ void main1() {
 
 void main2() {
 
-    ofstream file("testfiles/Image140/results.csv");
+    ofstream file("data/Image140/results.csv");
     file << "no;x;y;alpha;pixelSize;no;x;y;alpha;pixelSize;" << endl;
 
     for (int i = 96; i <= 140; i++) {
 
         cout << "Loading image " << i << endl;
-        Mat image = cv::imread("testfiles/Image140/Image" + to_string(i) + ".png");
+        Mat image = cv::imread("data/Image140/Image" + to_string(i) + ".png");
         cv::Rect myROI(500, 500, 1500, 1000);
         image = image(myROI);
         bitwise_not(image, image);
@@ -246,17 +246,17 @@ void test(string filename, int lowCannyThreshold, int highCannyThreshold, int nu
 }
 
 void runAllTests() {
-    test("testfiles/QRCode/code17.jpg", 100, 200, 1, 512, 37);
-    test("testfiles/QRCode/code23.png", 200, 400, 2, 512, 33);
-    test("testfiles/QRCode/code31.jpg", 50, 100, 3, 256, 37);
-    test("testfiles/QRCode/code61.jpg", 100, 210, 6, 256, 37);
+    test("data/QRCode/code17.jpg", 100, 200, 1, 512, 37);
+    test("data/QRCode/code23.png", 200, 400, 2, 512, 33);
+    test("data/QRCode/code31.jpg", 50, 100, 3, 256, 37);
+    test("data/QRCode/code61.jpg", 100, 210, 6, 256, 37);
     REPEAT_TEST(test2d(33), 10)
     REPEAT_TEST(test2d(37), 10)
 
 }
 
 double speed(unsigned long testCount) {
-    Mat image = imread("testfiles/QRCode/code31.jpg", -1);
+    Mat image = imread("data/QRCode/code31.jpg", -1);
 
     HPCodeDetector poses = HPCodeDetector(15.5, 256, 37);
     poses.detector.fiducialDetector.lowCannyThreshold = 50;

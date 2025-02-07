@@ -13,7 +13,7 @@ using namespace cv;
 
 void main1() {
 
-    string filename = "testfiles/stamp/stamp2.png";
+    string filename = "data/stamp/stamp2.png";
     Mat grayImage, image = imread(filename);
     imageTo8UC1(image, grayImage);
 
@@ -50,7 +50,7 @@ void test(string filename, int numberOfMarkers) {
 double speed(unsigned long testCount) {
 
     SquareDetector detector;
-    cv::Mat grayImage, image = cv::imread("testfiles/QRCode/code17.jpg");
+    cv::Mat grayImage, image = cv::imread("data/QRCode/code17.jpg");
     if (image.channels() > 1) {
         cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
     } else {
@@ -73,8 +73,8 @@ int main(int argc, char** argv) {
     
     cout << "Computing time: " << speed(100) << " ms" << endl;
 
-    test("testfiles/QRCode/code14.jpg", 1);
-    test("testfiles/QRCode/code17.jpg", 7);
+    test("data/QRCode/code14.jpg", 1);
+    test("data/QRCode/code17.jpg", 7);
 
     return EXIT_SUCCESS;
 }

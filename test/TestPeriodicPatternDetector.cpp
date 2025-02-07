@@ -14,7 +14,7 @@ using namespace Eigen;
 
 void main2d() {
     // Loading the layout
-    string filename = "testfiles/periodicPattern.json";
+    string filename = "data/periodicPattern.json";
     PatternLayout* layout = Layout::loadFromJSON(filename);
 
     // Setting the pose of the pattern in the camera frame for rendering

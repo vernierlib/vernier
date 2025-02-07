@@ -13,7 +13,7 @@ using namespace cv;
 
 void main1() {
 
-    cv::Mat image = cv::imread("testfiles/QRCode/code17.jpg");
+    cv::Mat image = cv::imread("data/QRCode/code17.jpg");
 
     QRFiducialDetector detector;
 
@@ -56,7 +56,7 @@ double speed(unsigned long testCount) {
 
     QRFiducialDetector detector;
     cv::Mat image;
-    image = cv::imread("testfiles/QRCode/code12.jpg");
+    image = cv::imread("data/QRCode/code12.jpg");
     detector.lowCannyThreshold = 50;
     detector.highCannyThreshold = 110;
 
@@ -74,18 +74,18 @@ int main(int argc, char** argv) {
     
 //    cout << "Computing time: " << speed(100) << " ms" << endl;
     
-    test("testfiles/QRCode/code11.jpg", 200, 400, 3);
-    test("testfiles/QRCode/code12.jpg", 200, 400, 3);
-    test("testfiles/QRCode/code13.jpg", 200, 400, 3);
-    test("testfiles/QRCode/code14.jpg", 200, 400, 3);
-    test("testfiles/QRCode/code15.jpg", 200, 400, 3);
-    test("testfiles/QRCode/code16.jpg", 350, 700, 3);
-    test("testfiles/QRCode/code17.jpg", 100, 200, 3);
-    test("testfiles/QRCode/code21.jpg", 200, 550, 6);
-    test("testfiles/QRCode/code22.tif", 50, 100, 6);
-    test("testfiles/QRCode/code23.png", 200, 400, 6);
-    test("testfiles/QRCode/code31.jpg", 50, 110, 9);
-    test("testfiles/QRCode/code61.jpg", 100, 210, 18);
+    test("data/QRCode/code11.jpg", 200, 400, 3);
+    test("data/QRCode/code12.jpg", 200, 400, 3);
+    test("data/QRCode/code13.jpg", 200, 400, 3);
+    test("data/QRCode/code14.jpg", 200, 400, 3);
+    test("data/QRCode/code15.jpg", 200, 400, 3);
+    test("data/QRCode/code16.jpg", 350, 700, 3);
+    test("data/QRCode/code17.jpg", 100, 200, 3);
+    test("data/QRCode/code21.jpg", 200, 550, 6);
+    test("data/QRCode/code22.tif", 50, 100, 6);
+    test("data/QRCode/code23.png", 200, 400, 6);
+    test("data/QRCode/code31.jpg", 50, 110, 9);
+    test("data/QRCode/code61.jpg", 100, 210, 18);
 
     return EXIT_SUCCESS;
 }

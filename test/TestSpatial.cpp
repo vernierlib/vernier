@@ -47,12 +47,12 @@ void main2() {
     double deltaPhase = PI / 6;
     Eigen::ArrayXXd wrappedPhasePeak1(1, 1);
 
-    cv::Mat image = cv::imread("testfiles/im_1.png");
+    cv::Mat image = cv::imread("data/im_1.png");
     Eigen::MatrixXd intermediaryMatrix;
     cv::cv2eigen(image, intermediaryMatrix);
     patternMatrix = intermediaryMatrix.array();
 
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDWR);
+    Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDWR);
     file.read_mat("wrappedPhasePeak1", wrappedPhasePeak1);
 
     Spatial::quartersUnwrapPhase(wrappedPhasePeak1);
@@ -70,7 +70,7 @@ void runAllTests() {
     
     Eigen::ArrayXXd wrappedPhasePeak1(1, 1);
     Eigen::ArrayXXd unwrappedReference(1, 1);
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDWR);
+    Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDWR);
     file.read_mat("wrappedPhasePeak1", wrappedPhasePeak1);
 
     Spatial::quartersUnwrapPhase(wrappedPhasePeak1);
@@ -85,7 +85,7 @@ void runAllTests() {
  */
 double speed(unsigned long testCount) {
     Eigen::ArrayXXd wrappedPhasePeak1(1, 1);
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat");
+    Eigen::MatioFile file("data/TestFilesMat.mat");
     file.read_mat("wrappedPhasePeak1", wrappedPhasePeak1);
 
     tic();

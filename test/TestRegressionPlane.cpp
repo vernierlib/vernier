@@ -38,7 +38,7 @@ void main2() {
 void main3() { // the coefficients in the mat file are wrong !!!!!
     int sideOffset = 250;
     Eigen::ArrayXXd unwrapCenterMatlab(1, 1);
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDONLY);
     file.read_mat("unwrapCenterMatlab", unwrapCenterMatlab);
 
     Eigen::Vector3d coefficients;
@@ -94,7 +94,7 @@ void test() {
 double speed(unsigned long testCount) {
     Eigen::ArrayXXd unwrap2(1, 1);
     int sideOffset = 250;
-    Eigen::MatioFile file("testfiles/TestFilesMat.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDONLY);
     file.read_mat("unwrapCenterMatlab", unwrap2);
 
     Eigen::Vector3d coefficients;

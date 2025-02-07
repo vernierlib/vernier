@@ -11,7 +11,7 @@
 using namespace vernier;
 
 void main1() {
-    Eigen::MatioFile file("testfiles/TestSpectrumPeak.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/TestSpectrumPeak.mat", MAT_ACC_RDONLY);
 
     Eigen::ArrayXXcd table(1, 1);
     file.read_mat("spectrumPattern", table);
@@ -67,7 +67,7 @@ void test1() {
 void test2() {
     
     START_UNIT_TEST;
-    Eigen::MatioFile file("testfiles/TestSpectrumPeak.mat", MAT_ACC_RDONLY);
+    Eigen::MatioFile file("data/TestSpectrumPeak.mat", MAT_ACC_RDONLY);
 
     Eigen::ArrayXXcd table(1, 1);
     file.read_mat("spectrumPattern", table);

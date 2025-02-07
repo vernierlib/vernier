@@ -12,7 +12,7 @@
 using namespace vernier;
 
 void main1() {
-    Eigen::MatioFile file("testfiles/TestFilesMatMegarena.mat");
+    Eigen::MatioFile file("data/TestFilesMatMegarena.mat");
 
     Eigen::ArrayXXd numberWhiteDots(1, 1);
     Eigen::ArrayXXd cumulWhiteDots(1, 1);
@@ -30,7 +30,7 @@ void runAllTests() {
     
     START_UNIT_TEST;
     
-    Eigen::MatioFile file("testfiles/TestFilesMatMegarena.mat");
+    Eigen::MatioFile file("data/TestFilesMatMegarena.mat");
 
     Eigen::ArrayXXd numberWhiteDots(1, 1);
     Eigen::ArrayXXd cumulWhiteDots(1, 1);
@@ -53,7 +53,7 @@ void runAllTests() {
 }
 
 double speedGlobal(unsigned long testCount) {
-    Eigen::MatioFile file("testfiles/TestFilesMatMegarena.mat");
+    Eigen::MatioFile file("data/TestFilesMatMegarena.mat");
 
     Eigen::ArrayXXd numberWhiteDots(1, 1);
     Eigen::ArrayXXd cumulWhiteDots(1, 1);
