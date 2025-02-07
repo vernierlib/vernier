@@ -9,7 +9,7 @@
 
 #include "QRFiducialDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
     
     class QRCode {

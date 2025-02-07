@@ -12,7 +12,7 @@
 
 #include "eigen-matio/MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestFingerprintPattern {
     public:

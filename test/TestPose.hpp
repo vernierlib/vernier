@@ -10,14 +10,14 @@
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestPose {
     public:
 
         static void main() {
 
-            Vernier::Pose pose2d(-3, -5, 0.2);
+            vernier::Pose pose2d(-3, -5, 0.2);
 
             std::cout << "Pattern pose definition : " << std::endl << pose2d.toString() << std::endl;
 

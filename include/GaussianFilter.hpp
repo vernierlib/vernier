@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Spectral Gaussian filter 
      * 

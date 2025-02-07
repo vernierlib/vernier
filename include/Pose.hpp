@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** This class defines a pose of a pattern from three translations x, y, z and intrinsic 
      * rotations alpha, beta, gamma as defined in [Andre2022pose].

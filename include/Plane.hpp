@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief With given plane coefficients, constructs a class which can return useful informations about this plane
      *	such as the position or the angle.

@@ -10,7 +10,7 @@
 #include "MegarenaBitSequence.hpp"
 #include "UnitTest.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestBitSequence {
     public:

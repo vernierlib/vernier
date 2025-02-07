@@ -14,7 +14,7 @@
 #include "RegressionPlane.hpp"
 #include "GaussianFilter.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Computes the phase planes of a given pattern
      * 

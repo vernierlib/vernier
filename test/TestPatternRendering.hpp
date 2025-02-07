@@ -15,7 +15,7 @@
 
 #include <random>
 
-namespace Vernier {
+namespace vernier {
 
     class TestPatternRendering {
     public:

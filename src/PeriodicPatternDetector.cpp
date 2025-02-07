@@ -6,7 +6,7 @@
 
 #include "PeriodicPatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     PeriodicPatternDetector::PeriodicPatternDetector(double physicalPeriod)
     : PatternDetector() {

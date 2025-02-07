@@ -6,7 +6,7 @@
 
 #include "PatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     PatternDetector::PatternDetector() {
         orthographicProjection = true;

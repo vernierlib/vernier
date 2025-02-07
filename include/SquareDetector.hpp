@@ -8,7 +8,7 @@
 #define SQUAREDETECTOR_HPP
 
 #include "Common.hpp"
-#include "objdetect/aruco_detector.hpp"
+#include "objdetect/include/objdetect/aruco_detector.hpp"
 
 //class CustomArucoDetector : protected cv::aruco::ArucoDetector {
 //    public:
@@ -21,7 +21,7 @@
 //        }
 //    };
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     class Square {

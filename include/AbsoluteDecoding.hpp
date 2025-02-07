@@ -12,7 +12,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Finds the place of the coding sample extracted from the pattern in the full coded sequence. **/
     class AbsoluteDecoding {

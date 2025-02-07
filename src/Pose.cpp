@@ -6,7 +6,7 @@
 
 #include "Pose.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     Pose::Pose()
     : Pose(0.0, 0.0, 0.0, 0.0, 0.0, 0.0) {
@@ -30,12 +30,12 @@ namespace Vernier {
 
     std::string Pose::toString() const {
         if (is3D) {
-            return "[ x=" + Vernier::toString(x) + "; y=" + Vernier::toString(y) + "; z=" + Vernier::toString(z)
-                    + "; alpha=" + Vernier::toString(alpha) + "; beta=" + Vernier::toString(beta) + "; gamma=" + Vernier::toString(gamma)
-                    + "; pixelSize=" + Vernier::toString(pixelSize) + " ]";
+            return "[ x=" + vernier::toString(x) + "; y=" + vernier::toString(y) + "; z=" + vernier::toString(z)
+                    + "; alpha=" + vernier::toString(alpha) + "; beta=" + vernier::toString(beta) + "; gamma=" + vernier::toString(gamma)
+                    + "; pixelSize=" + vernier::toString(pixelSize) + " ]";
         } else {
-            return "[ x=" + Vernier::toString(x) + "; y=" + Vernier::toString(y) + "; alpha=" + Vernier::toString(alpha)
-                    + "; pixelSize=" + Vernier::toString(pixelSize) + " ]";
+            return "[ x=" + vernier::toString(x) + "; y=" + vernier::toString(y) + "; alpha=" + vernier::toString(alpha)
+                    + "; pixelSize=" + vernier::toString(pixelSize) + " ]";
         }
     }
 

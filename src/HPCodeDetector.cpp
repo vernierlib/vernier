@@ -6,7 +6,7 @@
 
 #include "HPCodeDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     HPCodeDetector::HPCodeDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {

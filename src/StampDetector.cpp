@@ -6,7 +6,7 @@
 
 #include "StampDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     StampDetector::StampDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
@@ -44,9 +44,18 @@ namespace Vernier {
             }
         }
     }
+    
+    
 
     void StampDetector::compute(const cv::Mat& image) {
-
+        cv::Mat grayImage;
+        if (image.channels() > 1) {
+            cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
+        } else {
+            grayImage = image;
+        }
+        //cv::normalize(grayImage, grayImage, 255, 0, cv::NORM_MINMAX);
+    grayImage.convertTo(grayImage, CV_8UC1);
 
 
         detector.compute(image);

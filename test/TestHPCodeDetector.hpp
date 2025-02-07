@@ -12,7 +12,7 @@
 #include "UnitTest.hpp"
 #include <iomanip>
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 using namespace cv;
 

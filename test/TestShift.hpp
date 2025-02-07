@@ -10,7 +10,7 @@
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestShift {
     public:

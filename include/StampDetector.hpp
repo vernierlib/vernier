@@ -11,7 +11,7 @@
 #include "PatternPhase.hpp"
 #include <map>
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     class StampDetector {

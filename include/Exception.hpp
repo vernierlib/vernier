@@ -9,7 +9,7 @@
 
 #include "Utils.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Exception class for error management.
      */

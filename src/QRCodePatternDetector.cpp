@@ -6,7 +6,7 @@
 
 #include "QRCodePatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     void QRCodePatternDetector::createFinderPattern() {
         finderPattern.resize(7, 7);

@@ -12,7 +12,7 @@
 #include "UnitTest.hpp"
 #include <random>
 
-namespace Vernier {
+namespace vernier {
 
     class TestPatternProjection {
     public:

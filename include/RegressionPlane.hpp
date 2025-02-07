@@ -10,7 +10,7 @@
 #include "Common.hpp"
 #include "Plane.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Computes the least squares regression plane of a phase map */
     class RegressionPlane {

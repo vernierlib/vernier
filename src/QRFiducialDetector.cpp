@@ -6,7 +6,7 @@
 
 #include "QRFiducialDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     QRColumnPattern::QRColumnPattern(int col) : col(col) {
@@ -132,7 +132,7 @@ namespace Vernier {
     }
 
     std::string QRFiducialPattern::toString() {
-        return "[(" + Vernier::toString(position.x) + "," + Vernier::toString(position.y) + "), " + Vernier::toString(patternCount) + "]";
+        return "[(" + vernier::toString(position.x) + "," + vernier::toString(position.y) + "), " + vernier::toString(patternCount) + "]";
     }
 
     void QRFiducialDetector::findRowPatterns() {

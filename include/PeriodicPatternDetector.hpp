@@ -10,7 +10,7 @@
 #include "PatternDetector.hpp"
 #include "PatternPhase.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Class to estimate the pose of periodic patterns with subpixel resolutions.  
      */

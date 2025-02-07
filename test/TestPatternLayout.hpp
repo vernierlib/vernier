@@ -11,7 +11,7 @@
 #include "UnitTest.hpp"
 #include <fstream>
 
-namespace Vernier {
+namespace vernier {
 
     class TestPatternLayout {
     public:

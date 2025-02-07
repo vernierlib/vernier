@@ -15,7 +15,7 @@
 #include "QRCodePatternLayout.hpp"
 #include "CustomPatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class Layout {
     public:

@@ -6,7 +6,7 @@
 
 #include "PeriodicPatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     PeriodicPatternLayout::PeriodicPatternLayout() : PeriodicPatternLayout(0.0, 1, 1) {
     }

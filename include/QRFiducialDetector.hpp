@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     class QRColumnPattern {

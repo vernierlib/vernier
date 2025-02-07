@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Computes analysis on the spectrum mainly in input for the following methods.
      *

@@ -10,7 +10,7 @@
 #include "Common.hpp"
 #include "Plane.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Class to use the global cell of a pattern. The global cell represents the mean repartition of dots of the pattern in a cell **/
     class Cell {

@@ -6,7 +6,7 @@
 
 #include "Plane.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     Plane::Plane() {
     }
@@ -71,19 +71,19 @@ namespace Vernier {
 
     std::string Plane::toString() {
         std::string planeStr;
-        planeStr = "phi = " + Vernier::toString(planeCoefficients(0)) + "x ";
+        planeStr = "phi = " + vernier::toString(planeCoefficients(0)) + "x ";
         if (planeCoefficients(1) < 0) {
             planeStr += "- ";
         } else {
             planeStr += "+ ";
         }
-        planeStr += Vernier::toString(abs(planeCoefficients(1))) + "y ";
+        planeStr += vernier::toString(abs(planeCoefficients(1))) + "y ";
         if (planeCoefficients(2) < 0) {
             planeStr += "- ";
         } else {
             planeStr += "+ ";
         }
-        planeStr += Vernier::toString(abs(planeCoefficients(2)));
+        planeStr += vernier::toString(abs(planeCoefficients(2)));
         return planeStr;
     }
 }

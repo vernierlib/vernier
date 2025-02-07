@@ -6,7 +6,7 @@
 
 #include "Exception.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     Exception::Exception(std::string errorMsg, std::string filename, int line) throw () {
         if (filename.empty()) {

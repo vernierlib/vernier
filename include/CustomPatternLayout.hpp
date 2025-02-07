@@ -9,7 +9,7 @@
 
 #include "PatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Layout class for custom patterns (not periodic)
      *  

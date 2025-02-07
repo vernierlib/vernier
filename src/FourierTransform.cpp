@@ -6,7 +6,7 @@
 
 #include "FourierTransform.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_FFTW
 
     FourierTransform::FourierTransform(int sign) {

@@ -7,7 +7,7 @@
 #include "Thumbnail.hpp"
 #include <iomanip>
 
-namespace Vernier {
+namespace vernier {
 
     Thumbnail::Thumbnail() {
     }

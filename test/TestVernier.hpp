@@ -37,7 +37,7 @@
 #include <limits>
 #include <random>
 
-namespace Vernier {
+namespace vernier {
 
     class TestVernier {
     public:

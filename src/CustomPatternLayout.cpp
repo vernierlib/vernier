@@ -7,7 +7,7 @@
 #include "CustomPatternLayout.hpp"
 #include <algorithm>
 
-namespace Vernier {
+namespace vernier {
 
     CustomPatternLayout::CustomPatternLayout() : PatternLayout() {
         classname = "CustomPattern";

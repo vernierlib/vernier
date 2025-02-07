@@ -6,7 +6,7 @@
 
 #include "BitmapPatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     BitmapPatternLayout::BitmapPatternLayout()
     : BitmapPatternLayout(0.0, 1, 1) {

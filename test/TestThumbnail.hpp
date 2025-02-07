@@ -11,7 +11,7 @@
 #ifndef TESTHUMBNAIL_HPP
 #define TESTTHUMBNAIL_HPP
 
-namespace Vernier {
+namespace vernier {
 	class TestThumbnail {
 	public:
 		static void main() {

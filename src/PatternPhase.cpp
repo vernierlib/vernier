@@ -6,7 +6,7 @@
 
 #include "PatternPhase.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     PatternPhase::PatternPhase() {
         this->peaksSearchMethod = 0;

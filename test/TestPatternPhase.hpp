@@ -14,7 +14,7 @@
 #include <random>
 
 
-namespace Vernier {
+namespace vernier {
 
     class TestPatternPhase {
     public:

@@ -11,7 +11,7 @@
 #include "UnitTest.hpp"
 #include <opencv2/objdetect/graphical_code_detector.hpp>
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 using namespace cv;
 
@@ -40,35 +40,26 @@ public:
 #endif //USE_OPENCV 
     }
     
-        static void main2() { // test de la détection de QRCode avec opencv mais marche pas
-#ifdef USE_OPENCV
-        cv::Mat grayImage, image = cv::imread("testfiles/QRCode/code11.jpg");
-        if (image.channels() > 1) {
-            cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
-        } else {
-            grayImage = image;
-        }
-        cv::normalize(grayImage, grayImage, 255, 0, cv::NORM_MINMAX);
-        grayImage.convertTo(grayImage, CV_8UC1);
- 
-        std::vector<std::vector<cv::Point> > corners;
-      
-        cv::GraphicalCodeDetector  detector;
-        detector.detectMulti(grayImage, corners);
-        
-       
-//        for (int i = 0; i < corners.size(); i++) {
-//            
-//                Square s(corners[i]);
-//                s.draw(image);
-//            
+//        static void main2() { // test de la détection de QRCode avec opencv mais marche pas
+//#ifdef USE_OPENCV
+//        cv::Mat grayImage, image = cv::imread("testfiles/QRCode/code11.jpg");
+//        if (image.channels() > 1) {
+//            cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
+//        } else {
+//            grayImage = image;
 //        }
-//        
-       
-        cv::imshow("Image", image);
-        cv::waitKey(0);
-#endif //USE_OPENCV 
-    }
+//        cv::normalize(grayImage, grayImage, 255, 0, cv::NORM_MINMAX);
+//        grayImage.convertTo(grayImage, CV_8UC1);
+// 
+//        std::vector<std::vector<cv::Point> > corners;
+//      
+//        cv::GraphicalCodeDetector  detector;
+//        detector.detectMulti(grayImage, corners);
+// 
+//        cv::imshow("Image", image);
+//        cv::waitKey(0);
+//#endif //USE_OPENCV 
+//    }
 
     static void test(string filename, int numberOfMarkers) {
 #ifdef USE_OPENCV

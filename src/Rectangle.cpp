@@ -6,7 +6,7 @@
 
 #include "Rectangle.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     Rectangle::Rectangle() : Rectangle(0.0, 0.0, 0.0, 0.0) {
     }
@@ -19,7 +19,7 @@ namespace Vernier {
     }
 
     std::string Rectangle::toString() {
-        return "[" + Vernier::toString(x) + "; " + Vernier::toString(y) + "; " + Vernier::toString(width) + "; " + Vernier::toString(height) + "]";
+        return "[" + vernier::toString(x) + "; " + vernier::toString(y) + "; " + vernier::toString(width) + "; " + vernier::toString(height) + "]";
 
     }
 }

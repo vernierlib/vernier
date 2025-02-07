@@ -6,7 +6,7 @@
 
 #include "Utils.hpp"
 
-namespace Vernier {
+namespace vernier {
     
 #ifdef USE_OPENCV
 
@@ -69,6 +69,21 @@ namespace Vernier {
         Eigen::ArrayXXd patternArray;
         patternArray = patternMatrix.array();
         return patternArray;
+    }
+    
+    void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage) {
+        if (image.channels() > 1) {
+            cv::cvtColor(image, grayscaleImage, cv::COLOR_BGR2GRAY);
+            if (grayscaleImage.depth()!=CV_8U) {
+                grayscaleImage.convertTo(grayscaleImage, CV_8U, 255);
+            }   
+        } else {
+            if (image.depth()!=CV_8U) {
+                image.convertTo(grayscaleImage, CV_8U, 255);
+            } else {
+                grayscaleImage = image;
+            }   
+        }        
     }
 #endif // USE_OPENCV
 

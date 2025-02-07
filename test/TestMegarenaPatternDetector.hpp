@@ -7,12 +7,12 @@
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace cv;
 using namespace std;
 using namespace Eigen;
 
-namespace Vernier {
+namespace vernier {
 
     class TestMegarenaPatternDetector {
     public:

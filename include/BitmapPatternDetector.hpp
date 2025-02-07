@@ -13,7 +13,7 @@
 #include "PeriodicPatternDetector.hpp"
 #include "Thumbnail.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Class to estimate the absolute pose of periodic patterns with subpixel resolutions.
      *   This class is based on the positioning of a given __bitmap template periodic pattern__.

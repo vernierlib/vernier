@@ -51,7 +51,7 @@ bool areEqual(int x, int y) {
     return x == y;
 }
 
-bool areEqual(Vernier::Pose a, Vernier::Pose b, double tolerance) {
+bool areEqual(vernier::Pose a, vernier::Pose b, double tolerance) {
     return areEqual(a.x, b.x, tolerance) 
             && areEqual(a.y, b.y, tolerance) 
             && areEqual(a.z, b.z, tolerance) 

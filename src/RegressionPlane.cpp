@@ -6,7 +6,7 @@
 
 #include "RegressionPlane.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     RegressionPlane::RegressionPlane() {
         colOffset = 0;

@@ -6,7 +6,7 @@
 
 #include "BitmapPatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     BitmapPatternDetector::BitmapPatternDetector()
     : PeriodicPatternDetector() {
@@ -343,7 +343,7 @@ namespace Vernier {
             for (int row = -radius; row < radius; row++) {
                 double distanceToCenter = sqrt((row + 0.5) * (row + 0.5) + (col + 0.5) * (col + 0.5));
                 //double hanning = 0.42659 - 0.49656 * cos(2 * PI * distanceToCenter / radius) + 0.076849 * cos(4 * PI * distanceToCenter / radius);
-                double hanning = (1 + cos(Vernier::PI * distanceToCenter / radius)) / 2;
+                double hanning = (1 + cos(vernier::PI * distanceToCenter / radius)) / 2;
                 if (distanceToCenter < radius && yCenter + row > 0 && xCenter + col > 0 && yCenter + row < pattern.rows() && xCenter + col < pattern.cols()) {
                     snapshot.real()(size / 2 + row, size / 2 + col) = hanning * pattern.real()(yCenter + row, xCenter + col);
                     //snapshot.real()(size / 2 + row, size / 2 + col) = pattern.real()(yCenter + row, xCenter + col);

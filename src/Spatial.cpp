@@ -6,7 +6,7 @@
 
 #include "Spatial.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     void Spatial::quartersUnwrapPhase(Eigen::ArrayXXd& wrappedPhase) {
         int sizeX = wrappedPhase.cols();

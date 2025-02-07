@@ -6,7 +6,7 @@
 
 #include "GaussianFilter.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     GaussianFilter::GaussianFilter() {
         sigma = 0.0;

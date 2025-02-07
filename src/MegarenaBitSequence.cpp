@@ -6,7 +6,7 @@
 
 #include "MegarenaBitSequence.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     int MegarenaBitSequence::getBit(int state, int bitPosition) {
         return (state >> bitPosition) & 1;

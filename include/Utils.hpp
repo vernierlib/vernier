@@ -13,7 +13,7 @@ namespace Eigen {
     typedef Array< unsigned char, Dynamic, Dynamic > ArrayXXu;
 }
 
-namespace Vernier {
+namespace vernier {
 
     const double PI = 3.14159265358979323846264338327950288419716939937510;
     const std::complex<double> I(0, 1);
@@ -33,6 +33,9 @@ namespace Vernier {
     cv::Mat array2image(Eigen::ArrayXXcd & array);
 
     Eigen::ArrayXXd image2array(cv::Mat & image);
+    
+    void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage);
+    
 #endif // USE_OPENCV
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);

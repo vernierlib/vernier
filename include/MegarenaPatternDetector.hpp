@@ -11,7 +11,7 @@
 #include "Thumbnail.hpp"
 #include "AbsoluteDecoding.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Class to estimate the absolute pose of periodic encoded patterns with subpixel resolutions.
      */

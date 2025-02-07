@@ -6,7 +6,7 @@
 
 #include "BufferedReader.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     BufferedReader::BufferedReader(const char * filename) {
         buffer = NULL;

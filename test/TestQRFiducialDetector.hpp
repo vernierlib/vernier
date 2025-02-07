@@ -10,7 +10,7 @@
 #include "QRFiducialDetector.hpp"
 #include "UnitTest.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 using namespace cv;
 

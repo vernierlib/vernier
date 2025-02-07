@@ -7,7 +7,7 @@
 #include "Spectrum.hpp"
 #include "GaussianFilter.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     void Spectrum::shift(Eigen::ArrayXXcd& source, Eigen::ArrayXXcd& dest) {
         ASSERT(source.rows() > 0 && source.cols() > 0);

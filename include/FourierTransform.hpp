@@ -16,7 +16,7 @@
 #define FFTW_BACKWARD -1
 #endif
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Computes Discrete Fourier Transform on Eigen arrays using FFTW library
      * or Ooura's implementation if FFTW is not available.

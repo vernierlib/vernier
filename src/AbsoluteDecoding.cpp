@@ -6,7 +6,7 @@
 
 #include "AbsoluteDecoding.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     AbsoluteDecoding::AbsoluteDecoding() {
     }

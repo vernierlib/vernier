@@ -11,7 +11,7 @@
 #include "UnitTest.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestBitmapPattern {
     public:

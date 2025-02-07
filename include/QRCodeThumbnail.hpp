@@ -11,7 +11,7 @@
 #include "Thumbnail.hpp"
 #include "PatternPhase.hpp"
 
-namespace Vernier {
+namespace vernier {
     
     const int QRCODE_33P = 33;
     const int QRCODE_37P = 37;

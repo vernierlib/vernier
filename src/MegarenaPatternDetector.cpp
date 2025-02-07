@@ -7,7 +7,7 @@
 #include "MegarenaPatternDetector.hpp"
 #include "MegarenaBitSequence.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     MegarenaPatternDetector::MegarenaPatternDetector()
     : PeriodicPatternDetector() {

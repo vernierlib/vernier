@@ -6,7 +6,7 @@
 
 #include "QRCodeDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     QRCode::QRCode(QRFiducialPattern& marker0, QRFiducialPattern& marker1, QRFiducialPattern& marker2) {
@@ -51,9 +51,9 @@ namespace Vernier {
     }
 
     std::string QRCode::toString() {
-        return "[ top=(" + Vernier::toString(top.x) + "," + Vernier::toString(top.y)
-                + "), right=(" + Vernier::toString(right.x) + "," + Vernier::toString(right.y)
-                + "), bottom=(" + Vernier::toString(bottom.x) + "," + Vernier::toString(bottom.y) + " ]";
+        return "[ top=(" + vernier::toString(top.x) + "," + vernier::toString(top.y)
+                + "), right=(" + vernier::toString(right.x) + "," + vernier::toString(right.y)
+                + "), bottom=(" + vernier::toString(bottom.x) + "," + vernier::toString(bottom.y) + " ]";
     }
 
     double QRCode::getRadius() {

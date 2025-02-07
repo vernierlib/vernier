@@ -9,7 +9,7 @@
 
 #include "BitmapPatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class QRCodePatternDetector : public BitmapPatternDetector {
     protected:

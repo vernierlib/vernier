@@ -6,7 +6,7 @@
 
 #include "Cell.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     Cell::Cell() {
     }

@@ -11,7 +11,7 @@
 #include "Plane.hpp"
 #include "Cell.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Uses a given periodic array and its phases planes, computes the thumbnail used as a model-reduction*/
     class Thumbnail {

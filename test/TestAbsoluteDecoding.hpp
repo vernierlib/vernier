@@ -13,7 +13,7 @@
 #include <random>
 #include "eigen-matio/MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestAbsoluteDecoding {
     public:

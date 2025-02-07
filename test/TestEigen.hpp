@@ -12,7 +12,7 @@
 
 #include "MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestEigen {
     public:

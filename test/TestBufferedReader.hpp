@@ -13,7 +13,7 @@
 
 #include <fstream>
 
-namespace Vernier {
+namespace vernier {
 
     class TestBufferedReader {
     public:

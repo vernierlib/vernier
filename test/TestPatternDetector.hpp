@@ -16,7 +16,7 @@
 #include <iomanip>
 #include <random>
 
-namespace Vernier {
+namespace vernier {
 	class TestPatternDetector {
 	public:
 

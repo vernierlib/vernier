@@ -9,7 +9,7 @@
 
 #include "PatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class Camera {
     private:

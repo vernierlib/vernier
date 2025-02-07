@@ -35,7 +35,7 @@ bool areEqual(std::complex<double> x, std::complex<double> y, double tolerance =
 
 bool areEqual(int x, int y);
 
-bool areEqual(Vernier::Pose a, Vernier::Pose b, double tolerance = DEFAULT_DOUBLE_EQUALITY_TOLERANCE);
+bool areEqual(vernier::Pose a, vernier::Pose b, double tolerance = DEFAULT_DOUBLE_EQUALITY_TOLERANCE);
 
 template<typename _Scalar, int _Rows, int _Cols>
 bool areEqual(Eigen::Array<_Scalar, _Rows, _Cols>& x, Eigen::Array<_Scalar, _Rows, _Cols>& y, double tolerance = DEFAULT_DOUBLE_EQUALITY_TOLERANCE) {

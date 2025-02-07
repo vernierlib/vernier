@@ -12,7 +12,7 @@
 #include <complex>
 #include <random>
 
-namespace Vernier {
+namespace vernier {
 
     class TestFourierTransform {
     public:

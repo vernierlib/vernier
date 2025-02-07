@@ -6,7 +6,7 @@
 
 #include "PatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     PatternLayout::PatternLayout() {
         classname = "PatternLayout";

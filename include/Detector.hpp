@@ -13,7 +13,7 @@
 #include "BitmapPatternDetector.hpp"
 #include "QRCodePatternDetector.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Class factory to construct any pattern detectors.
      * 

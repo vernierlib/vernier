@@ -6,7 +6,7 @@
 
 #include "QRCodePatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     QRCodePatternLayout::QRCodePatternLayout() : QRCodePatternLayout(0.0, 1) {
     }

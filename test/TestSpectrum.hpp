@@ -13,7 +13,7 @@
 #include "Spectrum.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestSpectrum {
     public:

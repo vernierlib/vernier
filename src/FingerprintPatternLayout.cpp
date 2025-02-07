@@ -6,7 +6,7 @@
 
 #include "FingerprintPatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     FingerprintPatternLayout::FingerprintPatternLayout()
     : FingerprintPatternLayout(0.0, 1, 1) {

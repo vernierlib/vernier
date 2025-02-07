@@ -12,7 +12,7 @@
 #include "Cell.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     class TestCell {
     public:

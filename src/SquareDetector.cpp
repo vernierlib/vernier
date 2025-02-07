@@ -10,15 +10,15 @@
 // Mandatory includes to avoid error: 
 //   member access into incomplete type 'cv::aruco::ArucoDetector::ArucoDetectorImpl'
 //   note: forward declaration of 'cv::aruco::ArucoDetector::ArucoDetectorImpl'
-#include "aruco/aruco_detector.cpp"
-#include "aruco/aruco_dictionary.cpp"
-#include "aruco/aruco_board.cpp"
-#include "aruco/aruco_utils.cpp"
-#include "aruco/apriltag/apriltag_quad_thresh.cpp"
-#include "aruco/apriltag/zmaxheap.cpp"
+#include "objdetect/src/aruco/aruco_detector.cpp"
+#include "objdetect/src/aruco/aruco_dictionary.cpp"
+#include "objdetect/src/aruco/aruco_board.cpp"
+#include "objdetect/src/aruco/aruco_utils.cpp"
+#include "objdetect/src/aruco/apriltag/apriltag_quad_thresh.cpp"
+#include "objdetect/src/aruco/apriltag/zmaxheap.cpp"
 
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     Square::Square(cv::Point2f corner0, cv::Point2f corner1, cv::Point2f corner2, cv::Point2f corner3) {
@@ -59,10 +59,10 @@ namespace Vernier {
     }
 
     std::string Square::toString() {
-        return "[ topLeft=(" + Vernier::toString(topLeft.x) + "," + Vernier::toString(topLeft.y)
-                + "), topRight=(" + Vernier::toString(topRight.x) + "," + Vernier::toString(topRight.y)
-                + "), bottomRight=(" + Vernier::toString(bottomRight.x) + "," + Vernier::toString(bottomRight.y)
-                + "), bottomLeft=(" + Vernier::toString(bottomLeft.x) + "," + Vernier::toString(bottomLeft.y) + " ]";
+        return "[ topLeft=(" + vernier::toString(topLeft.x) + "," + vernier::toString(topLeft.y)
+                + "), topRight=(" + vernier::toString(topRight.x) + "," + vernier::toString(topRight.y)
+                + "), bottomRight=(" + vernier::toString(bottomRight.x) + "," + vernier::toString(bottomRight.y)
+                + "), bottomLeft=(" + vernier::toString(bottomLeft.x) + "," + vernier::toString(bottomLeft.y) + " ]";
     }
 
     SquareDetector::SquareDetector() {

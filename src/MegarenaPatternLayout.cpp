@@ -7,7 +7,7 @@
 #include "MegarenaPatternLayout.hpp"
 #include "MegarenaBitSequence.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     MegarenaPatternLayout::MegarenaPatternLayout()
     : PeriodicPatternLayout() {

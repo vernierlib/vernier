@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Tool to read a document in a buffer and prepares it to be parsed. **/
     class BufferedReader {

@@ -6,7 +6,7 @@
 
 #include "QRCodeThumbnail.hpp"
 
-namespace Vernier {
+namespace vernier {
 #ifdef USE_OPENCV
 
     QRCodeThumbnail::QRCodeThumbnail() {

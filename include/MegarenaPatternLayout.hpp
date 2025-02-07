@@ -9,7 +9,7 @@
 
 #include "PeriodicPatternLayout.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Layout class for Megarena patterns 
      *  

@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 
-namespace Vernier {
+namespace vernier {
 
     /** \brief Computes the unwrapPIng of a phase map (i.e. in [-PI;PI]) using Eigen matrixes
      *
