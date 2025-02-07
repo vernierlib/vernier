@@ -175,10 +175,11 @@ namespace vernier {
     }
 
     void HPCodeDetector::showControlImages() {
+        cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
         //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
         //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
-        //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());
+        //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());        
     }
 
 

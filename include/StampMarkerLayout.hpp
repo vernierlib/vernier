@@ -4,17 +4,17 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#ifndef FINGERPRINTPATTERNLAYOUT_HPP
-#define FINGERPRINTPATTERNLAYOUT_HPP
+#ifndef STAMPLAYOUT_HPP
+#define STAMPLAYOUT_HPP
 
 #include "PeriodicPatternLayout.hpp"
 
 namespace vernier {
 
-    /** \brief Layout class for finger print patterns 
+    /** \brief Layout class for stamp markers 
      *  
      */
-    class FingerprintPatternLayout : public PeriodicPatternLayout {
+    class StampMarkerLayout : public PeriodicPatternLayout {
     protected:
 
         Eigen::ArrayXXi bitmap;
@@ -25,9 +25,9 @@ namespace vernier {
 
     public:
 
-        FingerprintPatternLayout();
+        StampMarkerLayout();
 
-        FingerprintPatternLayout(double period, int nRows, int nCols);
+        StampMarkerLayout(double period, int nRows, int nCols);
 
         void resize(double dotSize, int nRows, int nCols);
 

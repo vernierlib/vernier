@@ -10,9 +10,9 @@
 #include "PatternLayout.hpp"
 #include "PeriodicPatternLayout.hpp"
 #include "BitmapPatternLayout.hpp"
-#include "FingerprintPatternLayout.hpp"
+#include "StampMarkerLayout.hpp"
 #include "MegarenaPatternLayout.hpp"
-#include "QRCodePatternLayout.hpp"
+#include "HPCodeLayout.hpp"
 #include "CustomPatternLayout.hpp"
 
 namespace vernier {
@@ -27,11 +27,11 @@ namespace vernier {
             } else if (classname == "BitmapPattern") {
                 layout = new BitmapPatternLayout();
             } else if (classname == "FingerprintPattern") {
-                layout = new FingerprintPatternLayout();
+                layout = new StampMarkerLayout();
             } else if (classname == "MegarenaPattern") {
                 layout = new MegarenaPatternLayout();
             } else if (classname == "QRCodePattern") {
-                layout = new QRCodePatternLayout();
+                layout = new HPCodeLayout();
             } else if (classname == "CustomPattern") {
                 layout = new CustomPatternLayout();
             } else {

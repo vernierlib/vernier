@@ -82,9 +82,9 @@ double randomDouble(double max = 1.0);
 /** Remove the path before the filename */
 std::string removePath(std::string filename);
 
-#define UNIT_TEST(condition) { if (!(condition)) { std::cout<<"[Vernier unit test at "<<removePath(__FILE__)<<":"<<__LINE__<<"] Failed!!!!!!!"<<std::endl; exit(EXIT_FAILURE); } else std::cout<<"[Vernier unit test at "<<removePath(__FILE__)<<":"<<__LINE__ <<"] Passed"<<std::endl; }
+#define UNIT_TEST(condition) { if (!(condition)) { std::cout<<"[Unit test at "<<removePath(__FILE__)<<":"<<__LINE__<<"] Failed!!!!!!!"<<std::endl; exit(EXIT_FAILURE); } else std::cout<<"[Unit test at "<<removePath(__FILE__)<<":"<<__LINE__ <<"] Passed"<<std::endl; }
 
-#define START_UNIT_TEST { std::cout<<"[Vernier unit test at "<<removePath(__FILE__)<<":"<<__LINE__<<"] Starting..."<<std::endl; }
+#define START_UNIT_TEST { std::cout<<"[Unit test at "<<removePath(__FILE__)<<":"<<__LINE__<<"] Starting..."<<std::endl; }
 
 #define REPEAT_TEST(test,count) { for(int i=0;i<count;i++) {test;} }
 

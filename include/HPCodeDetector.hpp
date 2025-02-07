@@ -50,7 +50,7 @@ namespace vernier {
          */
         void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
 
-        /** Estimate the pose of a QR code in a image
+        /** Estimate the pose of a HP code in a image
          *
          *	\param QRCode: code
          *	\param image: image

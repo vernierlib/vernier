@@ -1,33 +1,33 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#include "QRCodePatternLayout.hpp"
+#include "HPCodeLayout.hpp"
 
 namespace vernier {
 
-    QRCodePatternLayout::QRCodePatternLayout() : QRCodePatternLayout(0.0, 1) {
+    HPCodeLayout::HPCodeLayout() : HPCodeLayout(0.0, 1) {
     }
 
-    QRCodePatternLayout::QRCodePatternLayout(double period, int size)
+    HPCodeLayout::HPCodeLayout(double period, int size)
     : PeriodicPatternLayout() {
         classname = "QRCodePattern";
         resize(period, size);
     }
 
-    void QRCodePatternLayout::resize(double period, int size) {
+    void HPCodeLayout::resize(double period, int size) {
         PeriodicPatternLayout::resize(period, size, size);
     }
 
-    void QRCodePatternLayout::writeJSON(std::ofstream & file) {
+    void HPCodeLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
         file << "        \"period\": " << period << "," << std::endl;
         file << "        \"size\": " << nRows << "," << std::endl;
     }
 
-    void QRCodePatternLayout::readJSON(rapidjson::Value & document) {
+    void HPCodeLayout::readJSON(rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 
@@ -44,7 +44,7 @@ namespace vernier {
         resize(period, nRows);
     }
 
-    void QRCodePatternLayout::addMarker(int row, int col, std::vector<Rectangle>& rectangleList) {
+    void HPCodeLayout::addMarker(int row, int col, std::vector<Rectangle>& rectangleList) {
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 1) * dotSize, dotSize, dotSize));
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 3) * dotSize, dotSize, dotSize));
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 5) * dotSize, dotSize, dotSize));
@@ -64,7 +64,7 @@ namespace vernier {
         rectangleList.push_back(Rectangle((2 * row + 4) * dotSize, (2 * col + 3) * dotSize, dotSize, dotSize));
     }
 
-    void QRCodePatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
+    void HPCodeLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         PeriodicPatternLayout::toRectangleVector(rectangleList);
         if (nRows > 4) {
             addMarker(0, 0, rectangleList);
@@ -75,7 +75,7 @@ namespace vernier {
         }
     }
 
-    double QRCodePatternLayout::getIntensity(double x, double y) {
+    double HPCodeLayout::getIntensity(double x, double y) {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {

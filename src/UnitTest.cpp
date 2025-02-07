@@ -61,7 +61,7 @@ bool areEqual(vernier::Pose a, vernier::Pose b, double tolerance) {
             && areEqual(a.pixelSize, b.pixelSize, tolerance); 
 }
 
-std::mt19937 generator(getTick());
+std::mt19937 generator(25); // for tests reproductibility
 
 double randomDouble(double min, double max) {
     return std::uniform_real_distribution<double>(min, max)(generator);

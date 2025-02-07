@@ -4,25 +4,25 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#include "FingerprintPatternLayout.hpp"
+#include "StampMarkerLayout.hpp"
 
 namespace vernier {
 
-    FingerprintPatternLayout::FingerprintPatternLayout()
-    : FingerprintPatternLayout(0.0, 1, 1) {
+    StampMarkerLayout::StampMarkerLayout()
+    : StampMarkerLayout(0.0, 1, 1) {
     }
 
-    FingerprintPatternLayout::FingerprintPatternLayout(double period, int nRows, int nCols) : PeriodicPatternLayout() {
+    StampMarkerLayout::StampMarkerLayout(double period, int nRows, int nCols) : PeriodicPatternLayout() {
         classname = "FingerprintPattern";
         resize(period, nRows, nCols);
     }
 
-    void FingerprintPatternLayout::resize(double period, int nRows, int nCols) {
+    void StampMarkerLayout::resize(double period, int nRows, int nCols) {
         PeriodicPatternLayout::resize(period, nRows, nCols);
         bitmap.resize(nRows, nCols);
     }
 
-    void FingerprintPatternLayout::writeJSON(std::ofstream & file) {
+    void StampMarkerLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
         file << "        \"period\": " << period << "," << std::endl;
         file << "        \"bitmap\": [" << std::endl;
@@ -44,7 +44,7 @@ namespace vernier {
         file << "        ]," << std::endl;
     }
 
-    void FingerprintPatternLayout::readJSON(rapidjson::Value & document) {
+    void StampMarkerLayout::readJSON(rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 
@@ -84,7 +84,7 @@ namespace vernier {
 
 
 
-    void FingerprintPatternLayout::loadFromPNG(std::string filename, double period) {
+    void StampMarkerLayout::loadFromPNG(std::string filename, double period) {
 #ifdef USE_OPENCV        
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
         image1.convertTo(image, CV_8U);
@@ -102,7 +102,7 @@ namespace vernier {
 #endif // USE_OPENCV
     }
 
-    void FingerprintPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
+    void StampMarkerLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         rectangleList.clear();
         for (int col = 0; col < bitmap.cols(); col++) {
             double x = col * period;
@@ -115,7 +115,7 @@ namespace vernier {
         }
     }
 
-    double FingerprintPatternLayout::getIntensity(double x, double y) {
+    double StampMarkerLayout::getIntensity(double x, double y) {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {

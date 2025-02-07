@@ -1,19 +1,19 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#ifndef QRCODEPATTERNLAYOUT_HPP
-#define QRCODEPATTERNLAYOUT_HPP
+#ifndef HPCODELAYOUT_HPP
+#define HPCODELAYOUT_HPP
 
 #include "PeriodicPatternLayout.hpp"
 
 namespace vernier {
 
-    /** \brief Layout class for QRCode patterns 
+    /** \brief Layout class for HPCode markers 
      */
-    class QRCodePatternLayout : public PeriodicPatternLayout {
+    class HPCodeLayout : public PeriodicPatternLayout {
     protected:
 
         void addMarker(int row, int col, std::vector<Rectangle>& rectangleList);
@@ -24,9 +24,9 @@ namespace vernier {
 
     public:
 
-        QRCodePatternLayout();
+        HPCodeLayout();
 
-        QRCodePatternLayout(double period, int size);
+        HPCodeLayout(double period, int size);
 
         void resize(double period, int size);
 
