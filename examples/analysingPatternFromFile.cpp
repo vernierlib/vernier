@@ -1,6 +1,6 @@
 #include "Vernier.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace cv;
 using namespace std;
 using namespace Eigen;

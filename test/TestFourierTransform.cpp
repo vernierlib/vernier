@@ -6,12 +6,12 @@
 
 #include "TestFourierTransform.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    Vernier::TestFourierTransform::runAllTests();
+    vernier::TestFourierTransform::runAllTests();
 
     return EXIT_SUCCESS;
 }

@@ -6,7 +6,7 @@
 
 #include "TestPatternLayout.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 
 int main(int argc, char** argv) {

@@ -101,7 +101,7 @@ namespace vernier {
 //			mDetect = Detector::loadFromJSON("testPeriodicPattern.json");
 //
 //			mDetect->compute(image);
-//			Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
+//			vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
 //			std::cout << "Periodic pattern detector poses :" << std::endl;
 //			std::cout << "Camera pose in Pattern" << patternPose.toString() << std::endl;
 //			std::cout << "Pattern pose in Camera" << mDetect->getPatternPoseInCamera().toString() << std::endl;
@@ -139,7 +139,7 @@ namespace vernier {
 //			mDetect = Detector::loadFromJSON("testBitmapPattern.json");
 //
 //			mDetect->compute(image);
-//			Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
+//			vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
 //			std::cout << "Periodic pattern detector poses :" << std::endl;
 //			std::cout << "Camera pose in Pattern" << patternPose.toString() << std::endl;
 //			std::cout << "Pattern pose in Camera" << mDetect->getPatternPoseInCamera().toString() << std::endl;
@@ -175,7 +175,7 @@ namespace vernier {
 //			mDetect = Detector::loadFromJSON("testBitmapQRCodePattern.json");
 //
 //			mDetect->compute(image);
-//			Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
+//			vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
 //			std::cout << "Periodic pattern detector poses :" << std::endl;
 //			std::cout << "Camera pose in Pattern" << patternPose.toString() << std::endl;
 //			std::cout << "Pattern pose in Camera" << mDetect->getPatternPoseInCamera().toString() << std::endl;
@@ -302,7 +302,7 @@ namespace vernier {
 //
 //			mDetect->compute(image);
 //			//cv::imwrite("periodicPatternImg.png", image * 255);
-//			Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
+//			vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
 //
 //			//std::cout << "Sent pose periodic : " << Pose(xPosition, yPosition, 1000, alphaOrientation, 0.0, 0.0).toString() << std::endl;
 //			std::cout << xPosition + patternPose.x << "\t" << yPosition + patternPose.y << "\t" << alphaOrientation - patternPose.alpha << std::endl;
@@ -349,7 +349,7 @@ namespace vernier {
 //
 //			mDetect->compute(image);
 //			//cv::imwrite("bitmapPatternImg.png", image * 255);
-//			Vernier::Pose patternPose = mDetect->getPatternPoseInCamera();
+//			vernier::Pose patternPose = mDetect->getPatternPoseInCamera();
 //			//std::cout << "COMPUTED POSE : " << patternPose.x << "\t" << patternPose.y << "\t" << patternPose.alpha << std::endl;
 //
 //			//std::cout << "ERROR : " << array.rows() / 2.0 + xCamera - patternPose.x << "\t" << array.cols() / 2.0 + yCamera - patternPose.y << "\t" << alphaOrientation - patternPose.alpha << "\n" << std::endl;
@@ -399,7 +399,7 @@ namespace vernier {
 //
 //			mDetect->compute(image);
 //			//cv::imwrite("qrCodePatternImg.png", image * 255);
-//			Vernier::Pose patternPose = mDetect->getPatternPoseInCamera();
+//			vernier::Pose patternPose = mDetect->getPatternPoseInCamera();
 //			//std::cout << "COMPUTED POSE : " << patternPose.x << "\t" << patternPose.y << "\t" << patternPose.alpha << std::endl;
 //
 //			//std::cout << "ERROR : " << array.rows() / 2.0 + xCamera - patternPose.x << "\t" << array.cols() / 2.0 + yCamera - patternPose.y << "\t" << alphaOrientation - patternPose.alpha << "\n" << std::endl;
@@ -450,7 +450,7 @@ namespace vernier {
 //
 //			mDetect->compute(image);
 //			//cv::imwrite("megarenaPatternImg.png", image * 255);
-//			Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
+//			vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
 //			//std::cout << std::setprecision(std::numeric_limits<long double>::digits10 + 1) << "Camera pose in Pattern" << patternPose.toString() << std::endl;
 //
 //			std::cout << "diff with pose : " << xPosition + patternPose.y << "; " << yPosition + patternPose.x << "; " << patternPose.alpha - alphaOrientation << "\n" << std::endl;

@@ -1,6 +1,6 @@
 #include "Vernier.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 
 /** This example converts a pattern layout from JSON to SVG.

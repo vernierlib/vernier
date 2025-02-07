@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestBufferedReader::runAllTests();
+    vernier::TestBufferedReader::runAllTests();
 
     return EXIT_SUCCESS;
 }

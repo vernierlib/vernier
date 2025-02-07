@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestPeriodicPatternDetector::runAllTests();
+    vernier::TestPeriodicPatternDetector::runAllTests();
 
     return EXIT_SUCCESS;
 }

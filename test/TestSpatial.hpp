@@ -17,7 +17,7 @@
 namespace vernier {
 	/** \brief  Computes the tests of the Unwrapping class in order to validate this one quickly and systematicly
 	*	This class is made of three main functions in order to keep the process simple and repeatable at each
-	*	new version of the Vernier library.
+	*	new version of the vernier library.
 	*/
 
 	class TestSpatial {

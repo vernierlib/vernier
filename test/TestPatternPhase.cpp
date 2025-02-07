@@ -6,12 +6,12 @@
 
 #include "TestPatternPhase.hpp"
 
-using namespace Vernier;
+using namespace vernier;
 using namespace std;
 
 int main(int argc, char** argv) {
 
-    Vernier::TestPatternPhase::runAllTests();
+    vernier::TestPatternPhase::runAllTests();
 
     return EXIT_SUCCESS;
 }

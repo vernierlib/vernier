@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestBitmapPattern::runAllTests();
+    vernier::TestBitmapPattern::runAllTests();
 
     return EXIT_SUCCESS;
 }

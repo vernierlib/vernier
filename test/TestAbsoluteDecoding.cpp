@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestAbsoluteDecoding::runAllTests();
+    vernier::TestAbsoluteDecoding::runAllTests();
 
     return EXIT_SUCCESS;
 }

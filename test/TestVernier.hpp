@@ -39,7 +39,7 @@
 
 namespace vernier {
 
-    class TestVernier {
+    class Testvernier {
     public:
 
         static void runAllTests() {
@@ -93,8 +93,8 @@ namespace vernier {
 
             std::cout << "\n" << std::endl;
 
-            //std::cout << "periodic pattern computing time : " << Vernier::TestPatternDetector::speedPeriodic(testCount) << std::endl;
-            //std::cout << "megarena computing time : " << Vernier::TestPatternDetector::speedMegarena(testCount) << std::endl;
+            //std::cout << "periodic pattern computing time : " << vernier::TestPatternDetector::speedPeriodic(testCount) << std::endl;
+            //std::cout << "megarena computing time : " << vernier::TestPatternDetector::speedMegarena(testCount) << std::endl;
 
             std::cout << "\n" << std::endl;
         }

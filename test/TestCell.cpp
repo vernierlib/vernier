@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestCell::runAllTests();
+    vernier::TestCell::runAllTests();
 
     return EXIT_SUCCESS;
 }

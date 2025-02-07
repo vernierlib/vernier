@@ -8,7 +8,7 @@
 
 int main(int argc, char** argv) {
 
-    Vernier::TestBitSequence::runAllTests();
+    vernier::TestBitSequence::runAllTests();
 
     return EXIT_SUCCESS;
 }
