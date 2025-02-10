@@ -16,6 +16,12 @@ namespace vernier {
         classname = "FingerprintPattern";
         resize(period, nRows, nCols);
     }
+    
+     
+    FingerprintPatternLayout::FingerprintPatternLayout(std::string filename, double period) : BitmapPatternLayout() {
+        classname = "FingerprintPattern";
+        loadFromPNG(filename, period);
+    }
 
     void FingerprintPatternLayout::resize(double period, int nRows, int nCols) {
         PeriodicPatternLayout::resize(period, nRows, nCols);

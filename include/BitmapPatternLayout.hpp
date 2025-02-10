@@ -29,7 +29,7 @@ namespace vernier {
 
         BitmapPatternLayout(double period, int nRows, int nCols);
 
-        /** Construct a pattern from a PNG file with given period (requires OpenCV) */
+        /** Construct a pattern from a PNG file with given period */
         BitmapPatternLayout(std::string filename, double period);
 
         void resize(double dotSize, int nRows, int nCols);

@@ -28,6 +28,9 @@ namespace vernier {
         FingerprintPatternLayout();
 
         FingerprintPatternLayout(double period, int nRows, int nCols);
+        
+        /** Construct a pattern from a PNG file with given period */
+        FingerprintPatternLayout(std::string filename, double period);
 
         void resize(double dotSize, int nRows, int nCols);
 

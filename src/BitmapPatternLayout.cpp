@@ -16,7 +16,7 @@ namespace vernier {
         classname = "BitmapPattern";
         resize(period, nRows, nCols);
     }
-    
+
     BitmapPatternLayout::BitmapPatternLayout(std::string filename, double period) {
 #ifdef USE_OPENCV        
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
@@ -27,7 +27,7 @@ namespace vernier {
         bitmap = Eigen::ArrayXXi::Zero(image.rows, image.cols);
         for (int col = 0; col < image.cols; col++) {
             for (int row = 0; row < image.rows; row++) {
-                bitmap(row, col) = (int) (image.at<char>(row, col) != 0);
+                bitmap(row, col) = (int) (image.at<char>(row, col) == 0);
             }
         }
 #else
@@ -72,13 +72,13 @@ namespace vernier {
             throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
         }
         if (document.HasMember("bitmap") && document["bitmap"].IsArray()) {
-            nRows = (document["bitmap"].Size()+1)/2;
+            nRows = (document["bitmap"].Size() + 1) / 2;
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");
         }
 
         if (document["bitmap"][0].IsArray() && document["bitmap"][0].Size() > 0) {
-            nCols = (document["bitmap"][0].Size()+1)/2;
+            nCols = (document["bitmap"][0].Size() + 1) / 2;
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the first row of the bitmap has a wrong format.");
         }
@@ -114,17 +114,16 @@ namespace vernier {
     }
 
     double BitmapPatternLayout::getIntensity(double x, double y) {
-        if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
+        int col = std::floor((x + originX) / dotSize - 0.5);
+        int row = std::floor((y + originY) / dotSize - 0.5);
+
+        if (col < 0 || row < 0 || col >= bitmap.cols() || row >= bitmap.rows()) {
             return 0;
         } else {
-            int col = std::floor((x + originX) / dotSize);
-            int row = std::floor((y + originY) / dotSize);
-            if (col < 0 || row < 0 || col >= bitmap.cols() || row >= bitmap.rows()) {
-                return 0;
-            } else {
-                return bitmap(row, col); // *PeriodicPatternLayout::getIntensity(x,y);
-            }
+            //double periodicIntensity = (1 + cos(2 * PI * x / dotSize)) * (1 + cos(2 * PI * y / dotSize)) / 4;
+            return bitmap(row, col);//* periodicIntensity; 
         }
+
     }
 
     int BitmapPatternLayout::numberOfWrongEdges() {
@@ -141,7 +140,7 @@ namespace vernier {
     bool BitmapPatternLayout::hasWrongEdges() {
         return (numberOfWrongEdges() != 0);
     }
-    
+
     int BitmapPatternLayout::numberOfCorrectEdges() {
         int n = 0;
         for (int col = 0; col < bitmap.cols() - 1; col++) {
