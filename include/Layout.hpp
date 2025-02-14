@@ -55,7 +55,7 @@ namespace vernier {
             layout->readJSON(document.MemberBegin()->value);
             return layout;
         }
-
+        
     };
 
 }

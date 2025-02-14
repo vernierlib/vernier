@@ -5,6 +5,7 @@
  */
 
 #include "PatternLayout.hpp"
+#include <gdstk/gdstk.hpp>
 
 namespace vernier {
 
@@ -62,8 +63,8 @@ namespace vernier {
             file << "width=\"" << rectangleList[i].width << "\" ";
             file << "height=\"" << rectangleList[i].height << "\" ";
             file << "fill=\"black\" />" << std::endl;
-            if (i % (rectangleList.size()/100) == 0) {
-                std::cout<< " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            if (i % (rectangleList.size() / 100) == 0) {
+                std::cout << " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
         file << "</svg>" << std::endl;
@@ -93,13 +94,79 @@ namespace vernier {
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin) << "," << -1000 * (rectangleList[i].y + margin) << ");" << std::endl;
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin + rectangleList[i].width) << "," << -1000 * (rectangleList[i].y + margin + rectangleList[i].height) << ");" << std::endl;
             file << "layout->drawing->box();" << std::endl;
-            if (i % (rectangleList.size()/100) == 0) {
-                std::cout<< " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            if (i % (rectangleList.size() / 100) == 0) {
+                std::cout << " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
         file << "}" << std::endl;
         file.close();
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
+    }
+
+    void PatternLayout::saveToGDS(std::string filename) {
+        if (filename == "") {
+            filename = classname + ".gds";
+        }
+
+        std::vector<vernier::Rectangle> rectangleList;
+        toRectangleVector(rectangleList);
+
+        gdstk::Library lib = {};
+        lib.init(classname.c_str(), 1e-6, 1e-9);
+
+        gdstk::Cell cell = {};
+        cell.name = gdstk::copy_string("MAIN", NULL);
+        lib.cell_array.append(&cell);
+
+        std::vector<gdstk::Polygon> rectangleListGDS;
+        rectangleListGDS.resize(rectangleList.size());
+        for (int i = 0; i < rectangleList.size(); i++) {
+            rectangleListGDS[i] = gdstk::rectangle(gdstk::Vec2{rectangleList[i].x, -rectangleList[i].y}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width, -rectangleList[i].y - rectangleList[i].height}, gdstk::make_tag(1, 1));
+            cell.polygon_array.append(&rectangleListGDS[i]);
+            if (i % (rectangleList.size() / 100) == 0) {
+                std::cout << " \r Building " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            }
+        }
+        std::cout << "\r Writing " << filename << " : writing file...            " << std::flush;
+        lib.write_gds(filename.c_str(), 0, NULL);
+        //cell.write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
+
+        cell.clear();
+        lib.clear();
+        std::cout << "\r Writing " << filename << " : completed            " << std::endl;
+    }
+    
+    void PatternLayout::saveToOASIS(std::string filename) {
+        if (filename == "") {
+            filename = classname + ".oas";
+        }
+        std::vector<vernier::Rectangle> rectangleList;
+        toRectangleVector(rectangleList);
+
+        gdstk::Library lib = {};
+        lib.init(classname.c_str(), 1e-6, 1e-9);
+
+        gdstk::Cell cell = {};
+        cell.name = gdstk::copy_string("MAIN", NULL);
+        lib.cell_array.append(&cell);
+
+        std::vector<gdstk::Polygon> rectangleListGDS;
+        rectangleListGDS.resize(rectangleList.size());
+        for (int i = 0; i < rectangleList.size(); i++) {
+            rectangleListGDS[i] = gdstk::rectangle(gdstk::Vec2{rectangleList[i].x, -rectangleList[i].y}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width, -rectangleList[i].y - rectangleList[i].height}, gdstk::make_tag(1, 1));
+            cell.polygon_array.append(&rectangleListGDS[i]);
+            if (i % (rectangleList.size() / 100) == 0) {
+                std::cout << " \r Building " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+            }
+        }
+        std::cout << "\r Writing " << filename << " : writing file...            " << std::flush;
+        lib.write_oas(filename.c_str(), 0, 6, OASIS_CONFIG_DETECT_ALL);
+        //cell.write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
+
+        cell.clear();
+        lib.clear();
+        std::cout << "\r Writing " << filename << " : completed            " << std::endl;
+        
     }
 
     void PatternLayout::saveToCSV(std::string filename) {
@@ -208,7 +275,7 @@ namespace vernier {
             throw Exception("The number of columns must be positive and even.");
         }
 
-        if (principalPoint(0)<0) {
+        if (principalPoint(0) < 0) {
             principalPoint(0) = outputImage.cols() / 2.0;
             principalPoint(1) = outputImage.rows() / 2.0;
         }
@@ -246,8 +313,8 @@ namespace vernier {
         if (outputImage.cols() <= 0 || outputImage.cols() % 2 == 1) {
             throw Exception("The number of columns must be positive and even.");
         }
-        
-        if (principalPoint(0)<0) {
+
+        if (principalPoint(0) < 0) {
             principalPoint(0) = outputImage.cols() / 2.0;
             principalPoint(1) = outputImage.rows() / 2.0;
         }

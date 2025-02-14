@@ -54,6 +54,7 @@ endif(USE_OPENCV)
 
 # add library core
 add_subdirectory(src)
+add_subdirectory(3rdparty/gdstk)
 
 # add examples
 add_subdirectory(examples)

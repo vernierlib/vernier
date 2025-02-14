@@ -87,7 +87,7 @@ namespace vernier {
             }
         } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {
             int codeSize = document["codeSize"].GetInt();
-            if (codeSize >= 4 && codeSize <=12) {
+            if (codeSize >= 4 && codeSize <= 12) {
                 MegarenaBitSequence::generate(codeSize, bitSequence);
             } else {
                 throw Exception("The file is not a valid megarena pattern file, the code size must between 4 and 12.");
@@ -131,6 +131,8 @@ namespace vernier {
             for (int row = rowStart; row < rowStop; row++) {
                 if (bitSequence(row) && bitSequence(col) && (col % 3 != 0 || row % 3 != 0)) {
                     rectangleList.push_back(Rectangle(col * period, row * period, dotSize, dotSize));
+                    //double dot = 3.5;
+                    //rectangleList.push_back(Rectangle(col * period + (dotSize - dot) / 2.0, row * period + (dotSize - dot) / 2.0, dot, dot));
                 }
             }
         }
@@ -140,8 +142,8 @@ namespace vernier {
         if (x<-0.5 * period || y<-0.5 * period || x > width || y > height) {
             return 0;
         } else {
-            int col = (int)((x + dotSize) / period) ;
-            int row = (int)((y + dotSize) / period) ;
+            int col = (int) ((x + dotSize) / period);
+            int row = (int) ((y + dotSize) / period);
             if (col < 0 || row < 0 || col >= nCols || row >= nRows) {
                 return 0;
             } else {

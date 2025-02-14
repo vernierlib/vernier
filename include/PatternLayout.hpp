@@ -52,6 +52,12 @@ namespace vernier {
 
         /** Creates a macro for LayoutEditor corresponding to the pattern layout */
         void saveToLayoutEditorMacro(std::string filename = "");
+        
+        /** Creates a SVG file corresponding to the pattern layout */
+        void saveToGDS(std::string filename = "");
+
+        /** Creates a OASIS file corresponding to the pattern layout */
+        void saveToOASIS(std::string filename = "");
 
         /** Creates a CSV file listing all the dots of the pattern layout */
         void saveToCSV(std::string filename = "");
