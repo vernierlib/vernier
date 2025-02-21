@@ -293,14 +293,14 @@ namespace vernier {
                     if (nb_affichageCoding1 == 0 && (int) (globalCell(i, j) * 4096) != 0) {
                         nb_affichageCoding1++;
                         cv::rectangle(codingCell, cv::Point(340, 180), cv::Point(400, 180 - 180 * globalCell(i, j) / depth), cv::Scalar(1, 1, 0), cv::FILLED);
-                        cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(350, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
+                        cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(350, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                         cv::putText(codingCell, "d1 ", cv::Point(350, 180 - (180 * globalCell(i, j) / depth - 15)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                     }
 
                     if (nb_affichageCoding1 == 1 && (int) (globalCell(i, j) * 4096) != 0) {
                         nb_affichageCoding1++;
                         cv::rectangle(codingCell, cv::Point(410, 180), cv::Point(470, 180 - 180 * globalCell(i, j) / depth), cv::Scalar(1, 1, 0), cv::FILLED);
-                        cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(420, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
+                        cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(420, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                         cv::putText(codingCell, "d1 ", cv::Point(420, 180 - (180 * globalCell(i, j) / depth - 15)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                     }
                 }
@@ -318,7 +318,7 @@ namespace vernier {
                     if (nb_affichageCoding2 == 1 && (int) (globalCell(i, j) * 4096) != 0) {
                         nb_affichageCoding2++;
                         cv::rectangle(codingCell, cv::Point(550, 180), cv::Point(610, 180 - 180 * globalCell(i, j) / depth), cv::Scalar(1, 0, 1), cv::FILLED);
-                        cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(560, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
+                        cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(560, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                         cv::putText(codingCell, "d2 ", cv::Point(560, 180 - (180 * globalCell(i, j) / depth - 15)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                     }
                 }
@@ -330,7 +330,7 @@ namespace vernier {
                     cv::rectangle(codingCell, cv::Point(270, 180), cv::Point(330, 180 - 180 * globalCell(i, j) / depth), cv::Scalar(0.33, 0, 0.33), cv::FILLED);
                     if (nb_affichageCombined < 1 && (int) (globalCell(i, j) * 4096) != 0) {
                         nb_affichageCombined++;
-                        cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(280, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
+                        cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(280, 180 - (180 * globalCell(i, j) / depth - 30)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
                         cv::putText(codingCell, "d1.d2 ", cv::Point(280, 180 - (180 * globalCell(i, j) / depth - 15)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
                     }
                 }
@@ -342,7 +342,7 @@ namespace vernier {
 
                         cv::rectangle(codingCell, cv::Point(200, 180), cv::Point(260, 180 - (180 * globalCell(i, j) / depth + 5)), cv::Scalar(0.2, 0.2, 0.2), cv::FILLED);
                         cv::rectangle(codingCell, cv::Point(200, 180), cv::Point(260, 180 - (180 * globalCell(i, j) / depth + 5)), cv::Scalar(1, 1, 1), 1);
-                        cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(210, 180 - (180 * globalCell(i, j) / depth + 10)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
+                        cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(210, 180 - (180 * globalCell(i, j) / depth + 10)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
                         cv::putText(codingCell, "min ", cv::Point(210, 180 - (180 * globalCell(i, j) / depth + 25)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(1, 1, 1), 1);
                     } else {
                         cv::rectangle(codingCell, cv::Point(i * 60, j * 60), cv::Point((i + 1) * 60, (j + 1) * 60), cv::Scalar(0, 1, 1), cv::FILLED);
@@ -352,7 +352,7 @@ namespace vernier {
                             cv::rectangle(codingCell, cv::Point(620, 180), cv::Point(680, 180 - 180 * globalCell(i, j) / depth), cv::Scalar(0, 1, 1), cv::FILLED);
 
                             nb_affichageMAX++;
-                            cv::putText(codingCell, std::to_string((int) (globalCell(i, j) * 4096)), cv::Point(630, 180 - (180 * globalCell(i, j) / depth - 25)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
+                            cv::putText(codingCell, to_string((int) (globalCell(i, j) * 4096)), cv::Point(630, 180 - (180 * globalCell(i, j) / depth - 25)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                             cv::putText(codingCell, "max ", cv::Point(630, 180 - (180 * globalCell(i, j) / depth - 10)), cv::FONT_HERSHEY_COMPLEX_SMALL, 0.8, cv::Scalar(0, 0, 0), 1);
                         }
                     }

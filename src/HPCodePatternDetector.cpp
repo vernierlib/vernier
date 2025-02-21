@@ -4,16 +4,15 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#include "HPCodeDetector.hpp"
+#include "HPCodePatternDetector.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
 
-    HPCodeDetector::HPCodeDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
         resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 
-    void HPCodeDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    void HPCodePatternDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
         ASSERT(snapshotSize % 2 == 0);
         ASSERT(physicalPeriod > 0.0);
         ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
@@ -24,7 +23,7 @@ namespace vernier {
         patternPhase.resize(snapshotSize, snapshotSize);
     }
 
-    void HPCodeDetector::takeSnapshot(int x, int y, cv::Mat image) {
+    void HPCodePatternDetector::takeSnapshot(int x, int y, cv::Mat image) {
         snapshot.setConstant(0);
         if (image.channels() > 1) {
             cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
@@ -45,7 +44,7 @@ namespace vernier {
         }
     }
 
-    void HPCodeDetector::compute(cv::Mat& image) {
+    void HPCodePatternDetector::compute(cv::Mat& image) {
 
         detector.compute(image);
 
@@ -105,7 +104,7 @@ namespace vernier {
         }
     }
 
-    unsigned long HPCodeDetector::readNumber(QRCode& code, cv::Mat& image, double dotSize) {
+    unsigned long HPCodePatternDetector::readNumber(QRCode& code, cv::Mat& image, double dotSize) {
         cv::Point2d rightDirection = (code.right - code.top);
         rightDirection *= dotSize / cv::norm(rightDirection);
         cv::Point2d upDirection = (code.top - code.bottom);
@@ -151,30 +150,30 @@ namespace vernier {
         return number;
     }
 
-    void HPCodeDetector::drawPose(cv::Mat & image) {
+    void HPCodePatternDetector::drawPose(cv::Mat & image) {
         for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
             double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
-            it->second.draw(image, length, std::to_string(it->first));
+            it->second.draw(image, length, to_string(it->first));
         }
     }
 
-    void HPCodeDetector::drawSnapshot() {
+    void HPCodePatternDetector::drawSnapshot() {
         for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
             cv::Mat snap64f;
             Eigen::MatrixXd snapMatrix;
             snapMatrix = snapshot.real().matrix();
             cv::eigen2cv(snapMatrix, snap64f);
-            cv::imshow("snapshot " + std::to_string(it->first), snap64f);
+            cv::imshow("snapshot " + to_string(it->first), snap64f);
             snap64f *= 255;
             //cv::imwrite("snapshot.png", snap64f);
         }
     }
-
-    double HPCodeDetector::getPixelSize() {
+    
+    double HPCodePatternDetector::getPixelSize() {
         return patternPhase.getPixelPeriod();
     }
 
-    void HPCodeDetector::showControlImages() {
+    void HPCodePatternDetector::showControlImages() {
         cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
         //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
         //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
@@ -182,11 +181,4 @@ namespace vernier {
         //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());        
     }
 
-
-
-
-
-
-
-#endif //USE_OPENCV
 }

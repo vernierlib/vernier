@@ -148,7 +148,7 @@ namespace vernier {
                 if (value.IsInt()) {
                     bitSequence(0, row) = value.GetInt();
                 } else {
-                    throw Exception("The file is not a valid bitmap pattern file, the row " + toString(row) + " of the bitmap has a wrong format");
+                    throw Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
                 }
             }
         } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {

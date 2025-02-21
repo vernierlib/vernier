@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef PERIODICPATTERNLAYOUT_HPP
@@ -17,7 +17,6 @@ namespace vernier {
     protected:
 
         double period;
-        double dotSize;
         int nRows;
         int nCols;
 
@@ -27,6 +26,8 @@ namespace vernier {
 
     public:
 
+        double dotSize;
+        
         PeriodicPatternLayout();
 
         PeriodicPatternLayout(double period, int nRows, int nCols);
@@ -39,10 +40,19 @@ namespace vernier {
 
         void saveToPNG(std::string filename = "");
         
+        std::string toString();
+        
+        double getPeriod();
+        
+        int getNRows();
+        
+        int getNCols();
+        
         double getDouble(const std::string & attribute);
 
         int getInt(const std::string & attribute);
-
+        
+        void setDouble(const std::string & attribute, double value);
 
     };
 

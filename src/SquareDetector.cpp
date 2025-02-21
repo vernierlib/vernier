@@ -59,10 +59,10 @@ namespace vernier {
     }
 
     std::string Square::toString() {
-        return "[ topLeft=(" + vernier::toString(topLeft.x) + "," + vernier::toString(topLeft.y)
-                + "), topRight=(" + vernier::toString(topRight.x) + "," + vernier::toString(topRight.y)
-                + "), bottomRight=(" + vernier::toString(bottomRight.x) + "," + vernier::toString(bottomRight.y)
-                + "), bottomLeft=(" + vernier::toString(bottomLeft.x) + "," + vernier::toString(bottomLeft.y) + " ]";
+        return "[ topLeft=(" + vernier::to_string(topLeft.x) + "," + vernier::to_string(topLeft.y)
+                + "), topRight=(" + vernier::to_string(topRight.x) + "," + vernier::to_string(topRight.y)
+                + "), bottomRight=(" + vernier::to_string(bottomRight.x) + "," + vernier::to_string(bottomRight.y)
+                + "), bottomLeft=(" + vernier::to_string(bottomLeft.x) + "," + vernier::to_string(bottomLeft.y) + " ]";
     }
 
     SquareDetector::SquareDetector() {

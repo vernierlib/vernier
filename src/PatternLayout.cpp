@@ -1,23 +1,25 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "PatternLayout.hpp"
-#include <gdstk/gdstk.hpp>
 
 namespace vernier {
 
     PatternLayout::PatternLayout() {
         classname = "PatternLayout";
-        description = "Pattern created with Vernier library";
-        date = "2022";
+        description = "Layout generated with Vernier library";
+        date = "2025";
         author = "FEMTO-ST";
-        unit = "micrometer";
+        unit = "um";
         originX = 0.0;
         originY = 0.0;
-        margin = 0.0;
+        leftMargin = 0.0;
+        rightMargin = 0.0;
+        topMargin = 0.0;
+        bottomMargin = 0.0;
         width = 0.0;
         height = 0.0;
     }
@@ -30,7 +32,7 @@ namespace vernier {
         std::ofstream file;
         file.open(filename.c_str());
         if (!file.is_open()) {
-            throw Exception("Error creating file.");
+            throw Exception("Error creating file" + filename);
         }
 
         file.precision(15);
@@ -39,8 +41,8 @@ namespace vernier {
         file << "<svg" << std::endl;
         file << "    xmlns=\"http://www.w3.org/2000/svg\"" << std::endl;
         file << "    version=\"1.1\"" << std::endl;
-        file << "    x=\"0\" y=\"0\" width=\"" << width + 2 * margin << "\" height=\"" << height + 2 * margin << "\"" << std::endl;
-        file << "    viewBox=\"0 0 " << width + 2 * margin << " " << height + 2 * margin << "\">" << std::endl;
+        file << "    x=\"0\" y=\"0\" width=\"" << width + leftMargin + rightMargin << "\" height=\"" << height + topMargin + bottomMargin << "\"" << std::endl;
+        file << "    viewBox=\"0 0 " << width + leftMargin + rightMargin << " " << height + topMargin + bottomMargin << "\">" << std::endl;
         file << "<title>" << description << "</title>" << std::endl;
         file << "<desc>" << std::endl;
         file << "    class: " << classname << std::endl;
@@ -50,16 +52,18 @@ namespace vernier {
         file << "    unit: " << unit << std::endl;
         file << "    width: " << width << std::endl;
         file << "    height: " << height << std::endl;
-        //        file << "    period: " << period << std::endl;
         file << "    originX: " << originX << std::endl;
         file << "    originY: " << originY << std::endl;
-        file << "    margin: " << margin << std::endl;
+        file << "    leftMargin: " << leftMargin << std::endl;
+        file << "    rightMargin: " << rightMargin << std::endl;
+        file << "    topMargin: " << topMargin << std::endl;
+        file << "    bottomMargin: " << bottomMargin << std::endl;
         file << "</desc>" << std::endl;
         std::vector<Rectangle> rectangleList;
         toRectangleVector(rectangleList);
         for (int i = 0; i < rectangleList.size(); i++) {
-            file << "<rect x=\"" << rectangleList[i].x + margin << "\" ";
-            file << "y=\"" << rectangleList[i].y + margin << "\" ";
+            file << "<rect x=\"" << rectangleList[i].x + leftMargin << "\" ";
+            file << "y=\"" << rectangleList[i].y + topMargin << "\" ";
             file << "width=\"" << rectangleList[i].width << "\" ";
             file << "height=\"" << rectangleList[i].height << "\" ";
             file << "fill=\"black\" />" << std::endl;
@@ -80,7 +84,7 @@ namespace vernier {
         std::ofstream file;
         file.open(filename.c_str());
         if (!file.is_open()) {
-            throw Exception("Error creating file.");
+            throw Exception("Error creating file" + filename);
         }
         file.precision(15);
         file << "#!/usr/bin/layout" << std::endl;
@@ -91,8 +95,8 @@ namespace vernier {
         std::vector<Rectangle> rectangleList;
         toRectangleVector(rectangleList);
         for (int i = 0; i < rectangleList.size(); i++) {
-            file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin) << "," << -1000 * (rectangleList[i].y + margin) << ");" << std::endl;
-            file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + margin + rectangleList[i].width) << "," << -1000 * (rectangleList[i].y + margin + rectangleList[i].height) << ");" << std::endl;
+            file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + leftMargin) << "," << -1000 * (rectangleList[i].y + topMargin) << ");" << std::endl;
+            file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + leftMargin + rectangleList[i].width) << "," << -1000 * (rectangleList[i].y + topMargin + rectangleList[i].height) << ");" << std::endl;
             file << "layout->drawing->box();" << std::endl;
             if (i % (rectangleList.size() / 100) == 0) {
                 std::cout << " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
@@ -103,70 +107,76 @@ namespace vernier {
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
 
-    void PatternLayout::saveToGDS(std::string filename) {
-        if (filename == "") {
-            filename = classname + ".gds";
+    gdstk::Cell * PatternLayout::convertToGDSCell(std::string name) {
+        if (name == "") {
+            name = classname;
         }
 
         std::vector<vernier::Rectangle> rectangleList;
         toRectangleVector(rectangleList);
 
-        gdstk::Library lib = {};
-        lib.init(classname.c_str(), 1e-6, 1e-9);
-
-        gdstk::Cell cell = {};
-        cell.name = gdstk::copy_string("MAIN", NULL);
-        lib.cell_array.append(&cell);
-
-        std::vector<gdstk::Polygon> rectangleListGDS;
-        rectangleListGDS.resize(rectangleList.size());
+        gdstk::Cell * cell = new gdstk::Cell();
+        cell->init(name.c_str());
         for (int i = 0; i < rectangleList.size(); i++) {
-            rectangleListGDS[i] = gdstk::rectangle(gdstk::Vec2{rectangleList[i].x, -rectangleList[i].y}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width, -rectangleList[i].y - rectangleList[i].height}, gdstk::make_tag(1, 1));
-            cell.polygon_array.append(&rectangleListGDS[i]);
+            gdstk::Polygon * polygon = new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{rectangleList[i].x + leftMargin, -(rectangleList[i].y + topMargin)}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width + leftMargin, -(rectangleList[i].y + rectangleList[i].height + topMargin)}, gdstk::make_tag(1, 1)));
+            cell->polygon_array.append(polygon);
             if (i % (rectangleList.size() / 100) == 0) {
-                std::cout << " \r Building " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
+                std::cout << " \r Building cell " << name << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
-        std::cout << "\r Writing " << filename << " : writing file...            " << std::flush;
-        lib.write_gds(filename.c_str(), 0, NULL);
-        //cell.write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
 
-        cell.clear();
+        //        rectangleList.push_back(Rectangle(0.0, 0.0, leftMargin + width + rightMargin, topMargin));
+        //        rectangleList.push_back(Rectangle(0.0, topMargin, leftMargin, height));
+        //        rectangleList.push_back(Rectangle(leftMargin + width, topMargin, rightMargin, height));
+        //        rectangleList.push_back(Rectangle(0.0, topMargin + height, leftMargin + width + rightMargin, bottomMargin));
+
+        gdstk::Array<gdstk::Polygon*> all_text = {};
+        gdstk::text(toString().c_str(), 4 * rectangleList[0].height, gdstk::Vec2{0, 0}, false, 0, all_text);
+        cell->polygon_array.extend(all_text);
+
+        return cell;
+    }
+
+    void PatternLayout::saveToGDS(std::string filename) {
+        if (filename == "") {
+            filename = classname + ".oas";
+        }
+
+        gdstk::Library lib = {};
+        lib.init(classname.c_str(), 1e-6, 1e-9);
+        gdstk::Cell * cell = convertToGDSCell();
+        lib.cell_array.append(cell);
+
+        std::cout << "\r Writing " << filename << " : starting...            " << std::flush;
+        lib.write_gds(filename.c_str(), 0, NULL);
+        //lib.write_oas(filename.c_str(), 0, 6, OASIS_CONFIG_DETECT_ALL);
+        //cell->write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
+
         lib.clear();
+        cell->clear(); // possible memory leak: are polygons really deleted?
+        delete cell;
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
-    
+
     void PatternLayout::saveToOASIS(std::string filename) {
         if (filename == "") {
             filename = classname + ".oas";
         }
-        std::vector<vernier::Rectangle> rectangleList;
-        toRectangleVector(rectangleList);
 
         gdstk::Library lib = {};
         lib.init(classname.c_str(), 1e-6, 1e-9);
+        gdstk::Cell * cell = convertToGDSCell();
+        lib.cell_array.append(cell);
 
-        gdstk::Cell cell = {};
-        cell.name = gdstk::copy_string("MAIN", NULL);
-        lib.cell_array.append(&cell);
-
-        std::vector<gdstk::Polygon> rectangleListGDS;
-        rectangleListGDS.resize(rectangleList.size());
-        for (int i = 0; i < rectangleList.size(); i++) {
-            rectangleListGDS[i] = gdstk::rectangle(gdstk::Vec2{rectangleList[i].x, -rectangleList[i].y}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width, -rectangleList[i].y - rectangleList[i].height}, gdstk::make_tag(1, 1));
-            cell.polygon_array.append(&rectangleListGDS[i]);
-            if (i % (rectangleList.size() / 100) == 0) {
-                std::cout << " \r Building " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
-            }
-        }
-        std::cout << "\r Writing " << filename << " : writing file...            " << std::flush;
+        std::cout << "\r Writing " << filename << " : starting...            " << std::flush;
+        //lib.write_gds(filename.c_str(), 0, NULL);
         lib.write_oas(filename.c_str(), 0, 6, OASIS_CONFIG_DETECT_ALL);
-        //cell.write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
+        //cell->write_svg(filename.c_str(), 10, 6, NULL, NULL, "#222222", 5, true, NULL);
 
-        cell.clear();
         lib.clear();
+        cell->clear(); // possible memory leak: are polygons really deleted?
+        delete cell;
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
-        
     }
 
     void PatternLayout::saveToCSV(std::string filename) {
@@ -177,7 +187,7 @@ namespace vernier {
         std::ofstream file;
         file.open(filename.c_str());
         if (!file.is_open()) {
-            throw Exception("Error creating file.");
+            throw Exception("Error creating file " + filename);
         }
         file.precision(15);
         file << "x;y;width;height:intensity" << std::endl;
@@ -201,7 +211,7 @@ namespace vernier {
         std::ofstream file;
         file.open(filename.c_str());
         if (!file.is_open()) {
-            throw Exception("Error creating file.");
+            throw Exception("Error creating file " + filename);
         }
 
         file.precision(15);
@@ -210,7 +220,7 @@ namespace vernier {
 
         writeJSON(file);
 
-        file << "        \"copyright\": \"Copyright (c) 2018-2022 UBFC, ENSMM, UFC, CNRS.\"" << std::endl;
+        file << "        \"copyright\": \"Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.\"" << std::endl;
         file << "    }" << std::endl;
         file << "}" << std::endl;
         file.close();
@@ -222,7 +232,10 @@ namespace vernier {
         file << "        \"date\": \"" << date << "\"," << std::endl;
         file << "        \"author\": \"" << author << "\"," << std::endl;
         file << "        \"unit\": \"" << unit << "\"," << std::endl;
-        file << "        \"margin\": " << margin << "," << std::endl;
+        file << "        \"leftMargin\": " << leftMargin << "," << std::endl;
+        file << "        \"rightMargin\": " << rightMargin << "," << std::endl;
+        file << "        \"topMargin\": " << topMargin << "," << std::endl;
+        file << "        \"bottomMargin\": " << rightMargin << "," << std::endl;
     }
 
     void PatternLayout::readJSON(rapidjson::Value & document) {
@@ -246,10 +259,31 @@ namespace vernier {
         } else {
             unit = "";
         }
-        if (document.HasMember("margin") && document["margin"].IsDouble()) {
-            margin = document["margin"].GetDouble();
+        if (document.HasMember("leftMargin") && document["leftMargin"].IsDouble()) {
+            leftMargin = document["leftmargin"].GetDouble();
         } else {
-            margin = 0.0;
+            leftMargin = 0.0;
+        }
+        if (document.HasMember("rightMargin") && document["rightMargin"].IsDouble()) {
+            rightMargin = document["rightMargin"].GetDouble();
+        } else {
+            rightMargin = 0.0;
+        }
+        if (document.HasMember("topMargin") && document["topMargin"].IsDouble()) {
+            topMargin = document["topMargin"].GetDouble();
+        } else {
+            topMargin = 0.0;
+        }
+        if (document.HasMember("bottomMargin") && document["bottomMargin"].IsDouble()) {
+            bottomMargin = document["bottomMargin"].GetDouble();
+        } else {
+            bottomMargin = 0.0;
+        }
+        if (document.HasMember("margin") && document["margin"].IsDouble()) {
+            leftMargin = document["margin"].GetDouble();
+            rightMargin = leftMargin;
+            topMargin = leftMargin;
+            bottomMargin = leftMargin;
         }
     };
 
@@ -345,25 +379,13 @@ namespace vernier {
             }
         }
     }
+    
+    std::string PatternLayout::toString() {
+        return classname;
+    }
 
     void PatternLayout::saveToPNG(std::string filename) {
         throw Exception("saveToPNG is not implemented for " + this->classname);
-    }
-
-    std::string PatternLayout::getAuthor() {
-        return author;
-    }
-
-    std::string PatternLayout::getDate() {
-        return date;
-    }
-
-    std::string PatternLayout::getDescription() {
-        return description;
-    }
-
-    std::string PatternLayout::getUnit() {
-        return unit;
     }
 
     std::string PatternLayout::getClassname() {
@@ -378,36 +400,12 @@ namespace vernier {
         return originY;
     }
 
-    double PatternLayout::getMargin() {
-        return margin;
-    }
-
     double PatternLayout::getHeight() {
         return height;
     }
 
     double PatternLayout::getWidth() {
         return width;
-    }
-
-    void PatternLayout::setAuthor(std::string author) {
-        this->author = author;
-    }
-
-    void PatternLayout::setDate(std::string date) {
-        this->date = date;
-    }
-
-    void PatternLayout::setDescription(std::string description) {
-        this->description = description;
-    }
-
-    void PatternLayout::setUnit(std::string unit) {
-        this->unit = unit;
-    }
-
-    void PatternLayout::setMargin(double margin) {
-        this->margin = margin;
     }
 
     void* PatternLayout::getObject(const std::string & attribute) {
@@ -419,8 +417,14 @@ namespace vernier {
             return originX;
         } else if (attribute == "originY") {
             return originY;
-        } else if (attribute == "margin") {
-            return margin;
+        } else if (attribute == "leftMargin") {
+            return leftMargin;
+        } else if (attribute == "rightMargin") {
+            return rightMargin;
+        } else if (attribute == "topMargin") {
+            return topMargin;
+        } else if (attribute == "bottomMargin") {
+            return bottomMargin;
         } else if (attribute == "width") {
             return width;
         } else if (attribute == "height") {
@@ -441,6 +445,8 @@ namespace vernier {
     std::string PatternLayout::getString(const std::string & attribute) {
         if (attribute == "classname") {
             return classname;
+        } else if (attribute == "description") {
+            return description;
         } else if (attribute == "date") {
             return date;
         } else if (attribute == "description") {
@@ -455,8 +461,14 @@ namespace vernier {
     }
 
     void PatternLayout::setDouble(const std::string & attribute, double value) {
-        if (attribute == "margin") {
-            margin = value;
+        if (attribute == "leftMargin") {
+            leftMargin = value;
+        } else if (attribute == "rightMargin") {
+            rightMargin = value;
+        } else if (attribute == "topMargin") {
+            topMargin = value;
+        } else if (attribute == "bottomMargin") {
+            bottomMargin = value;
         } else {
             std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
         }
@@ -473,10 +485,10 @@ namespace vernier {
     void PatternLayout::setString(const std::string & attribute, std::string value) {
         if (attribute == "classname") {
             classname = value;
-        } else if (attribute == "date") {
-            date = value;
         } else if (attribute == "description") {
             description = value;
+        } else if (attribute == "date") {
+            date = value;
         } else if (attribute == "author") {
             author = value;
         } else if (attribute == "unit") {

@@ -12,7 +12,7 @@ namespace vernier {
         if (filename.empty()) {
             Exception::errorMsg = "[Vernier exception] " + errorMsg;
         } else {
-            Exception::errorMsg = "[Vernier exception in " + filename + " at line " + toString(line) + "] " + errorMsg;
+            Exception::errorMsg = "[Vernier exception in " + filename + " at line " + to_string(line) + "] " + errorMsg;
         }
     }
 

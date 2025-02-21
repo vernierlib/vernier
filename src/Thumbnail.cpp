@@ -530,13 +530,13 @@ namespace vernier {
                     //		cv::putText(text, "0", cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	}
                     //	else {
-                    //		cv::putText(text, std::to_string((int)(sequence1(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
+                    //		cv::putText(text, to_string((int)(sequence1(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
                     //	}
                     //}
                     //else {
                     //	//cv::putText(text, "1", cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	if (trueSequence1(i / 3) == sequence1(i)) {
-                    //		cv::putText(text, std::to_string((int)(sequence1(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
+                    //		cv::putText(text, to_string((int)(sequence1(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	}
                     //	else {
                     //		cv::putText(text, "0", cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
@@ -544,7 +544,7 @@ namespace vernier {
                     //}
 
                     if (sequence1(i) == 1) {
-                        cv::putText(text, std::to_string((int) (sequence1(i))), cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
+                        cv::putText(text, to_string((int) (sequence1(i))), cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
                     } else {
                         cv::putText(text, "0", cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
                     }
@@ -565,13 +565,13 @@ namespace vernier {
                     //		cv::putText(thumbnailImg, "0", cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	}
                     //	else {
-                    //		cv::putText(thumbnailImg, std::to_string((int)(sequence2(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
+                    //		cv::putText(thumbnailImg, to_string((int)(sequence2(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
                     //	}
                     //}
                     //else {
                     //	//cv::putText(thumbnailImg, "1", cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	if (trueSequence2(i / 3) == sequence2(i)) {
-                    //		cv::putText(thumbnailImg, std::to_string((int)(sequence2(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
+                    //		cv::putText(thumbnailImg, to_string((int)(sequence2(i))), cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 1, 0), 2);
                     //	}
                     //	else {
                     //		cv::putText(thumbnailImg, "0", cv::Point(i * rectWidth - 5, 70), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(0, 0, 1), 2);
@@ -579,7 +579,7 @@ namespace vernier {
                     //}
 
                     if (sequence2(i) == 1) {
-                        cv::putText(thumbnailImg, std::to_string((int) (sequence2(i))), cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
+                        cv::putText(thumbnailImg, to_string((int) (sequence2(i))), cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
                     } else {
                         cv::putText(thumbnailImg, "0", cv::Point(i * rectWidth - 5, 50), cv::FONT_HERSHEY_COMPLEX, 0.5, cv::Scalar(1, 1, 1), 2);
                     }

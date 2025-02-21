@@ -16,6 +16,7 @@ namespace vernier {
 
         static void generate(int codeDepth, Eigen::ArrayXXi & sequence);
         static bool check(int codeDepth, Eigen::ArrayXXi & bs);
+        static int codeDepth(int sequenceLength);
 
     private:
         static int getBit(int state, int bitPosition);

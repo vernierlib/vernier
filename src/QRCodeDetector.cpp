@@ -51,9 +51,9 @@ namespace vernier {
     }
 
     std::string QRCode::toString() {
-        return "[ top=(" + vernier::toString(top.x) + "," + vernier::toString(top.y)
-                + "), right=(" + vernier::toString(right.x) + "," + vernier::toString(right.y)
-                + "), bottom=(" + vernier::toString(bottom.x) + "," + vernier::toString(bottom.y) + " ]";
+        return "[ top=(" + vernier::to_string(top.x) + "," + vernier::to_string(top.y)
+                + "), right=(" + vernier::to_string(right.x) + "," + vernier::to_string(right.y)
+                + "), bottom=(" + vernier::to_string(bottom.x) + "," + vernier::to_string(bottom.y) + " ]";
     }
 
     double QRCode::getRadius() {

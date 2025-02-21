@@ -2710,6 +2710,7 @@ void main1() {
 
     Eigen::ArrayXXi bitSequence1;
     previousBitSequence8(bitSequence1);
+    std::cout << "Sequence length: " << bitSequence1.cols() << std::endl;
     std::cout << bitSequence1 << std::endl;
 
     Eigen::ArrayXXi bitSequence2;
@@ -2747,6 +2748,8 @@ void runAllTests() {
 
 int main(int argc, char** argv) {
 
+    //main1();
+    
     runAllTests();
 
     return EXIT_SUCCESS;

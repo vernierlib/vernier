@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "PeriodicPatternLayout.hpp"
@@ -28,8 +28,8 @@ namespace vernier {
         this->dotSize = 0.5 * period;
         this->nRows = nRows;
         this->nCols = nCols;
-        width = period * nCols;
-        height = period * nRows;
+        width = period * nCols - 0.5 * period;
+        height = period * nRows - 0.5 * period;
         originX = 0.5 * width;
         originY = 0.5 * height;
     }
@@ -61,14 +61,18 @@ namespace vernier {
             throw Exception("The file is not a valid periodic pattern file, the number of columns (nCols) is missing or has a wrong format.");
         }
         resize(period, nRows, nCols);
+
+        if (document.HasMember("dotSize") && document["dotSize"].IsDouble()) {
+            dotSize = document["dotSize"].GetDouble();
+        }
     }
 
     void PeriodicPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
-        rectangleList.clear();
+        double offset = (period / 2 - dotSize) / 2;
         for (int col = 0; col < nCols; col++) {
-            double x = col * period;
+            double x = col * period + offset;
             for (int row = 0; row < nRows; row++) {
-                double y = row * period;
+                double y = row * period + offset;
                 rectangleList.push_back(Rectangle(x, y, dotSize, dotSize));
             }
         }
@@ -84,15 +88,12 @@ namespace vernier {
         }
     }
 
-
-
     void PeriodicPatternLayout::saveToPNG(std::string filename) {
-#ifdef USE_OPENCV        
         cv::Mat image(2 * nRows, 2 * nCols, CV_8U);
         for (int col = 0; col < image.cols; col++) {
-            double x = col * dotSize - originX;
+            double x = col * period * 0.5 - originX;
             for (int row = 0; row < image.rows; row++) {
-                double y = row * dotSize - originY;
+                double y = row * period * 0.5 - originY;
                 image.at<char>(row, col) = (char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
@@ -100,9 +101,22 @@ namespace vernier {
             filename = classname + ".png";
         }
         cv::imwrite(filename, image);
-#else
-        std::cout << "OpenCV is required to save PNG files." << std::endl;
-#endif // USE_OPENCV
+    }
+
+    std::string PeriodicPatternLayout::toString() {
+        return PatternLayout::toString()+ " (period: " + to_string(this->period) + unit + ", dotSize: " + to_string(dotSize) + unit+ ", width: " + to_string(width) + unit + ", height: " + to_string(height) + unit + ")";
+    }
+
+    double PeriodicPatternLayout::getPeriod() {
+        return period;
+    }
+
+    int PeriodicPatternLayout::getNRows() {
+        return nRows;
+    }
+
+    int PeriodicPatternLayout::getNCols() {
+        return nCols;
     }
 
     double PeriodicPatternLayout::getDouble(const std::string & attribute) {
@@ -116,13 +130,21 @@ namespace vernier {
     }
 
     int PeriodicPatternLayout::getInt(const std::string & attribute) {
-       if (attribute == "nRows") {
+        if (attribute == "nRows") {
             return nRows;
-        } else if (attribute == "dotSize") {
+        } else if (attribute == "nCols") {
             return nCols;
         } else {
             return PatternLayout::getInt(attribute);
         }
     }
-    
+
+    void PeriodicPatternLayout::setDouble(const std::string & attribute, double value) {
+        if (attribute == "dotSize") {
+            dotSize = value;
+        } else {
+            PatternLayout::setDouble(attribute, value);
+        }
+    }
+
 }

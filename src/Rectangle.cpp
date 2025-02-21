@@ -19,7 +19,7 @@ namespace vernier {
     }
 
     std::string Rectangle::toString() {
-        return "[" + vernier::toString(x) + "; " + vernier::toString(y) + "; " + vernier::toString(width) + "; " + vernier::toString(height) + "]";
+        return "[" + vernier::to_string(x) + "; " + vernier::to_string(y) + "; " + vernier::to_string(width) + "; " + vernier::to_string(height) + "]";
 
     }
 }

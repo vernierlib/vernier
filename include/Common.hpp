@@ -35,7 +35,8 @@
 #include <opencv2/calib3d.hpp>
 #endif //USE_OPENCV
 
-#include "rapidjson/document.hpp"
+#include <rapidjson/document.hpp>
+#include <gdstk/gdstk.hpp>
 
 #include "Exception.hpp"
 #include "Utils.hpp"

@@ -70,11 +70,11 @@ namespace vernier {
                     if (value[col].IsInt()) {
                         bitmapKernel(row, col) = value[col].GetInt();
                     } else {
-                        Exception("The file is not a valid bitmap pattern file, the row " + toString(row) + " of the bitmap has a wrong format");
+                        Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
                     }
                 }
             } else {
-                throw Exception("The file is not a valid bitmap pattern file, the row " + toString(row) + " of the bitmap has a wrong format");
+                throw Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
             }
         }
 
@@ -510,7 +510,7 @@ namespace vernier {
             }
         }
         cv::rectangle(thumbnailImage, cv::Rect(centerRow * rectSize, centerCol * rectSize, rectWidth, rectWidth), cv::Scalar(1, 0, 0), -1);
-        cv::putText(thumbnailImage, "quarter : " + std::to_string(quarter), cv::Point(20, 40), cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cv::Scalar(255, 0, 0), 1);
+        cv::putText(thumbnailImage, "quarter : " + to_string(quarter), cv::Point(20, 40), cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cv::Scalar(255, 0, 0), 1);
 
     }
 #endif //USE_OPENCV

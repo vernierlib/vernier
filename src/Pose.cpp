@@ -30,12 +30,12 @@ namespace vernier {
 
     std::string Pose::toString() const {
         if (is3D) {
-            return "[ x=" + vernier::toString(x) + "; y=" + vernier::toString(y) + "; z=" + vernier::toString(z)
-                    + "; alpha=" + vernier::toString(alpha) + "; beta=" + vernier::toString(beta) + "; gamma=" + vernier::toString(gamma)
-                    + "; pixelSize=" + vernier::toString(pixelSize) + " ]";
+            return "[ x=" + vernier::to_string(x) + "; y=" + vernier::to_string(y) + "; z=" + vernier::to_string(z)
+                    + "; alpha=" + vernier::to_string(alpha) + "; beta=" + vernier::to_string(beta) + "; gamma=" + vernier::to_string(gamma)
+                    + "; pixelSize=" + vernier::to_string(pixelSize) + " ]";
         } else {
-            return "[ x=" + vernier::toString(x) + "; y=" + vernier::toString(y) + "; alpha=" + vernier::toString(alpha)
-                    + "; pixelSize=" + vernier::toString(pixelSize) + " ]";
+            return "[ x=" + vernier::to_string(x) + "; y=" + vernier::to_string(y) + "; alpha=" + vernier::to_string(alpha)
+                    + "; pixelSize=" + vernier::to_string(pixelSize) + " ]";
         }
     }
 

@@ -11,7 +11,7 @@
 #include "PeriodicPatternDetector.hpp"
 #include "MegarenaPatternDetector.hpp"
 #include "BitmapPatternDetector.hpp"
-#include "QRCodePatternDetector.hpp"
+#include "HPCodePatternDetector.hpp"
 
 namespace vernier {
 
@@ -24,7 +24,7 @@ namespace vernier {
 
         /** Create an instance of pattern detector given its classname.
          *   
-         *   \param classname: name of the pattern detector (PeriodicPattern, MegarenaPattern, BitmapPattern, QRCodePattern).
+         *   \param classname: name of the pattern detector (PeriodicPattern, MegarenaPattern, BitmapPattern, HPCodePattern).
          **/
         static PatternDetector* newInstance(const std::string& classname) {
             PatternDetector* detector;
@@ -34,8 +34,8 @@ namespace vernier {
                 detector = new MegarenaPatternDetector();
             } else if (classname == "BitmapPattern") {
                 detector = new BitmapPatternDetector();
-            } else if (classname == "QRCodePattern") {
-                detector = new QRCodePatternDetector();
+//            } else if (classname == "HPCodePattern") {
+//                detector = new HPCodePatternDetector();
             } else {
                 throw Exception(classname + " is not a valid class name for a pattern detector.");
             }

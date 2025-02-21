@@ -132,7 +132,7 @@ namespace vernier {
     }
 
     std::string QRFiducialPattern::toString() {
-        return "[(" + vernier::toString(position.x) + "," + vernier::toString(position.y) + "), " + vernier::toString(patternCount) + "]";
+        return "[(" + vernier::to_string(position.x) + "," + vernier::to_string(position.y) + "), " + vernier::to_string(patternCount) + "]";
     }
 
     void QRFiducialDetector::findRowPatterns() {

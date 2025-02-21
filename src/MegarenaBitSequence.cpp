@@ -4,6 +4,8 @@
  * Copyright (c) 2025 CNRS, ENSMM, UFC.
  */
 
+#include <math.h>
+
 #include "MegarenaBitSequence.hpp"
 
 namespace vernier {
@@ -34,6 +36,10 @@ namespace vernier {
         } else {
             throw Exception("The megarena code depth must between 4 and 12.");
         }
+    }
+    
+    int MegarenaBitSequence::codeDepth(int sequenceLength) {
+        return std::round(std::log2(sequenceLength/3));
     }
 
     void MegarenaBitSequence::generate(int codeDepth, Eigen::ArrayXXi & sequence) {

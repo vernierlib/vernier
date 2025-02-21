@@ -4,8 +4,8 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#ifndef HPCODELAYOUT_HPP
-#define HPCODELAYOUT_HPP
+#ifndef HPCODEPATTERNLAYOUT_HPP
+#define HPCODEPATTERNLAYOUT_HPP
 
 #include "PeriodicPatternLayout.hpp"
 
@@ -13,7 +13,7 @@ namespace vernier {
 
     /** \brief Layout class for HPCode markers 
      */
-    class HPCodeLayout : public PeriodicPatternLayout {
+    class HPCodePatternLayout : public PeriodicPatternLayout {
     protected:
 
         void addMarker(int row, int col, std::vector<Rectangle>& rectangleList);
@@ -24,15 +24,17 @@ namespace vernier {
 
     public:
 
-        HPCodeLayout();
+        HPCodePatternLayout();
 
-        HPCodeLayout(double period, int size);
+        HPCodePatternLayout(double period, int size);
 
         void resize(double period, int size);
 
         double getIntensity(double x, double y);
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        
+        std::string toString();
 
     };
 

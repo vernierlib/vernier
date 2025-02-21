@@ -4,30 +4,30 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#include "HPCodeLayout.hpp"
+#include "HPCodePatternLayout.hpp"
 
 namespace vernier {
 
-    HPCodeLayout::HPCodeLayout() : HPCodeLayout(0.0, 1) {
+    HPCodePatternLayout::HPCodePatternLayout() : HPCodePatternLayout(0.0, 1) {
     }
 
-    HPCodeLayout::HPCodeLayout(double period, int size)
+    HPCodePatternLayout::HPCodePatternLayout(double period, int size)
     : PeriodicPatternLayout() {
-        classname = "QRCodePattern";
+        classname = "HPCodePattern";
         resize(period, size);
     }
 
-    void HPCodeLayout::resize(double period, int size) {
+    void HPCodePatternLayout::resize(double period, int size) {
         PeriodicPatternLayout::resize(period, size, size);
     }
 
-    void HPCodeLayout::writeJSON(std::ofstream & file) {
+    void HPCodePatternLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
         file << "        \"period\": " << period << "," << std::endl;
         file << "        \"size\": " << nRows << "," << std::endl;
     }
 
-    void HPCodeLayout::readJSON(rapidjson::Value & document) {
+    void HPCodePatternLayout::readJSON(rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 
@@ -44,7 +44,7 @@ namespace vernier {
         resize(period, nRows);
     }
 
-    void HPCodeLayout::addMarker(int row, int col, std::vector<Rectangle>& rectangleList) {
+    void HPCodePatternLayout::addMarker(int row, int col, std::vector<Rectangle>& rectangleList) {
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 1) * dotSize, dotSize, dotSize));
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 3) * dotSize, dotSize, dotSize));
         rectangleList.push_back(Rectangle((2 * row + 0) * dotSize, (2 * col + 5) * dotSize, dotSize, dotSize));
@@ -64,7 +64,7 @@ namespace vernier {
         rectangleList.push_back(Rectangle((2 * row + 4) * dotSize, (2 * col + 3) * dotSize, dotSize, dotSize));
     }
 
-    void HPCodeLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
+    void HPCodePatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         PeriodicPatternLayout::toRectangleVector(rectangleList);
         if (nRows > 4) {
             addMarker(0, 0, rectangleList);
@@ -75,7 +75,7 @@ namespace vernier {
         }
     }
 
-    double HPCodeLayout::getIntensity(double x, double y) {
+    double HPCodePatternLayout::getIntensity(double x, double y) {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {
@@ -97,5 +97,11 @@ namespace vernier {
             }
         }
     }
+    
+    std::string HPCodePatternLayout::toString() {
+        return to_string(nRows) + "x" + to_string(nRows) + " " + PeriodicPatternLayout::toString();
+    }
+
+
 
 }

@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef BITMAPPATTERNLAYOUT_HPP
@@ -32,17 +32,19 @@ namespace vernier {
         /** Construct a pattern from a PNG file with given period */
         BitmapPatternLayout(std::string filename, double period);
 
-        void resize(double dotSize, int nRows, int nCols);
+        void resize(double period, int nRows, int nCols);
 
         double getIntensity(double x, double y);
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        
+        void saveToPNG(std::string filename = "");
 
-        void setDot(int row, int col, int value) {
+        inline void setDot(int row, int col, int value) {
             bitmap(row, col) = value;
         }
 
-        int getDot(int row, int col) {
+        inline int getDot(int row, int col) {
             return bitmap(row, col);
         }
         
@@ -51,6 +53,7 @@ namespace vernier {
         bool hasWrongEdges();
         
         int numberOfCorrectEdges();
+
     };
 
 }

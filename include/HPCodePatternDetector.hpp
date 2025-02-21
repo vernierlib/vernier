@@ -4,17 +4,16 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#ifndef HPCODEDETECTOR_HPP
-#define HPCODEDETECTOR_HPP
+#ifndef HPCODEPATTERNDETECTOR_HPP
+#define HPCODEPATTERNDETECTOR_HPP
 
 #include "QRCodeDetector.hpp"
 #include "PatternPhase.hpp"
 #include <map>
 
 namespace vernier {
-#ifdef USE_OPENCV
 
-    class HPCodeDetector {
+    class HPCodePatternDetector {
     protected:
 
         Eigen::ArrayXXcd snapshot;
@@ -40,7 +39,7 @@ namespace vernier {
          *	\param snapshotSize: maximal size of the QR code in pixels
          *	\param numberHalfPeriods: number of half periods contained in the QR along one direction.
          */
-        HPCodeDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 37);
+        HPCodePatternDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 37);
 
         /** Prepares the different required objects for processing
          *
@@ -63,7 +62,7 @@ namespace vernier {
          *	\param image: image of any types
          */
         void drawPose(cv::Mat& image);
-
+        
         void drawSnapshot(); // a supprimer
 
         double getPixelSize(); // a supprimer
@@ -71,7 +70,7 @@ namespace vernier {
         void showControlImages();
 
     };
-#endif // USE_OPENCV
+
 }
 
 #endif

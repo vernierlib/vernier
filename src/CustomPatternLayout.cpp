@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "CustomPatternLayout.hpp"
@@ -11,8 +11,6 @@ namespace vernier {
 
     CustomPatternLayout::CustomPatternLayout() : PatternLayout() {
         classname = "CustomPattern";
-        originX = 0.0;
-        originY = 0.0;
     }
 
     void CustomPatternLayout::resize() {
@@ -66,10 +64,10 @@ namespace vernier {
                     dots[row] = Rectangle(value[0].GetDouble(), value[1].GetDouble(), value[2].GetDouble(), value[3].GetDouble());
                     dotsIntensity[row] = value[4].GetDouble();
                 } else {
-                    Exception("The file is not a valid custom pattern file, the row " + toString(row) + " of the array of dots has a wrong format");
+                    Exception("The file is not a valid custom pattern file, the row " + to_string(row) + " of the array of dots has a wrong format");
                 }
             } else {
-                throw Exception("The file is not a valid custom pattern file, the row " + toString(row) + " of the array of dots has a wrong size");
+                throw Exception("The file is not a valid custom pattern file, the row " + to_string(row) + " of the array of dots has a wrong size");
             }
         }
 
@@ -106,7 +104,7 @@ namespace vernier {
         }
 
         resize();
-        description = "Custom pattern loaded from " + filename;
+        description = "Layout created from " + filename;
     }
 
     void CustomPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {

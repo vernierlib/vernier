@@ -19,7 +19,7 @@ namespace vernier {
     const std::complex<double> I(0, 1);
 
     /** Converts a double, int or char to a std::string. */
-    template <typename T> inline std::string toString(T value) {
+    template <typename T> inline std::string to_string(T value) {
         std::ostringstream os;
         os << value;
         return os.str();

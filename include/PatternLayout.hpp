@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef PATTERNLAYOUT_HPP
@@ -22,16 +22,11 @@ namespace vernier {
     protected:
 
         std::string classname;
-        std::string description;
-        std::string date;
-        std::string author;
-        std::string unit;
-        double originX;
-        double originY;
-        double margin;
         double width;
         double height;
-
+        double originX;
+        double originY;
+        
         virtual void writeJSON(std::ofstream & file);
 
         void writeApproxPxPeriod(std::ofstream& file);
@@ -42,15 +37,27 @@ namespace vernier {
 
     public:
 
+        std::string description;
+        std::string date;
+        std::string author;
+        std::string unit;
+        double leftMargin;
+        double rightMargin;
+        double topMargin;
+        double bottomMargin;
+        
         PatternLayout();
 
         virtual ~PatternLayout() {
         };
 
+        /** Initializes a pattern layout from a JSON file */
+        void loadFromJSON(std::string filename);
+
         /** Creates a SVG file corresponding to the pattern layout */
         void saveToSVG(std::string filename = "");
 
-        /** Creates a macro for LayoutEditor corresponding to the pattern layout */
+        /** Creates a macro file for LayoutEditor corresponding to the pattern layout */
         void saveToLayoutEditorMacro(std::string filename = "");
         
         /** Creates a SVG file corresponding to the pattern layout */
@@ -58,6 +65,9 @@ namespace vernier {
 
         /** Creates a OASIS file corresponding to the pattern layout */
         void saveToOASIS(std::string filename = "");
+        
+        /** Creates a new GDS cell corresponding to the pattern layout (must be deleted afterward) */
+        gdstk::Cell * convertToGDSCell(std::string name = "");
 
         /** Creates a CSV file listing all the dots of the pattern layout */
         void saveToCSV(std::string filename = "");
@@ -67,9 +77,6 @@ namespace vernier {
 
         /** Creates a PNG file corresponding to the pattern layout (requires OpenCV) */
         virtual void saveToPNG(std::string filename = "");
-
-        /** Initializes a pattern layout from a JSON file */
-        void loadFromJSON(std::string filename);
 
         /** Returns the intensity (between 0.0 and 1.0) of the pattern at point (x,y) */
         virtual double getIntensity(double x, double y) = 0;
@@ -110,35 +117,17 @@ namespace vernier {
          */
         void renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
-        std::string getAuthor();
-
-        std::string getDate();
-
-        std::string getDescription();
-
-        std::string getUnit();
-
+        virtual std::string toString();
+        
         std::string getClassname();
 
         double getOriginX();
 
         double getOriginY();
 
-        double getMargin();
-
         double getHeight();
 
         double getWidth();
-
-        void setAuthor(std::string author);
-
-        void setDate(std::string date);
-
-        void setDescription(std::string description);
-
-        void setUnit(std::string unit);
-
-        void setMargin(double margin);
 
         /** Returns the attribute address corresponding to the given name */
         virtual void* getObject(const std::string & attribute);
