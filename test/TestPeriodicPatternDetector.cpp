@@ -51,7 +51,7 @@ void main2d() {
 
     // Showing image and is spectrum
     PatternPhase *patternPhase = (PatternPhase*) (detector->getObject("patternPhase"));
-    arrayShow(layout->getDescription() + " (" + filename + ")", array);
+    arrayShow(layout->getClassname() + " (" + filename + ")", array);
     //arrayShow("Phase 1 (wrapped)", patternPhase->getPhase1());
     //arrayShow("Phase 2 (wrapped)", patternPhase->getPhase2());
     //imshow("Spectrum", array2image(patternPhase->getSpectrum()));

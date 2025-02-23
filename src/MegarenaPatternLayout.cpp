@@ -64,7 +64,7 @@ namespace vernier {
         //                file << bitSequence(col);
         //            }
         //        }
-        file << "]," << std::endl;
+        //        file << "]," << std::endl;
     }
 
     void MegarenaPatternLayout::readJSON(rapidjson::Value & document) {

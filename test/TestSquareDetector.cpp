@@ -69,9 +69,9 @@ double speed(unsigned long testCount) {
 
 int main(int argc, char** argv) {
 
-    main1();
+    //main1();
     
-    cout << "Computing time: " << speed(100) << " ms" << endl;
+    //cout << "Computing time: " << speed(100) << " ms" << endl;
 
     test("data/QRCode/code14.jpg", 1);
     test("data/QRCode/code17.jpg", 7);

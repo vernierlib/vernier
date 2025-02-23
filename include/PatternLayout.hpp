@@ -128,6 +128,8 @@ namespace vernier {
         double getHeight();
 
         double getWidth();
+        
+        void setMargins(double margins);
 
         /** Returns the attribute address corresponding to the given name */
         virtual void* getObject(const std::string & attribute);

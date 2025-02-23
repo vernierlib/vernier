@@ -79,8 +79,8 @@ namespace vernier {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {
-            int col = std::floor((x + originX - 0.25 * period) / dotSize);
-            int row = std::floor((y + originY - 0.25 * period) / dotSize);
+            int col = std::round((x + originX - 0.25 * period) / dotSize);
+            int row = std::round((y + originY - 0.25 * period) / dotSize);
             if (((col >= 0 && row >= 0 && col < 7 && row < 7) && !(col >= 1 && row >= 1 && col < 6 && row < 6)) ||
                     (col >= 2 && row >= 2 && col < 5 && row < 5) ||
 

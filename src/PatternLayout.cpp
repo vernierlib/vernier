@@ -10,7 +10,7 @@ namespace vernier {
 
     PatternLayout::PatternLayout() {
         classname = "PatternLayout";
-        description = "Layout generated with Vernier library";
+        description = "Layout generated with the Vernier library";
         date = "2025";
         author = "FEMTO-ST";
         unit = "um";
@@ -23,6 +23,101 @@ namespace vernier {
         width = 0.0;
         height = 0.0;
     }
+    
+        void PatternLayout::saveToJSON(std::string filename) {
+        if (filename == "") {
+            filename = classname + ".json";
+        }
+
+        std::ofstream file;
+        file.open(filename.c_str());
+        if (!file.is_open()) {
+            throw Exception("Error creating file " + filename);
+        }
+
+        file.precision(15);
+        file.setf(std::ios::fixed, std::ios::floatfield);
+        file << "{" << std::endl;
+
+        writeJSON(file);
+
+        file << "        \"copyright\": \"Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.\"" << std::endl;
+        file << "    }" << std::endl;
+        file << "}" << std::endl;
+        file.close();
+    }
+
+    void PatternLayout::writeJSON(std::ofstream & file) {
+        file << "    \"" << classname << "\": {" << std::endl;
+        file << "        \"description\": \"" << description << "\"," << std::endl;
+        file << "        \"date\": \"" << date << "\"," << std::endl;
+        file << "        \"author\": \"" << author << "\"," << std::endl;
+        file << "        \"unit\": \"" << unit << "\"," << std::endl;
+        file << "        \"leftMargin\": " << leftMargin << "," << std::endl;
+        file << "        \"rightMargin\": " << rightMargin << "," << std::endl;
+        file << "        \"topMargin\": " << topMargin << "," << std::endl;
+        file << "        \"bottomMargin\": " << rightMargin << "," << std::endl;
+    }
+
+    void PatternLayout::readJSON(rapidjson::Value & document) {
+        if (document.HasMember("description") && document["description"].IsString()) {
+            description = document["description"].GetString();
+        } else {
+            description = "";
+        }
+        if (document.HasMember("date") && document["date"].IsString()) {
+            date = document["date"].GetString();
+        } else {
+            date = "";
+        }
+        if (document.HasMember("author") && document["author"].IsString()) {
+            author = document["author"].GetString();
+        } else {
+            author = "";
+        }
+        if (document.HasMember("unit") && document["unit"].IsString()) {
+            unit = document["unit"].GetString();
+        } else {
+            unit = "";
+        }
+        if (document.HasMember("leftMargin") && document["leftMargin"].IsDouble()) {
+            leftMargin = document["leftMargin"].GetDouble();
+        } else {
+            leftMargin = 0.0;
+        }
+        if (document.HasMember("rightMargin") && document["rightMargin"].IsDouble()) {
+            rightMargin = document["rightMargin"].GetDouble();
+        } else {
+            rightMargin = 0.0;
+        }
+        if (document.HasMember("topMargin") && document["topMargin"].IsDouble()) {
+            topMargin = document["topMargin"].GetDouble();
+        } else {
+            topMargin = 0.0;
+        }
+        if (document.HasMember("bottomMargin") && document["bottomMargin"].IsDouble()) {
+            bottomMargin = document["bottomMargin"].GetDouble();
+        } else {
+            bottomMargin = 0.0;
+        }
+        if (document.HasMember("margin") && document["margin"].IsDouble()) {
+            setMargins(document["margin"].GetDouble());
+        }
+    };
+
+    void PatternLayout::loadFromJSON(std::string filename) {
+        BufferedReader bufferedReader(filename);
+
+        rapidjson::Document document;
+        document.ParseInsitu(bufferedReader.data());
+        if (!document.IsObject()) {
+            throw Exception(filename + " is not a valid JSON file.");
+        }
+        if (document.MemberBegin() == document.MemberEnd()) {
+            throw Exception(filename + " is empty.");
+        }
+        readJSON(document.MemberBegin()->value);
+    };
 
     void PatternLayout::saveToSVG(std::string filename) {
         if (filename == "") {
@@ -37,7 +132,7 @@ namespace vernier {
 
         file.precision(15);
         file << "<?xml version=\"1.0\" encoding=\"utf-8\"?>" << std::endl;
-        file << "<!-- Created with Vernier library -->" << std::endl;
+        file << "<!-- Created with the Vernier library -->" << std::endl;
         file << "<svg" << std::endl;
         file << "    xmlns=\"http://www.w3.org/2000/svg\"" << std::endl;
         file << "    version=\"1.1\"" << std::endl;
@@ -89,7 +184,7 @@ namespace vernier {
         file.precision(15);
         file << "#!/usr/bin/layout" << std::endl;
         file << "#name=" << filename << std::endl;
-        file << "#help=This macro was generated with Vernier library." << std::endl;
+        file << "#help=This macro was generated with the Vernier library." << std::endl;
         file << std::endl;
         file << "int main() {" << std::endl;
         std::vector<Rectangle> rectangleList;
@@ -202,104 +297,6 @@ namespace vernier {
         }
         file.close();
     }
-
-    void PatternLayout::saveToJSON(std::string filename) {
-        if (filename == "") {
-            filename = classname + ".json";
-        }
-
-        std::ofstream file;
-        file.open(filename.c_str());
-        if (!file.is_open()) {
-            throw Exception("Error creating file " + filename);
-        }
-
-        file.precision(15);
-        file.setf(std::ios::fixed, std::ios::floatfield);
-        file << "{" << std::endl;
-
-        writeJSON(file);
-
-        file << "        \"copyright\": \"Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.\"" << std::endl;
-        file << "    }" << std::endl;
-        file << "}" << std::endl;
-        file.close();
-    }
-
-    void PatternLayout::writeJSON(std::ofstream & file) {
-        file << "    \"" << classname << "\": {" << std::endl;
-        file << "        \"description\": \"" << description << "\"," << std::endl;
-        file << "        \"date\": \"" << date << "\"," << std::endl;
-        file << "        \"author\": \"" << author << "\"," << std::endl;
-        file << "        \"unit\": \"" << unit << "\"," << std::endl;
-        file << "        \"leftMargin\": " << leftMargin << "," << std::endl;
-        file << "        \"rightMargin\": " << rightMargin << "," << std::endl;
-        file << "        \"topMargin\": " << topMargin << "," << std::endl;
-        file << "        \"bottomMargin\": " << rightMargin << "," << std::endl;
-    }
-
-    void PatternLayout::readJSON(rapidjson::Value & document) {
-        if (document.HasMember("description") && document["description"].IsString()) {
-            description = document["description"].GetString();
-        } else {
-            description = "";
-        }
-        if (document.HasMember("date") && document["date"].IsString()) {
-            date = document["date"].GetString();
-        } else {
-            date = "";
-        }
-        if (document.HasMember("author") && document["author"].IsString()) {
-            author = document["author"].GetString();
-        } else {
-            author = "";
-        }
-        if (document.HasMember("unit") && document["unit"].IsString()) {
-            unit = document["unit"].GetString();
-        } else {
-            unit = "";
-        }
-        if (document.HasMember("leftMargin") && document["leftMargin"].IsDouble()) {
-            leftMargin = document["leftmargin"].GetDouble();
-        } else {
-            leftMargin = 0.0;
-        }
-        if (document.HasMember("rightMargin") && document["rightMargin"].IsDouble()) {
-            rightMargin = document["rightMargin"].GetDouble();
-        } else {
-            rightMargin = 0.0;
-        }
-        if (document.HasMember("topMargin") && document["topMargin"].IsDouble()) {
-            topMargin = document["topMargin"].GetDouble();
-        } else {
-            topMargin = 0.0;
-        }
-        if (document.HasMember("bottomMargin") && document["bottomMargin"].IsDouble()) {
-            bottomMargin = document["bottomMargin"].GetDouble();
-        } else {
-            bottomMargin = 0.0;
-        }
-        if (document.HasMember("margin") && document["margin"].IsDouble()) {
-            leftMargin = document["margin"].GetDouble();
-            rightMargin = leftMargin;
-            topMargin = leftMargin;
-            bottomMargin = leftMargin;
-        }
-    };
-
-    void PatternLayout::loadFromJSON(std::string filename) {
-        BufferedReader bufferedReader(filename);
-
-        rapidjson::Document document;
-        document.ParseInsitu(bufferedReader.data());
-        if (!document.IsObject()) {
-            throw Exception(filename + " is not a valid JSON file.");
-        }
-        if (document.MemberBegin() == document.MemberEnd()) {
-            throw Exception(filename + " is empty.");
-        }
-        readJSON(document.MemberBegin()->value);
-    };
 
     void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
@@ -441,6 +438,13 @@ namespace vernier {
     bool PatternLayout::getBool(const std::string & attribute) {
         throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
+    
+    void PatternLayout::setMargins(double margins) {
+        leftMargin = margins;
+        rightMargin = margins;
+        topMargin = margins;
+        bottomMargin = margins;
+    }
 
     std::string PatternLayout::getString(const std::string & attribute) {
         if (attribute == "classname") {
@@ -469,6 +473,8 @@ namespace vernier {
             topMargin = value;
         } else if (attribute == "bottomMargin") {
             bottomMargin = value;
+        } else if (attribute == "margins") {
+            setMargins(value);
         } else {
             std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
         }

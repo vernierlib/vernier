@@ -8,10 +8,10 @@ install(TARGETS vernier DESTINATION lib)
 
 install(FILES ${HEADERS} DESTINATION include/${CMAKE_PROJECT_NAME})
 
-include_directories (${CMAKE_SOURCE_DIR}/include)
-include_directories (${CMAKE_SOURCE_DIR}/3rdparty)
-include_directories (${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
-target_link_directories(vernier PUBLIC gdstk)
+include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/3rdparty)
+include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
+target_link_libraries(vernier gdstk)
 
 if (USE_OPENCV)
   include_directories (${OpenCV_INCLUDE_DIRS})

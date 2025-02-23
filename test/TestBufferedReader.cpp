@@ -133,11 +133,11 @@ void main2() {
                 if (value[col].IsInt()) {
                     bitmap(row, col) = value[col].GetInt();
                 } else {
-                    Exception(filename + " is not a valid bitmap pattern file, the row " + toString(row) + " of the bitmap has a wrong format");
+                    Exception(filename + " is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
                 }
             }
         } else {
-            throw Exception(filename + " is not a valid bitmap pattern file, the row " + toString(row) + " of the bitmap has a wrong format");
+            throw Exception(filename + " is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
         }
     }
 

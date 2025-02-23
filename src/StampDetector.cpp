@@ -14,7 +14,7 @@ namespace vernier {
     }
 
     void StampDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
-        ASSERT(snapshotSize % 2 == 0);
+        //        ASSERT(snapshotSize % 2 == 0);
         ASSERT(physicalPeriod > 0.0);
         ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
         this->snapshotSize = snapshotSize;
@@ -44,8 +44,6 @@ namespace vernier {
             }
         }
     }
-    
-    
 
     void StampDetector::compute(const cv::Mat& image) {
         cv::Mat grayImage;
@@ -55,8 +53,7 @@ namespace vernier {
             grayImage = image;
         }
         //cv::normalize(grayImage, grayImage, 255, 0, cv::NORM_MINMAX);
-    grayImage.convertTo(grayImage, CV_8UC1);
-
+        grayImage.convertTo(grayImage, CV_8UC1);
 
         detector.compute(image);
 

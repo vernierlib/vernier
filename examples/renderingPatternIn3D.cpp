@@ -28,5 +28,5 @@ int main() {
     layout->renderOrthographicProjection(patternPose, array);
 
     // Showing the array
-    arrayShow(layout->getDescription() + " (" + filename + ")", array);
+    arrayShow(layout->getClassname() + " (" + filename + ")", array);
 }

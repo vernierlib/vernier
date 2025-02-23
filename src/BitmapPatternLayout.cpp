@@ -29,7 +29,6 @@ namespace vernier {
                 bitmap(row, col) = (int) (image.at<char>(row, col) == 0);
             }
         }
-        PRINT(bitmap.rows())
     }
 
     void BitmapPatternLayout::resize(double period, int nRows, int nCols) {
@@ -110,8 +109,8 @@ namespace vernier {
     }
 
     double BitmapPatternLayout::getIntensity(double x, double y) {
-        int col = std::floor((x + originX) / dotSize - 0.5);
-        int row = std::floor((y + originY) / dotSize - 0.5);
+        int col = std::round((x + originX) / dotSize - 0.5);
+        int row = std::round((y + originY) / dotSize - 0.5);
 
         if (col < 0 || row < 0 || col >= bitmap.cols() || row >= bitmap.rows()) {
             return 0;

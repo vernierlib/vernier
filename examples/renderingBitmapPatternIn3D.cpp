@@ -29,5 +29,5 @@ int main() {
     layout.renderOrthographicProjection(patternPose, array);
 
     // Showing the array
-    arrayShow(layout.getDescription(), array);
+    arrayShow(layout.toString(), array);
 }

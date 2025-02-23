@@ -27,7 +27,7 @@ int main() {
     layout->renderOrthographicProjection(patternPose, array);
 
     // Showing the array
-    arrayShow(layout->getDescription() + patternPose.toString() + " (" + filename + ")", array);
+    arrayShow(layout->getClassname() + patternPose.toString() + " (" + filename + ")", array);
     
     layout->saveToJSON("test.json");
 }

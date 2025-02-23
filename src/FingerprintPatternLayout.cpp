@@ -20,7 +20,6 @@ namespace vernier {
      
     FingerprintPatternLayout::FingerprintPatternLayout(std::string filename, double period) : BitmapPatternLayout(filename, period) {
         classname = "FingerprintPattern";
-        PRINT(bitmap.rows())
         PeriodicPatternLayout::resize(period, bitmap.rows(), bitmap.cols());
     }
 
@@ -87,8 +86,8 @@ namespace vernier {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;
         } else {
-            int col = std::floor((x + originX) / period);
-            int row = std::floor((y + originY) / period);
+            int col = std::round((x + originX) / period);
+            int row = std::round((y + originY) / period);
             if (col < 0 || row < 0 || col >= nCols || row >= nRows) {
                 return 0;
             } else {

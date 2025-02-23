@@ -1,6 +1,6 @@
 include_directories (${CMAKE_SOURCE_DIR}/include)
-include_directories (${CMAKE_SOURCE_DIR}/test)
 include_directories (${CMAKE_SOURCE_DIR}/3rdparty)
+include_directories (${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
 
 file(GLOB EXAMPLES *.cpp)
 
@@ -8,6 +8,7 @@ foreach(file ${EXAMPLES})
   get_filename_component(exampleName ${file} NAME_WE) 
   add_executable (${exampleName} ${file}) 
   target_link_libraries(${exampleName} vernier)
+  target_link_libraries(${exampleName} gdstk)
   install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${exampleName}
     DESTINATION bin
     RENAME ${CMAKE_PROJECT_NAME}-${exampleName})

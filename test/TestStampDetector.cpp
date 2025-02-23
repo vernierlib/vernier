@@ -35,7 +35,7 @@ void main1() {
 void testFile(string filename, int markerCount) {
 
     START_UNIT_TEST;
-    
+
     cv::Mat grayImage, image = cv::imread(filename);
     imageTo8UC1(image, grayImage);
 
@@ -50,7 +50,7 @@ void test2d() {
     START_UNIT_TEST;
 
     // Constructing the layout
-    double physicalPeriod = randomDouble(5.0, 6.0);
+    double physicalPeriod = randomDouble(15.0, 16.0)/2;
     PatternLayout* layout = new BitmapPatternLayout("data/stamp/stampF.png", physicalPeriod);
     cout << "  Physical period: " << physicalPeriod << endl;
 
@@ -70,20 +70,21 @@ void test2d() {
     // Detecting
     Mat grayImage;
     imageTo8UC1(image, grayImage);
-    StampDetector detector(physicalPeriod, 256, 61);
+    StampDetector detector(physicalPeriod, 512, 69);
     detector.compute(grayImage);
 
-
+    Pose estimatedPose;
     if (detector.stamps.size() == 1) {
-        Pose estimatedPose = detector.stamps[0];
+        estimatedPose = detector.stamps[0];
         cout << "  Estimated pose: " << estimatedPose << endl;
-
-//        detector.draw(image);
-//        imshow("Image", image);
-//        waitKey(1);
-
-        UNIT_TEST(areEqual(patternPose, estimatedPose, 0.1));
+        detector.draw(image);
     }
+
+//    imshow("Image", image);
+//    waitKey(1);
+
+    UNIT_TEST(areEqual(patternPose, estimatedPose, 0.1));
+
 
 }
 

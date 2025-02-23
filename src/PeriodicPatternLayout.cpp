@@ -28,8 +28,8 @@ namespace vernier {
         this->dotSize = 0.5 * period;
         this->nRows = nRows;
         this->nCols = nCols;
-        width = period * nCols - 0.5 * period;
-        height = period * nRows - 0.5 * period;
+        width = period * (nCols - 0.5) ;
+        height = period * (nRows - 0.5) ;
         originX = 0.5 * width;
         originY = 0.5 * height;
     }

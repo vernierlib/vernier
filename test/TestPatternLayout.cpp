@@ -33,9 +33,9 @@ void main1() {
     //MegarenaPatternLayout layout(1, bitSequence);
     MegarenaPatternLayout layout(0.5, 8);
 
-    layout.setRegionOfInterest(Rectangle(0, 0, 680, 680));
-    layout.setMargin(10);
-    layout.setUnit("mm");
+    layout.regionOfInterest = Rectangle(0, 0, 680, 680);
+    layout.setMargins(10);
+    layout.unit = "mm";
     layout.saveToSVG();
     //layout.saveToCSV();
     //layout.saveToJSON("testMegarenaPattern2.json");
@@ -61,7 +61,7 @@ void main3() {
 }
 
 void main4() {
-    HPCodeLayout layout(10, 37);
+    HPCodePatternLayout layout(10, 37);
     layout.saveToSVG();
     layout.saveToCSV();
     layout.saveToPNG();
@@ -79,7 +79,7 @@ void main5() {
 }
 
 void main6() {
-    HPCodeLayout layout;
+    HPCodePatternLayout layout;
     layout.loadFromJSON("testQRCodePattern.json");
     layout.saveToSVG();
     layout.saveToCSV();
@@ -138,11 +138,11 @@ void runAllTests() {
     remove("PeriodicPattern.json");
     UNIT_TEST(1);
 
-    HPCodeLayout layout2(10, 37);
+    HPCodePatternLayout layout2(10, 37);
     layout2.saveToJSON();
     layout2.saveToCSV();
-    layout2.loadFromJSON("QRCodePattern.json");
-    remove("QRCodePattern.json");
+    layout2.loadFromJSON("HPCodePattern.json");
+    remove("HPCodePattern.json");
     UNIT_TEST(2);
 
     MegarenaPatternLayout layout3(4.5, 12);
@@ -151,8 +151,7 @@ void runAllTests() {
     remove("MegarenaPattern.json");
     UNIT_TEST(3);
 
-    FingerprintPatternLayout layout4;
-    layout4.loadFromPNG("data/femto.png", 9);
+    FingerprintPatternLayout layout4("data/femto.png", 9);
     layout4.saveToJSON("FingerprintPattern.json");
     layout4.loadFromJSON("FingerprintPattern.json");
     remove("FingerprintPattern.json");
@@ -165,11 +164,11 @@ void runAllTests() {
     UNIT_TEST(5);
 
     CustomPatternLayout layout6;
-    layout6.loadFromCSV("QRCodePattern.csv");
+    layout6.loadFromCSV("HPCodePattern.csv");
     layout6.saveToJSON();
     layout6.loadFromJSON("CustomPattern.json");
     remove("CustomPattern.json");
-    remove("QRCodePattern.csv");
+    remove("HPCodePattern.csv");
     UNIT_TEST(6);
 
 }
