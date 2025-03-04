@@ -41,11 +41,16 @@ namespace vernier {
         compute(spatial);
     }
 
+    void PatternPhase::compute(cv::Mat& image) {
+        Eigen::ArrayXXd array = image2array(image);
+        compute(array);
+    }
+
     void PatternPhase::compute(Eigen::ArrayXXcd& patternArray) {
         resize(patternArray.rows(), patternArray.cols());
-        
+
         fft.compute(patternArray, spectrum);
-        
+
         Spectrum::shift(spectrum, spectrumShifted);
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
@@ -64,7 +69,8 @@ namespace vernier {
                     Spectrum::mainPeakPerimeter(spectrumShifted, mainPeak1, mainPeak2);
                     break;
                 default:
-                    Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, pixelPeriod);;
+                    Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, pixelPeriod);
+                    ;
                     break;
             }
         }
@@ -82,7 +88,7 @@ namespace vernier {
         plane1 = regressionPlane.compute(unwrappedPhase1);
 
         this->pixelPeriod = plane1.getPixelicPeriod();
-        
+
         // Compute second plase from peak 2
         gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
         ifft.compute(spectrumFiltered2, phase2);
@@ -93,7 +99,7 @@ namespace vernier {
         Spatial::quartersUnwrapPhase(unwrappedPhase2);
 
         plane2 = regressionPlane.compute(unwrappedPhase2);
-        
+
 #ifndef USE_FFTW
         // plane1.setC(-plane1.getC());   // supprimé le 19/11/2022 quelle différence avec oouda fft ?
         // plane2.setC(-plane2.getC());
@@ -101,7 +107,7 @@ namespace vernier {
     }
 
     void PatternPhase::computePhaseGradients(int& betaSign, int& gammaSign) {
-#ifdef USE_OPENCV     
+
         // Direction 1
         int sideOffset = regressionPlane.getColOffset();
         Eigen::ArrayXXd phaseCropped = unwrappedPhase1.block(sideOffset, sideOffset, unwrappedPhase1.rows() - 2 * sideOffset, unwrappedPhase1.cols() - 2 * sideOffset);
@@ -166,19 +172,7 @@ namespace vernier {
 
         //std::cout << "mean second direction SOBEL : " << mean2 << std::endl;
         gammaSign = (mean2 > 0) - (mean2 < 0);
-
-#else
-        std::cout << "OpenCV is required to compute phase gradients." << std::endl;
-        betaSign = 1;
-        gammaSign = 1;
-#endif // USE_OPENCV
     }
-
-
-
-
-
-#ifdef USE_OPENCV
 
     void PatternPhase::computeWeakPerspective(Eigen::ArrayXXd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod) {
         spatial.resize(patternArray.rows(), patternArray.cols());
@@ -293,7 +287,6 @@ namespace vernier {
         //std::cout << "mean second direction SOBEL : " << mean2 << std::endl;
         gammaSign = (mean2 > 0) - (mean2 < 0);
     }
-#endif // USE_OPENCV
 
     void PatternPhase::computeQRCode(Eigen::ArrayXXcd& patternArray) {
 
@@ -430,8 +423,6 @@ namespace vernier {
         return sigma;
     }
 
-#ifdef USE_OPENCV
-
     cv::Mat PatternPhase::getPeaksImage() {
         int offsetMin = 10.0;
         double max = spectrumShifted.block(spectrumShifted.rows() / 2 - offsetMin / 2, spectrumShifted.cols() / 2 - offsetMin / 2, offsetMin, offsetMin).abs().maxCoeff();
@@ -464,7 +455,7 @@ namespace vernier {
 
     cv::Mat PatternPhase::getFringesImage() {
         cv::Mat image = array2image(spatial);
-        
+
         for (int row = 0; row < image.rows; ++row) {
             uchar *dst = image.ptr<uchar>(row);
             for (int col = 0; col < image.cols; ++col) {
@@ -491,12 +482,11 @@ namespace vernier {
 
         return image;
     }
-    
+
     cv::Mat PatternPhase::getImage() {
         cv::Mat image = array2image(spatial);
         return image;
     }
-#endif //USE_OPENCV
 
     Eigen::ArrayXXcd & PatternPhase::getSpectrum() {
         return spectrumShifted;

@@ -10,7 +10,6 @@
 #include "Common.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
 
     class QRColumnPattern {
     private:
@@ -123,7 +122,6 @@ namespace vernier {
         std::string toString();
     };
 
-#endif // USE_OPENCV
 }
 
 #endif

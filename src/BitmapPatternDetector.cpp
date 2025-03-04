@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "BitmapPatternDetector.hpp"
@@ -174,7 +174,7 @@ namespace vernier {
         computeAbsolutePose(pattern);
     }
 
-#ifdef USE_OPENCV
+
 
     void BitmapPatternDetector::computePerspective(Eigen::ArrayXXd& pattern) {
         this->pattern = pattern;
@@ -188,7 +188,7 @@ namespace vernier {
 
         computeAbsolutePose(pattern);
     }
-#endif // USE_OPENCV
+
 
     void BitmapPatternDetector::computeAbsolutePose(Eigen::ArrayXXd& patternImage) {
 
@@ -300,7 +300,7 @@ namespace vernier {
         return pose2D;
     }
 
-    std::vector<Pose> BitmapPatternDetector::getAll3DPoses() {
+    std::vector<Pose> BitmapPatternDetector::getAll3DPoses(int id) {
 
         Pose pose2D = getPatternPoseInCamera();
 
@@ -361,17 +361,17 @@ namespace vernier {
         Eigen::MatrixXf::Index maxRowEigen, maxColEigen;
         Eigen::MatrixXf::Index maxRowMatch, maxColMatch;
 
-#ifdef USE_OPENCV
+
         cv::Mat thumbnailImg(thumbnailArray.rows(), thumbnailArray.cols(), CV_64FC1, thumbnailArray.data());
         cv::Mat templateImg(bitmapKernel.rows(), bitmapKernel.cols(), CV_64FC1, bitmapKernel.data());
         thumbnailImg.convertTo(thumbnailImg, CV_32FC1);
         templateImg.convertTo(templateImg, CV_32FC1);
 
         cv::Mat resultImg(thumbnailImg.rows - templateImg.rows + 1, thumbnailImg.cols - templateImg.cols + 1, CV_32FC1);
-#endif // USE_OPENCV
+
 
         if (isSymetric) {
-#ifdef USE_OPENCV
+
             cv::matchTemplate(thumbnailImg, templateImg, resultImg, cv::TM_CCOEFF_NORMED);
 
             cv::normalize(resultImg, resultImg, 1, 0, cv::NORM_MINMAX);
@@ -384,26 +384,26 @@ namespace vernier {
 
             centerRow = maxLoc.x + bitmapKernel.rows() / 2;
             centerRow = maxLoc.y + bitmapKernel.cols() / 2;
-#else
-            templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
-            resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
 
-            for (int i = 0; i < HImage - hTemplate + 1; i++) {
-                for (int j = 0; j < WImage - wTemplate + 1; j++) {
-                    imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
-                    resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
-                }
-            }
+//            templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
+//            resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
+//
+//            for (int i = 0; i < HImage - hTemplate + 1; i++) {
+//                for (int j = 0; j < WImage - wTemplate + 1; j++) {
+//                    imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
+//                    resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
+//                }
+//            }
+//
+//            double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
+//
+//            centerRow = maxRowEigen + bitmapKernel.rows() / 2;
+//            centerCol = maxColEigen + bitmapKernel.cols() / 2;
 
-            double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
-
-            centerRow = maxRowEigen + bitmapKernel.rows() / 2;
-            centerCol = maxColEigen + bitmapKernel.cols() / 2;
-#endif // USE_OPENCV
             maxRowMatch = 0;
         } else {
             for (int i = 0; i < 4; i++) {
-#ifdef USE_OPENCV
+
 
                 cv::matchTemplate(thumbnailImg, templateImg, resultImg, cv::TM_CCOEFF_NORMED);
 
@@ -419,22 +419,22 @@ namespace vernier {
                 maxMatch(i, 1) = maxLoc.x;
                 maxMatch(i, 2) = maxLoc.y;
 
-#else
-                templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
-                resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
-                for (int i = 0; i < HImage - hTemplate + 1; i++) {
-                    for (int j = 0; j < WImage - wTemplate + 1; j++) {
-                        imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
-                        resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
-                    }
-                }
 
-                double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
+//                templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
+//                resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
+//                for (int i = 0; i < HImage - hTemplate + 1; i++) {
+//                    for (int j = 0; j < WImage - wTemplate + 1; j++) {
+//                        imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
+//                        resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
+//                    }
+//                }
+//
+//                double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
+//
+//                maxMatch(i, 0) = max;
+//                maxMatch(i, 1) = maxRowEigen;
+//                maxMatch(i, 2) = maxColEigen;
 
-                maxMatch(i, 0) = max;
-                maxMatch(i, 1) = maxRowEigen;
-                maxMatch(i, 2) = maxColEigen;
-#endif // USE_OPENCV
 
                 rotate90deg(bitmapKernel);
             }
@@ -444,9 +444,9 @@ namespace vernier {
             //SEARCHNG FOR ROUGH BITMAP CENTER
             centerRow = maxMatch(maxRowMatch, 1) + bitmapKernel.rows() / 2;
             centerCol = maxMatch(maxColMatch, 2) + bitmapKernel.cols() / 2;
-#ifdef USE_OPENCV
+
             maxRowMatch += 2;
-#endif // USE_OPENCV
+
         }
 
         return maxRowMatch;
@@ -484,7 +484,7 @@ namespace vernier {
         this->bitmapKernel = bitmapKernelPadded;
     }
 
-#ifdef USE_OPENCV
+
 
     void BitmapPatternDetector::guiDisplayThumbnail(cv::Mat& thumbnailImage) {
         int rectSize = round(patternPhase.getPixelPeriod() / 2.0);
@@ -513,5 +513,5 @@ namespace vernier {
         cv::putText(thumbnailImage, "quarter : " + to_string(quarter), cv::Point(20, 40), cv::FONT_HERSHEY_COMPLEX_SMALL, 1, cv::Scalar(255, 0, 0), 1);
 
     }
-#endif //USE_OPENCV
+
 }

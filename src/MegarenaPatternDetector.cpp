@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2025 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "MegarenaPatternDetector.hpp"
@@ -96,7 +96,7 @@ namespace vernier {
 
     }
 
-    Pose MegarenaPatternDetector::get2DPose() {
+    Pose MegarenaPatternDetector::get2DPose(int id) {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, codePosition1);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, codePosition2);
         double alpha = plane1.getAngle();
@@ -105,7 +105,7 @@ namespace vernier {
         return Pose(x, y, alpha, pixelSize);
     }
 
-    std::vector<Pose> MegarenaPatternDetector::getAll3DPoses() {
+    std::vector<Pose> MegarenaPatternDetector::getAll3DPoses(int id) {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, codePosition1);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, codePosition2);
 
@@ -121,11 +121,9 @@ namespace vernier {
         return thumbnail;
     }
 
-    void MegarenaPatternDetector::showControlImages(int delay) {
-#ifdef USE_OPENCV       
+    void MegarenaPatternDetector::showControlImages(int delay) {    
         cv::imshow("Thumbnail", this->thumbnail.getMeanDotsImage());
         cv::moveWindow("Thumbnail", patternPhase.getNCols()*2,0);
-#endif // USE_OPENCV
         PeriodicPatternDetector::showControlImages();
     }
 

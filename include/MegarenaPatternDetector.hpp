@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef MEGARENADETECTOR_HPP
@@ -51,9 +51,9 @@ namespace vernier {
 
         void compute(Eigen::ArrayXXd& pattern);
 
-        Pose get2DPose();
+        Pose get2DPose(int id = 0);
 
-        std::vector<Pose> getAll3DPoses();
+        std::vector<Pose> getAll3DPoses(int id = 0);
         
         void showControlImages(int delay = -1);
         

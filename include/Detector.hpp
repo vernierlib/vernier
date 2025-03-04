@@ -64,4 +64,4 @@ namespace vernier {
 
     };
 }
-#endif // !DETECTOR_HPP
+#endif

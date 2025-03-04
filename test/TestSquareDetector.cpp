@@ -13,7 +13,8 @@ using namespace cv;
 
 void main1() {
 
-    string filename = "data/stamp/stamp2.png";
+    //string filename = "data/stamp/stamp2.png";
+    string filename = "data/QRCode/code17.jpg";
     Mat grayImage, image = imread(filename);
     imageTo8UC1(image, grayImage);
 

@@ -45,10 +45,9 @@ namespace vernier {
         /** Display the global cell and its coefficients to monitor the global repartition of the cells
          *
          **/
-#ifdef USE_OPENCV
         void guiDisplayCell(cv::Mat& codingCell);
-#endif // USE_OPENCV
+
 
     };
 }
-#endif // !CELL_HPP
+#endif

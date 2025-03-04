@@ -7,7 +7,6 @@
 #include "QRFiducialDetector.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
 
     QRColumnPattern::QRColumnPattern(int col) : col(col) {
     };
@@ -336,5 +335,4 @@ namespace vernier {
         return result;
     }
 
-#endif //USE_OPENCV
 }

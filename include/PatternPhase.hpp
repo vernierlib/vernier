@@ -74,16 +74,17 @@ namespace vernier {
          */
         void compute(Eigen::ArrayXXcd& image);
         
+        void compute(cv::Mat& image);
+        
         /** Computes the phase gradients to find the sign of the out-of-plane 
          * angles (works only with perspective projection)
          */
         void computePhaseGradients(int& betaSign, int& gammaSign);
 
-#ifdef USE_OPENCV
         void computeWeakPerspective(Eigen::ArrayXXd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod);
 
         void computeWeakPerspective(Eigen::ArrayXXcd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod);
-#endif // USE_OPENCV
+
 
         /** Computes the phase retrieving with a given QRCode and returns the phase at the center of the pattern along the two directions
          *
@@ -99,14 +100,12 @@ namespace vernier {
          */
         double computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod);
 
-#ifdef USE_OPENCV
         /** Returns an image of the spectrum with the peak locations */
         cv::Mat getPeaksImage();
         
         cv::Mat getFringesImage();
         
         cv::Mat getImage();
-#endif // USE_OPENCV
 
         /** Returns the shifted spectrum */
         Eigen::ArrayXXcd & getSpectrum();

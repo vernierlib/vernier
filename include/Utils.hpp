@@ -25,7 +25,6 @@ namespace vernier {
         return os.str();
     }
 
-#ifdef USE_OPENCV
     void drawCameraFrame(cv::Mat & image);
 
     cv::Mat array2image(Eigen::ArrayXXd & array);
@@ -35,8 +34,6 @@ namespace vernier {
     Eigen::ArrayXXd image2array(cv::Mat & image);
     
     void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage);
-    
-#endif // USE_OPENCV
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);
 

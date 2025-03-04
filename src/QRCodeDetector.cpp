@@ -7,7 +7,6 @@
 #include "QRCodeDetector.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
 
     QRCode::QRCode(QRFiducialPattern& marker0, QRFiducialPattern& marker1, QRFiducialPattern& marker2) {
         // Determining the top marker
@@ -163,5 +162,5 @@ namespace vernier {
         result += " }";
         return result;
     }
-#endif //USE_OPENCV
+
 }

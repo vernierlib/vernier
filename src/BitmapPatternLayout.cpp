@@ -18,6 +18,7 @@ namespace vernier {
     }
 
     BitmapPatternLayout::BitmapPatternLayout(std::string filename, double period) {
+        classname = "BitmapPattern";
         description = "Layout created from " + filename;
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
         image1.convertTo(image, CV_8U);

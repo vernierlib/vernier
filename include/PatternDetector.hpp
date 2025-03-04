@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef PATTERNDETECTOR_HPP
@@ -26,7 +26,6 @@ namespace vernier {
         std::string date;
         std::string author;
         std::string unit;
-        bool orthographicProjection;
 
         virtual void readJSON(rapidjson::Value& document);
 
@@ -61,33 +60,21 @@ namespace vernier {
          */
         void compute(char* data, int rows, int cols);
 
-#ifdef USE_OPENCV
         /** Estimates the pose of the pattern in the image stored in a OpenCV Mat */
         void compute(cv::Mat& image);
-#endif // USE_OPENCV
 
         /** Display the images to check the pattern detector working 
          * (do nothing if OpenCV is not available) */
         virtual void showControlImages(int delay = -1) = 0;
 
         /** Returns the 2D pose of the pattern */
-        virtual Pose get2DPose() = 0;
+        virtual Pose get2DPose(int id = 0) = 0;
 
         /** Returns the most likely 3D pose of the pattern */
-        virtual Pose get3DPose() = 0;
+        virtual Pose get3DPose(int id = 0) = 0;
 
         /** Returns the four possible 3D pose the pattern */
-        virtual std::vector<Pose> getAll3DPoses() = 0;
-
-        /** Tells the detector to estimate the pose with a perspective projection */
-        void setPerspectiveMode(bool isPerspective = true);
-
-        /** Tells the detector to estimate the pose with an orthographic projection */
-        void setOrthographicMode(bool isOrthographic = true);
-        
-        bool isOrthographicMode();
-        
-        bool isPerspectiveMode();
+        virtual std::vector<Pose> getAll3DPoses(int id = 0) = 0;
 
         std::string getAuthor();
 

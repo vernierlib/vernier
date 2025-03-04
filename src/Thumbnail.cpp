@@ -323,9 +323,6 @@ namespace vernier {
         }
     }
 
-
-#ifdef USE_OPENCV 
-
     void Thumbnail::drawCodeDetection(cv::Mat& image) {
         cv::transpose(image, image);
         cv::Mat imageCode(image.rows + 200, image.cols + 200, CV_32FC1);
@@ -356,7 +353,6 @@ namespace vernier {
 
         cv::imshow("coding Comparison", imageCodeRGB);
     }
-#endif // USE_OPENCV
 
     double Thumbnail::computeSTD2(Eigen::ArrayXXd image) {
         removeNanFromArray(image);
@@ -372,8 +368,6 @@ namespace vernier {
 
         return sum / ((double) (image.rows() * image.cols()));
     }
-
-#ifdef USE_OPENCV
 
     cv::Mat Thumbnail::getMeanDotsImage(int rectWidth) {
         //----------------------------------------------------------------------
@@ -781,7 +775,6 @@ namespace vernier {
         }
         cv::imshow("code direction", codeDirection);
     }
-#endif // USE_OPENCV
 
     Eigen::ArrayXXd Thumbnail::getThumbnailArray() {
         Eigen::ArrayXXd meanWhiteDots = cumulWhiteDots / numberWhiteDots;

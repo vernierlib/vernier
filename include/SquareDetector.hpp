@@ -22,7 +22,6 @@
 //    };
 
 namespace vernier {
-#ifdef USE_OPENCV
 
     class Square {
     public:
@@ -76,7 +75,7 @@ namespace vernier {
         /** Converts into a string */
         std::string toString();
     };
-#endif // USE_OPENCV
+
 }
 
 #endif

@@ -7,8 +7,6 @@
 #include "Utils.hpp"
 
 namespace vernier {
-    
-#ifdef USE_OPENCV
 
     void drawCameraFrame(cv::Mat& image) {
         int cx = image.cols / 2;
@@ -85,17 +83,13 @@ namespace vernier {
             }   
         }        
     }
-#endif // USE_OPENCV
+
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {
-#ifdef USE_OPENCV   
         cv::Mat image = array2image(array);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
         //cv::waitKey();
-#else
-        std::cout << "OpenCV is required to show arrays." << std::endl;
-#endif // USE_OPENCV
     }
 
     void removeNanFromArray(Eigen::ArrayXXd& array) {

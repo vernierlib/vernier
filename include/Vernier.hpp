@@ -27,9 +27,7 @@
 #include "PatternPhase.hpp"
 #include "AbsoluteDecoding.hpp"
 #include "Cell.hpp"
-#include "BitmapPatternDetector.hpp"
 #include "Detector.hpp"
-#include "BitmapPatternLayout.hpp"
 #include "Layout.hpp"
 
 

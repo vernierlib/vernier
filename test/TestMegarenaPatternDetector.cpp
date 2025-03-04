@@ -107,7 +107,7 @@ void main2d() {
             layout->renderPerspectiveProjection(patternPose, array, 5000.0);
 
             // Detecting and estimating the pose of the pattern
-            PatternDetector* detector;
+            MegarenaPatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
             detector->setDouble("sigma", 5);
             detector->setDouble("cropFactor", 0.8);

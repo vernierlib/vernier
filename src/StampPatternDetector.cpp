@@ -4,16 +4,15 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#include "StampDetector.hpp"
+#include "StampPatternDetector.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
 
-    StampDetector::StampDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    StampPatternDetector::StampPatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
         resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 
-    void StampDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    void StampPatternDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
         //        ASSERT(snapshotSize % 2 == 0);
         ASSERT(physicalPeriod > 0.0);
         ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
@@ -24,7 +23,7 @@ namespace vernier {
         patternPhase.resize(snapshotSize, snapshotSize);
     }
 
-    void StampDetector::takeSnapshot(int x, int y, cv::Mat image) {
+    void StampPatternDetector::takeSnapshot(int x, int y, cv::Mat image) {
         snapshot.setConstant(0);
         if (image.channels() > 1) {
             cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
@@ -45,7 +44,7 @@ namespace vernier {
         }
     }
 
-    void StampDetector::compute(const cv::Mat& image) {
+    void StampPatternDetector::compute(const cv::Mat& image) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
             cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
@@ -107,7 +106,7 @@ namespace vernier {
         }
     }
 
-    void StampDetector::draw(cv::Mat & image) {
+    void StampPatternDetector::draw(cv::Mat & image) {
         detector.draw(image);
 
         for (int i = 0; i < stamps.size(); i++) {
@@ -115,12 +114,11 @@ namespace vernier {
         }
     }
 
-    void StampDetector::showControlImages() {
+    void StampPatternDetector::showControlImages() {
         //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
         //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());
     }
 
-#endif //USE_OPENCV
 }

@@ -23,8 +23,8 @@ namespace vernier {
         width = 0.0;
         height = 0.0;
     }
-    
-        void PatternLayout::saveToJSON(std::string filename) {
+
+    void PatternLayout::saveToJSON(std::string filename) {
         if (filename == "") {
             filename = classname + ".json";
         }
@@ -226,7 +226,7 @@ namespace vernier {
         //        rectangleList.push_back(Rectangle(0.0, topMargin + height, leftMargin + width + rightMargin, bottomMargin));
 
         gdstk::Array<gdstk::Polygon*> all_text = {};
-        gdstk::text(toString().c_str(), 4 * rectangleList[0].height, gdstk::Vec2{0, 0}, false, 0, all_text);
+        gdstk::text(toString().c_str(), 8 * rectangleList[0].height, gdstk::Vec2{0, -(topMargin + height + bottomMargin + 8 * rectangleList[0].height)}, false, 2, all_text);
         cell->polygon_array.extend(all_text);
 
         return cell;
@@ -376,7 +376,7 @@ namespace vernier {
             }
         }
     }
-    
+
     std::string PatternLayout::toString() {
         return classname;
     }
@@ -438,7 +438,7 @@ namespace vernier {
     bool PatternLayout::getBool(const std::string & attribute) {
         throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
-    
+
     void PatternLayout::setMargins(double margins) {
         leftMargin = margins;
         rightMargin = margins;

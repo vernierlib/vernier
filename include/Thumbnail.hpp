@@ -77,7 +77,7 @@ namespace vernier {
         Eigen::ArrayXXd guiMeanDots2();
 
         /** Graphical feedback of thumbnail*/
-#ifdef USE_OPENCV
+
         /** Method used to display the thumbnail*/
         cv::Mat getMeanDotsImage(int rectWidth = 10);
         void guiMeanDots(cv::Mat& thumbnailImg);
@@ -94,7 +94,6 @@ namespace vernier {
 
         /** Displays with an arrow the orientation of the code ans where to pinpoint the position (0,0)*/
         void guiCodeDirection();
-#endif // USE_OPENCV
 
         Eigen::VectorXd getSequence1();
 
@@ -120,10 +119,8 @@ namespace vernier {
 
         Eigen::ArrayXXd getCumulBackDots();
 
-#ifdef USE_OPENCV
-        void drawCodeDetection(cv::Mat& image);
-#endif // USE_OPENCV
 
+        void drawCodeDetection(cv::Mat& image);
 
         double computeSTD2(Eigen::ArrayXXd image);
         

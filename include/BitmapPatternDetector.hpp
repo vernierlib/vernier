@@ -1,10 +1,7 @@
 /*
- * This file is part of VERNIER Library.
+ * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2020 UBFC, ENSMM, UFC, CNRS.
- *
- * Authors: Antoine N. ANDRE, Guillaume J. LAURENT, Patrick SANDOZ
- *
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef BITMAPPATTERNDETECTOR_HPP
@@ -38,13 +35,6 @@ namespace vernier {
         int quarter;
         bool isSymetric, isInverted;
         int thumbLength1, thumbLength2;
-
-//        /** Remove all the "Not A Number" terms of an array 
-//         *
-//         *   \param image: input image array with NaN to be removed
-//         *
-//         **/
-//        void removeNanFromArray(Eigen::ArrayXXd &image);
 
         /** Takes a snapchot of an overall image to keep only a rectangle of interest centered around the periodic pattern bitmap 
          *
@@ -137,23 +127,12 @@ namespace vernier {
          */
         void compute(Eigen::ArrayXXd & pattern);
 
-#ifdef USE_OPENCV
+
         /** Estimate the absolute pose of the pattern for a given Eigen array when a perspective projection is considered.
          *
          * \param pattern: image of the pattern
          */
-#ifdef USE_OPENCV
         void computePerspective(Eigen::ArrayXXd& pattern);
-#endif
-#endif // USE_OPENCV
-
-        /** Estimate the absolute pose of the pattern for a given pointer data array
-         *
-         * @param data: pointer to the data of the pattern
-         * @param rows: number of rows of the given data array
-         * @param cols: number of cols of the given data array
-         */
-//        void compute(char* data, int nRows, int nCols);
 
         /** Returns the absolute pose of the camera inside the pattern frame.
          *  Please refer to the documentation datasheet concerning the method of absolute positioning
@@ -169,7 +148,7 @@ namespace vernier {
          */
         Pose getPatternPoseInCamera();
 
-        std::vector<Pose> getAll3DPoses();
+        std::vector<Pose> getAll3DPoses(int id = 0);
 
         /** Returns the first direction computed phase plane of the bitmap periodic pattern in the image
          **/
@@ -179,14 +158,8 @@ namespace vernier {
          **/
         Plane getPlane2();
 
-#ifdef USE_OPENCV
         void guiDisplayThumbnail(cv::Mat& thumbnailImage);
-#endif
-
-        /** Default destructor
-         **/
-        ~BitmapPatternDetector() = default;
 
     };
 }
-#endif // !BITMAPPATTERNDETECTOR_HPP
+#endif

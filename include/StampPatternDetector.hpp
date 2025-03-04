@@ -4,17 +4,16 @@
  * Copyright (c) 2025 CNRS, ENSMM, UMLP.
  */
 
-#ifndef STAMPDETECTOR_HPP
-#define STAMPDETECTOR_HPP
+#ifndef STAMPPATTERNDETECTOR_HPP
+#define STAMPPATTERNDETECTOR_HPP
 
 #include "SquareDetector.hpp"
 #include "PatternPhase.hpp"
 #include <map>
 
 namespace vernier {
-#ifdef USE_OPENCV
 
-    class StampDetector {
+    class StampPatternDetector {
     protected:
 
         Eigen::ArrayXXcd snapshot;
@@ -38,7 +37,7 @@ namespace vernier {
          *	\param snapshotSize: maximal size of the QR code in pixels
          *	\param numberHalfPeriods: number of half periods contained in the QR along one direction.
          */
-        StampDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 61);
+        StampPatternDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 61);
 
         /** Prepares the different required objects for processing
          *
@@ -64,7 +63,7 @@ namespace vernier {
         void showControlImages();
 
     };
-#endif // USE_OPENCV
+
 }
 
 #endif

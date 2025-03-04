@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef PERIODICPATTERNDETECTOR_HPP
@@ -20,6 +20,7 @@ namespace vernier {
         PatternPhase patternPhase;
         Plane plane1, plane2;
         int betaSign, gammaSign;
+        bool orthographicProjection;
 
         void readJSON(rapidjson::Value& document);
 
@@ -37,11 +38,11 @@ namespace vernier {
 
         void compute(Eigen::ArrayXXd & array);
 
-        Pose get2DPose();
+        Pose get2DPose(int id = 0);
 
-        Pose get3DPose();
+        Pose get3DPose(int id = 0);
 
-        std::vector<Pose> getAll3DPoses();
+        std::vector<Pose> getAll3DPoses(int id = 0);
 
         /** Returns the 3D pose of the pattern (assuming a perspective projection with a pin-hole camera model) */
         Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
@@ -50,6 +51,16 @@ namespace vernier {
         PatternPhase * getPatternPhase() {
             return &patternPhase;
         }
+        
+        /** Tells the detector to estimate the pose with a perspective projection */
+        void setPerspectiveMode(bool isPerspective = true);
+
+        /** Tells the detector to estimate the pose with an orthographic projection */
+        void setOrthographicMode(bool isOrthographic = true);
+        
+        bool isOrthographicMode();
+        
+        bool isPerspectiveMode();
 
         /** Sets the approximate length of one period in pixels */
         void setPixelPeriod(double pixelPeriod);
@@ -76,8 +87,12 @@ namespace vernier {
         Eigen::ArrayXXd getUnwrappedPhase2();
 
         void setDouble(const std::string & attribute, double value);
+        
+        void setBool(const std::string & attribute, bool value);
 
         double getDouble(const std::string & attribute);
+        
+        bool getBool(const std::string & attribute);
 
         void* getObject(const std::string & attribute);
 

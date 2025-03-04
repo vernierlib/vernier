@@ -10,7 +10,6 @@
 #include "QRFiducialDetector.hpp"
 
 namespace vernier {
-#ifdef USE_OPENCV
     
     class QRCode {
     public:
@@ -65,7 +64,7 @@ namespace vernier {
         /** Converts into a string */
         std::string toString();
     };
-#endif // USE_OPENCV
+
 }
 
 #endif

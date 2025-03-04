@@ -266,8 +266,6 @@ namespace vernier {
         return globalCell;
     }
 
-#ifdef USE_OPENCV
-
     void Cell::guiDisplayCell(cv::Mat& codingCell) {
         int depth = 1;
         int coding1 = codeOrientation(0);
@@ -360,7 +358,5 @@ namespace vernier {
             }
         }
     }
-#endif // USE_OPENCV
-
 
 }

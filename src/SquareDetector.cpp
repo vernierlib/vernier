@@ -19,7 +19,6 @@
 
 
 namespace vernier {
-#ifdef USE_OPENCV
 
     Square::Square(cv::Point2f corner0, cv::Point2f corner1, cv::Point2f corner2, cv::Point2f corner3) {
         topLeft = corner0;
@@ -103,5 +102,5 @@ namespace vernier {
         result += " }";
         return result;
     }
-#endif //USE_OPENCV
+
 }

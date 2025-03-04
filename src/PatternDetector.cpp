@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "PatternDetector.hpp"
@@ -9,7 +9,7 @@
 namespace vernier {
 
     PatternDetector::PatternDetector() {
-        orthographicProjection = true;
+        classname = "PetternDetector";
     }
 
     void PatternDetector::readJSON(rapidjson::Value& document) {
@@ -57,8 +57,6 @@ namespace vernier {
         compute(patternImage);
     }
 
-#ifdef USE_OPENCV 
-
     void PatternDetector::compute(cv::Mat& image) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
@@ -74,24 +72,6 @@ namespace vernier {
         Eigen::ArrayXXd patternArray;
         patternArray = patternMatrix.array();
         compute(patternArray);
-    }
-#endif // USE_OPENCV
-
-    void PatternDetector::setPerspectiveMode(bool isPerspective) {
-        this->orthographicProjection = !isPerspective;
-    }
-
-    /** Tells the detector to estimate the pose with an orthographic projection */
-    void PatternDetector::setOrthographicMode(bool isOrthographic) {
-        this->orthographicProjection = isOrthographic;
-    }
-
-    bool PatternDetector::isOrthographicMode() {
-        return orthographicProjection;
-    }
-
-    bool PatternDetector::isPerspectiveMode() {
-        return !orthographicProjection;
     }
 
     std::string PatternDetector::getAuthor() {
@@ -127,13 +107,7 @@ namespace vernier {
     }
 
     bool PatternDetector::getBool(const std::string & attribute) {
-        if (attribute == "orthographicProjection") {
-            return orthographicProjection;
-        } else if (attribute == "perspectiveProjection") {
-            return !orthographicProjection;
-        } else {
-            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-        }
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     std::string PatternDetector::getString(const std::string & attribute) {
@@ -163,13 +137,7 @@ namespace vernier {
     }
 
     void PatternDetector::setBool(const std::string & attribute, bool value) {
-        if (attribute == "orthographicProjection") {
-            orthographicProjection = value;
-        } else if (attribute == "perspectiveProjection") {
-            orthographicProjection = !value;
-        } else {
-            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
-        }
+        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
     }
 
     void PatternDetector::setString(const std::string & attribute, std::string value) {

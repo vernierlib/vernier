@@ -104,7 +104,7 @@ namespace vernier {
     }
 
     std::string PeriodicPatternLayout::toString() {
-        return PatternLayout::toString()+ " (period: " + to_string(this->period) + unit + ", dotSize: " + to_string(dotSize) + unit+ ", width: " + to_string(width) + unit + ", height: " + to_string(height) + unit + ")";
+        return PatternLayout::toString()+ "\n  period: " + to_string(this->period) + unit + "\n  dotSize: " + to_string(dotSize) + unit+ "\n  width: " + to_string(width) + unit + "\n  height: " + to_string(height) + unit;
     }
 
     double PeriodicPatternLayout::getPeriod() {

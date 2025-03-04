@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "PeriodicPatternDetector.hpp"
@@ -15,6 +15,7 @@ namespace vernier {
         }
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
+        orthographicProjection = true;
     }
 
     void PeriodicPatternDetector::readJSON(rapidjson::Value& document) {
@@ -45,7 +46,7 @@ namespace vernier {
         }
     }
 
-    Pose PeriodicPatternDetector::get2DPose() {
+    Pose PeriodicPatternDetector::get2DPose(int id) {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
         double alpha = angleInPiPi(plane2.getAngle() - PI / 2);
@@ -54,14 +55,14 @@ namespace vernier {
         return Pose(x, y, alpha, pixelSize);
     }
 
-    Pose PeriodicPatternDetector::get3DPose() {
+    Pose PeriodicPatternDetector::get3DPose(int id) {
         Pose pose = getAll3DPoses()[0];
         pose.beta *= betaSign;
         pose.gamma *= gammaSign;
         return pose;
     }
 
-    std::vector<Pose> PeriodicPatternDetector::getAll3DPoses() {
+    std::vector<Pose> PeriodicPatternDetector::getAll3DPoses(int id) {
 
         double u1 = plane1.getA() * 2.0 * PI / (pow(plane1.getA(), 2) + pow(plane1.getB(), 2));
         double v1 = plane1.getB() * 2.0 * PI / (pow(plane1.getA(), 2) + pow(plane1.getB(), 2));
@@ -108,7 +109,6 @@ namespace vernier {
     }
 
     void PeriodicPatternDetector::showControlImages(int delay) {
-#ifdef USE_OPENCV  
         cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
         cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
@@ -116,10 +116,25 @@ namespace vernier {
         if (delay < 0) {
             cv::waitKey(delay);
         }
-#else
-        std::cout << "OpenCV is required to show the control images." << std::endl;
-#endif // USE_OPENCV
     }
+    
+        void PeriodicPatternDetector::setPerspectiveMode(bool isPerspective) {
+        this->orthographicProjection = !isPerspective;
+    }
+
+    /** Tells the detector to estimate the pose with an orthographic projection */
+    void PeriodicPatternDetector::setOrthographicMode(bool isOrthographic) {
+        this->orthographicProjection = isOrthographic;
+    }
+
+    bool PeriodicPatternDetector::isOrthographicMode() {
+        return orthographicProjection;
+    }
+
+    bool PeriodicPatternDetector::isPerspectiveMode() {
+        return !orthographicProjection;
+    }
+
 
     Eigen::ArrayXXd PeriodicPatternDetector::getUnwrappedPhase1() {
         return patternPhase.getUnwrappedPhase1();
@@ -182,5 +197,24 @@ namespace vernier {
             return PatternDetector::getObject(attribute);
         }
     }
-
+    
+    bool PeriodicPatternDetector::getBool(const std::string & attribute) {
+        if (attribute == "orthographicProjection") {
+            return orthographicProjection;
+        } else if (attribute == "perspectiveProjection") {
+            return !orthographicProjection;
+        } else {
+            return PatternDetector::getBool(attribute);
+        }
+    }
+    
+    void PeriodicPatternDetector::setBool(const std::string & attribute, bool value) {
+        if (attribute == "orthographicProjection") {
+            orthographicProjection = value;
+        } else if (attribute == "perspectiveProjection") {
+            orthographicProjection = !value;
+        } else {
+            PatternDetector::setBool(attribute, value);
+        }
+    }
 }

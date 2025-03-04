@@ -4,7 +4,7 @@
  * Copyright (c) 2025 CNRS, ENSMM, UMLP.
  */
 
-#include "StampDetector.hpp"
+#include "StampPatternDetector.hpp"
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
@@ -19,7 +19,7 @@ void main1() {
     Mat grayImage, image = imread(filename);
     imageTo8UC1(image, grayImage);
 
-    StampDetector detector(15.5, 512, 61);
+    StampPatternDetector detector(15.5, 512, 61);
     detector.compute(grayImage);
 
     cout << "Found " << detector.stamps.size() << " markers in " << filename << endl;
@@ -39,7 +39,7 @@ void testFile(string filename, int markerCount) {
     cv::Mat grayImage, image = cv::imread(filename);
     imageTo8UC1(image, grayImage);
 
-    StampDetector detector(15.5, 512, 61);
+    StampPatternDetector detector(15.5, 512, 61);
     detector.compute(grayImage);
 
     UNIT_TEST(detector.stamps.size() == markerCount);
@@ -70,7 +70,7 @@ void test2d() {
     // Detecting
     Mat grayImage;
     imageTo8UC1(image, grayImage);
-    StampDetector detector(physicalPeriod, 512, 69);
+    StampPatternDetector detector(physicalPeriod, 512, 69);
     detector.compute(grayImage);
 
     Pose estimatedPose;
@@ -111,7 +111,7 @@ double speed(unsigned long testCount) {
     // Detecting
     Mat grayImage;
     imageTo8UC1(image, grayImage);
-    StampDetector detector(physicalPeriod, 256, 61);
+    StampPatternDetector detector(physicalPeriod, 256, 61);
     detector.compute(grayImage);
 
     tic();
