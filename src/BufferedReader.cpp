@@ -69,5 +69,15 @@ namespace vernier {
     long BufferedReader::size() {
         return length;
     }
+    
+    bool BufferedReader::equals(const BufferedReader & other) {
+        return memcmp(buffer, other.buffer, length) == 0;
+    }
+    
+    bool areFilesEqual(const std::string & filename1, const std::string & filename2) {
+        BufferedReader b1(filename1);
+        BufferedReader b2(filename2);
+        return b1.equals(b2);
+    }
 
 }

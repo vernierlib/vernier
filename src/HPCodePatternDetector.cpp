@@ -8,7 +8,8 @@
 
 namespace vernier {
 
-    HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods)
+    : PeriodicPatternDetector(physicalPeriod) {
         resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 
@@ -53,10 +54,10 @@ namespace vernier {
             QRCode code = detector.codes[i];
 
             if ((int) code.getRadius()*2 > snapshotSize) {
-                throw Exception("The QRCode is too large for pose estimation: increase the snapshot size.");
+                throw Exception("The HPCode is too large for pose estimation: increase the snapshot size.");
             }
             if ((int) code.getRadius() < numberHalfPeriods) {
-                throw Exception("The QRCode is too tiny for pose estimation: increase the picture quality size.");
+                throw Exception("The HPCode is too tiny for pose estimation: increase the picture quality size.");
             }
 
             int centerX = (int) code.center.x;
@@ -93,7 +94,7 @@ namespace vernier {
 
             Pose pose = Pose(x, y, alpha, pixelSize);
 
-            if (numberHalfPeriods == 37) { // MAGIC NUMBER !!
+            if ((numberHalfPeriods - 1) % 4 == 0) {
                 unsigned long number = readNumber(code, image, patternPhase.getPixelPeriod() / 2.0);
 
                 codes.insert(std::make_pair(number, pose));
@@ -150,35 +151,54 @@ namespace vernier {
         return number;
     }
 
-    void HPCodePatternDetector::drawPose(cv::Mat & image) {
+    void HPCodePatternDetector::compute(Eigen::ArrayXXd& image) {
+        cv::Mat matImage = array2image(image);
+        compute(matImage);
+    }
+
+    Pose HPCodePatternDetector::get2DPose(int id) {
+        return codes.at(id);
+    }
+
+    Pose HPCodePatternDetector::get3DPose(int id) {
+        throw Exception("The 3D pose of HPCode is not implemented yet.");
+        return codes.at(id);
+    }
+
+    bool HPCodePatternDetector::found(int id) {
+        return (codes.find(id) != codes.end());
+    }
+
+    std::vector<Pose> HPCodePatternDetector::getAll3DPoses(int id) {
+        throw Exception("The 3D pose of HPCode is not implemented yet.");
+        std::vector<Pose> vector;
+        vector.push_back(codes.at(id));
+        return vector;
+    }
+
+    void HPCodePatternDetector::draw(cv::Mat & image) {
         for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
             double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
             it->second.draw(image, length, to_string(it->first));
         }
     }
 
-    void HPCodePatternDetector::drawSnapshot() {
-        for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
-            cv::Mat snap64f;
-            Eigen::MatrixXd snapMatrix;
-            snapMatrix = snapshot.real().matrix();
-            cv::eigen2cv(snapMatrix, snap64f);
-            cv::imshow("snapshot " + to_string(it->first), snap64f);
-            snap64f *= 255;
-            //cv::imwrite("snapshot.png", snap64f);
-        }
-    }
-    
-    double HPCodePatternDetector::getPixelSize() {
-        return patternPhase.getPixelPeriod();
-    }
+    //    void HPCodePatternDetector::drawSnapshots(cv::Mat & image) {
+    //        for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
+    //            int x = (int) (it->second.x);
+    //            int y = (int) (it->second.y);
+    //            cv::rectangle(image, cv::Rect(x - snapshotSize / 2, y - snapshotSize / 2, snapshotSize, snapshotSize), cv::Scalar(255, 0, 0));
+    //        }
+    //    }
 
-    void HPCodePatternDetector::showControlImages() {
+    void HPCodePatternDetector::showControlImages(int delay) {
         cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
-        //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
-        //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
-        //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());        
+        arrayShow("Snapshot image", snapshot);
+
+        if (delay >= 0) {
+            cv::waitKey(delay);
+        }
     }
 
 }

@@ -16,8 +16,7 @@ namespace vernier {
         classname = "FingerprintPattern";
         resize(period, nRows, nCols);
     }
-    
-     
+
     FingerprintPatternLayout::FingerprintPatternLayout(std::string filename, double period) : BitmapPatternLayout(filename, period) {
         classname = "FingerprintPattern";
         PeriodicPatternLayout::resize(period, bitmap.rows(), bitmap.cols());
@@ -27,48 +26,11 @@ namespace vernier {
         PeriodicPatternLayout::resize(period, nRows, nCols);
         bitmap.resize(nRows, nCols);
     }
-    
-     void FingerprintPatternLayout::readJSON(rapidjson::Value & document) {
-         BitmapPatternLayout::readJSON(document);
-         PeriodicPatternLayout::resize(period, bitmap.rows(), bitmap.cols());
-     }
-//    void FingerprintPatternLayout::readJSON(rapidjson::Value & document) {
-//
-//        PatternLayout::readJSON(document);
-//
-//        if (document.HasMember("period") && document["period"].IsDouble()) {
-//            period = document["period"].GetDouble();
-//        } else {
-//            throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
-//        }
-//        if (document.HasMember("bitmap") && document["bitmap"].IsArray()) {
-//            nRows = document["bitmap"].Size();
-//        } else {
-//            throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");
-//        }
-//
-//        if (document["bitmap"][0].IsArray() && document["bitmap"][0].Size() > 0) {
-//            nCols = document["bitmap"][0].Size();
-//        } else {
-//            throw Exception("The file is not a valid bitmap pattern file, the first row of the bitmap has a wrong format.");
-//        }
-//
-//        resize(period, nRows, nCols);
-//        for (rapidjson::SizeType row = 0; row < nRows; row++) {
-//            const rapidjson::Value& value = document["bitmap"][row];
-//            if (value.IsArray() && value.Size() == nCols) {
-//                for (rapidjson::SizeType col = 0; col < nCols; col++) {
-//                    if (value[col].IsInt()) {
-//                        bitmap(row, col) = value[col].GetInt();
-//                    } else {
-//                        Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
-//                    }
-//                }
-//            } else {
-//                throw Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong size");
-//            }
-//        }
-//    }
+
+    void FingerprintPatternLayout::readJSON(rapidjson::Value & document) {
+        BitmapPatternLayout::readJSON(document);
+        PeriodicPatternLayout::resize(period, bitmap.rows(), bitmap.cols());
+    }
 
     void FingerprintPatternLayout::toRectangleVector(std::vector<Rectangle>& rectangleList) {
         for (int col = 0; col < bitmap.cols(); col++) {
@@ -83,18 +45,27 @@ namespace vernier {
     }
 
     double FingerprintPatternLayout::getIntensity(double x, double y) {
-        if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
+        int col = std::round((x + originX) / dotSize - 0.5);
+        int row = std::round((y + originY) / dotSize - 0.5);
+
+        if (col < 0 || row < 0 || col >= 2 * bitmap.cols() || row >= 2 * bitmap.rows()) {
+            return 0;
+        } else if (row % 2 == 1 || col % 2 == 1) {
             return 0;
         } else {
-            int col = std::round((x + originX) / period);
-            int row = std::round((y + originY) / period);
-            if (col < 0 || row < 0 || col >= nCols || row >= nRows) {
-                return 0;
-            } else {
-                double periodicIntensity = (1 + cos(2 * PI * x / period)) * (1 + cos(2 * PI * y / period)) / 4;
-                return (bitmap(row, col) * periodicIntensity);
+            double periodicIntensity = (1 + cos(2 * PI * x / dotSize)) * (1 + cos(2 * PI * y / dotSize)) / 4;
+            return bitmap(row / 2, col / 2) * periodicIntensity;
+        }
+    }
+
+    int FingerprintPatternLayout::numberOfCorrectEdges() {
+        int n = 0;
+        for (int col = 0; col < bitmap.cols() - 1; col++) {
+            for (int row = 0; row < bitmap.rows() - 1; row++) {
+                n += 4 * bitmap(row, col);
             }
         }
+        return n;
     }
 
 }

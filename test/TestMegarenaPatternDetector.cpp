@@ -13,7 +13,7 @@ using namespace std;
 using namespace Eigen;
 
 void main2d() {
-
+    
             // Constructing the layout
             double physicalPeriod = randomDouble(5.0, 10.0);
             int codeSize = 12;
@@ -112,7 +112,7 @@ void main2d() {
             detector->setDouble("sigma", 5);
             detector->setDouble("cropFactor", 0.8);
             detector->setDouble("pixelPeriod", 7);
-            detector->setPerspectiveMode();
+            detector->setPhaseGradientMode();
             detector->compute(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
 

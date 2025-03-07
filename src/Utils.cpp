@@ -38,7 +38,7 @@ namespace vernier {
                     value = (uchar) 0;
                 } else {
                     value = (uchar) (src[col]*255);
-                } 
+                }
                 dst[4 * col] = dst[4 * col + 1] = dst[4 * col + 2] = value;
                 dst[4 * col + 3] = (uchar) 255;
             }
@@ -51,7 +51,7 @@ namespace vernier {
         spectrumAbs = array.abs();
         return array2image(spectrumAbs);
     }
-    
+
     Eigen::ArrayXXd image2array(cv::Mat & image) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
@@ -68,28 +68,32 @@ namespace vernier {
         patternArray = patternMatrix.array();
         return patternArray;
     }
-    
+
     void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage) {
         if (image.channels() > 1) {
             cv::cvtColor(image, grayscaleImage, cv::COLOR_BGR2GRAY);
-            if (grayscaleImage.depth()!=CV_8U) {
+            if (grayscaleImage.depth() != CV_8U) {
                 grayscaleImage.convertTo(grayscaleImage, CV_8U, 255);
-            }   
+            }
         } else {
-            if (image.depth()!=CV_8U) {
+            if (image.depth() != CV_8U) {
                 image.convertTo(grayscaleImage, CV_8U, 255);
             } else {
                 grayscaleImage = image;
-            }   
-        }        
+            }
+        }
     }
-
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {
         cv::Mat image = array2image(array);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
-        //cv::waitKey();
+    }
+
+    void arrayShow(const std::string windowTitle, Eigen::ArrayXXcd & array) {
+        cv::Mat image = array2image(array);
+        drawCameraFrame(image);
+        cv::imshow(windowTitle, image);
     }
 
     void removeNanFromArray(Eigen::ArrayXXd& array) {
@@ -101,13 +105,22 @@ namespace vernier {
             }
         }
     }
-    
+
     double angleInPiPi(double angle) {
-        while(angle>=PI) 
-            angle-=2*PI;
-        while(angle<-PI) 
-            angle+=2*PI;
+        while (angle >= PI)
+            angle -= 2 * PI;
+        while (angle<-PI)
+            angle += 2 * PI;
         return angle;
     }
-        
+
+    const std::string currentDateTime() {
+        time_t now = time(0);
+        struct tm tstruct;
+        char buf[80];
+        tstruct = *localtime(&now);
+        strftime(buf, sizeof (buf), "%Y-%m-%d %X", &tstruct);
+        return buf;
+    }
+
 }

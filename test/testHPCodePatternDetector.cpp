@@ -23,13 +23,13 @@ void main1() {
     estimator.detector.fiducialDetector.highCannyThreshold = 100;
 
     estimator.compute(image);
-    estimator.drawPose(image);
+    estimator.draw(image);
 
     namedWindow("canny image", WINDOW_FREERATIO);
     imshow("canny image", estimator.detector.fiducialDetector.cannyImage);
 
     namedWindow("QR codes", WINDOW_FREERATIO);
-    estimator.drawPose(image);
+    estimator.draw(image);
     imshow("QR codes", image);
 
 
@@ -44,16 +44,36 @@ void main1() {
 
 void main2() {
 
-    ofstream file("data/Image140/results.csv");
-    file << "no;x;y;alpha;pixelSize;no;x;y;alpha;pixelSize;" << endl;
+    Mat image = cv::imread("data/QRCode/code25.png");
 
-    for (int i = 96; i <= 140; i++) {
+    HPCodePatternDetector estimator(15.5, 512, 33);
+
+    estimator.detector.fiducialDetector.lowCannyThreshold = 100;
+    estimator.detector.fiducialDetector.highCannyThreshold = 200;
+
+    bitwise_not(image, image);
+    estimator.compute(image);
+    bitwise_not(image, image);
+    estimator.draw(image);
+
+    imwrite("HPCode.png", image);
+
+    imshow("QR codes", image);
+    waitKey();
+}
+
+void main3() {
+
+    ofstream file("data/Image140/results.csv");
+    file << "image;no;x;y;alpha;pixelSize;no;x;y;alpha;pixelSize;" << endl;
+
+    for (int i = 96; i <= 133; i++) {
 
         cout << "Loading image " << i << endl;
         Mat image = cv::imread("data/Image140/Image" + to_string(i) + ".png");
-        cv::Rect myROI(500, 500, 1500, 1000);
-        image = image(myROI);
-        bitwise_not(image, image);
+        //cv::Rect myROI(500, 500, 1500, 1000);
+        //image = image(myROI);
+        //bitwise_not(image, image);
 
         HPCodePatternDetector estimator(15.5, 512, 33);
         estimator.detector.fiducialDetector.lowCannyThreshold = 200;
@@ -62,115 +82,29 @@ void main2() {
         cout << "Found " << estimator.codes.size() << " markers" << endl;
 
         estimator.showControlImages();
-
-
-        estimator.drawPose(image);
+        estimator.draw(image);
         imshow("QR codes", image);
-        moveWindow("QR codes", 512, 0);
 
-        //imshow("canny image", estimator.detector.markerDetector.cannyImage);
-
-
-
-        for (map<int, Pose>::iterator it = estimator.codes.begin(); it != estimator.codes.end(); it++) {
-            cout << "QR code " << it->first << " at " << it->second.toString() << endl;
-            file << it->first << ";" << it->second.x << ";" << it->second.y << ";" << it->second.alpha << ";" << it->second.pixelSize << ";";
+        //        for (map<int, Pose>::iterator it = estimator.codes.begin(); it != estimator.codes.end(); it++) {
+        //            cout << "QR code " << it->first << " at " << it->second.toString() << endl;
+        //            file << it->first << ";" << it->second.x << ";" << it->second.y << ";" << it->second.alpha << ";" << it->second.pixelSize << ";";
+        //        }
+        if (estimator.codes.size() == 2) {
+            file << i << ";";
+            Pose p0 = estimator.get2DPose(0);
+            file << 0 << ";" << p0.x << ";" << p0.y << ";" << p0.alpha << ";" << p0.pixelSize << ";";
+            Pose p1 = estimator.get2DPose(1);
+            file << 0 << ";" << p1.x << ";" << p1.y << ";" << p1.alpha << ";" << p1.pixelSize << ";";
+            file << endl;
         }
-        file << endl;
 
-        waitKey(1);
+        //waitKey(1);
     }
     file.close();
-}
-
-void mainNoNumber() {
-
-    //Mat oneSub(image.rows, image.cols, CV_8UC3);
-    //oneSub.setTo(Scalar(255,255,255));
-    //image = oneSub - image;
-    //Mat image(image12bits.rows, image12bits.cols, CV_8U);
-    //cvtColor(image12bits, image, CV_8U);
-
-    //image = image12bits;
-
-    HPCodePatternDetector pose;
-    pose.resize(900, 0, 33);
-    pose.detector.fiducialDetector.lowCannyThreshold = 75; //100
-    pose.detector.fiducialDetector.highCannyThreshold = 80; //250
-
-    Eigen::ArrayXXd analyseCPP(1, 3);
-
-    for (int i = 0; i < 400; i++) {
-        Mat image = imread("G:/Utilisateurs/antoine.andre/Documents/Essais_experimentaux/essaisSalleOptique/QRCodes/translation/29_01_20_50nanos_midi/essai_QRCode_translation_50nanos_29_01_20_midi_num_" + to_string(i) + ".tiff", IMREAD_ANYDEPTH);
-        erode(image, image, getStructuringElement(MORPH_ELLIPSE, Size(3, 3)), Point(1, 1));
-
-        int raw_x_center = 1065;
-        int raw_y_center = 959;
-
-        image = image(Rect(raw_x_center - 256, raw_y_center - 256, 512, 512));
-        image(Rect(400, 400, 112, 112)).setTo(1000);
-
-        normalize(image, image, 255, 0, NORM_MINMAX);
-        image.convertTo(image, CV_8UC1);
-        pose.compute(image);
-        pose.drawPose(image);
-        imshow("image", image);
-
-        waitKey(1);
-
-        cout << "frame " << i << endl;
-        cout << pose.codes[0].toString() << endl;
-
-        analyseCPP.conservativeResize(analyseCPP.rows() + 1, 3);
-        analyseCPP(analyseCPP.rows() - 2, 0) = pose.codes[0].x;
-        analyseCPP(analyseCPP.rows() - 2, 1) = pose.codes[0].y;
-    }
-
-    ofstream file;
-    file.open("G:/Utilisateurs/antoine.andre/Documents/Essais_experimentaux/essaisSalleOptique/QRCodes/translation/29_01_20_50nanos_midi/essai_QRCode_translation_50nanos_29_01_20_midi_num_analyse_py_canny.csv");
-    file << "x,y\n";
-    for (int i = 0; i < analyseCPP.rows(); i++) {
-        for (int j = 0; j < analyseCPP.cols(); j++) {
-            if (j == analyseCPP.cols() - 1) {
-                file << setprecision(numeric_limits<long double>::digits10 + 1) << analyseCPP(i, j);
-            } else {
-                file << analyseCPP(i, j) << ",";
-            }
-        }
-        file << "\n";
-    }
-    file.close();
-}
-
-void main3() {
-    Mat image = imread("G:/Utilisateurs/antoine.andre/Desktop/QRCodeFiltered.png", -1);
-
-    HPCodePatternDetector poses = HPCodePatternDetector(1, 250, 37);
-    poses.resize(250, 1, 37);
-
-    poses.detector.fiducialDetector.lowCannyThreshold = 100;
-    poses.detector.fiducialDetector.highCannyThreshold = 253;
-
-    poses.compute(image);
-    poses.drawPose(image);
-
-    Mat canny;
-    namedWindow("canny image", WINDOW_FREERATIO);
-    imshow("canny image", poses.detector.fiducialDetector.cannyImage);
-
-    namedWindow("QR codes", WINDOW_FREERATIO);
-    imshow("QR codes", image);
-
-    waitKey();
-
-    cout << "First way to get information from QR codes : " << endl;
-    for (map<int, Pose>::iterator it = poses.codes.begin(); it != poses.codes.end(); it++) {
-        cout << "QR code num " << it->first << " at " << it->second.toString() << endl;
-    }
 }
 
 void test2d(int codeSize) {
-    
+
     START_UNIT_TEST;
 
     // Constructing the layout
@@ -205,17 +139,17 @@ void test2d(int codeSize) {
         cout << "  Marker " << it->first << " pose:" << it->second.toString() << endl;
         //it->second.draw(image);
     }
-    
-    
+
+
     // Drawing
     //estimator.showControlImages();
 
 
     drawCameraFrame(image);
-    estimator.drawPose(image);
-    
-//    imshow("HP codes", image);
-//    waitKey(1);
+    estimator.draw(image);
+
+    //    imshow("HP codes", image);
+    //    waitKey(1);
 
     if (estimator.codes.size() == 1) {
         Pose estimatedPose = estimator.codes.begin()->second;
@@ -239,6 +173,11 @@ void test(string filename, int lowCannyThreshold, int highCannyThreshold, int nu
         cout << "  QR code " << it->first << " at " << it->second.toString() << endl;
     }
 
+//    estimator.draw(image);
+//    estimator.showControlImages();
+//    imshow("QR codes", image);
+//    waitKey(0);
+
     UNIT_TEST(estimator.codes.size() == numberOfMarkers);
 
 }
@@ -246,6 +185,7 @@ void test(string filename, int lowCannyThreshold, int highCannyThreshold, int nu
 void runAllTests() {
     test("data/QRCode/code17.jpg", 100, 200, 1, 512, 37);
     test("data/QRCode/code23.png", 200, 400, 2, 512, 33);
+    test("data/QRCode/code24.png", 100, 300, 2, 512, 33);
     test("data/QRCode/code31.jpg", 50, 100, 3, 256, 37);
     test("data/QRCode/code61.jpg", 100, 210, 6, 256, 37);
     REPEAT_TEST(test2d(33), 10)
@@ -272,7 +212,9 @@ int main(int argc, char** argv) {
 
     //    main1();
 
-    //    main2();
+    //        main2();
+
+    //    main3();
 
     //    cout << "Computing time: " << speed(100) << " ms" << endl;
 

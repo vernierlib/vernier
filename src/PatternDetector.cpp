@@ -9,7 +9,7 @@
 namespace vernier {
 
     PatternDetector::PatternDetector() {
-        classname = "PetternDetector";
+        classname = "PatternDetector";
     }
 
     void PatternDetector::readJSON(rapidjson::Value& document) {
@@ -49,13 +49,13 @@ namespace vernier {
         readJSON(document.MemberBegin()->value);
     }
 
-    void PatternDetector::compute(char* data, int rows, int cols) {
-        Eigen::MatrixXd mPatternMatrix(rows, cols);
-        std::memcpy(mPatternMatrix.data(), data, rows * cols * sizeof (double));
-
-        Eigen::ArrayXXd patternImage = mPatternMatrix.array();
-        compute(patternImage);
-    }
+//    void PatternDetector::compute(char* data, int rows, int cols) {
+//        Eigen::MatrixXd mPatternMatrix(rows, cols);
+//        std::memcpy(mPatternMatrix.data(), data, rows * cols * sizeof (double));
+//
+//        Eigen::ArrayXXd patternImage = mPatternMatrix.array();
+//        compute(patternImage);
+//    }
 
     void PatternDetector::compute(cv::Mat& image) {
         cv::Mat grayImage;

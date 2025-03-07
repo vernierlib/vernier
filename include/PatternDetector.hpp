@@ -36,14 +36,14 @@ namespace vernier {
         /** Default constructor */
         PatternDetector();
 
-        virtual ~PatternDetector() = default;
+//        virtual ~PatternDetector() = default;
 
-        /** Resizes the detector with a given number of rows and columns 
-         *
-         *	\param nRows: number of rows of the image to compute
-         *	\param nCols: number of columns of the image to compute
-         */
-        virtual void resize(int nRows, int nCols) = 0;
+//        /** Resizes the detector with a given number of rows and columns 
+//         *
+//         *	\param nRows: number of rows of the image to compute
+//         *	\param nCols: number of columns of the image to compute
+//         */
+//        virtual void resize(int nRows, int nCols) = 0;
 
         /** Initializes a pattern detector from a JSON file */
         void loadFromJSON(std::string filename);
@@ -52,19 +52,20 @@ namespace vernier {
          */
         virtual void compute(Eigen::ArrayXXd& image) = 0;
 
-        /** Estimates the pose of the pattern in the image stored in a char array 
-         *
-         * @param data: pointer to the data of the pattern
-         * @param rows: number of rows of the given data array
-         * @param cols: number of cols of the given data array
-         */
-        void compute(char* data, int rows, int cols);
+//        /** Estimates the pose of the pattern in the image stored in a char array 
+//         *
+//         * @param data: pointer to the data of the pattern
+//         * @param rows: number of rows of the given data array
+//         * @param cols: number of cols of the given data array
+//         */
+//        virtual void compute(char* data, int rows, int cols);
 
         /** Estimates the pose of the pattern in the image stored in a OpenCV Mat */
-        void compute(cv::Mat& image);
+        virtual void compute(cv::Mat& image);
 
-        /** Display the images to check the pattern detector working 
-         * (do nothing if OpenCV is not available) */
+        /** Displays the images to check the pattern detector working. 
+         * The function waits for a key event infinitely when delay == 0, or for 
+         * delay milliseconds when delay > 0, or does not wait when delay < 0. */
         virtual void showControlImages(int delay = -1) = 0;
 
         /** Returns the 2D pose of the pattern */
@@ -72,6 +73,9 @@ namespace vernier {
 
         /** Returns the most likely 3D pose of the pattern */
         virtual Pose get3DPose(int id = 0) = 0;
+        
+        /** Returns true if the pattern has been detected and localized. */
+        virtual bool found(int id = 0) = 0;
 
         /** Returns the four possible 3D pose the pattern */
         virtual std::vector<Pose> getAll3DPoses(int id = 0) = 0;

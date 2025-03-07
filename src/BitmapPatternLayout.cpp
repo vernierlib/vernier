@@ -121,18 +121,18 @@ namespace vernier {
         }
     }
     
-    void BitmapPatternLayout::saveToPNG(std::string filename) {
-        cv::Mat image(bitmap.rows(), bitmap.cols(), CV_8U);
-        for (int col = 0; col < image.cols; col++) {
-            for (int row = 0; row < image.rows; row++) {
-                image.at<char>(row, col) = (char) (255 * bitmap(row,col));
-            }
-        }
-        if (filename == "") {
-            filename = classname + ".png";
-        }
-        cv::imwrite(filename, image);
-    }
+//    void BitmapPatternLayout::saveToPNG(std::string filename) {
+//        cv::Mat image(bitmap.rows(), bitmap.cols(), CV_8U);
+//        for (int col = 0; col < image.cols; col++) {
+//            for (int row = 0; row < image.rows; row++) {
+//                image.at<char>(row, col) = (char) (255 * bitmap(row,col));
+//            }
+//        }
+//        if (filename == "") {
+//            filename = classname + ".png";
+//        }
+//        cv::imwrite(filename, image);
+//    }
 
     int BitmapPatternLayout::numberOfWrongEdges() {
         int n = 0;

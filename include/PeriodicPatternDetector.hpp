@@ -20,7 +20,7 @@ namespace vernier {
         PatternPhase patternPhase;
         Plane plane1, plane2;
         int betaSign, gammaSign;
-        bool orthographicProjection;
+        bool computePhaseGradient;
 
         void readJSON(rapidjson::Value& document);
 
@@ -41,6 +41,8 @@ namespace vernier {
         Pose get2DPose(int id = 0);
 
         Pose get3DPose(int id = 0);
+        
+        bool found(int id = 0);
 
         std::vector<Pose> getAll3DPoses(int id = 0);
 
@@ -52,15 +54,10 @@ namespace vernier {
             return &patternPhase;
         }
         
-        /** Tells the detector to estimate the pose with a perspective projection */
-        void setPerspectiveMode(bool isPerspective = true);
-
-        /** Tells the detector to estimate the pose with an orthographic projection */
-        void setOrthographicMode(bool isOrthographic = true);
-        
-        bool isOrthographicMode();
-        
-        bool isPerspectiveMode();
+        /** Tells the detector to estimate the most likely pose with phase gradients */
+        void setPhaseGradientMode(bool value = true);
+ 
+        bool isPhaseGradientMode();
 
         /** Sets the approximate length of one period in pixels */
         void setPixelPeriod(double pixelPeriod);

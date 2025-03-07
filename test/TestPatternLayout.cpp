@@ -131,51 +131,71 @@ void main7() {
 void runAllTests() {
 
     START_UNIT_TEST;
-
     PeriodicPatternLayout layout1(9, 17, 17);
     layout1.saveToJSON();
+    layout1.saveToSVG();
+    layout1.saveToPNG();
     layout1.loadFromJSON("PeriodicPattern.json");
-    remove("PeriodicPattern.json");
-    UNIT_TEST(1);
+    layout1.saveToJSON("PeriodicPattern2.json");
+    //    remove("PeriodicPattern.json");
+    UNIT_TEST(areFilesEqual("PeriodicPattern.json", "PeriodicPattern2.json"));
 
+    START_UNIT_TEST;
     HPCodePatternLayout layout2(10, 37);
     layout2.saveToJSON();
+    layout2.saveToSVG();
+    layout2.saveToPNG();
     layout2.saveToCSV();
     layout2.loadFromJSON("HPCodePattern.json");
-    remove("HPCodePattern.json");
-    UNIT_TEST(2);
+    layout2.saveToJSON("HPCodePattern2.json");
+    //    remove("HPCodePattern.json");
+    UNIT_TEST(areFilesEqual("HPCodePattern.json", "HPCodePattern2.json"));
 
-    MegarenaPatternLayout layout3(4.5, 12);
+    START_UNIT_TEST;
+    MegarenaPatternLayout layout3(4.5, 6);
     layout3.saveToJSON();
+    layout3.saveToSVG();
+    layout3.saveToPNG();
     layout3.loadFromJSON("MegarenaPattern.json");
-    remove("MegarenaPattern.json");
-    UNIT_TEST(3);
+    layout3.saveToJSON("MegarenaPattern2.json");
+    //    remove("MegarenaPattern.json");
+    UNIT_TEST(areFilesEqual("MegarenaPattern.json", "MegarenaPattern2.json"));
 
-    FingerprintPatternLayout layout4("data/femto.png", 9);
+    START_UNIT_TEST;
+    FingerprintPatternLayout layout4("data/vernier.png", 9);
     layout4.saveToJSON("FingerprintPattern.json");
+    layout4.saveToSVG();
+    layout4.saveToPNG();
     layout4.loadFromJSON("FingerprintPattern.json");
-    remove("FingerprintPattern.json");
-    UNIT_TEST(4);
+    layout4.saveToJSON("FingerprintPattern2.json");
+    //    remove("FingerprintPattern.json");
+    UNIT_TEST(areFilesEqual("FingerprintPattern.json", "FingerprintPattern2.json"));
 
+    START_UNIT_TEST;
     BitmapPatternLayout layout5("data/femto.png", 9);
     layout5.saveToJSON("BitmapPattern.json");
+    layout5.saveToSVG();
+    layout5.saveToPNG();
     layout5.loadFromJSON("BitmapPattern.json");
-    remove("BitmapPattern.json");
-    UNIT_TEST(5);
+    layout5.saveToJSON("BitmapPattern2.json");
+    //    remove("BitmapPattern.json");
+    UNIT_TEST(areFilesEqual("BitmapPattern.json", "BitmapPattern2.json"));
 
+    START_UNIT_TEST;
     CustomPatternLayout layout6;
     layout6.loadFromCSV("HPCodePattern.csv");
     layout6.saveToJSON();
     layout6.loadFromJSON("CustomPattern.json");
-    remove("CustomPattern.json");
-    remove("HPCodePattern.csv");
-    UNIT_TEST(6);
+    layout6.saveToJSON("CustomPattern2.json");
+    //    remove("CustomPattern.json");
+    //    remove("HPCodePattern.csv");
+    UNIT_TEST(areFilesEqual("CustomPattern.json", "CustomPattern2.json"));
 
 }
 
 int main(int argc, char** argv) {
 
-//    main4();
+    //    main4();
 
     runAllTests();
 

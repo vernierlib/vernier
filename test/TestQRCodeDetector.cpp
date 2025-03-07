@@ -13,12 +13,12 @@ using namespace std;
 using namespace cv;
 
  void main1() {
-        Mat image = imread("data/QRCode/code23.png");
+        Mat image = imread("data/QRCode/code24.png");
 
         QRCodeDetector detector;
 
-        detector.fiducialDetector.lowCannyThreshold = 200;
-        detector.fiducialDetector.highCannyThreshold = 400;
+        detector.fiducialDetector.lowCannyThreshold = 100;
+        detector.fiducialDetector.highCannyThreshold = 200;
 
         detector.compute(image);
         detector.draw(image);
@@ -106,7 +106,13 @@ using namespace cv;
         detector.fiducialDetector.lowCannyThreshold = 200;
         detector.fiducialDetector.highCannyThreshold = 400;
         detector.compute(image);
-        UNIT_TEST(detector.codes.size() == 2);        
+        UNIT_TEST(detector.codes.size() == 2);
+
+        image = imread("data/QRCode/code24.png");
+        detector.fiducialDetector.lowCannyThreshold = 100;
+        detector.fiducialDetector.highCannyThreshold = 200;
+        detector.compute(image);
+        UNIT_TEST(detector.codes.size() == 2);          
 
         image = imread("data/QRCode/code31.jpg");
         detector.fiducialDetector.lowCannyThreshold = 50;

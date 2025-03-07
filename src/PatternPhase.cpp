@@ -482,6 +482,11 @@ namespace vernier {
 
         return image;
     }
+    
+    bool PatternPhase::peaksFound() {
+        return (mainPeak1.z() > MIN_PEAK_POWER && mainPeak2.z() > MIN_PEAK_POWER);
+        
+    }
 
     cv::Mat PatternPhase::getImage() {
         cv::Mat image = array2image(spatial);

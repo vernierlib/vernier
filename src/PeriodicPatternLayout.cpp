@@ -28,8 +28,8 @@ namespace vernier {
         this->dotSize = 0.5 * period;
         this->nRows = nRows;
         this->nCols = nCols;
-        width = period * (nCols - 0.5) ;
-        height = period * (nRows - 0.5) ;
+        width = period * (nCols - 0.5);
+        height = period * (nRows - 0.5);
         originX = 0.5 * width;
         originY = 0.5 * height;
     }
@@ -73,7 +73,9 @@ namespace vernier {
             double x = col * period + offset;
             for (int row = 0; row < nRows; row++) {
                 double y = row * period + offset;
-                rectangleList.push_back(Rectangle(x, y, dotSize, dotSize));
+                if (row != 0 || col != 0) {
+                    rectangleList.push_back(Rectangle(x, y, dotSize, dotSize));
+                }
             }
         }
     }
@@ -89,12 +91,12 @@ namespace vernier {
     }
 
     void PeriodicPatternLayout::saveToPNG(std::string filename) {
-        cv::Mat image(2 * nRows, 2 * nCols, CV_8U);
+        cv::Mat image(2 * nRows - 1, 2 * nCols - 1, CV_8U);
         for (int col = 0; col < image.cols; col++) {
-            double x = col * period * 0.5 - originX;
+            double x = col * period * 0.5 + 0.25 * period - originX;
             for (int row = 0; row < image.rows; row++) {
-                double y = row * period * 0.5 - originY;
-                image.at<char>(row, col) = (char) (255 * (getIntensity(x, y) > 0.5));
+                double y = row * period * 0.5 + 0.25 * period - originY;
+                image.at<char>(row, col) = (char) (255 * (getIntensity(x, y) < 0.5));
             }
         }
         if (filename == "") {
@@ -104,7 +106,7 @@ namespace vernier {
     }
 
     std::string PeriodicPatternLayout::toString() {
-        return PatternLayout::toString()+ "\n  period: " + to_string(this->period) + unit + "\n  dotSize: " + to_string(dotSize) + unit+ "\n  width: " + to_string(width) + unit + "\n  height: " + to_string(height) + unit;
+        return PatternLayout::toString() + "\n  period: " + to_string(this->period) + unit + "\n  dotSize: " + to_string(dotSize) + unit + "\n  width: " + to_string(width) + unit + "\n  height: " + to_string(height) + unit;
     }
 
     double PeriodicPatternLayout::getPeriod() {

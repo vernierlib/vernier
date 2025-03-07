@@ -15,7 +15,7 @@ namespace vernier {
         }
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
-        orthographicProjection = true;
+        computePhaseGradient = false;
     }
 
     void PeriodicPatternDetector::readJSON(rapidjson::Value& document) {
@@ -38,7 +38,7 @@ namespace vernier {
         plane1 = patternPhase.getPlane1();
         plane2 = patternPhase.getPlane2();
 
-        if (orthographicProjection) {
+        if (computePhaseGradient==false) {
             betaSign = 1;
             gammaSign = 1;
         } else {
@@ -60,6 +60,10 @@ namespace vernier {
         pose.beta *= betaSign;
         pose.gamma *= gammaSign;
         return pose;
+    }
+
+    bool PeriodicPatternDetector::found(int id) {
+        return patternPhase.peaksFound();
     }
 
     std::vector<Pose> PeriodicPatternDetector::getAll3DPoses(int id) {
@@ -113,28 +117,18 @@ namespace vernier {
         cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getNCols(), 0);
-        if (delay < 0) {
+        if (delay >= 0) {
             cv::waitKey(delay);
         }
     }
-    
-        void PeriodicPatternDetector::setPerspectiveMode(bool isPerspective) {
-        this->orthographicProjection = !isPerspective;
+
+    void PeriodicPatternDetector::setPhaseGradientMode(bool isPerspective) {
+        this->computePhaseGradient = !isPerspective;
     }
 
-    /** Tells the detector to estimate the pose with an orthographic projection */
-    void PeriodicPatternDetector::setOrthographicMode(bool isOrthographic) {
-        this->orthographicProjection = isOrthographic;
+    bool PeriodicPatternDetector::isPhaseGradientMode() {
+        return computePhaseGradient;
     }
-
-    bool PeriodicPatternDetector::isOrthographicMode() {
-        return orthographicProjection;
-    }
-
-    bool PeriodicPatternDetector::isPerspectiveMode() {
-        return !orthographicProjection;
-    }
-
 
     Eigen::ArrayXXd PeriodicPatternDetector::getUnwrappedPhase1() {
         return patternPhase.getUnwrappedPhase1();
@@ -197,22 +191,22 @@ namespace vernier {
             return PatternDetector::getObject(attribute);
         }
     }
-    
+
     bool PeriodicPatternDetector::getBool(const std::string & attribute) {
-        if (attribute == "orthographicProjection") {
-            return orthographicProjection;
-        } else if (attribute == "perspectiveProjection") {
-            return !orthographicProjection;
+        if (attribute == "computePhaseGradient") {
+            return computePhaseGradient;
+        } else if (attribute == "phaseGradientMode") {
+            return computePhaseGradient;
         } else {
             return PatternDetector::getBool(attribute);
         }
     }
-    
+
     void PeriodicPatternDetector::setBool(const std::string & attribute, bool value) {
-        if (attribute == "orthographicProjection") {
-            orthographicProjection = value;
-        } else if (attribute == "perspectiveProjection") {
-            orthographicProjection = !value;
+        if (attribute == "computePhaseGradient") {
+            computePhaseGradient = value;
+        } else if (attribute == "phaseGradientMode") {
+            computePhaseGradient = value;
         } else {
             PatternDetector::setBool(attribute, value);
         }

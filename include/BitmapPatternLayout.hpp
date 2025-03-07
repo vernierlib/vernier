@@ -38,16 +38,6 @@ namespace vernier {
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
         
-        void saveToPNG(std::string filename = "");
-
-        inline void setDot(int row, int col, int value) {
-            bitmap(row, col) = value;
-        }
-
-        inline int getDot(int row, int col) {
-            return bitmap(row, col);
-        }
-        
         int numberOfWrongEdges();
         
         bool hasWrongEdges();

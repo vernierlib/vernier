@@ -258,16 +258,16 @@ namespace vernier {
                     maxValue = norm;
                     mainPeak1.x() = col;
                     mainPeak1.y() = row;
-                    mainPeak1.z() = norm/source.cols()/source.rows()/5;
+                    mainPeak1.z() = norm/source.cols()/source.rows()/5; // MAGIC NUMBER
                 }
             }
         }
         //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
-        if (mainPeak1.z() < 1e-5) { // MAGIC NUMBER
-            //cv::imshow("Peaks not found", array2image(source) );
-            //cv::waitKey();
-            throw Exception("Houston, we have a problem here, the first peak has not be found.");
-        }
+//        if (mainPeak1.z() < 1e-5) { // MAGIC NUMBER
+//            //cv::imshow("Peaks not found", array2image(source) );
+//            //cv::waitKey();
+//            throw Exception("Houston, we have a problem here, the first peak has not be found.");
+//        }
         
         source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
         source.block((source.rows()-mainPeak1.y()) - 4, (source.cols()-mainPeak1.x()) - 4, 8, 8) = 0;

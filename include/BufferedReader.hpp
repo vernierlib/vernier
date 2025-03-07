@@ -59,8 +59,12 @@ namespace vernier {
         /** Returns the size of the buffer read in from the file
          **/
         long size();
+        
+        bool equals(const BufferedReader & other);
 
     };
+    
+    bool areFilesEqual(const std::string & filename1, const std::string & filename2);
 
 }
 

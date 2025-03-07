@@ -80,10 +80,11 @@ namespace vernier {
         Eigen::Matrix4d cTp = getCameraToPatternTransformationMatrix();
         double xImg = cTp(0, 3) / pixelSize + image.cols / 2;
         double yImg = cTp(1, 3) / pixelSize + image.rows / 2;
-        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha), yImg + length * sin(alpha)), cv::Scalar(0, 0, 255));
-        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha + PI / 2), yImg + length * sin(alpha + PI / 2)), cv::Scalar(0, 255, 0));
-        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha), yImg - length * sin(alpha)), cv::Scalar(128, 128, 128));
-        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha + PI / 2), yImg - length * sin(alpha + PI / 2)), cv::Scalar(128, 128, 128));
+        int thickness = 2;
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha), yImg + length * sin(alpha)), cv::Scalar(0, 0, 255), thickness, cv::LINE_AA);
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg + length * cos(alpha + PI / 2), yImg + length * sin(alpha + PI / 2)), cv::Scalar(0, 255, 0), thickness, cv::LINE_AA);
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha), yImg - length * sin(alpha)), cv::Scalar(255, 150, 128), thickness, cv::LINE_AA);
+        cv::line(image, cv::Point(xImg, yImg), cv::Point(xImg - length * cos(alpha + PI / 2), yImg - length * sin(alpha + PI / 2)), cv::Scalar(255, 150, 128), thickness, cv::LINE_AA);
         cv::putText(image, name, cv::Point(xImg + 5, yImg - 5), cv::FONT_HERSHEY_COMPLEX, 1, cv::Scalar(0, 0, 255), 1);
 
     }

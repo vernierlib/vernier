@@ -44,6 +44,8 @@ namespace vernier {
         Plane plane1, plane2;
 
     public:
+        
+        double MIN_PEAK_POWER = 1e5;
 
         /** Default constructor*/
         PatternPhase();
@@ -100,6 +102,9 @@ namespace vernier {
          */
         double computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod);
 
+        /** Returns true if two peaks with sufficient power have been found */
+        bool peaksFound();
+        
         /** Returns an image of the spectrum with the peak locations */
         cv::Mat getPeaksImage();
         

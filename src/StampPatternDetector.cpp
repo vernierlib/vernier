@@ -8,12 +8,12 @@
 
 namespace vernier {
 
-    StampPatternDetector::StampPatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
+    StampPatternDetector::StampPatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods)
+    : PeriodicPatternDetector(physicalPeriod) {
         resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 
     void StampPatternDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
-        //        ASSERT(snapshotSize % 2 == 0);
         ASSERT(physicalPeriod > 0.0);
         ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
         this->snapshotSize = snapshotSize;
@@ -106,6 +106,29 @@ namespace vernier {
         }
     }
 
+    void StampPatternDetector::compute(Eigen::ArrayXXd& image) {
+        cv::Mat matImage = array2image(image);
+        compute(matImage);
+    }
+
+    Pose StampPatternDetector::get2DPose(int id) {
+        return stamps.at(id);
+    }
+
+    Pose StampPatternDetector::get3DPose(int id) {
+        throw Exception("The 3D pose of stamp is not implemented yet.");
+        return stamps.at(id);
+    }
+
+    bool StampPatternDetector::found(int id) {
+        return (id >= 0 && id < stamps.size());
+    }
+
+    std::vector<Pose> StampPatternDetector::getAll3DPoses(int id) {
+        throw Exception("The 3D pose of stamp is not implemented yet.");
+        return stamps;
+    }
+
     void StampPatternDetector::draw(cv::Mat & image) {
         detector.draw(image);
 
@@ -114,11 +137,15 @@ namespace vernier {
         }
     }
 
-    void StampPatternDetector::showControlImages() {
+    void StampPatternDetector::showControlImages(int delay) {
         //cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage()); // erreur spatial est vide ???
         //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", 0, patternPhase.getNRows());
+
+        if (delay >= 0) {
+            cv::waitKey(delay);
+        }
     }
 
 }

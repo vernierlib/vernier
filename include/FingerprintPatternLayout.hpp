@@ -24,7 +24,7 @@ namespace vernier {
         FingerprintPatternLayout();
 
         FingerprintPatternLayout(double period, int nRows, int nCols);
-        
+
         /** Construct a pattern from a PNG file with given period */
         FingerprintPatternLayout(std::string filename, double period);
 
@@ -33,6 +33,16 @@ namespace vernier {
         double getIntensity(double x, double y);
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList);
+
+        int numberOfWrongEdges() {
+            return 0;
+        }
+
+        bool hasWrongEdges() {
+            return false;
+        }
+
+        int numberOfCorrectEdges();
 
     };
 

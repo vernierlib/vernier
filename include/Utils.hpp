@@ -32,16 +32,21 @@ namespace vernier {
     cv::Mat array2image(Eigen::ArrayXXcd & array);
 
     Eigen::ArrayXXd image2array(cv::Mat & image);
-    
+
     void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage);
 
     void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);
+
+    void arrayShow(const std::string windowTitle, Eigen::ArrayXXcd & array);
 
     /** Replace all the "Not A Number" terms of an array by zeros
      */
     void removeNanFromArray(Eigen::ArrayXXd & image);
 
     double angleInPiPi(double angle);
+
+    const std::string currentDateTime();
+
 }
 
 #define PRINT(variable) { std::cout << "  "<< #variable << " at line " << __LINE__ << " = " << variable << std::endl; }

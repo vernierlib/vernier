@@ -11,7 +11,7 @@ namespace vernier {
     PatternLayout::PatternLayout() {
         classname = "PatternLayout";
         description = "Layout generated with the Vernier library";
-        date = "2025";
+        date = currentDateTime();
         author = "FEMTO-ST";
         unit = "um";
         originX = 0.0;
@@ -41,7 +41,15 @@ namespace vernier {
 
         writeJSON(file);
 
-        file << "        \"copyright\": \"Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.\"" << std::endl;
+        //file << "        \"copyright\": \"Creative Commons Attribution 4.0\"" << std::endl;
+        if (author != "") {
+        file << "        \"author\": \"" << author << "\"," << std::endl;
+        }
+        if (date != "") {
+        file << "        \"date\": \"" << date << "\"" << std::endl;
+        } else {
+            file << "        \"date\": \"" << currentDateTime() << "\"" << std::endl;
+        }
         file << "    }" << std::endl;
         file << "}" << std::endl;
         file.close();
@@ -49,14 +57,24 @@ namespace vernier {
 
     void PatternLayout::writeJSON(std::ofstream & file) {
         file << "    \"" << classname << "\": {" << std::endl;
-        file << "        \"description\": \"" << description << "\"," << std::endl;
-        file << "        \"date\": \"" << date << "\"," << std::endl;
-        file << "        \"author\": \"" << author << "\"," << std::endl;
+        if (description != "") {
+            file << "        \"description\": \"" << description << "\"," << std::endl;
+        }
+        if (unit != "") {
         file << "        \"unit\": \"" << unit << "\"," << std::endl;
-        file << "        \"leftMargin\": " << leftMargin << "," << std::endl;
-        file << "        \"rightMargin\": " << rightMargin << "," << std::endl;
-        file << "        \"topMargin\": " << topMargin << "," << std::endl;
-        file << "        \"bottomMargin\": " << rightMargin << "," << std::endl;
+        }
+        if (leftMargin > 0) {
+            file << "        \"leftMargin\": " << to_string(leftMargin) << "," << std::endl;
+        }
+        if (rightMargin > 0) {
+            file << "        \"rightMargin\": " << to_string(rightMargin) << "," << std::endl;
+        }
+        if (topMargin > 0) {
+            file << "        \"topMargin\": " << to_string(topMargin) << "," << std::endl;
+        }
+        if (bottomMargin > 0) {
+            file << "        \"bottomMargin\": " << to_string(bottomMargin) << "," << std::endl;
+        }
     }
 
     void PatternLayout::readJSON(rapidjson::Value & document) {
