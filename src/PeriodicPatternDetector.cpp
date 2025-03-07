@@ -103,6 +103,10 @@ namespace vernier {
 
         return poseVec;
     }
+    
+    std::string PeriodicPatternDetector::toString() {
+        return PatternDetector::toString() + " (period: " + to_string(this->physicalPeriod) + unit + ")";
+    }
 
     Plane PeriodicPatternDetector::getPlane1() {
         return plane1;

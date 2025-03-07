@@ -30,7 +30,7 @@ namespace vernier {
         PatternLayout::writeJSON(file);
         file << "        \"dots\": [" << std::endl;
         for (int i = 0; i < dots.size(); i++) {
-            file << "            [" << dots[i].x << ", " << dots[i].y << ", " << dots[i].width << ", " << dots[i].height << ", " << dotsIntensity[i];
+            file << "            [" << to_string(dots[i].x) << ", " << to_string(dots[i].y) << ", " << to_string(dots[i].width) << ", " << to_string(dots[i].height) << ", " << to_string(dotsIntensity[i]);
             if (i < dots.size() - 1) {
                 file << "]," << std::endl;
             } else {

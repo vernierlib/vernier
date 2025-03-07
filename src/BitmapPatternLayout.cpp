@@ -39,7 +39,7 @@ namespace vernier {
 
     void BitmapPatternLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
-        file << "        \"period\": " << period << "," << std::endl;
+        file << "        \"period\": " << to_string(period) << "," << std::endl;
         file << "        \"bitmap\": [" << std::endl;
         for (int row = 0; row < bitmap.rows(); row++) {
             file << "            [";

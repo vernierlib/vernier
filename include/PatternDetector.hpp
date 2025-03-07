@@ -79,6 +79,8 @@ namespace vernier {
 
         /** Returns the four possible 3D pose the pattern */
         virtual std::vector<Pose> getAll3DPoses(int id = 0) = 0;
+        
+        virtual std::string toString();
 
         std::string getAuthor();
 

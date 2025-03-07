@@ -10,6 +10,7 @@ namespace vernier {
 
     StampPatternDetector::StampPatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods)
     : PeriodicPatternDetector(physicalPeriod) {
+        classname = "StampPattern";
         resize(physicalPeriod, snapshotSize, numberHalfPeriods);
     }
 

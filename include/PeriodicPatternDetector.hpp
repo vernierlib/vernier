@@ -47,8 +47,10 @@ namespace vernier {
         std::vector<Pose> getAll3DPoses(int id = 0);
 
         /** Returns the 3D pose of the pattern (assuming a perspective projection with a pin-hole camera model) */
-        Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
+        //Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
 
+        std::string toString();
+        
         /** return the reference to the pattern phase class */
         PatternPhase * getPatternPhase() {
             return &patternPhase;

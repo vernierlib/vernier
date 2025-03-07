@@ -23,7 +23,7 @@ namespace vernier {
 
     void HPCodePatternLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
-        file << "        \"period\": " << period << "," << std::endl;
+        file << "        \"period\": " << to_string(period) << "," << std::endl;
         file << "        \"size\": " << nRows << "," << std::endl;
     }
 

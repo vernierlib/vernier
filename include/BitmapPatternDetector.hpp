@@ -89,7 +89,7 @@ namespace vernier {
          * \param approxPixelPeriod: approximate length of one period in pixels
          * \param physicalPeriod: real length of one period
          */
-        BitmapPatternDetector(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod = 0);
+//        BitmapPatternDetector(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod = 0);
 
         /** Constructs a detector for bitmap periodic patterns with a Json file
          *
@@ -104,7 +104,7 @@ namespace vernier {
          * \param approxPixelPeriod: approximate length of one period in pixels
          * \param physicalPeriod: real length of one period
          */
-        void resize(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod);
+//        void resize(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod);
 
 
         /** Resizes the detector
@@ -149,14 +149,6 @@ namespace vernier {
         Pose getPatternPoseInCamera();
 
         std::vector<Pose> getAll3DPoses(int id = 0);
-
-        /** Returns the first direction computed phase plane of the bitmap periodic pattern in the image
-         **/
-        Plane getPlane1();
-
-        /** Returns the second direction computed phase plane of the bitmap periodic pattern in the image
-         **/
-        Plane getPlane2();
 
         void guiDisplayThumbnail(cv::Mat& thumbnailImage);
 

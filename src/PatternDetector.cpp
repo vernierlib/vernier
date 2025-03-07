@@ -73,6 +73,10 @@ namespace vernier {
         patternArray = patternMatrix.array();
         compute(patternArray);
     }
+    
+    std::string PatternDetector::toString() {
+        return classname;
+    }
 
     std::string PatternDetector::getAuthor() {
         return author;

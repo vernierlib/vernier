@@ -10,29 +10,53 @@ namespace vernier {
 
     BitmapPatternDetector::BitmapPatternDetector()
     : PeriodicPatternDetector() {
+        classname = "BitmapPattern";
     }
 
-    BitmapPatternDetector::BitmapPatternDetector(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod)
-    : PeriodicPatternDetector() {
-        classname = "BitmapPatternDetector";
-        resize(bitmapKernel, approxPixelPeriod, physicalPeriod);
-    }
+    //    BitmapPatternDetector::BitmapPatternDetector(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod)
+    //    : PeriodicPatternDetector() {
+    //        classname = "BitmapPatternDetector";
+    //        resize(bitmapKernel, approxPixelPeriod, physicalPeriod);
+    //    }
 
     BitmapPatternDetector::BitmapPatternDetector(std::string filename, double approxPixelPeriod)
     : PeriodicPatternDetector() {
-        classname = "BitmapPatternDetector";
+        classname = "BitmapPattern";
         resize(filename, approxPixelPeriod);
     }
 
-    void BitmapPatternDetector::resize(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod) {
-        this->bitmapKernel = bitmapKernel;
-        wTemplate = bitmapKernel.cols();
-        hTemplate = bitmapKernel.rows();
+    void BitmapPatternDetector::resize(std::string filename, double approxPixelPeriod) {
+        BufferedReader bufferedReader(filename);
+        rapidjson::Document document;
+        document.ParseInsitu(bufferedReader.data());
+        if (!document.IsObject()) {
+            throw Exception(filename + " is not a valid JSON file.");
+        }
+
+        readJSON(document);
         PeriodicPatternDetector::setPixelPeriod(approxPixelPeriod);
         PeriodicPatternDetector::setPhysicalPeriod(physicalPeriod);
         templatePrime.resize(hTemplate, wTemplate);
         imagePrime.resize(hTemplate, wTemplate);
     }
+
+    void BitmapPatternDetector::resize(int nRows, int nCols) {
+        PeriodicPatternDetector::resize(nRows, nCols);
+        pattern.resize(nRows, nCols);
+        snapshot.resize(nRows, nCols);
+        this->thumbLength1 = 0;
+        this->thumbLength2 = 0;
+    }
+
+    //    void BitmapPatternDetector::resize(Eigen::ArrayXXd bitmapKernel, double approxPixelPeriod, double physicalPeriod) {
+    //        this->bitmapKernel = bitmapKernel;
+    //        wTemplate = bitmapKernel.cols();
+    //        hTemplate = bitmapKernel.rows();
+    //        PeriodicPatternDetector::setPixelPeriod(approxPixelPeriod);
+    //        PeriodicPatternDetector::setPhysicalPeriod(physicalPeriod);
+    //        templatePrime.resize(hTemplate, wTemplate);
+    //        imagePrime.resize(hTemplate, wTemplate);
+    //    }
 
     void BitmapPatternDetector::readJSON(rapidjson::Value& document) {
 
@@ -44,10 +68,10 @@ namespace vernier {
         } else {
             throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
         }
-//        if (document.HasMember("approxPixelPeriod") && document["approxPixelPeriod"].IsDouble()) {
-//            this->approxPixelPeriod = document["approxPixelPeriod"].GetDouble();
-//            PeriodicPatternDetector::setApproxPixelPeriod(document["approxPixelPeriod"].GetDouble());
-//        }
+        //        if (document.HasMember("approxPixelPeriod") && document["approxPixelPeriod"].IsDouble()) {
+        //            this->approxPixelPeriod = document["approxPixelPeriod"].GetDouble();
+        //            PeriodicPatternDetector::setApproxPixelPeriod(document["approxPixelPeriod"].GetDouble());
+        //        }
         if (document.HasMember("bitmap") && document["bitmap"].IsArray()) {
             hTemplate = document["bitmap"].Size();
         } else {
@@ -135,60 +159,30 @@ namespace vernier {
         //std::cout << "is inverted : " << isInverted << std::endl;
     }
 
-    void BitmapPatternDetector::resize(std::string filename, double approxPixelPeriod) {
-        BufferedReader bufferedReader(filename);
-        rapidjson::Document document;
-        document.ParseInsitu(bufferedReader.data());
-        if (!document.IsObject()) {
-            throw Exception(filename + " is not a valid JSON file.");
-        }
-
-        readJSON(document);
-        PeriodicPatternDetector::setPixelPeriod(approxPixelPeriod);
-        PeriodicPatternDetector::setPhysicalPeriod(physicalPeriod);
-        templatePrime.resize(hTemplate, wTemplate);
-        imagePrime.resize(hTemplate, wTemplate);
-    }
-
-    void BitmapPatternDetector::resize(int nRows, int nCols) {
-//        if (nRows != this->nRows || nCols != this->nCols) {
-//            this->nRows = nRows;
-//            this->nCols = nCols;
-//            PeriodicPatternDetector::resize(nRows, nCols);
-//            pattern.resize(nRows, nCols);
-//            snapshot.resize(nRows, nCols);
-//            this->thumbLength1 = 0;
-//            this->thumbLength2 = 0;
-//        }
-    }
-
     void BitmapPatternDetector::compute(Eigen::ArrayXXd& pattern) {
         this->pattern = pattern;
         resize(pattern.rows(), pattern.cols());
 
-        PeriodicPatternDetector::setSigma(0.0001);
-//        PeriodicPatternDetector::resize(nRows, nCols);
+        //PeriodicPatternDetector::setSigma(0.0001);
+        //        PeriodicPatternDetector::resize(nRows, nCols);
 
         PeriodicPatternDetector::compute(pattern);
 
         computeAbsolutePose(pattern);
     }
-
-
 
     void BitmapPatternDetector::computePerspective(Eigen::ArrayXXd& pattern) {
         this->pattern = pattern;
         resize(pattern.rows(), pattern.cols());
 
         PeriodicPatternDetector::setSigma(0.0001);
-//        PeriodicPatternDetector::resize(nRows, nCols);
+        //        PeriodicPatternDetector::resize(nRows, nCols);
 
-        this->setPerspectiveMode();
+        this->setPhaseGradientMode();
         PeriodicPatternDetector::compute(pattern);
 
         computeAbsolutePose(pattern);
     }
-
 
     void BitmapPatternDetector::computeAbsolutePose(Eigen::ArrayXXd& patternImage) {
 
@@ -254,19 +248,19 @@ namespace vernier {
 
 
         PeriodicPatternDetector::setSigma(0.0033);
-//        PeriodicPatternDetector::resize(nRows, nCols);
+        //        PeriodicPatternDetector::resize(nRows, nCols);
         PeriodicPatternDetector::compute(snapArray);
 
-        patternPhase.setPixelPeriod( (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0 );
+        patternPhase.setPixelPeriod((plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0);
     }
 
-//    void BitmapPatternDetector::compute(char* data, int nRows, int nCols) {
-//        Eigen::MatrixXd mPatternMatrix(nRows, nCols);
-//        std::memcpy(mPatternMatrix.data(), data, nRows * nCols * sizeof (double));
-//        mPatternMatrix.transposeInPlace();
-//        pattern = mPatternMatrix.array();
-//        compute(pattern);
-//    }
+    //    void BitmapPatternDetector::compute(char* data, int nRows, int nCols) {
+    //        Eigen::MatrixXd mPatternMatrix(nRows, nCols);
+    //        std::memcpy(mPatternMatrix.data(), data, nRows * nCols * sizeof (double));
+    //        mPatternMatrix.transposeInPlace();
+    //        pattern = mPatternMatrix.array();
+    //        compute(pattern);
+    //    }
 
     Pose BitmapPatternDetector::getCameraPoseInPattern() {
         plane1.setC(plane1.getC() + phiOffset1);
@@ -315,24 +309,6 @@ namespace vernier {
         return poseVec;
 
     }
-
-    Plane BitmapPatternDetector::getPlane1() {
-        return plane1;
-    }
-
-    Plane BitmapPatternDetector::getPlane2() {
-        return plane2;
-    }
-
-//    void BitmapPatternDetector::removeNanFromArray(Eigen::ArrayXXd& image) {
-//        for (int i = 0; i < image.rows(); i++) {
-//            for (int j = 0; j < image.cols(); j++) {
-//                if (isnan(image(i, j))) {
-//                    image(i, j) = 0;
-//                }
-//            }
-//        }
-//    }
 
     void BitmapPatternDetector::takeSnapshot(Eigen::ArrayXXcd& snapshot, double radius, double xCenter, double yCenter) {
         if (isInverted) {
@@ -385,20 +361,20 @@ namespace vernier {
             centerRow = maxLoc.x + bitmapKernel.rows() / 2;
             centerRow = maxLoc.y + bitmapKernel.cols() / 2;
 
-//            templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
-//            resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
-//
-//            for (int i = 0; i < HImage - hTemplate + 1; i++) {
-//                for (int j = 0; j < WImage - wTemplate + 1; j++) {
-//                    imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
-//                    resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
-//                }
-//            }
-//
-//            double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
-//
-//            centerRow = maxRowEigen + bitmapKernel.rows() / 2;
-//            centerCol = maxColEigen + bitmapKernel.cols() / 2;
+            //            templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
+            //            resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
+            //
+            //            for (int i = 0; i < HImage - hTemplate + 1; i++) {
+            //                for (int j = 0; j < WImage - wTemplate + 1; j++) {
+            //                    imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
+            //                    resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
+            //                }
+            //            }
+            //
+            //            double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
+            //
+            //            centerRow = maxRowEigen + bitmapKernel.rows() / 2;
+            //            centerCol = maxColEigen + bitmapKernel.cols() / 2;
 
             maxRowMatch = 0;
         } else {
@@ -420,20 +396,20 @@ namespace vernier {
                 maxMatch(i, 2) = maxLoc.y;
 
 
-//                templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
-//                resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
-//                for (int i = 0; i < HImage - hTemplate + 1; i++) {
-//                    for (int j = 0; j < WImage - wTemplate + 1; j++) {
-//                        imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
-//                        resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
-//                    }
-//                }
-//
-//                double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
-//
-//                maxMatch(i, 0) = max;
-//                maxMatch(i, 1) = maxRowEigen;
-//                maxMatch(i, 2) = maxColEigen;
+                //                templatePrime = bitmapKernel - (1.0 / ((double) wTemplate * (double) hTemplate)) * bitmapKernel.sum();
+                //                resultArray.resize(HImage - hTemplate + 1, WImage - wTemplate + 1);
+                //                for (int i = 0; i < HImage - hTemplate + 1; i++) {
+                //                    for (int j = 0; j < WImage - wTemplate + 1; j++) {
+                //                        imagePrime = thumbnailArray.block(i, j, hTemplate, wTemplate) - (1.0 / ((double) wTemplate * (double) hTemplate)) * thumbnailArray.block(i, j, hTemplate, wTemplate).sum();
+                //                        resultArray(i, j) = (templatePrime * imagePrime).sum() / (sqrt(templatePrime.pow(2).sum() * imagePrime.pow(2).sum()));
+                //                    }
+                //                }
+                //
+                //                double max = resultArray.maxCoeff(&maxRowEigen, &maxColEigen);
+                //
+                //                maxMatch(i, 0) = max;
+                //                maxMatch(i, 1) = maxRowEigen;
+                //                maxMatch(i, 2) = maxColEigen;
 
 
                 rotate90deg(bitmapKernel);
@@ -483,8 +459,6 @@ namespace vernier {
         this->bitmapKernel.resize(bitmapKernelPadded.rows(), bitmapKernelPadded.cols());
         this->bitmapKernel = bitmapKernelPadded;
     }
-
-
 
     void BitmapPatternDetector::guiDisplayThumbnail(cv::Mat& thumbnailImage) {
         int rectSize = round(patternPhase.getPixelPeriod() / 2.0);
