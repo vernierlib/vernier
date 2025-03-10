@@ -18,7 +18,7 @@ void main1() {
     std::cout << unwrappedSimple << std::endl;
     RegressionPlane regressor(cropFactor);
 
-    Plane plane = regressor.compute(unwrappedSimple);
+    PhasePlane plane = regressor.compute(unwrappedSimple);
 
     std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
 }
@@ -30,7 +30,7 @@ void main2() {
     std::cout << unwrappedSimple << std::endl;
     RegressionPlane regressor(cropFactor);
 
-    Plane plane = regressor.compute(unwrappedSimple);
+    PhasePlane plane = regressor.compute(unwrappedSimple);
 
     std::cout << "plane coefficients:  \n" << plane.toString() << std::endl;
 }
@@ -47,7 +47,7 @@ void main3() { // the coefficients in the mat file are wrong !!!!!
     intermediaryMatrix = unwrapCenterMatlab.block(sideOffset, sideOffset, unwrapCenterMatlab.rows() - 2 * sideOffset, unwrapCenterMatlab.cols() - 2 * sideOffset);
     RegressionPlane leastSquaresPlane;
 
-    Plane plane = leastSquaresPlane.compute(intermediaryMatrix);
+    PhasePlane plane = leastSquaresPlane.compute(intermediaryMatrix);
 
     coefficients = plane.getCoefficients();
 
@@ -71,7 +71,7 @@ void test() {
 
     RegressionPlane regressor(0.5);
 
-    Plane plane = regressor.compute(unwrappedSimple);
+    PhasePlane plane = regressor.compute(unwrappedSimple);
     Eigen::MatrixXd planeCoeffRef(3, 1);
     planeCoeffRef << 2, 0, 10;
     Eigen::MatrixXd planeCoeff(3, 1);
@@ -104,7 +104,7 @@ double speed(unsigned long testCount) {
     matTest = unwrap2.block(sideOffset - 1, sideOffset - 1, unwrap2.rows() - 2 * sideOffset + 1, unwrap2.cols() - 2 * sideOffset + 1);
     tic();
     for (unsigned long i = 0; i < testCount; i++) {
-        Plane plan = leastSquaresPlane.compute(matTest);
+        PhasePlane plan = leastSquaresPlane.compute(matTest);
     }
 
     return toc(testCount);

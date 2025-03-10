@@ -5,7 +5,7 @@
  */
 
 
-#include "Cell.hpp"
+#include "MegarenaCell.hpp"
 #include "UnitTest.hpp"
 #include "eigen-matio/MatioFile.hpp"
 
@@ -19,7 +19,7 @@ void main1() {
     file.read_mat("thumbNbWhiteDots", numberWhiteDots);
     file.read_mat("thumbValWhiteDots", cumulWhiteDots);
 
-    Cell cell;
+    MegarenaCell cell;
 
     cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
 
@@ -37,7 +37,7 @@ void runAllTests() {
     file.read_mat("thumbNbWhiteDots", numberWhiteDots);
     file.read_mat("thumbValWhiteDots", cumulWhiteDots);
 
-    Cell cell;
+    MegarenaCell cell;
 
     cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
 
@@ -60,7 +60,7 @@ double speedGlobal(unsigned long testCount) {
     file.read_mat("thumbNbWhiteDots", numberWhiteDots);
     file.read_mat("thumbValWhiteDots", cumulWhiteDots);
 
-    Cell cell;
+    MegarenaCell cell;
 
     tic();
 

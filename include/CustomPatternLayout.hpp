@@ -16,7 +16,7 @@ namespace vernier {
      */
     class CustomPatternLayout : public PatternLayout {
     protected:
-
+        
         std::vector<Rectangle> dots;
         std::vector<double> dotsIntensity;
 

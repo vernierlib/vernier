@@ -6,7 +6,7 @@
 
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
-#include "AbsoluteDecoding.hpp"
+#include "MegarenaAbsoluteDecoding.hpp"
 #include <random>
 #include "eigen-matio/MatioFile.hpp"
 
@@ -24,7 +24,7 @@ void main1() {
 
     std::cout << "coding sample : \n" << codingSample << std::endl;
 
-    AbsoluteDecoding absoludeDecode(bitSequence);
+    MegarenaAbsoluteDecoding absoludeDecode(bitSequence);
 
     int maxIndex = absoludeDecode.findCodePosition(codingSample, 1);
 
@@ -45,7 +45,7 @@ void runAllTests() {
 
     // std::cout << "coding sample : \n" << codingSample << std::endl;
 
-    AbsoluteDecoding absoludeDecode(bitSequence);
+    MegarenaAbsoluteDecoding absoludeDecode(bitSequence);
 
     int maxIndex = absoludeDecode.findCodePosition(codingSample, 1);
 
@@ -62,7 +62,7 @@ void test12bits() {
     std::random_device rd;
     std::uniform_int_distribution<int> dist(200, 10000);
     std::uniform_int_distribution<int> dist2(13, 200);
-    AbsoluteDecoding absoludeDecode(bitSequence);
+    MegarenaAbsoluteDecoding absoludeDecode(bitSequence);
 
     int codePosition = dist(rd);
 
@@ -82,7 +82,7 @@ double speedFindCode(unsigned long testCount) {
     file2.read_mat("bit_sequence_codee", bitSequence);
 
     Eigen::ArrayXXd codeSample(56, 1);
-    AbsoluteDecoding decode;
+    MegarenaAbsoluteDecoding decode;
     decode.resize(bitSequence);
     codeSample << 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0, -1, 0, 0, 1, 0, 0, 1, 0, 0;
     codeSample.transposeInPlace();
