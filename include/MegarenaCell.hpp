@@ -4,8 +4,8 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#ifndef CELL_HPP
-#define CELL_HPP
+#ifndef MEGARENACELL_HPP
+#define MEGARENACELL_HPP
 
 #include "Common.hpp"
 #include "Plane.hpp"
@@ -13,14 +13,14 @@
 namespace vernier {
 
     /** \brief Class to use the global cell of a pattern. The global cell represents the mean repartition of dots of the pattern in a cell **/
-    class Cell {
+    class MegarenaCell {
     private:
         Eigen::Array33d globalCell;
         Eigen::VectorXd codeOrientation;
 
     public:
         /** Empty constructor **/
-        Cell();
+        MegarenaCell();
 
         void resize();
 

@@ -9,7 +9,7 @@
 
 #include "Common.hpp"
 #include "Plane.hpp"
-#include "Cell.hpp"
+#include "MegarenaCell.hpp"
 
 namespace vernier {
 
@@ -24,7 +24,7 @@ namespace vernier {
         Eigen::VectorXd numberWhiteRefDots1, cumulWhiteRefDots1, numberBackRefDots1, cumulBackRefDots1, numberCodingDots1, cumulCodingDots1, meanCodingDots1, meanBackRefDots1, meanWhiteRefDots1;
         Eigen::VectorXd numberWhiteRefDots2, cumulWhiteRefDots2, numberBackRefDots2, cumulBackRefDots2, numberCodingDots2, cumulCodingDots2, meanCodingDots2, meanBackRefDots2, meanWhiteRefDots2;
         int MSB1, MSB2;
-        Cell cell;
+        MegarenaCell cell;
 
     public:
         Eigen::ArrayXXd codeIntensity1, codeIntensity2;

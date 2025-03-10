@@ -26,7 +26,7 @@
 #include "GaussianFilter.hpp"
 #include "PatternPhase.hpp"
 #include "MegarenaAbsoluteDecoding.hpp"
-#include "Cell.hpp"
+#include "MegarenaCell.hpp"
 #include "Detector.hpp"
 #include "Layout.hpp"
 

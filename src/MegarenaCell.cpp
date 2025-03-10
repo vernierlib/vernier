@@ -4,17 +4,17 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#include "Cell.hpp"
+#include "MegarenaCell.hpp"
 
 namespace vernier {
 
-    Cell::Cell() {
+    MegarenaCell::MegarenaCell() {
     }
 
-    void Cell::resize() {
+    void MegarenaCell::resize() {
     }
 
-    void Cell::getGlobalCell(Eigen::ArrayXXd thumbnailNumberWhiteDots, Eigen::ArrayXXd thumbnailCumulWhiteDots) {
+    void MegarenaCell::getGlobalCell(Eigen::ArrayXXd thumbnailNumberWhiteDots, Eigen::ArrayXXd thumbnailCumulWhiteDots) {
         Eigen::Array33d sumOnlyDotsRemain = Eigen::Array33d::Zero(3, 3);
         Eigen::Array33d countOnlyDots = Eigen::Array33d::Zero(3, 3);
 
@@ -33,7 +33,7 @@ namespace vernier {
         this->globalCell = sumOnlyDotsRemain;
     }
 
-    Eigen::VectorXd Cell::getCodeOrientation() {
+    Eigen::VectorXd MegarenaCell::getCodeOrientation() {
         Eigen::Matrix<Eigen::Array33d, 3, 3> orientation1;
         Eigen::Matrix<Eigen::Array33d, 3, 3> orientation2;
         Eigen::Matrix<Eigen::Array33d, 3, 3> orientation3;
@@ -262,11 +262,11 @@ namespace vernier {
         return codingLines;
     }
 
-    Eigen::Array33d Cell::getGlobalCellOut() {
+    Eigen::Array33d MegarenaCell::getGlobalCellOut() {
         return globalCell;
     }
 
-    void Cell::guiDisplayCell(cv::Mat& codingCell) {
+    void MegarenaCell::guiDisplayCell(cv::Mat& codingCell) {
         int depth = 1;
         int coding1 = codeOrientation(0);
         int coding2 = codeOrientation(1);
