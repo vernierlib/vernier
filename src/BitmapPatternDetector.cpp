@@ -26,13 +26,13 @@ namespace vernier {
         }
     }
 
-    void BitmapPatternDetector::readJSON(rapidjson::Value& document) {
+    void BitmapPatternDetector::readJSON(rapidjson::Value & document) {
         throw Exception("BitmapPatternDetector::readJSON is not implemented yet.");
     }
 
-    void BitmapPatternDetector::compute(const Eigen::ArrayXXd& array) {
-        PeriodicPatternDetector::compute(array);
-        computeThumbnail(plane1, plane2, array, PI / 4);
+    void BitmapPatternDetector::computeArray(const Eigen::ArrayXXd & array) {
+        PeriodicPatternDetector::computeArray(array);
+        computeThumbnail(array, PI / 4);
         computeAbsolutePose(array);
     }
 
@@ -82,7 +82,7 @@ namespace vernier {
         }
     }
 
-    void BitmapPatternDetector::computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& array, double deltaPhase) {
+    void BitmapPatternDetector::computeThumbnail(const Eigen::ArrayXXd& array, double deltaPhase) {
         double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
         int length1 = (int) (2.82 * array.rows() / approxPixelPeriod);
         int length2 = (int) (2.82 * array.cols() / approxPixelPeriod);
@@ -133,34 +133,6 @@ namespace vernier {
                 thumbnail.at<char>(row, col) = (char) (255 * cumulWhiteDots(col, row) / numberWhiteDots(col, row));
             }
         }
-    }
-
-    Pose BitmapPatternDetector::get2DPose(int id) {
-        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
-        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
-        double alpha = plane1.getAngle();
-        double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
-
-        return Pose(x, y, alpha, pixelSize);
-    }
-
-    Pose BitmapPatternDetector::get3DPose(int id) {
-        Pose pose = getAll3DPoses()[0];
-        pose.beta *= betaSign;
-        pose.gamma *= gammaSign;
-        return pose;
-    }
-
-    std::vector<Pose> BitmapPatternDetector::getAll3DPoses(int id) {
-        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
-        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
-
-        std::vector<Pose> poseVec = PeriodicPatternDetector::getAll3DPoses();
-        for (int i = 0; i < poseVec.size(); i++) {
-            poseVec[i].x = x;
-            poseVec[i].y = y;
-        }
-        return poseVec;
     }
 
     cv::Mat BitmapPatternDetector::getThumbnail() {

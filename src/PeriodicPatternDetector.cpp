@@ -16,6 +16,8 @@ namespace vernier {
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
         computePhaseGradient = false;
+        periodShift1 = 0;
+        periodShift2 = 0;
     }
 
     void PeriodicPatternDetector::readJSON(rapidjson::Value& document) {
@@ -32,7 +34,7 @@ namespace vernier {
         patternPhase.resize(nRows, nCols);
     }
 
-    void PeriodicPatternDetector::compute(const Eigen::ArrayXXd& array) {
+    void PeriodicPatternDetector::computeArray(const Eigen::ArrayXXd& array) {
         patternPhase.compute(array);
 
         plane1 = patternPhase.getPlane1();
@@ -45,16 +47,16 @@ namespace vernier {
             patternPhase.computePhaseGradients(betaSign, gammaSign);
         }
     }
-
+        
     Pose PeriodicPatternDetector::get2DPose(int id) {
-        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
-        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
-        double alpha = angleInPiPi(plane2.getAngle() - PI / 2);
+        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
+        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
+        double alpha = plane1.getAngle();
         double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
 
         return Pose(x, y, alpha, pixelSize);
     }
-
+    
     Pose PeriodicPatternDetector::get3DPose(int id) {
         Pose pose = getAll3DPoses()[0];
         pose.beta *= betaSign;
@@ -91,8 +93,8 @@ namespace vernier {
         double beta21 = -acos(u1 / sqrt(s_2) / physicalPeriod / cos(alpha));
         double beta22 = -acos(u1 / sqrt(s_2) / physicalPeriod / cos(alpha));
 
-        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
-        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
+        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
+        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
 
         alpha = angleInPiPi(plane2.getAngle() - PI / 2);
 

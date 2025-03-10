@@ -15,15 +15,15 @@ namespace vernier {
      */
     class BitmapPatternDetector : public PeriodicPatternDetector {
     protected:
-        int periodShift1, periodShift2;
+
         cv::Mat thumbnail;
         std::vector<cv::Mat> bitmap;
 
-        void readJSON(rapidjson::Value& document);
+        void readJSON(rapidjson::Value& document) override;
 
-        void computeAbsolutePose(const Eigen::ArrayXXd& pattern);
+        void computeAbsolutePose(const Eigen::ArrayXXd & pattern);
         
-        void computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& array, double deltaPhase);
+        void computeThumbnail(const Eigen::ArrayXXd & array, double deltaPhase);
 
     public:
         
@@ -39,23 +39,17 @@ namespace vernier {
          */
         BitmapPatternDetector(double physicalPeriod, const std::string filename);
         
-        void compute(const Eigen::ArrayXXd& array);
-
-        Pose get2DPose(int id = 0);
+        void computeArray(const Eigen::ArrayXXd & array) override;
         
-        Pose get3DPose(int id = 0);
-
-        std::vector<Pose> getAll3DPoses(int id = 0);
-        
-        void showControlImages(int delay = -1);
+        void showControlImages(int delay = -1) override;
         
         /** Returns the computed thumbnail of the image 
          */ 
         cv::Mat getThumbnail();
 
-        int getInt(const std::string & attribute);
+        int getInt(const std::string & attribute) override;
         
-        void* getObject(const std::string & attribute);
+        void* getObject(const std::string & attribute) override;
 
     };
 }

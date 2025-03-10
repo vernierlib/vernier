@@ -19,10 +19,11 @@ namespace vernier {
         double physicalPeriod;
         PatternPhase patternPhase;
         Plane plane1, plane2;
+        int periodShift1, periodShift2;
         int betaSign, gammaSign;
         bool computePhaseGradient;
 
-        void readJSON(rapidjson::Value& document);
+        void readJSON(rapidjson::Value& document) override;
 
     public:
 
@@ -34,22 +35,30 @@ namespace vernier {
 
         void resize(int nRows, int nCols);
 
-        void compute(const Eigen::ArrayXXd & array);
+        void computeArray(const Eigen::ArrayXXd & array) override;
+        
+        /** Returns true of a periodic pattern has been found */
+        bool patternFound(int id = 0) override;
 
-        Pose get2DPose(int id = 0);
+        /** Returns the 2D pose of the pattern (assuming an orthographic projection) */
+        Pose get2DPose(int id = 0) override;
 
-        Pose get3DPose(int id = 0);
+        /** Returns the most likely 3D pose of the pattern (assuming a perspective 
+         * projection with a long-focus lens) 
+         *
+         * The phase gradient mode must be actived before image computing.
+         */
+        Pose get3DPose(int id = 0) override;
+        
+        /** Returns the four 3D possible poses of the pattern (assuming an 
+         * orthographic projection) */
+        std::vector<Pose> getAll3DPoses(int id = 0) override;
+        
+        void showControlImages(int delay = -1) override;
+        
+        std::string toString() override;
 
-        bool patternFound(int id = 0);
-
-        std::vector<Pose> getAll3DPoses(int id = 0);
-
-        /** Returns the 3D pose of the pattern (assuming a perspective projection with a pin-hole camera model) */
-        //Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
-
-        std::string toString();
-
-        /** return the reference to the pattern phase class */
+        /** Returns the reference to the pattern phase class */
         PatternPhase * getPatternPhase() {
             return &patternPhase;
         }
@@ -57,6 +66,7 @@ namespace vernier {
         /** Tells the detector to estimate the most likely pose with phase gradients */
         void setPhaseGradientMode(bool value = true);
 
+        /** Returns true if the phase gradient mode is activated */
         bool isPhaseGradientMode();
 
         /** Sets the approximate length of one period in pixels */
@@ -77,21 +87,19 @@ namespace vernier {
         /** Returns the phase plane corresponding to the second direction of the pattern */
         Plane getPlane2();
 
-        void showControlImages(int delay = -1);
-
         Eigen::ArrayXXd getUnwrappedPhase1();
 
         Eigen::ArrayXXd getUnwrappedPhase2();
 
-        void setDouble(const std::string & attribute, double value);
+        void setDouble(const std::string & attribute, double value) override;
 
-        void setBool(const std::string & attribute, bool value);
+        void setBool(const std::string & attribute, bool value) override;
 
-        double getDouble(const std::string & attribute);
+        double getDouble(const std::string & attribute) override;
 
-        bool getBool(const std::string & attribute);
+        bool getBool(const std::string & attribute) override;
 
-        void* getObject(const std::string & attribute);
+        void* getObject(const std::string & attribute) override;
 
     };
 }

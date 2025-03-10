@@ -33,7 +33,7 @@ int main() {
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
     detector->setDouble("pixelPeriod", 7);
-    detector->compute(array);
+    detector->computeArray(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;

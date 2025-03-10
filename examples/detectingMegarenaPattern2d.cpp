@@ -29,7 +29,7 @@ int main() {
     // Detecting and estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->compute(array);
+    detector->computeArray(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;

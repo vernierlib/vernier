@@ -12,6 +12,23 @@ using namespace cv;
 using namespace std;
 using namespace Eigen;
 
+void main1() {
+
+    MegarenaPatternDetector detector(9, 12);
+    cout << detector.toString() << endl;
+
+    cv::Mat image = cv::imread("data/megarena12bits.jpg");
+    detector.compute(image);
+
+    detector.showControlImages();
+
+    std::cout << "Camera pose in Pattern" << detector.get2DPose().toString() << std::endl;
+    detector.get2DPose().draw(image);
+    imshow("Image", image);
+    waitKey(0);
+
+}
+
 void main2d() {
     
             // Constructing the layout
@@ -36,7 +53,7 @@ void main2d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->compute(array);
+            detector->computeArray(array);
             Pose estimatedPose = detector->get2DPose();
 
             // Printing results 
@@ -70,7 +87,7 @@ void main2d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->compute(array);
+            detector->computeArray(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
             
             // Printing results 
@@ -113,7 +130,7 @@ void main2d() {
             detector->setDouble("cropFactor", 0.8);
             detector->setDouble("pixelPeriod", 7);
             detector->setPhaseGradientMode();
-            detector->compute(array);
+            detector->computeArray(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
 
             // Printing results 
@@ -148,7 +165,7 @@ void main2d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->compute(array);
+            detector->computeArray(array);
             Pose estimatedPose = detector->get2DPose();
 
             // Printing results 
@@ -185,7 +202,7 @@ void main2d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->compute(array);
+            detector->computeArray(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
             
             // Printing results 
@@ -230,12 +247,12 @@ void main2d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, 12);
-            detector->compute(array);
+            detector->computeArray(array);
             Pose estimatedPose = detector->get2DPose();
 
             tic();
             for (unsigned long i = 0; i < testCount; i++) {
-                detector->compute(array);
+                detector->computeArray(array);
             }
 
             return toc(testCount);
@@ -243,6 +260,8 @@ void main2d() {
 
 
 int main(int argc, char** argv) {
+    
+//    main1();
 
 //    main3d();
     

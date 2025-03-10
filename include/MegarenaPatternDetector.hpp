@@ -17,13 +17,12 @@ namespace vernier {
      */
     class MegarenaPatternDetector : public PeriodicPatternDetector {
     protected:
+        
         Eigen::ArrayXXi bitSequence;
         AbsoluteDecoding decoding;
         Thumbnail thumbnail;
-        int codePosition1, codePosition2;
-        Plane plane1Save, plane2Save;
 
-        void readJSON(rapidjson::Value& document);
+        void readJSON(rapidjson::Value& document) override;
 
         void computeAbsolutePose(const Eigen::ArrayXXd& pattern);
 
@@ -48,21 +47,17 @@ namespace vernier {
 
         ~MegarenaPatternDetector() = default;
 
-        void compute(const Eigen::ArrayXXd& pattern);
+        void computeArray(const Eigen::ArrayXXd& pattern) override;
 
-        Pose get2DPose(int id = 0);
-
-        std::vector<Pose> getAll3DPoses(int id = 0);
-        
-        void showControlImages(int delay = -1);
+        void showControlImages(int delay = -1) override;
         
         /** Returns the computed thumbnail of the image given to the megarena detector
          */
         Thumbnail getThumbnail();
 
-        int getInt(const std::string & attribute);
+        int getInt(const std::string & attribute) override;
 
-        void* getObject(const std::string & attribute);
+        void* getObject(const std::string & attribute) override;
 
     };
 }

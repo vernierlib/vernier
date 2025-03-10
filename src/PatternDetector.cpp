@@ -54,20 +54,15 @@ namespace vernier {
         std::memcpy(mPatternMatrix.data(), data, rows * cols * sizeof (double));
 
         Eigen::ArrayXXd patternImage = mPatternMatrix.array();
-        compute(patternImage);
+        computeArray(patternImage);
     }
 
     void PatternDetector::compute(const cv::Mat & image) {
         Eigen::ArrayXXd array = image2array(image);
-        compute(array);
+        computeArray(array);
     }
     
-    void PatternDetector::compute2(const cv::Mat & image) {
-        Eigen::ArrayXXd array = image2array(image);
-        compute(array);
-    }
-
-    void PatternDetector::compute(const Eigen::ArrayXXd & array) {
+    void PatternDetector::computeArray(const Eigen::ArrayXXd & array) {
         cv::Mat image = array2image(array);
         compute(image);
     }
