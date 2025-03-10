@@ -67,7 +67,7 @@ namespace vernier {
         //        file << "]," << std::endl;
     }
 
-    void MegarenaPatternLayout::readJSON(rapidjson::Value & document) {
+    void MegarenaPatternLayout::readJSON(const rapidjson::Value & document) {
         PatternLayout::readJSON(document);
 
         if (document.HasMember("period") && document["period"].IsDouble()) {

@@ -60,7 +60,7 @@ namespace vernier {
         file << "        ]," << std::endl;
     }
 
-    void BitmapPatternLayout::readJSON(rapidjson::Value & document) {
+    void BitmapPatternLayout::readJSON(const rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 

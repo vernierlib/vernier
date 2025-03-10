@@ -18,9 +18,9 @@ namespace vernier {
 
         void addMarker(int row, int col, std::vector<Rectangle>& rectangleList);
 
-        void writeJSON(std::ofstream & file);
+        void writeJSON(std::ofstream & file) override;
 
-        void readJSON(rapidjson::Value & document);
+        void readJSON(const rapidjson::Value & document) override;
 
     public:
 
@@ -30,11 +30,11 @@ namespace vernier {
 
         void resize(double period, int size);
 
-        double getIntensity(double x, double y);
+        double getIntensity(double x, double y) override;
 
-        void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
         
-        std::string toString();
+        std::string toString() override;
 
     };
 

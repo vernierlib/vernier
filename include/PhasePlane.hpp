@@ -4,8 +4,8 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#ifndef PLANE_HPP
-#define PLANE_HPP
+#ifndef PHASEPLANE_HPP
+#define PHASEPLANE_HPP
 
 #include "Common.hpp"
 
@@ -14,16 +14,12 @@ namespace vernier {
     /** \brief constructs a phase plane with given coefficients. The class returns 
      * useful informations about this plane such as the phase or the angle.
      */
-    class Plane {
-    private:
-        Eigen::Vector3d planeCoefficients;
-
-
+    class PhasePlane {
     public:
 
         double a, b, c;
 
-        Plane();
+        PhasePlane();
 
         /** Constructs a plane with three coefficients in a vector
          * 
@@ -33,7 +29,7 @@ namespace vernier {
          *
          *	\param vector: coefficients of the plane
          */
-        Plane(Eigen::Vector3d planeCoefficients);
+        PhasePlane(Eigen::Vector3d planeCoefficients);
 
         /** Constructs a plane with three coefficients
          *	
@@ -45,7 +41,7 @@ namespace vernier {
          *      \param b: second coefficient of the plane
          *      \param c: third coefficient of the plane
          */
-        Plane(double a, double b, double c);
+        PhasePlane(double a, double b, double c);
 
         /** Returns the coefficients of the plane within a vector
          */

@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef DETECTOR_HPP
@@ -12,6 +12,7 @@
 #include "MegarenaPatternDetector.hpp"
 #include "BitmapPatternDetector.hpp"
 #include "HPCodePatternDetector.hpp"
+#include "StampPatternDetector.hpp"
 
 namespace vernier {
 
@@ -34,8 +35,10 @@ namespace vernier {
                 detector = new MegarenaPatternDetector();
             } else if (classname == "BitmapPattern") {
                 detector = new BitmapPatternDetector();
-//            } else if (classname == "HPCodePattern") {
-//                detector = new HPCodePatternDetector();
+            } else if (classname == "HPCodePattern") {
+                detector = new HPCodePatternDetector();
+            } else if (classname == "StampPattern") {
+                detector = new StampPatternDetector();
             } else {
                 throw Exception(classname + " is not a valid class name for a pattern detector.");
             }

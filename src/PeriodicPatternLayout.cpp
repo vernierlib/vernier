@@ -41,7 +41,7 @@ namespace vernier {
         file << "        \"nCols\": " << nCols << "," << std::endl;
     }
 
-    void PeriodicPatternLayout::readJSON(rapidjson::Value & document) {
+    void PeriodicPatternLayout::readJSON(const rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 

@@ -8,7 +8,7 @@
 #define REGRESSIONPLANE_HPP
 
 #include "Common.hpp"
-#include "Plane.hpp"
+#include "PhasePlane.hpp"
 
 namespace vernier {
 
@@ -52,9 +52,9 @@ namespace vernier {
          *			      [C]
          *
          */
-        Plane compute(const Eigen::ArrayXXd& unwrappedPhase);
+        PhasePlane compute(const Eigen::ArrayXXd& unwrappedPhase);
         
-        Plane computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask);
+        PhasePlane computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask);
 
         /** Sets the ratio of pixels to crop from the border*/
         void setCropFactor(double cropFactor);

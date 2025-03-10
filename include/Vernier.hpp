@@ -21,7 +21,7 @@
 #include "Spatial.hpp"
 #include "Spectrum.hpp"
 #include "FourierTransform.hpp"
-#include "Plane.hpp"
+#include "PhasePlane.hpp"
 #include "RegressionPlane.hpp"
 #include "GaussianFilter.hpp"
 #include "PatternPhase.hpp"

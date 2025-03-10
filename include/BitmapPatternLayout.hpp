@@ -19,9 +19,9 @@ namespace vernier {
 
         Eigen::ArrayXXi bitmap;
 
-        void writeJSON(std::ofstream & file);
+        void writeJSON(std::ofstream & file) override;
 
-        void readJSON(rapidjson::Value & document);
+        void readJSON(const rapidjson::Value & document) override;
 
     public:
 
@@ -34,9 +34,9 @@ namespace vernier {
 
         void resize(double period, int nRows, int nCols);
 
-        double getIntensity(double x, double y);
+        double getIntensity(double x, double y) override;
 
-        void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
         
         int numberOfWrongEdges();
         

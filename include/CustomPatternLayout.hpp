@@ -20,9 +20,9 @@ namespace vernier {
         std::vector<Rectangle> dots;
         std::vector<double> dotsIntensity;
 
-        void writeJSON(std::ofstream & file);
+        void writeJSON(std::ofstream & file) override;
 
-        void readJSON(rapidjson::Value & document);
+        void readJSON(const rapidjson::Value & document) override;
 
     public:
 
@@ -33,9 +33,9 @@ namespace vernier {
         /** Initializes a pattern from a CSV file */
         virtual void loadFromCSV(std::string filename);
 
-        double getIntensity(double x, double y);
+        double getIntensity(double x, double y) override;
 
-        void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
 
     };
 

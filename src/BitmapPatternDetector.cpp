@@ -106,8 +106,8 @@ namespace vernier {
         Eigen::Vector3d tempPlane1Coeff(plane1.getA(), plane1.getB(), plane1.getC());
         Eigen::Vector3d tempPlane2Coeff(plane2.getA(), plane2.getB(), plane2.getC());
 
-        Plane tempPlane1(tempPlane1Coeff);
-        Plane tempPlane2(tempPlane2Coeff);
+        PhasePlane tempPlane1(tempPlane1Coeff);
+        PhasePlane tempPlane2(tempPlane2Coeff);
 
 
         for (int col = 0; col < array.cols(); col++) {

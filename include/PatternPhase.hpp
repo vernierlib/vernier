@@ -41,7 +41,7 @@ namespace vernier {
         Eigen::ArrayXXcd phase1, phase2;
         Eigen::ArrayXXd unwrappedPhase1, unwrappedPhase2;
         
-        Plane plane1, plane2;
+        PhasePlane plane1, plane2;
 
     public:
         
@@ -134,10 +134,10 @@ namespace vernier {
         Eigen::ArrayXXd  getPhase2();
 
         /** Returns the first phase plane*/
-        Plane getPlane1();
+        PhasePlane getPlane1();
 
         /** Returns the second phase plane*/
-        Plane getPlane2();
+        PhasePlane getPlane2();
         
         /** Sets the ratio of pixels to crop from the border for the regression */
         void setCropFactor(double cropFactor);

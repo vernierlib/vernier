@@ -77,7 +77,7 @@ namespace vernier {
         }
     }
 
-    void PatternLayout::readJSON(rapidjson::Value & document) {
+    void PatternLayout::readJSON(const rapidjson::Value & document) {
         if (document.HasMember("description") && document["description"].IsString()) {
             description = document["description"].GetString();
         } else {
@@ -123,7 +123,7 @@ namespace vernier {
         }
     };
 
-    void PatternLayout::loadFromJSON(std::string filename) {
+    void PatternLayout::loadFromJSON(const std::string & filename) {
         BufferedReader bufferedReader(filename);
 
         rapidjson::Document document;

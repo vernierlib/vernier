@@ -27,7 +27,7 @@ namespace vernier {
         file << "        \"size\": " << nRows << "," << std::endl;
     }
 
-    void HPCodePatternLayout::readJSON(rapidjson::Value & document) {
+    void HPCodePatternLayout::readJSON(const rapidjson::Value & document) {
 
         PatternLayout::readJSON(document);
 

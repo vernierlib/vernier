@@ -17,7 +17,7 @@ namespace vernier {
     class FingerprintPatternLayout : public BitmapPatternLayout {
     protected:
 
-        void readJSON(rapidjson::Value & document);
+        void readJSON(const rapidjson::Value & document) override;
 
     public:
 
@@ -30,9 +30,9 @@ namespace vernier {
 
         void resize(double dotSize, int nRows, int nCols);
 
-        double getIntensity(double x, double y);
+        double getIntensity(double x, double y) override;
 
-        void toRectangleVector(std::vector<Rectangle>& rectangleList);
+        void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
 
         int numberOfWrongEdges() {
             return 0;

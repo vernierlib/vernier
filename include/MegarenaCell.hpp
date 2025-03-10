@@ -8,7 +8,7 @@
 #define MEGARENACELL_HPP
 
 #include "Common.hpp"
-#include "Plane.hpp"
+#include "PhasePlane.hpp"
 
 namespace vernier {
 

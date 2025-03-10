@@ -14,14 +14,14 @@
 
 namespace vernier {
 
-    class StampPatternDetector : PeriodicPatternDetector {
+    class StampPatternDetector : public PeriodicPatternDetector {
     protected:
 
         Eigen::ArrayXXcd snapshot;
         int numberHalfPeriods;
         int snapshotSize;
         
-        void readJSON(rapidjson::Value& document);
+        void readJSON(rapidjson::Value& document) override;
 
         void takeSnapshot(int x, int y, cv::Mat image);
 
@@ -49,20 +49,20 @@ namespace vernier {
         void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
 
         /** Estimate the pose of all stamps in an image */
-        void compute(const cv::Mat& image);
+        void compute(const cv::Mat& image) override;
 
-        Pose get2DPose(int id);
+        Pose get2DPose(int id) override;
 
-        Pose get3DPose(int id);
+        Pose get3DPose(int id) override;
 
-        bool patternFound(int id);
+        std::vector<Pose> getAll3DPoses(int id) override;
 
-        std::vector<Pose> getAll3DPoses(int id);
+        bool patternFound(int id) override;
 
         /** Draws all the found stamps in a image (analysis must have been done before) */
         void draw(cv::Mat& image);
 
-        void showControlImages(int delay = -1);
+        void showControlImages(int delay = -1) override;
 
     };
 

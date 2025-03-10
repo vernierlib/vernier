@@ -4,63 +4,63 @@
  * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
-#include "Plane.hpp"
+#include "PhasePlane.hpp"
 
 namespace vernier {
 
-    Plane::Plane() : Plane(0.0, 0.0, 0.0) {
+    PhasePlane::PhasePlane() : PhasePlane(0.0, 0.0, 0.0) {
     }
 
-    Plane::Plane(Eigen::Vector3d planeCoefficients) {
+    PhasePlane::PhasePlane(Eigen::Vector3d planeCoefficients) {
         a = planeCoefficients(0);
         b = planeCoefficients(1);
         c = planeCoefficients(2);
     }
 
-    Plane::Plane(double a, double b, double c) {
+    PhasePlane::PhasePlane(double a, double b, double c) {
         this-> a = a;
         this ->b = b;
         this->c = c;
     }
 
-    Eigen::Vector3d Plane::getCoefficients() {
+    Eigen::Vector3d PhasePlane::getCoefficients() {
         return Eigen::Vector3d(a, b, c);
     }
 
-    double Plane::getA() {
+    double PhasePlane::getA() {
         return a;
     }
 
-    double Plane::getB() {
+    double PhasePlane::getB() {
         return b;
     }
 
-    double Plane::getC() {
+    double PhasePlane::getC() {
         return c;
     }
 
-    void Plane::setA(double a) {
+    void PhasePlane::setA(double a) {
         this->a = a;
     }
 
-    void Plane::setB(double b) {
+    void PhasePlane::setB(double b) {
         this->b = b;
     }
 
-    void Plane::setC(double c) {
+    void PhasePlane::setC(double c) {
         this->c = c;
     }
 
-    double Plane::getPhase(double y, double x) {
+    double PhasePlane::getPhase(double y, double x) {
         double phiCenter = a * x + b * y + c;
         return phiCenter;
     }
 
-    double Plane::getAngle() {
+    double PhasePlane::getAngle() {
         return std::atan2(b, a);
     }
 
-    double Plane::getPosition(double physicalPeriod, double y, double x, int periodShift) {
+    double PhasePlane::getPosition(double physicalPeriod, double y, double x, int periodShift) {
         double phiCenter = getPhase(y, x);
         if (physicalPeriod != 0.0) {
             return physicalPeriod * (phiCenter / (2.0 * PI) + (double) (periodShift));
@@ -69,37 +69,37 @@ namespace vernier {
         }
     }
 
-    double Plane::getPositionPixels(double y, double x, int periodShift) {
+    double PhasePlane::getPositionPixels(double y, double x, int periodShift) {
         double phiCenter = getPhase(y, x);
         return (1.0 / std::sqrt(a * a + b * b)) * (phiCenter + (double) (periodShift));
     }
 
-    void Plane::flip() {
+    void PhasePlane::flip() {
         a = -a;
         b = -b;
         c = -c;
     }
 
-    void Plane::turnClockwise90() {
+    void PhasePlane::turnClockwise90() {
         std::swap(a, b);
         a = -a;
     }
 
-    void Plane::turnAntiClockwise90() {
+    void PhasePlane::turnAntiClockwise90() {
         std::swap(a, b);
         b = -b;
     }
 
-    void Plane::turn180() {
+    void PhasePlane::turn180() {
         a = -a;
         b = -b;
     }
 
-    double Plane::getPixelicPeriod() {
+    double PhasePlane::getPixelicPeriod() {
         return 2.0 * PI / std::sqrt(a * a + b * b);
     }
 
-    std::string Plane::toString() {
+    std::string PhasePlane::toString() {
         std::string planeStr;
         planeStr = "phi(x,y) = " + to_string(a) + "x ";
         if (b < 0) {

@@ -8,7 +8,7 @@
 #define MEGARENATHUMBNAIL_HPP
 
 #include "Common.hpp"
-#include "Plane.hpp"
+#include "PhasePlane.hpp"
 #include "MegarenaCell.hpp"
 
 namespace vernier {
@@ -38,7 +38,7 @@ namespace vernier {
          *	\param nRows: number of rows of the image pattern
          *	\param ncols: number of columns of the image pattern
          */
-        int getLength(Plane plane, int nRows, int nCols);
+        int getLength(PhasePlane plane, int nRows, int nCols);
 
         /** Resizes every array and vector used for the later computation of the thumbnail
          *
@@ -56,7 +56,7 @@ namespace vernier {
          *	\param plane2: second plane of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray);
+        void compute(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray);
 
         /** Computes the thumbnail and stores it in an array
          *	This method is used in intern for the compute function
@@ -65,9 +65,9 @@ namespace vernier {
          *	\param plane2: second plane of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
+        void computeThumbnail(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
 
-        void computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase);
+        void computeThumbnailTotal(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase);
 
 
         Eigen::ArrayXXd getThumbnailArray();

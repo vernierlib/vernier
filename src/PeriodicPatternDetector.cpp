@@ -110,11 +110,11 @@ namespace vernier {
         return PatternDetector::toString() + " (period: " + to_string(this->physicalPeriod) + unit + ")";
     }
 
-    Plane PeriodicPatternDetector::getPlane1() {
+    PhasePlane PeriodicPatternDetector::getPlane1() {
         return plane1;
     }
 
-    Plane PeriodicPatternDetector::getPlane2() {
+    PhasePlane PeriodicPatternDetector::getPlane2() {
         return plane2;
     }
 

@@ -39,7 +39,7 @@ namespace vernier {
         }
     }
 
-    Plane RegressionPlane::compute(const Eigen::ArrayXXd & unwrappedPhase) {
+    PhasePlane RegressionPlane::compute(const Eigen::ArrayXXd & unwrappedPhase) {
         resize(unwrappedPhase.rows(), unwrappedPhase.cols());
         Eigen::Vector3d planeCoefficients;
         Eigen::Vector3d vecMean;
@@ -51,10 +51,10 @@ namespace vernier {
         vecMean.z() = phaseCropped.mean();
 
         planeCoefficients = matMean.inverse() * vecMean;
-        return Plane(planeCoefficients);
+        return PhasePlane(planeCoefficients);
     }
 
-    Plane RegressionPlane::computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask) {
+    PhasePlane RegressionPlane::computeWithMask(const Eigen::ArrayXXd & unwrappedPhase, const Eigen::ArrayXXd & mask) {
         resize(unwrappedPhase.rows(), unwrappedPhase.cols());
         Eigen::Vector3d planeCoefficients;
         Eigen::Vector3d vecMean;
@@ -75,7 +75,7 @@ namespace vernier {
                 meshColMasked.mean(), meshRowMasked.mean(), 1;
 
         planeCoefficients = matMeanMasked.inverse() * vecMean;
-        return Plane(planeCoefficients);
+        return PhasePlane(planeCoefficients);
     }
 
     void RegressionPlane::setCropFactor(double cropFactor) {

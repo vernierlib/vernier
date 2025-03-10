@@ -40,7 +40,7 @@ namespace vernier {
         file << "        ]," << std::endl;
     }
 
-    void CustomPatternLayout::readJSON(rapidjson::Value & document) {
+    void CustomPatternLayout::readJSON(const rapidjson::Value & document) {
         PatternLayout::readJSON(document);
         int nRows = 0;
         if (document.HasMember("dots") && document["dots"].IsArray()) {

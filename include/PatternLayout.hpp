@@ -31,7 +31,7 @@ namespace vernier {
 
         void writeApproxPxPeriod(std::ofstream& file);
 
-        virtual void readJSON(rapidjson::Value & document);
+        virtual void readJSON(const rapidjson::Value & document);
 
         friend class Layout;
 
@@ -52,7 +52,7 @@ namespace vernier {
         };
 
         /** Initializes a pattern layout from a JSON file */
-        void loadFromJSON(std::string filename);
+        void loadFromJSON(const std::string & filename);
 
         /** Creates a SVG file corresponding to the pattern layout */
         void saveToSVG(std::string filename = "");

@@ -520,11 +520,11 @@ namespace vernier {
         return phase2.arg();
     }
 
-    Plane PatternPhase::getPlane1() {
+    PhasePlane PatternPhase::getPlane1() {
         return plane1;
     }
 
-    Plane PatternPhase::getPlane2() {
+    PhasePlane PatternPhase::getPlane2() {
         return plane2;
     }
 

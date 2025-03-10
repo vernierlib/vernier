@@ -20,9 +20,9 @@ namespace vernier {
         Eigen::ArrayXXi bitSequence;
         int codeDepth;
 
-        void writeJSON(std::ofstream & file);
+        void writeJSON(std::ofstream & file) override;
 
-        void readJSON(rapidjson::Value & document);
+        void readJSON(const rapidjson::Value & document) override;
 
     public:
 
@@ -36,19 +36,19 @@ namespace vernier {
 
         void resize(double period);
 
-        void toRectangleVector(std::vector<Rectangle> & rectangleList);
+        void toRectangleVector(std::vector<Rectangle> & rectangleList) override;
 
-        double getIntensity(double x, double y);
+        double getIntensity(double x, double y) override;
 
-        void saveToPNG(std::string filename = "");
+        void saveToPNG(std::string filename = "") override;
         
-        std::string toString();
+        std::string toString() override;
 
         int getCodeDepth();
         
-        int getInt(const std::string & attribute);
+        int getInt(const std::string & attribute) override;
         
-        void* getObject(const std::string & attribute);
+        void* getObject(const std::string & attribute) override;
 
     };
 

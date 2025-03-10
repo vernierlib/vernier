@@ -18,7 +18,7 @@ namespace vernier {
     protected:
         double physicalPeriod;
         PatternPhase patternPhase;
-        Plane plane1, plane2;
+        PhasePlane plane1, plane2;
         int periodShift1, periodShift2;
         int betaSign, gammaSign;
         bool computePhaseGradient;
@@ -82,10 +82,10 @@ namespace vernier {
         void setCropFactor(double cropFactor);
 
         /** Returns the phase plane corresponding to the first direction of the pattern */
-        Plane getPlane1();
+        PhasePlane getPlane1();
 
         /** Returns the phase plane corresponding to the second direction of the pattern */
-        Plane getPlane2();
+        PhasePlane getPlane2();
 
         Eigen::ArrayXXd getUnwrappedPhase1();
 

@@ -12,7 +12,7 @@ namespace vernier {
     MegarenaThumbnail::MegarenaThumbnail() {
     }
 
-    int MegarenaThumbnail::getLength(Plane plane, int nRows, int nCols) {
+    int MegarenaThumbnail::getLength(PhasePlane plane, int nRows, int nCols) {
         double stripesValues[4] = {plane.getC(), plane.getA() * nCols + plane.getC(), plane.getB() * nRows + plane.getC(), plane.getA() * nCols + plane.getB() * nRows + plane.getC()};
         double nMin = *std::min_element(stripesValues, stripesValues + 4);
         nMin = nMin / (2 * PI);
@@ -225,7 +225,7 @@ namespace vernier {
         }
     }
 
-    void MegarenaThumbnail::compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray) {
+    void MegarenaThumbnail::compute(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray) {
         computeThumbnail(plane1, plane2, patternArray, PI / 4.0);
 
         cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
@@ -253,7 +253,7 @@ namespace vernier {
         }
     }
 
-    void MegarenaThumbnail::computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void MegarenaThumbnail::computeThumbnail(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -261,8 +261,8 @@ namespace vernier {
         Eigen::Vector3d tempPlane1Coeff(plane1.getA(), plane1.getB(), plane1.getC());
         Eigen::Vector3d tempPlane2Coeff(plane2.getA(), plane2.getB(), plane2.getC());
 
-        Plane tempPlane1(tempPlane1Coeff);
-        Plane tempPlane2(tempPlane2Coeff);
+        PhasePlane tempPlane1(tempPlane1Coeff);
+        PhasePlane tempPlane2(tempPlane2Coeff);
 
 
         for (int col = 0; col < patternArray.cols(); col++) {
@@ -288,7 +288,7 @@ namespace vernier {
         }
     }
 
-    void MegarenaThumbnail::computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void MegarenaThumbnail::computeThumbnailTotal(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -296,8 +296,8 @@ namespace vernier {
         Eigen::Vector3d tempPlane1Coeff(plane1.getA() * 2.0, plane1.getB() * 2.0, plane1.getC() * 2.0);
         Eigen::Vector3d tempPlane2Coeff(plane2.getA() * 2.0, plane2.getB() * 2.0, plane2.getC() * 2.0);
 
-        Plane tempPlane1(tempPlane1Coeff);
-        Plane tempPlane2(tempPlane2Coeff);
+        PhasePlane tempPlane1(tempPlane1Coeff);
+        PhasePlane tempPlane2(tempPlane2Coeff);
 
 
         for (int col = 0; col < patternArray.cols(); col++) {

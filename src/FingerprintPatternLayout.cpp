@@ -27,7 +27,7 @@ namespace vernier {
         bitmap.resize(nRows, nCols);
     }
 
-    void FingerprintPatternLayout::readJSON(rapidjson::Value & document) {
+    void FingerprintPatternLayout::readJSON(const rapidjson::Value & document) {
         BitmapPatternLayout::readJSON(document);
         PeriodicPatternLayout::resize(period, bitmap.rows(), bitmap.cols());
     }
