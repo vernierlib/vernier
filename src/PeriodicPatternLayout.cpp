@@ -36,7 +36,7 @@ namespace vernier {
 
     void PeriodicPatternLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
-        file << "        \"period\": " << to_string(period) << "," << std::endl;
+        file << "        \"period\": " << period << "," << std::endl;
         file << "        \"nRows\": " << nRows << "," << std::endl;
         file << "        \"nCols\": " << nCols << "," << std::endl;
     }

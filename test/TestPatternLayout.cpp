@@ -32,7 +32,7 @@ void main1() {
 
     //MegarenaPatternLayout layout(1, bitSequence);
     MegarenaPatternLayout layout(0.5, 8);
-
+    
     layout.regionOfInterest = Rectangle(0, 0, 680, 680);
     layout.setMargins(10);
     layout.unit = "mm";

@@ -54,8 +54,8 @@ namespace vernier {
     void MegarenaPatternLayout::writeJSON(std::ofstream & file) {
         PatternLayout::writeJSON(file);
         file << "        \"codeDepth\": " << codeDepth << "," << std::endl;
-        file << "        \"period\": " << to_string(period) << "," << std::endl;
-        file << "        \"regionOfInterest\": [" << to_string(regionOfInterest.x) << ", " << to_string(regionOfInterest.y) << ", " << to_string(regionOfInterest.width) << ", " << to_string(regionOfInterest.height) << " ]," << std::endl;
+        file << "        \"period\": " << period << "," << std::endl;
+        file << "        \"regionOfInterest\": [" << regionOfInterest.x << ", " << regionOfInterest.y << ", " << regionOfInterest.width << ", " << regionOfInterest.height << " ]," << std::endl;
         //        file << "        \"bitSequence\": [";
         //        for (int col = 0; col < bitSequence.cols(); col++) {
         //            if (col < bitSequence.cols() - 1) {

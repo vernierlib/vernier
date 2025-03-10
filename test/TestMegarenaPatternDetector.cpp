@@ -153,7 +153,8 @@ void main2d() {
 
             // Printing results 
             cout << "  Estimated pose: " << estimatedPose.toString() << endl;
-            //detector->showControlImages();
+//            detector->showControlImages();
+//            waitKey(0);
             
             TEST_EQUALITY(patternPose, estimatedPose, 0.01)
         }
@@ -192,7 +193,8 @@ void main2d() {
             cout << "  Estimated pose 1: " << estimatedPoses[1].toString() << endl;
             cout << "  Estimated pose 2: " << estimatedPoses[2].toString() << endl;
             cout << "  Estimated pose 4: " << estimatedPoses[3].toString() << endl;
-            //detector->showControlImages();
+//            detector->showControlImages();
+//            waitKey(0);
 
             UNIT_TEST(areEqual(patternPose, estimatedPoses[0], 0.1)
                     || areEqual(patternPose, estimatedPoses[1], 0.1)

@@ -81,7 +81,7 @@ void test2d() {
     }
 
 //    imshow("Image", image);
-//    waitKey(1);
+//    waitKey(0);
 
     UNIT_TEST(areEqual(patternPose, estimatedPose, 0.1));
 

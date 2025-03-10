@@ -27,7 +27,7 @@ namespace vernier {
     }
 
     void BitmapPatternDetector::readJSON(rapidjson::Value& document) {
-        throw Exception("SaturdayPatternDetector::readJSON is not implemented yet.");
+        throw Exception("BitmapPatternDetector::readJSON is not implemented yet.");
     }
 
     void BitmapPatternDetector::compute(const Eigen::ArrayXXd& array) {
@@ -37,9 +37,6 @@ namespace vernier {
     }
 
     void BitmapPatternDetector::computeAbsolutePose(const Eigen::ArrayXXd& array) {
-
-
-
         double maxmaxVal = -1;
         int maxAngle;
         for (int k = 0; k < 4; k++) {
@@ -178,9 +175,9 @@ namespace vernier {
     }
 
     int BitmapPatternDetector::getInt(const std::string & attribute) {
-        if (attribute == "codePosition1") {
+        if (attribute == "periodShift1") {
             return periodShift1;
-        } else if (attribute == "codePosition2") {
+        } else if (attribute == "periodShift2") {
             return periodShift2;
         } else {
             return PeriodicPatternDetector::getInt(attribute);
@@ -188,7 +185,9 @@ namespace vernier {
     }
 
     void* BitmapPatternDetector::getObject(const std::string & attribute) {
-        if (attribute == "thumbnail") {
+        if (attribute == "bitmap") {
+            return &bitmap;
+        } else if (attribute == "thumbnail") {
             return &thumbnail;
         } else {
             return PeriodicPatternDetector::getObject(attribute);

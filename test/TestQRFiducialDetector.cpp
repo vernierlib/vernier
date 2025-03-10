@@ -12,7 +12,7 @@ using namespace std;
 using namespace cv;
 
 void main1() {
-
+    
     cv::Mat image = cv::imread("data/QRCode/code24.png");
 
     QRFiducialDetector detector;
@@ -84,7 +84,6 @@ int main(int argc, char** argv) {
     test("data/QRCode/code21.jpg", 200, 550, 6);
     test("data/QRCode/code22.tif", 50, 100, 6);
     test("data/QRCode/code23.png", 200, 400, 6);
-    test("data/QRCode/code23.png", 100, 200, 6);
     test("data/QRCode/code31.jpg", 50, 110, 9);
     test("data/QRCode/code61.jpg", 100, 210, 18);
 

@@ -93,6 +93,9 @@ namespace vernier {
             //std::cout<<"code1<0 && code2<0"<<std::endl;
             thumbnail.rotate180();
         }
+        
+        codePosition1 = std::abs(codePosition1);
+        codePosition2 = std::abs(codePosition2);
 
     }
 
