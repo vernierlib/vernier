@@ -25,7 +25,7 @@
 #include "RegressionPlane.hpp"
 #include "GaussianFilter.hpp"
 #include "PatternPhase.hpp"
-#include "AbsoluteDecoding.hpp"
+#include "MegarenaAbsoluteDecoding.hpp"
 #include "Cell.hpp"
 #include "Detector.hpp"
 #include "Layout.hpp"

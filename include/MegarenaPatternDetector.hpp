@@ -9,7 +9,7 @@
 
 #include "PeriodicPatternDetector.hpp"
 #include "MegarenaThumbnail.hpp"
-#include "AbsoluteDecoding.hpp"
+#include "MegarenaAbsoluteDecoding.hpp"
 
 namespace vernier {
 
@@ -19,7 +19,7 @@ namespace vernier {
     protected:
         
         Eigen::ArrayXXi bitSequence;
-        AbsoluteDecoding decoding;
+        MegarenaAbsoluteDecoding decoding;
         MegarenaThumbnail thumbnail;
 
         void readJSON(rapidjson::Value& document) override;

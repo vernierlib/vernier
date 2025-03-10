@@ -4,18 +4,18 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#include "AbsoluteDecoding.hpp"
+#include "MegarenaAbsoluteDecoding.hpp"
 
 namespace vernier {
 
-    AbsoluteDecoding::AbsoluteDecoding() {
+    MegarenaAbsoluteDecoding::MegarenaAbsoluteDecoding() {
     }
 
-    AbsoluteDecoding::AbsoluteDecoding(Eigen::ArrayXXi& bitSequence) {
+    MegarenaAbsoluteDecoding::MegarenaAbsoluteDecoding(Eigen::ArrayXXi& bitSequence) {
         resize(bitSequence);
     }
 
-    void AbsoluteDecoding::resize(Eigen::ArrayXXi& bitSequence) {
+    void MegarenaAbsoluteDecoding::resize(Eigen::ArrayXXi& bitSequence) {
         for (int i = 0; i < bitSequence.cols(); i++) {
             if (bitSequence(0, i) == 0) {
                 bitSequence(0, i) = -1;
@@ -27,7 +27,7 @@ namespace vernier {
         this->bitSequence = bitSequence;
     }
 
-    Eigen::ArrayXXd AbsoluteDecoding::getCodeSequence(Eigen::ArrayXXd numberWhiteDots, Eigen::ArrayXXd cumulWhiteDots, Eigen::ArrayXXd numberBackgroundDots, Eigen::ArrayXXd cumulBackgroundDots, Eigen::VectorXd& codeOrientation) {
+    Eigen::ArrayXXd MegarenaAbsoluteDecoding::getCodeSequence(Eigen::ArrayXXd numberWhiteDots, Eigen::ArrayXXd cumulWhiteDots, Eigen::ArrayXXd numberBackgroundDots, Eigen::ArrayXXd cumulBackgroundDots, Eigen::VectorXd& codeOrientation) {
         Eigen::ArrayXXd sequence;
         sequence = Eigen::ArrayXXd::Zero(std::max(numberWhiteDots.rows(), numberWhiteDots.cols()), 2);
 
@@ -152,7 +152,7 @@ namespace vernier {
         return sequence;
     }
 
-    int AbsoluteDecoding::findCodePosition(Eigen::ArrayXXd& codeSample, int MSB) {
+    int MegarenaAbsoluteDecoding::findCodePosition(Eigen::ArrayXXd& codeSample, int MSB) {
         double maximum;
         int offset = floor(codeSample.rows() / 2);
         int direction = 1;

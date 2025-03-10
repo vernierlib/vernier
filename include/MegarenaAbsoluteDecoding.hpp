@@ -7,15 +7,15 @@
  *
  */
 
-#ifndef ABSOLUTEDECODING_HPP
-#define ABSOLUTEDECODING_HPP
+#ifndef MEGARENAABSOLUTEDECODING_HPP
+#define MEGARENAABSOLUTEDECODING_HPP
 
 #include "Common.hpp"
 
 namespace vernier {
 
     /** \brief Finds the place of the coding sample extracted from the pattern in the full coded sequence. **/
-    class AbsoluteDecoding {
+    class MegarenaAbsoluteDecoding {
     private:
         Eigen::ArrayXXi bitSequence;
         Eigen::Array33d sumOnlyDotsRemain;
@@ -23,13 +23,13 @@ namespace vernier {
     public:
 
         /** Construct an empty constructor*/
-        AbsoluteDecoding();
+        MegarenaAbsoluteDecoding();
 
         /** Constructs the decoding class with the complete coded sequence
          *
          *	\param bitSequence: ArrayXXd containing the bit coded sequence
          */
-        AbsoluteDecoding(Eigen::ArrayXXi& bitSequence);
+        MegarenaAbsoluteDecoding(Eigen::ArrayXXi& bitSequence);
 
         /** resize the decoding class with the complete coded sequence
          *
