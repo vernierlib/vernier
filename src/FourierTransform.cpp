@@ -60,13 +60,13 @@ namespace vernier {
         }
     }
 
-    void FourierTransform::compute(Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out) {
+    void FourierTransform::compute(const Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out) {
         resize(in.rows(), in.cols(), sign);
         out.resize(nRows, nCols);
         fftw_execute_dft(plan, (fftw_complex*) in.data(), (fftw_complex*) out.data());
     }
 
-    void FourierTransform::compute(Eigen::ArrayXcd& in, Eigen::ArrayXcd& out) {
+    void FourierTransform::compute(const Eigen::ArrayXcd& in, Eigen::ArrayXcd& out) {
         resize(in.rows(), in.cols(), sign);
         out.resize(nRows, nCols);
         fftw_execute_dft(plan, (fftw_complex*) in.data(), (fftw_complex*) out.data());

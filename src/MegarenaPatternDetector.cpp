@@ -34,18 +34,18 @@ namespace vernier {
         decoding.resize(bitSequence);
     }
 
-    void MegarenaPatternDetector::compute(Eigen::ArrayXXd& pattern) {
+    void MegarenaPatternDetector::compute(const Eigen::ArrayXXd& pattern) {
         resize(pattern.rows(), pattern.cols());
         PeriodicPatternDetector::compute(pattern);
         computeAbsolutePose(pattern);
     }
 
-    void MegarenaPatternDetector::computeAbsolutePose(Eigen::ArrayXXd& pattern) {
+    void MegarenaPatternDetector::computeAbsolutePose(const Eigen::ArrayXXd& pattern) {
         double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
         //patternPhase.setPixelPeriod(approxPixelPeriod);
 
-        length1 = (pattern.rows() / (approxPixelPeriod));
-        length2 = (pattern.cols() / (approxPixelPeriod));
+        int length1 = (pattern.rows() / (approxPixelPeriod));
+        int length2 = (pattern.cols() / (approxPixelPeriod));
 
         length1++;
         length2++;
@@ -78,18 +78,18 @@ namespace vernier {
         } else if (codePosition1 < 0 && codePosition2 >= 0) {
             std::swap(codePosition1, codePosition2);
             std::swap(plane1, plane2);
-            plane2.revertCoefficients();
+            plane2.flip();
             //std::cout<<"code1<0 && code2>0"<<std::endl;
             thumbnail.rotate270();
         } else if (codePosition1 >= 0 && codePosition2 < 0) {
             std::swap(codePosition1, codePosition2);
             std::swap(plane1, plane2);
-            plane1.revertCoefficients();
+            plane1.flip();
             //std::cout<<"code1>0 && code2<0"<<std::endl;
             thumbnail.rotate90();
         } else {
-            plane1.revertCoefficients();
-            plane2.revertCoefficients();
+            plane1.flip();
+            plane2.flip();
             //std::cout<<"code1<0 && code2<0"<<std::endl;
             thumbnail.rotate180();
         }

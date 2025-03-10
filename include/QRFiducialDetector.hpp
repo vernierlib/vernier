@@ -89,7 +89,7 @@ namespace vernier {
         QRFiducialDetector();
 
         /** Detects QR markers in an image */
-        void compute(cv::Mat& image);
+        void compute(const cv::Mat& image);
 
         /** Draws the found row patterns in a image (detection must have been done before)
          *

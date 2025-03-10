@@ -1,89 +1,119 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #include "Plane.hpp"
 
 namespace vernier {
 
-    Plane::Plane() {
+    Plane::Plane() : Plane(0.0, 0.0, 0.0) {
     }
 
     Plane::Plane(Eigen::Vector3d planeCoefficients) {
-        this->planeCoefficients = planeCoefficients;
-        ASSERT(!planeCoefficients.isZero());
+        a = planeCoefficients(0);
+        b = planeCoefficients(1);
+        c = planeCoefficients(2);
+    }
+
+    Plane::Plane(double a, double b, double c) {
+        this-> a = a;
+        this ->b = b;
+        this->c = c;
     }
 
     Eigen::Vector3d Plane::getCoefficients() {
-        return planeCoefficients;
+        return Eigen::Vector3d(a, b, c);
     }
 
     double Plane::getA() {
-        return planeCoefficients(0);
+        return a;
     }
 
     double Plane::getB() {
-        return planeCoefficients(1);
+        return b;
     }
 
     double Plane::getC() {
-        return planeCoefficients(2);
+        return c;
     }
 
-    void Plane::setC(double coeffC) {
-        planeCoefficients(2) = coeffC;
+    void Plane::setA(double a) {
+        this->a = a;
     }
 
-    double Plane::getPhase(double row, double col) {
-        double phiCenter = planeCoefficients.x() * col + planeCoefficients.y() * row + planeCoefficients.z();
+    void Plane::setB(double b) {
+        this->b = b;
+    }
+
+    void Plane::setC(double c) {
+        this->c = c;
+    }
+
+    double Plane::getPhase(double y, double x) {
+        double phiCenter = a * x + b * y + c;
         return phiCenter;
     }
 
     double Plane::getAngle() {
-        return atan2(planeCoefficients(1), planeCoefficients(0));
+        return std::atan2(b, a);
     }
 
-    double Plane::getPosition(double physicalPeriod, double row, double col, int codePosition) {
-        double phiCenter = getPhase(row, col);
-        if (physicalPeriod != 0) {
-            return physicalPeriod * (phiCenter / (2.0 * PI) + (double) abs(codePosition));
+    double Plane::getPosition(double physicalPeriod, double y, double x, int periodShift) {
+        double phiCenter = getPhase(y, x);
+        if (physicalPeriod != 0.0) {
+            return physicalPeriod * (phiCenter / (2.0 * PI) + (double) (periodShift));
         } else {
-            return (2.0 * PI / (sqrt(pow(planeCoefficients(0), 2) + pow(planeCoefficients(1), 2)))) * (phiCenter / (2.0 * PI) + (double) abs(codePosition));
+            return (2.0 * PI / (std::sqrt(pow(a, 2) + pow(b, 2)))) * (phiCenter / (2.0 * PI) + (double) (periodShift));
         }
     }
 
-    double Plane::getPositionPixels(double row, double col, int codePosition) {
-        double phiCenter = getPhase(row, col);
-        return (1 / (sqrt(pow(planeCoefficients(0), 2) + pow(planeCoefficients(1), 2)))) * (phiCenter + (double) abs(codePosition));
+    double Plane::getPositionPixels(double y, double x, int periodShift) {
+        double phiCenter = getPhase(y, x);
+        return (1.0 / std::sqrt(a * a + b * b)) * (phiCenter + (double) (periodShift));
     }
 
-    void Plane::revertCoefficients() {
-        planeCoefficients(0) = -planeCoefficients(0);
-        planeCoefficients(1) = -planeCoefficients(1);
-        planeCoefficients(2) = -planeCoefficients(2);
+    void Plane::flip() {
+        a = -a;
+        b = -b;
+        c = -c;
+    }
+
+    void Plane::turnClockwise90() {
+        std::swap(a, b);
+        a = -a;
+    }
+
+    void Plane::turnAntiClockwise90() {
+        std::swap(a, b);
+        b = -b;
+    }
+
+    void Plane::turn180() {
+        a = -a;
+        b = -b;
     }
 
     double Plane::getPixelicPeriod() {
-        return 2.0 * PI / (sqrt(pow(planeCoefficients(0), 2) + pow(planeCoefficients(1), 2)));
+        return 2.0 * PI / std::sqrt(a * a + b * b);
     }
 
     std::string Plane::toString() {
         std::string planeStr;
-        planeStr = "phi = " + vernier::to_string(planeCoefficients(0)) + "x ";
-        if (planeCoefficients(1) < 0) {
+        planeStr = "phi(x,y) = " + to_string(a) + "x ";
+        if (b < 0) {
             planeStr += "- ";
         } else {
             planeStr += "+ ";
         }
-        planeStr += vernier::to_string(abs(planeCoefficients(1))) + "y ";
-        if (planeCoefficients(2) < 0) {
+        planeStr += to_string(std::abs(b)) + "y ";
+        if (c < 0) {
             planeStr += "- ";
         } else {
             planeStr += "+ ";
         }
-        planeStr += vernier::to_string(abs(planeCoefficients(2)));
+        planeStr += to_string(std::abs(c));
         return planeStr;
     }
 }

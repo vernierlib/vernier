@@ -136,7 +136,7 @@ namespace vernier {
         }
     }
 
-    void QRCodeDetector::compute(cv::Mat& image) {
+    void QRCodeDetector::compute(const cv::Mat& image) {
         fiducialDetector.compute(image);
         codes.clear();
         if (fiducialDetector.fiducials.size() >= 3) {

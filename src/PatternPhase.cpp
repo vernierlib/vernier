@@ -35,18 +35,18 @@ namespace vernier {
         }
     }
 
-    void PatternPhase::compute(Eigen::ArrayXXd& image) {
+    void PatternPhase::compute(const Eigen::ArrayXXd& image) {
         spatial.resize(image.rows(), image.cols());
         spatial.real() = image;
         compute(spatial);
     }
 
-    void PatternPhase::compute(cv::Mat& image) {
+    void PatternPhase::compute(const cv::Mat& image) {
         Eigen::ArrayXXd array = image2array(image);
         compute(array);
     }
 
-    void PatternPhase::compute(Eigen::ArrayXXcd& patternArray) {
+    void PatternPhase::compute(const Eigen::ArrayXXcd& patternArray) {
         resize(patternArray.rows(), patternArray.cols());
 
         fft.compute(patternArray, spectrum);
@@ -485,7 +485,6 @@ namespace vernier {
     
     bool PatternPhase::peaksFound() {
         return (mainPeak1.z() > MIN_PEAK_POWER && mainPeak2.z() > MIN_PEAK_POWER);
-        
     }
 
     cv::Mat PatternPhase::getImage() {

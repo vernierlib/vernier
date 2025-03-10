@@ -225,7 +225,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::compute(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray) {
+    void Thumbnail::compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray) {
         computeThumbnail(plane1, plane2, patternArray, PI / 4.0);
 
         cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
@@ -253,7 +253,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::computeThumbnail(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void Thumbnail::computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -288,7 +288,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::computeThumbnailTotal(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void Thumbnail::computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -440,7 +440,7 @@ namespace vernier {
         //---------------------------------------------------------------------
     }
 
-    Eigen::ArrayXXd Thumbnail::guiMeanDots2() {
+    Eigen::ArrayXXd Thumbnail::getMeanDots() {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points
         //----------------------------------------------------------------------
@@ -691,7 +691,7 @@ namespace vernier {
         cv::imshow("sequence2levels", sequence2Mat);
     }
 
-    void Thumbnail::guiSequences(cv::Mat& sequencesBiDir) {
+    void Thumbnail::showSequences(cv::Mat& sequencesBiDir) {
         double margin = 1;
         double marge = 1;
         int rectWidth = 5;
@@ -737,7 +737,7 @@ namespace vernier {
         cv::imshow("sequence bi dir thumbnail", sequencesBiDir);
     }
 
-    void Thumbnail::guiDisplayCode() {
+    void Thumbnail::showDisplayCode() {
         int coding1 = codeOrientation(0);
         int coding2 = codeOrientation(1);
         int missing1 = codeOrientation(2);
@@ -751,7 +751,7 @@ namespace vernier {
         cv::imshow("coding cell", codeOrientationImg);
     }
 
-    void Thumbnail::guiCodeDirection() {
+    void Thumbnail::showCodeDirection() {
         cv::Mat codeDirection = cv::Mat(300, 300, CV_64FC3);
         if (MSB1 == 1 && MSB2 == 1) {
             cv::line(codeDirection, cv::Point(150, 150), cv::Point(50, 50), cv::Scalar(0, 255, 0), 4);

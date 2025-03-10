@@ -21,13 +21,14 @@ namespace vernier {
         classname = "BitmapPattern";
         description = "Layout created from " + filename;
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
-        image1.convertTo(image, CV_8U);
+        image1.convertTo(image, CV_32F);
+        cv::normalize(image, image, 1.0, 0, cv::NORM_MINMAX);
         resize(period, (image.rows + 1) / 2, (image.cols + 1) / 2);
 
         bitmap = Eigen::ArrayXXi::Zero(image.rows, image.cols);
         for (int col = 0; col < image.cols; col++) {
             for (int row = 0; row < image.rows; row++) {
-                bitmap(row, col) = (int) (image.at<char>(row, col) == 0);
+                bitmap(row, col) = (int) (image.at<float>(row, col) > 0.5);
             }
         }
     }

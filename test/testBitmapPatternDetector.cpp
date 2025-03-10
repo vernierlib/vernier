@@ -5,6 +5,7 @@
  */
 
 #include "Detector.hpp"
+#include "BitmapPatternDetector.hpp"
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
@@ -15,12 +16,28 @@ using namespace cv;
 
 void main1() {
 
-    //    HPCodePatternLayout layout(18, 17);
-    //    layout.saveToPNG("data/HPCode33.png");
+    //    HPCodePatternLayout layout(2, 19);
+    //    layout.saveToPNG("data/HPCode37.png");
+
+    BitmapPatternDetector detector(2, "data/HPCode37.png");
+    cout << detector.toString() << endl;
+
+    cv::Mat image = cv::imread("data/QRCode/code18_270.jpg");
+    detector.compute2(image);
+
+    detector.showControlImages();
+
+    std::cout << "Camera pose in Pattern" << detector.get2DPose().toString() << std::endl;
+    detector.get2DPose().draw(image);
+    imshow("Image", image);
+    waitKey(0);
+
+}
+
+void main2() {
 
     //    BitmapPatternLayout layout5("data/HPCode33.png", 2);
     //    layout5.saveToJSON("BitmapPatternDetector.json");
-
 
     PatternDetector* detector;
     detector = Detector::loadFromJSON("BitmapPatternDetector.json");
@@ -35,52 +52,64 @@ void main1() {
     detector->get2DPose().draw(image);
     imshow("Image", image);
     waitKey(0);
+
 }
 
-//void mainBitmapFullStack() {
-//    std::cout << "BITMAP PATTERN LAYOUT AND DETECTOR FULL TEST" << std::endl;
-//    std::cout << "JSON Bitmap pattern file generation" << std::endl;
-//    BitmapPatternLayout layout("TestBitmapPatternUnit.png", 9);
-//
-//    layout.saveToJSON("testBitmapPattern.json");
-//    std::cout << "done" << std::endl;
-//
-//    std::cout << "Periodic pattern rendering" << std::endl;
-//    PatternLayout* patternLayout;
-//    patternLayout = Layout::loadFromJSON("testBitmapPattern.json");
-//
-//    
-//    Eigen::ArrayXXd array(1024, 1024);
-//
-//    layout.renderOrthographicProjection(Pose(-10, -5, 1000, 0.23, 0.0, 0.0), array);
-//    std::cout << "done" << std::endl;
-//
-//    cv::Mat image(array.rows(), array.cols(), CV_64FC1, array.data());
-//
-//    PatternDetector* mDetect;
-//    mDetect = Detector::loadFromJSON("testBitmapPattern.json");
-//
-//    mDetect->compute(image);
-//    Vernier::Pose patternPose = mDetect->getCameraPoseInPattern();
-//    std::cout << "Periodic pattern detector poses :" << std::endl;
-//    std::cout << "Camera pose in Pattern" << patternPose.toString() << std::endl;
-//    std::cout << "Pattern pose in Camera" << mDetect->getPatternPoseInCamera().toString() << std::endl;
-//
-//
-//    cv::normalize(image, image, 1, 0, cv::NORM_MINMAX);
-//    cv::imshow(patternLayout->getClassname(), image);
-//    cv::waitKey();
-//}
+void test2d(const string & filename) {
+
+    START_UNIT_TEST;
+
+    // Constructing the layout
+    double physicalPeriod = randomDouble(4., 8.0);
+    PatternLayout* layout = new BitmapPatternLayout(filename, physicalPeriod);
+    cout << "  Physical period: " << physicalPeriod << endl;
+
+    // Setting the pose of the pattern in the camera frame for rendering
+    double x = randomDouble(-90, 90);
+    double y = randomDouble(-90, 90);
+    double alpha = randomDouble(-PI, PI);
+    double pixelSize = randomDouble(1.0, 1.1);
+    Pose patternPose = Pose(x, y, alpha, pixelSize);
+    cout << "  Pattern pose:   " << patternPose.toString() << endl;
+
+    // Rendering
+    Eigen::ArrayXXd array(512, 512);
+    layout->renderOrthographicProjection(patternPose, array);
+    
+    // Detecting
+    BitmapPatternDetector detector(physicalPeriod, filename);
+    detector.compute(array);
+
+    // Printing results 
+    Pose estimatedPose;
+    if (detector.patternFound()) {
+        estimatedPose = detector.get2DPose();
+        cout << "  Estimated pose: " << estimatedPose << endl;
+
+        // Drawing
+//        cv::Mat image = array2image(array);
+//        drawCameraFrame(image);
+//        detector.get2DPose().draw(image);
+//        detector.showControlImages();
+//        imshow("HP codes", image);
+//        waitKey(10);
+    } else {
+        cout << "Pattern not found." << endl;
+    }
+
+    UNIT_TEST(areEqual(patternPose, estimatedPose, 0.5));
+}
 
 int main(int argc, char** argv) {
 
-    main1();
+    //main1();
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 
-    //REPEAT_TEST(test2d(), 20);
-
-    //testFile("data/stamp/stamp2.png", 2);
+    REPEAT_TEST(test2d("data/HPCode37.png"), 20);
+    
+    REPEAT_TEST(test2d("data/femto117x45.png"), 20);
+    
 
     return EXIT_SUCCESS;
 }

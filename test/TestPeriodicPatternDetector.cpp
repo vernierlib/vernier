@@ -149,17 +149,22 @@ void test2d() {
     PatternDetector* detector;
     detector = new PeriodicPatternDetector(physicalPeriod);
     detector->compute(array);
-    Pose estimatedPose = detector->get2DPose();
 
     // Printing results 
-    cout << "  Estimated pose: " << estimatedPose.toString() << endl;
+    Pose estimatedPose;
+    if (detector->patternFound()) {
+        estimatedPose = detector->get2DPose();
+        cout << "  Estimated pose: " << estimatedPose.toString() << endl;
+    } else {
+        cout << "Pattern not found." << endl;
+    }
 
     TEST_EQUALITY(patternPose, estimatedPose, 0.01)
 }
 
 int main(int argc, char** argv) {
 
-//    main2d();
+    //    main2d();
 
     REPEAT_TEST(test2d(), 10)
 

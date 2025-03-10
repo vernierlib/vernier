@@ -17,11 +17,9 @@ namespace vernier {
         cv::line(image, cv::Point(cx, cy), cv::Point(cx, cy + cy / 5), cv::Scalar(0, 255, 0));
     }
 
-    cv::Mat array2image(Eigen::ArrayXXd & array) {
-        array -= array.minCoeff();
-        array /= array.maxCoeff();
+    cv::Mat array2image(const Eigen::ArrayXXd & array) {
         Eigen::MatrixXd matrix;
-        matrix = array.array();
+        matrix = (array.array()-array.minCoeff())/array.maxCoeff();
 
         cv::Mat image64d;
         cv::eigen2cv(matrix, image64d);
@@ -46,13 +44,13 @@ namespace vernier {
         return image8u;
     }
 
-    cv::Mat array2image(Eigen::ArrayXXcd & array) {
+    cv::Mat array2image(const Eigen::ArrayXXcd & array) {
         Eigen::ArrayXXd spectrumAbs;
         spectrumAbs = array.abs();
         return array2image(spectrumAbs);
     }
 
-    Eigen::ArrayXXd image2array(cv::Mat & image) {
+    Eigen::ArrayXXd image2array(const cv::Mat & image) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
             cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
@@ -84,13 +82,13 @@ namespace vernier {
         }
     }
 
-    void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array) {
+    void arrayShow(const std::string windowTitle, const Eigen::ArrayXXd & array) {
         cv::Mat image = array2image(array);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
     }
 
-    void arrayShow(const std::string windowTitle, Eigen::ArrayXXcd & array) {
+    void arrayShow(const std::string windowTitle, const Eigen::ArrayXXcd & array) {
         cv::Mat image = array2image(array);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);

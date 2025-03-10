@@ -19,14 +19,13 @@ namespace vernier {
     protected:
         Eigen::ArrayXXi bitSequence;
         AbsoluteDecoding decoding;
-        int length1, length2;
         Thumbnail thumbnail;
         int codePosition1, codePosition2;
         Plane plane1Save, plane2Save;
 
         void readJSON(rapidjson::Value& document);
 
-        void computeAbsolutePose(Eigen::ArrayXXd& pattern);
+        void computeAbsolutePose(const Eigen::ArrayXXd& pattern);
 
     public:
 
@@ -49,7 +48,7 @@ namespace vernier {
 
         ~MegarenaPatternDetector() = default;
 
-        void compute(Eigen::ArrayXXd& pattern);
+        void compute(const Eigen::ArrayXXd& pattern);
 
         Pose get2DPose(int id = 0);
 

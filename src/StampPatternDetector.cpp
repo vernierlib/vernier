@@ -23,6 +23,10 @@ namespace vernier {
         snapshot.resize(snapshotSize, snapshotSize);
         patternPhase.resize(snapshotSize, snapshotSize);
     }
+    
+    void StampPatternDetector::readJSON(rapidjson::Value& document) {
+        throw Exception("StampPatternDetector::readJSON is not implemented yet.");
+    }
 
     void StampPatternDetector::takeSnapshot(int x, int y, cv::Mat image) {
         snapshot.setConstant(0);
@@ -107,11 +111,6 @@ namespace vernier {
         }
     }
 
-    void StampPatternDetector::compute(Eigen::ArrayXXd& image) {
-        cv::Mat matImage = array2image(image);
-        compute(matImage);
-    }
-
     Pose StampPatternDetector::get2DPose(int id) {
         return stamps.at(id);
     }
@@ -121,7 +120,7 @@ namespace vernier {
         return stamps.at(id);
     }
 
-    bool StampPatternDetector::found(int id) {
+    bool StampPatternDetector::patternFound(int id) {
         return (id >= 0 && id < stamps.size());
     }
 

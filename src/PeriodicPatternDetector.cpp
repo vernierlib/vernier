@@ -32,7 +32,7 @@ namespace vernier {
         patternPhase.resize(nRows, nCols);
     }
 
-    void PeriodicPatternDetector::compute(Eigen::ArrayXXd& array) {
+    void PeriodicPatternDetector::compute(const Eigen::ArrayXXd& array) {
         patternPhase.compute(array);
 
         plane1 = patternPhase.getPlane1();
@@ -62,7 +62,7 @@ namespace vernier {
         return pose;
     }
 
-    bool PeriodicPatternDetector::found(int id) {
+    bool PeriodicPatternDetector::patternFound(int id) {
         return patternPhase.peaksFound();
     }
 

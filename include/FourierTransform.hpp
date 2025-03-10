@@ -72,14 +72,14 @@ namespace vernier {
          * \param in: 2-D complex input array
          * \param out: 2-D complex output array
          */
-        void compute(Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out);
+        void compute(const Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out);
 
         /** Computes the transform using prepared FFT plan
          *
          * \param in: 1-D complex input array
          * \param out: 1-D complex output array
          */
-        void compute(Eigen::ArrayXcd& in, Eigen::ArrayXcd& out);
+        void compute(const Eigen::ArrayXcd& in, Eigen::ArrayXcd& out);
         
         /** Set the direction of the FFT
          *

@@ -21,9 +21,11 @@ namespace vernier {
         int numberHalfPeriods;
         int snapshotSize;
 
+        void readJSON(rapidjson::Value& document);
+
         void takeSnapshot(int x, int y, cv::Mat image);
 
-        unsigned long readNumber(QRCode& code, cv::Mat& image, double dotSize);
+        unsigned long readNumber(QRCode& code, const cv::Mat& image, double dotSize);
 
     public:
 
@@ -50,17 +52,15 @@ namespace vernier {
         void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
 
         /** Estimate the pose of all HP codes in an image */
-        void compute(cv::Mat& image);
-        
-        void compute(Eigen::ArrayXXd& image);
-        
+        void compute(const cv::Mat& image);
+
         Pose get2DPose(int id);
 
         Pose get3DPose(int id);
-        
-        bool found(int id);
 
-         std::vector<Pose> getAll3DPoses(int id);
+        bool patternFound(int id);
+
+        std::vector<Pose> getAll3DPoses(int id);
 
         /** Draws all the found patterns in a image (analysis must have been done before) */
         void draw(cv::Mat& image);

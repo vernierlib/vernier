@@ -1,7 +1,7 @@
 /* 
  * This file is part of the VERNIER Library.
  *
- * Copyright (c) 2018 CNRS, ENSMM, UFC.
+ * Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
  */
 
 #ifndef PLANE_HPP
@@ -11,26 +11,43 @@
 
 namespace vernier {
 
-    /** \brief With given plane coefficients, constructs a class which can return useful informations about this plane
-     *	such as the position or the angle.
+    /** \brief constructs a phase plane with given coefficients. The class returns 
+     * useful informations about this plane such as the phase or the angle.
      */
     class Plane {
     private:
         Eigen::Vector3d planeCoefficients;
 
+
     public:
+
+        double a, b, c;
 
         Plane();
 
-        /** Constructs a plane with the coefficients of this one
-         *	The coefficients have to be stored according to the following equation:
-         *	a*x + b*y + c = z
+        /** Constructs a plane with three coefficients in a vector
+         * 
+         * The plane is defined according to the following equation: 
+         * 
+         *      vector[0]*x + vector[1]*y + vector[2] = z
          *
-         *	\param planeCoefficients: coefficients of the plane
+         *	\param vector: coefficients of the plane
          */
         Plane(Eigen::Vector3d planeCoefficients);
 
-        /** Returns the coefficients of the plane
+        /** Constructs a plane with three coefficients
+         *	
+         * The plane is defined according to the following equation:
+         * 
+         *	a*x + b*y + c = z
+         *
+         *	\param a: first coefficient of the plane
+         *      \param b: second coefficient of the plane
+         *      \param c: third coefficient of the plane
+         */
+        Plane(double a, double b, double c);
+
+        /** Returns the coefficients of the plane within a vector
          */
         Eigen::Vector3d getCoefficients();
 
@@ -43,45 +60,66 @@ namespace vernier {
         /** Returns the third coefficient of the plane*/
         double getC();
 
-        /** Permits to set the third coefficient of the plane (to set the offset of the plane)
+        /** Sets the first coefficient of the plane
          *
-         *	\param coeffC: coefficient to replace in the plane equation
+         *	\param a: first coefficient of the plane
          */
-        void setC(double coeffC);
+        void setA(double a);
 
-        /** Get the phase at the center of the pattern
+        /** Sets the second coefficient of the plane
          *
-         *	\param row: row to compute the phase acquisition
-         *	\param col: column to compute the phase acquisition
+         *	\param c: second coefficient of the plane
          */
-        double getPhase(double row, double col);
+        void setB(double b);
+
+        /** Sets the third coefficient of the plane (offset of the plane)
+         *
+         *	\param c: third coefficient of the plane
+         */
+        void setC(double c);
+
+        /** Get the phase at a given position of the image
+         *
+         *	\param y: row to compute the phase acquisition (default = 0 = center)
+         *	\param x: column to compute the phase acquisition (default = 0 = center)
+         */
+        double getPhase(double y = 0.0, double x = 0.0);
 
         /** Returns the angle of the plane in radians
          */
         double getAngle();
 
-        /** Returns the position of the pattern in the same unit that the period length. It can return either the relative or the absolute position
+        /** Returns the position of the pattern in the same unit that the period length. 
+         * It can return either the relative or the absolute position
          *
          *	\param physicalPeriod: physical period of the pattern
-         *	\param row: row where the position is computed
-         *	\param col: column where the position is computed
-         *	\param codePosition: (optionnal) position of the pattern in the code
+         *	\param y: row where the position is computed (default = 0 = center)
+         *	\param x: column where the position is computed (default = 0 = center)
+         *	\param periodShift: number of periods to shift (default = 0)
          */
-        double getPosition(double physicalPeriod, double row = 0.0, double col = 0.0, int codePosition = 0);
+        double getPosition(double physicalPeriod, double y = 0.0, double x = 0.0, int periodShift = 0);
 
-        /** Returns the position of the pattern in pixels. It can return either the relative or the absolute position
+        /** Returns the position of the pattern in pixels. 
+         * It can return either the relative or the absolute position
          *
-         *	\param row: row where the position is computed
-         *	\param col: column where the position is computed
-         *	\param codePosition: (optionnal) position of the pattern in the code
+         *	\param y: row where the position is computed (default = 0 = center)
+         *	\param x: column where the position is computed (default = 0 = center)
+         *	\param eriodShift: number of periods to shift (default = 0)
          */
-        double getPositionPixels(double row = 0.0, double col = 0.0, int codePosition = 0);
+        double getPositionPixels(double y = 0.0, double x = 0.0, int periodShift = 0);
 
-        /** Take the three coefficients and apply a negative sens
-         *	i.e. take a*x + b*y + c = z
-         *	and returns -a*x -b*y -c = z
+        /** Replace the plane coefficients by their opposite values.
+         * 
+         *	from a*x + b*y + c = z
+         *	the plane becomes -a*x -b*y -c = z
          */
-        void revertCoefficients();
+        void flip();
+
+        void turnClockwise90();
+
+        void turnAntiClockwise90();
+
+        void turn180();
 
         /** Returns the pixelic period of the pattern*/
         double getPixelicPeriod();

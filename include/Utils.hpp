@@ -27,17 +27,17 @@ namespace vernier {
 
     void drawCameraFrame(cv::Mat & image);
 
-    cv::Mat array2image(Eigen::ArrayXXd & array);
+    cv::Mat array2image(const Eigen::ArrayXXd & array);
 
-    cv::Mat array2image(Eigen::ArrayXXcd & array);
+    cv::Mat array2image(const Eigen::ArrayXXcd & array);
 
-    Eigen::ArrayXXd image2array(cv::Mat & image);
+    Eigen::ArrayXXd image2array(const cv::Mat & image);
 
     void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage);
 
-    void arrayShow(const std::string windowTitle, Eigen::ArrayXXd & array);
+    void arrayShow(const std::string windowTitle, const Eigen::ArrayXXd & array);
 
-    void arrayShow(const std::string windowTitle, Eigen::ArrayXXcd & array);
+    void arrayShow(const std::string windowTitle, const Eigen::ArrayXXcd & array);
 
     /** Replace all the "Not A Number" terms of an array by zeros
      */

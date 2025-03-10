@@ -49,31 +49,29 @@ namespace vernier {
         readJSON(document.MemberBegin()->value);
     }
 
-//    void PatternDetector::compute(char* data, int rows, int cols) {
-//        Eigen::MatrixXd mPatternMatrix(rows, cols);
-//        std::memcpy(mPatternMatrix.data(), data, rows * cols * sizeof (double));
-//
-//        Eigen::ArrayXXd patternImage = mPatternMatrix.array();
-//        compute(patternImage);
-//    }
+    void PatternDetector::compute(char* data, int rows, int cols) {
+        Eigen::MatrixXd mPatternMatrix(rows, cols);
+        std::memcpy(mPatternMatrix.data(), data, rows * cols * sizeof (double));
 
-    void PatternDetector::compute(cv::Mat& image) {
-        cv::Mat grayImage;
-        if (image.channels() > 1) {
-            cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
-        } else {
-            grayImage = image;
-        }
+        Eigen::ArrayXXd patternImage = mPatternMatrix.array();
+        compute(patternImage);
+    }
 
-        grayImage.convertTo(grayImage, CV_64F);
-        cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
-        Eigen::MatrixXd patternMatrix;
-        cv::cv2eigen(grayImage, patternMatrix);
-        Eigen::ArrayXXd patternArray;
-        patternArray = patternMatrix.array();
-        compute(patternArray);
+    void PatternDetector::compute(const cv::Mat & image) {
+        Eigen::ArrayXXd array = image2array(image);
+        compute(array);
     }
     
+    void PatternDetector::compute2(const cv::Mat & image) {
+        Eigen::ArrayXXd array = image2array(image);
+        compute(array);
+    }
+
+    void PatternDetector::compute(const Eigen::ArrayXXd & array) {
+        cv::Mat image = array2image(array);
+        compute(image);
+    }
+
     std::string PatternDetector::toString() {
         return classname;
     }

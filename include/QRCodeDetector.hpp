@@ -56,7 +56,7 @@ namespace vernier {
         };
 
         /** Detects QR codes in an image */
-        void compute(cv::Mat& image);
+        void compute(const cv::Mat& image);
 
         /** Draws the found codes in an image (detection must have been done before) */
         void draw(cv::Mat& image);

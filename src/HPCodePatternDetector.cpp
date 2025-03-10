@@ -24,6 +24,10 @@ namespace vernier {
         patternPhase.resize(snapshotSize, snapshotSize);
     }
 
+    void HPCodePatternDetector::readJSON(rapidjson::Value& document) {
+        throw Exception("HPCodePatternDetector::readJSON is not implemented yet.");
+    }
+
     void HPCodePatternDetector::takeSnapshot(int x, int y, cv::Mat image) {
         snapshot.setConstant(0);
         if (image.channels() > 1) {
@@ -45,7 +49,7 @@ namespace vernier {
         }
     }
 
-    void HPCodePatternDetector::compute(cv::Mat& image) {
+    void HPCodePatternDetector::compute(const cv::Mat& image) {
 
         detector.compute(image);
 
@@ -105,7 +109,7 @@ namespace vernier {
         }
     }
 
-    unsigned long HPCodePatternDetector::readNumber(QRCode& code, cv::Mat& image, double dotSize) {
+    unsigned long HPCodePatternDetector::readNumber(QRCode& code, const cv::Mat& image, double dotSize) {
         cv::Point2d rightDirection = (code.right - code.top);
         rightDirection *= dotSize / cv::norm(rightDirection);
         cv::Point2d upDirection = (code.top - code.bottom);
@@ -151,11 +155,6 @@ namespace vernier {
         return number;
     }
 
-    void HPCodePatternDetector::compute(Eigen::ArrayXXd& image) {
-        cv::Mat matImage = array2image(image);
-        compute(matImage);
-    }
-
     Pose HPCodePatternDetector::get2DPose(int id) {
         return codes.at(id);
     }
@@ -165,7 +164,7 @@ namespace vernier {
         return codes.at(id);
     }
 
-    bool HPCodePatternDetector::found(int id) {
+    bool HPCodePatternDetector::patternFound(int id) {
         return (codes.find(id) != codes.end());
     }
 

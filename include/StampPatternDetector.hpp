@@ -20,6 +20,8 @@ namespace vernier {
         Eigen::ArrayXXcd snapshot;
         int numberHalfPeriods;
         int snapshotSize;
+        
+        void readJSON(rapidjson::Value& document);
 
         void takeSnapshot(int x, int y, cv::Mat image);
 
@@ -49,13 +51,11 @@ namespace vernier {
         /** Estimate the pose of all stamps in an image */
         void compute(const cv::Mat& image);
 
-        void compute(Eigen::ArrayXXd& image);
-
         Pose get2DPose(int id);
 
         Pose get3DPose(int id);
 
-        bool found(int id);
+        bool patternFound(int id);
 
         std::vector<Pose> getAll3DPoses(int id);
 

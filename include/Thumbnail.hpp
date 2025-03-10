@@ -56,7 +56,7 @@ namespace vernier {
          *	\param plane2: second plane of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void compute(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray);
+        void compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray);
 
         /** Computes the thumbnail and stores it in an array
          *	This method is used in intern for the compute function
@@ -65,35 +65,36 @@ namespace vernier {
          *	\param plane2: second plane of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void computeThumbnail(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
+        void computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
 
-        void computeThumbnailTotal(Plane plane1, Plane plane2, Eigen::ArrayXXd& patternArray, double deltaPhase);
+        void computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase);
 
 
         Eigen::ArrayXXd getThumbnailArray();
 
         Eigen::ArrayXXd getBackgroundForegroundArray();
 
-        Eigen::ArrayXXd guiMeanDots2();
+        Eigen::ArrayXXd getMeanDots();
 
         /** Graphical feedback of thumbnail*/
 
         /** Method used to display the thumbnail*/
         cv::Mat getMeanDotsImage(int rectWidth = 10);
+        
         void guiMeanDots(cv::Mat& thumbnailImg);
 
         void drawThumbnailDetection(cv::Mat& thumbnailImg);
 
         /** Method used to display the coded sequence in regard of the thumbnail size*/
-        void guiSequences(cv::Mat& sequencesBiDir);
+        void showSequences(cv::Mat& sequencesBiDir);
 
         void drawSequence1Level(Eigen::ArrayXXd& codingLevelSecurity1, Eigen::ArrayXXd& codingLevelSecurity2);
 
         /** Method used to display the coding cell and the code orientation*/
-        void guiDisplayCode();
+        void showDisplayCode();
 
         /** Displays with an arrow the orientation of the code ans where to pinpoint the position (0,0)*/
-        void guiCodeDirection();
+        void showCodeDirection();
 
         Eigen::VectorXd getSequence1();
 

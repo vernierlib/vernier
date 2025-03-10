@@ -32,17 +32,15 @@ namespace vernier {
          */
         PeriodicPatternDetector(double physicalPeriod = 1.0);
 
-        ~PeriodicPatternDetector() = default;
-
         void resize(int nRows, int nCols);
 
-        void compute(Eigen::ArrayXXd & array);
+        void compute(const Eigen::ArrayXXd & array);
 
         Pose get2DPose(int id = 0);
 
         Pose get3DPose(int id = 0);
-        
-        bool found(int id = 0);
+
+        bool patternFound(int id = 0);
 
         std::vector<Pose> getAll3DPoses(int id = 0);
 
@@ -50,15 +48,15 @@ namespace vernier {
         //Pose get3DPosePerspective(double focalLength, Eigen::Vector2d principalPoint);
 
         std::string toString();
-        
+
         /** return the reference to the pattern phase class */
         PatternPhase * getPatternPhase() {
             return &patternPhase;
         }
-        
+
         /** Tells the detector to estimate the most likely pose with phase gradients */
         void setPhaseGradientMode(bool value = true);
- 
+
         bool isPhaseGradientMode();
 
         /** Sets the approximate length of one period in pixels */
@@ -86,11 +84,11 @@ namespace vernier {
         Eigen::ArrayXXd getUnwrappedPhase2();
 
         void setDouble(const std::string & attribute, double value);
-        
+
         void setBool(const std::string & attribute, bool value);
 
         double getDouble(const std::string & attribute);
-        
+
         bool getBool(const std::string & attribute);
 
         void* getObject(const std::string & attribute);

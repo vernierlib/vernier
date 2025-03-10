@@ -277,7 +277,7 @@ namespace vernier {
         rowPatternGroup.reserve(128);
     }
 
-    void QRFiducialDetector::compute(cv::Mat& image) {
+    void QRFiducialDetector::compute(const cv::Mat& image) {
         if (image.channels() > 1) {
             cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
         } else {
