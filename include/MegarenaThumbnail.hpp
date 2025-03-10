@@ -4,8 +4,8 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#ifndef THUMBNAIL_HPP
-#define THUMBNAIL_HPP
+#ifndef MEGARENATHUMBNAIL_HPP
+#define MEGARENATHUMBNAIL_HPP
 
 #include "Common.hpp"
 #include "Plane.hpp"
@@ -14,7 +14,7 @@
 namespace vernier {
 
     /** \brief Uses a given periodic array and its phases planes, computes the thumbnail used as a model-reduction*/
-    class Thumbnail {
+    class MegarenaThumbnail {
     private:
         int orderMin1, orderMin2;
         int length1, length2;
@@ -29,7 +29,7 @@ namespace vernier {
     public:
         Eigen::ArrayXXd codeIntensity1, codeIntensity2;
 
-        Thumbnail();
+        MegarenaThumbnail();
 
         /** Access to the number of cells contained in the image pattern with the plane coefficients
          *	and the size of the image pattern

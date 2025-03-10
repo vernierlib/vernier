@@ -4,15 +4,15 @@
  * Copyright (c) 2018-2023 CNRS, ENSMM, UFC.
  */
 
-#include "Thumbnail.hpp"
+#include "MegarenaThumbnail.hpp"
 #include <iomanip>
 
 namespace vernier {
 
-    Thumbnail::Thumbnail() {
+    MegarenaThumbnail::MegarenaThumbnail() {
     }
 
-    int Thumbnail::getLength(Plane plane, int nRows, int nCols) {
+    int MegarenaThumbnail::getLength(Plane plane, int nRows, int nCols) {
         double stripesValues[4] = {plane.getC(), plane.getA() * nCols + plane.getC(), plane.getB() * nRows + plane.getC(), plane.getA() * nCols + plane.getB() * nRows + plane.getC()};
         double nMin = *std::min_element(stripesValues, stripesValues + 4);
         nMin = nMin / (2 * PI);
@@ -22,7 +22,7 @@ namespace vernier {
         return abs(floor(nMax)) + abs(floor(nMin)) + 1;
     }
 
-    void Thumbnail::resize(int length1, int length2) {
+    void MegarenaThumbnail::resize(int length1, int length2) {
         this->length1 = length1;
         this->length2 = length2;
 
@@ -86,7 +86,7 @@ namespace vernier {
         sequence2.fill(0);
     }
 
-    void Thumbnail::getCodeSequence() {
+    void MegarenaThumbnail::getCodeSequence() {
         int coding1 = codeOrientation(0);
         int coding2 = codeOrientation(1);
         int missing1 = codeOrientation(2);
@@ -225,7 +225,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray) {
+    void MegarenaThumbnail::compute(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray) {
         computeThumbnail(plane1, plane2, patternArray, PI / 4.0);
 
         cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
@@ -253,7 +253,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void MegarenaThumbnail::computeThumbnail(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -288,7 +288,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void MegarenaThumbnail::computeThumbnailTotal(Plane plane1, Plane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
         int phaseIteration1, phaseIteration2;
@@ -323,7 +323,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::drawCodeDetection(cv::Mat& image) {
+    void MegarenaThumbnail::drawCodeDetection(cv::Mat& image) {
         cv::transpose(image, image);
         cv::Mat imageCode(image.rows + 200, image.cols + 200, CV_32FC1);
         image.convertTo(image, CV_32FC1);
@@ -354,7 +354,7 @@ namespace vernier {
         cv::imshow("coding Comparison", imageCodeRGB);
     }
 
-    double Thumbnail::computeSTD2(Eigen::ArrayXXd image) {
+    double MegarenaThumbnail::computeSTD2(Eigen::ArrayXXd image) {
         removeNanFromArray(image);
         double mean = image.mean();
 
@@ -369,7 +369,7 @@ namespace vernier {
         return sum / ((double) (image.rows() * image.cols()));
     }
 
-    cv::Mat Thumbnail::getMeanDotsImage(int rectWidth) {
+    cv::Mat MegarenaThumbnail::getMeanDotsImage(int rectWidth) {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points
         //----------------------------------------------------------------------
@@ -410,7 +410,7 @@ namespace vernier {
         return thumbnailImg;
     }
 
-    void Thumbnail::guiMeanDots(cv::Mat& thumbnailImg) {
+    void MegarenaThumbnail::guiMeanDots(cv::Mat& thumbnailImg) {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points
         //----------------------------------------------------------------------
@@ -440,7 +440,7 @@ namespace vernier {
         //---------------------------------------------------------------------
     }
 
-    Eigen::ArrayXXd Thumbnail::getMeanDots() {
+    Eigen::ArrayXXd MegarenaThumbnail::getMeanDots() {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points
         //----------------------------------------------------------------------
@@ -477,7 +477,7 @@ namespace vernier {
         //---------------------------------------------------------------------
     }
 
-    void Thumbnail::drawThumbnailDetection(cv::Mat& thumbnailImg) {
+    void MegarenaThumbnail::drawThumbnailDetection(cv::Mat& thumbnailImg) {
         //----------------------------------------------------------------------
         // feedback sur l'intensit� des points
         //----------------------------------------------------------------------
@@ -595,7 +595,7 @@ namespace vernier {
         //---------------------------------------------------------------------
     }
 
-    void Thumbnail::drawSequence1Level(Eigen::ArrayXXd& codingLevelSecurity1, Eigen::ArrayXXd& codingLevelSecurity2) {
+    void MegarenaThumbnail::drawSequence1Level(Eigen::ArrayXXd& codingLevelSecurity1, Eigen::ArrayXXd& codingLevelSecurity2) {
         int rectWidth = 20;
         Eigen::ArrayXXd meanWhiteDots = cumulWhiteDots / numberWhiteDots;
         Eigen::ArrayXXd meanBackDots = cumulBackgroundDots / numberBackgroundDots;
@@ -691,7 +691,7 @@ namespace vernier {
         cv::imshow("sequence2levels", sequence2Mat);
     }
 
-    void Thumbnail::showSequences(cv::Mat& sequencesBiDir) {
+    void MegarenaThumbnail::showSequences(cv::Mat& sequencesBiDir) {
         double margin = 1;
         double marge = 1;
         int rectWidth = 5;
@@ -737,7 +737,7 @@ namespace vernier {
         cv::imshow("sequence bi dir thumbnail", sequencesBiDir);
     }
 
-    void Thumbnail::showDisplayCode() {
+    void MegarenaThumbnail::showDisplayCode() {
         int coding1 = codeOrientation(0);
         int coding2 = codeOrientation(1);
         int missing1 = codeOrientation(2);
@@ -751,7 +751,7 @@ namespace vernier {
         cv::imshow("coding cell", codeOrientationImg);
     }
 
-    void Thumbnail::showCodeDirection() {
+    void MegarenaThumbnail::showCodeDirection() {
         cv::Mat codeDirection = cv::Mat(300, 300, CV_64FC3);
         if (MSB1 == 1 && MSB2 == 1) {
             cv::line(codeDirection, cv::Point(150, 150), cv::Point(50, 50), cv::Scalar(0, 255, 0), 4);
@@ -776,12 +776,12 @@ namespace vernier {
         cv::imshow("code direction", codeDirection);
     }
 
-    Eigen::ArrayXXd Thumbnail::getThumbnailArray() {
+    Eigen::ArrayXXd MegarenaThumbnail::getThumbnailArray() {
         Eigen::ArrayXXd meanWhiteDots = cumulWhiteDots / numberWhiteDots;
         return meanWhiteDots;
     }
 
-    Eigen::ArrayXXd Thumbnail::getBackgroundForegroundArray() {
+    Eigen::ArrayXXd MegarenaThumbnail::getBackgroundForegroundArray() {
         Eigen::ArrayXXd meanWhiteDots = cumulWhiteDots / numberWhiteDots;
         Eigen::ArrayXXd meanBackDots = cumulBackgroundDots / numberBackgroundDots;
 
@@ -802,43 +802,43 @@ namespace vernier {
         return fullThumbnail;
     }
 
-    Eigen::VectorXd Thumbnail::getSequence1() {
+    Eigen::VectorXd MegarenaThumbnail::getSequence1() {
         return sequence1;
     }
 
-    Eigen::VectorXd Thumbnail::getSequence2() {
+    Eigen::VectorXd MegarenaThumbnail::getSequence2() {
         return sequence2;
     }
 
-    Eigen::VectorXd Thumbnail::getCodeOrientation() {
+    Eigen::VectorXd MegarenaThumbnail::getCodeOrientation() {
         return codeOrientation;
     }
 
-    int Thumbnail::getMSB1() {
+    int MegarenaThumbnail::getMSB1() {
         return MSB1;
     }
 
-    int Thumbnail::getMSB2() {
+    int MegarenaThumbnail::getMSB2() {
         return MSB2;
     }
 
-    Eigen::ArrayXXd Thumbnail::getNumberWhiteDots() {
+    Eigen::ArrayXXd MegarenaThumbnail::getNumberWhiteDots() {
         return numberWhiteDots;
     }
 
-    Eigen::ArrayXXd Thumbnail::getCumulWhiteDots() {
+    Eigen::ArrayXXd MegarenaThumbnail::getCumulWhiteDots() {
         return cumulWhiteDots;
     }
 
-    Eigen::ArrayXXd Thumbnail::getNumberBackground() {
+    Eigen::ArrayXXd MegarenaThumbnail::getNumberBackground() {
         return numberBackgroundDots;
     }
 
-    Eigen::ArrayXXd Thumbnail::getCumulBackground() {
+    Eigen::ArrayXXd MegarenaThumbnail::getCumulBackground() {
         return cumulBackgroundDots;
     }
 
-    void Thumbnail::removeNanFromArray(Eigen::ArrayXXd& image) {
+    void MegarenaThumbnail::removeNanFromArray(Eigen::ArrayXXd& image) {
         for (int i = 0; i < image.rows(); i++) {
             for (int j = 0; j < image.cols(); j++) {
                 if (isnan(image(i, j))) {
@@ -848,7 +848,7 @@ namespace vernier {
         }
     }
 
-    void Thumbnail::rotate270() {
+    void MegarenaThumbnail::rotate270() {
         numberWhiteDots.transposeInPlace();
         numberWhiteDots.rowwise().reverseInPlace();
         cumulWhiteDots.transposeInPlace();
@@ -860,14 +860,14 @@ namespace vernier {
 
     }
 
-    void Thumbnail::rotate180() {
+    void MegarenaThumbnail::rotate180() {
         numberWhiteDots.reverseInPlace();
         cumulWhiteDots.reverseInPlace();
         numberBackgroundDots.reverseInPlace();
         cumulBackgroundDots.reverseInPlace();
     }
 
-    void Thumbnail::rotate90() {
+    void MegarenaThumbnail::rotate90() {
         numberWhiteDots.transposeInPlace();
         numberWhiteDots.colwise().reverseInPlace();
         cumulWhiteDots.transposeInPlace();

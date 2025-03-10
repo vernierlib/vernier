@@ -98,7 +98,7 @@ namespace vernier {
 
     }
 
-    Thumbnail MegarenaPatternDetector::getThumbnail() {
+    MegarenaThumbnail MegarenaPatternDetector::getThumbnail() {
         return thumbnail;
     }
 

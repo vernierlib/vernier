@@ -8,7 +8,7 @@
 #define MEGARENADETECTOR_HPP
 
 #include "PeriodicPatternDetector.hpp"
-#include "Thumbnail.hpp"
+#include "MegarenaThumbnail.hpp"
 #include "AbsoluteDecoding.hpp"
 
 namespace vernier {
@@ -20,7 +20,7 @@ namespace vernier {
         
         Eigen::ArrayXXi bitSequence;
         AbsoluteDecoding decoding;
-        Thumbnail thumbnail;
+        MegarenaThumbnail thumbnail;
 
         void readJSON(rapidjson::Value& document) override;
 
@@ -53,7 +53,7 @@ namespace vernier {
         
         /** Returns the computed thumbnail of the image given to the megarena detector
          */
-        Thumbnail getThumbnail();
+        MegarenaThumbnail getThumbnail();
 
         int getInt(const std::string & attribute) override;
 
