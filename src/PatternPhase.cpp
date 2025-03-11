@@ -422,6 +422,13 @@ namespace vernier {
 
         return sigma;
     }
+    
+    void PatternPhase::showControlImages() {
+        cv::imshow("Found peaks (red = direction 1, green = direction 2)", getPeaksImage());
+        cv::moveWindow("Found peaks (red = direction 1, green = direction 2)", 0, 0);
+        cv::imshow("Phase fringes (red = direction 1, green = direction 2)", getFringesImage());
+        cv::moveWindow("Phase fringes (red = direction 1, green = direction 2)", getNCols(), 0);
+    }
 
     cv::Mat PatternPhase::getPeaksImage() {
         int offsetMin = 10.0;

@@ -105,6 +105,9 @@ namespace vernier {
         /** Returns true if two peaks with sufficient power have been found */
         bool peaksFound();
         
+        /** Displays the images to check the spectrum analyse. */
+        void showControlImages();
+        
         /** Returns an image of the spectrum with the peak locations */
         cv::Mat getPeaksImage();
         

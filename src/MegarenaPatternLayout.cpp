@@ -181,7 +181,7 @@ namespace vernier {
             double x = col * period * 0.5 + 0.25 * period - originX;
             for (int row = rowStart; row < rowStop; row++) {
                 double y = row * period * 0.5 + 0.25 * period - originY;
-                image.at<char>(row - rowStart, col - colStart) = (char) (255 * (getIntensity(x, y) < 0.5));
+                image.at<char>(row - rowStart, col - colStart) = (char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
         if (filename == "") {

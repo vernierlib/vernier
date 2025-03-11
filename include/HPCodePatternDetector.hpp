@@ -62,10 +62,9 @@ namespace vernier {
 
         bool patternFound(int id) override;
 
-        /** Draws all the found patterns in a image (analysis must have been done before) */
-        void draw(cv::Mat& image);
+        void draw(cv::Mat& image) override;
 
-        void showControlImages(int delay = -1) override;
+        void showControlImages() override;
 
     };
 

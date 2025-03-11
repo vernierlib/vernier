@@ -150,7 +150,7 @@ namespace vernier {
     void QRCodeDetector::draw(cv::Mat& image) {
         for (int i = 0; i < codes.size(); i++) {
             codes[i].draw(image);
-            //cv::putText(image, Vernier::toString(i), codes[i].center, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 4);
+            //cv::putText(image, to_tring(i), codes[i].center, cv::FONT_HERSHEY_SIMPLEX, 1, cv::Scalar(0, 0, 255), 4);
         }
     }
 

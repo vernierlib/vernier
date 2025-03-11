@@ -139,7 +139,7 @@ namespace vernier {
         return thumbnail;
     }
 
-    void BitmapPatternDetector::showControlImages(int delay) {
+    void BitmapPatternDetector::showControlImages() {
         PeriodicPatternDetector::showControlImages();
         cv::Mat zoom;
         cv::resize(thumbnail, zoom, cv::Size(thumbnail.rows * THUMBNAIL_ZOOM, thumbnail.cols * THUMBNAIL_ZOOM), THUMBNAIL_ZOOM, THUMBNAIL_ZOOM, cv::INTER_NEAREST);

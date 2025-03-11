@@ -107,7 +107,7 @@ namespace vernier {
     }
     
     std::string PeriodicPatternDetector::toString() {
-        return PatternDetector::toString() + " (period: " + to_string(this->physicalPeriod) + unit + ")";
+        return PatternDetector::toString() + " period: " + to_string(this->physicalPeriod) + unit;
     }
 
     PhasePlane PeriodicPatternDetector::getPlane1() {
@@ -118,15 +118,22 @@ namespace vernier {
         return plane2;
     }
 
-    void PeriodicPatternDetector::showControlImages(int delay) {
-        cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
-        cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
+    void PeriodicPatternDetector::showControlImages() {
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
-        cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getNCols(), 0);
-        if (delay >= 0) {
-            cv::waitKey(delay);
-        }
+        //cv::moveWindow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getNCols(), 0);
+        cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
+        //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
     }
+    
+    void PeriodicPatternDetector::draw(cv::Mat& image) {
+        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, 0);
+        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, 0);
+        double alpha = plane1.getAngle();
+        double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
+
+        Pose(x, y, alpha, pixelSize).draw(image);        
+    }
+
 
     void PeriodicPatternDetector::setPhaseGradientMode(bool isPerspective) {
         this->computePhaseGradient = !isPerspective;

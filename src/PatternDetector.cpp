@@ -10,6 +10,10 @@ namespace vernier {
 
     PatternDetector::PatternDetector() {
         classname = "PatternDetector";
+        description = "";
+        date = "";
+        author = "";
+        unit = "";                        
     }
 
     void PatternDetector::readJSON(rapidjson::Value& document) {
@@ -66,9 +70,18 @@ namespace vernier {
         cv::Mat image = array2image(array);
         compute(image);
     }
+    
+    void PatternDetector::draw(cv::Mat& image) {
+        cv::putText(image, toString(), cv::Point(3, 15), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 255), 2);
+    }
 
     std::string PatternDetector::toString() {
-        return classname;
+        std::string result = classname + " detector";
+        if (description!="") result += " " + description;
+        if (author!="") result += " by " + author;
+        if (date!="") result+= " " + date;
+        result+= " with";
+        return result;
     }
 
     std::string PatternDetector::getAuthor() {

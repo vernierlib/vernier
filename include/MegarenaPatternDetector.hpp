@@ -49,7 +49,12 @@ namespace vernier {
 
         void computeArray(const Eigen::ArrayXXd& pattern) override;
 
-        void showControlImages(int delay = -1) override;
+        void showControlImages() override;
+        
+        std::string toString() override;
+        
+        /** Draws the found patterns in a image (analysis must have been done before) */
+        void draw(cv::Mat& image) override;
         
         /** Returns the computed thumbnail of the image given to the megarena detector
          */

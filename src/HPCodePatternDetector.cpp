@@ -190,14 +190,10 @@ namespace vernier {
     //        }
     //    }
 
-    void HPCodePatternDetector::showControlImages(int delay) {
+    void HPCodePatternDetector::showControlImages() {
         cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
         cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         arrayShow("Snapshot image", snapshot);
-
-        if (delay >= 0) {
-            cv::waitKey(delay);
-        }
     }
 
 }

@@ -26,8 +26,8 @@ namespace vernier {
         this->bitSequence = bitSequence;
         decoding.resize(bitSequence);
     }
-    
-    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize) 
+
+    MegarenaPatternDetector::MegarenaPatternDetector(double physicalPeriod, int codeSize)
     : PeriodicPatternDetector(physicalPeriod) {
         MegarenaBitSequence::generate(codeSize, bitSequence);
         classname = "MegarenaPattern";
@@ -42,7 +42,7 @@ namespace vernier {
 
     void MegarenaPatternDetector::computeAbsolutePose(const Eigen::ArrayXXd& pattern) {
         double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
-        
+
         int length1 = (pattern.rows() / (approxPixelPeriod));
         int length2 = (pattern.cols() / (approxPixelPeriod));
 
@@ -68,8 +68,8 @@ namespace vernier {
         periodShift1 = decoding.findCodePosition(sequence1, MSB1);
         periodShift2 = decoding.findCodePosition(sequence2, MSB2);
 
-//        plane1Save = plane1;
-//        plane2Save = plane2;
+        //        plane1Save = plane1;
+        //        plane2Save = plane2;
 
         if (periodShift1 >= 0 && periodShift2 >= 0) {
             // no change	
@@ -92,7 +92,7 @@ namespace vernier {
             //std::cout<<"code1<0 && code2<0"<<std::endl;
             thumbnail.rotate180();
         }
-        
+
         periodShift1 = std::abs(periodShift1);
         periodShift2 = std::abs(periodShift2);
 
@@ -102,10 +102,29 @@ namespace vernier {
         return thumbnail;
     }
 
-    void MegarenaPatternDetector::showControlImages(int delay) {    
+    void MegarenaPatternDetector::showControlImages() {
         cv::imshow("Thumbnail", this->thumbnail.getMeanDotsImage());
-        cv::moveWindow("Thumbnail", patternPhase.getNCols()*2,0);
+        //cv::moveWindow("Thumbnail", patternPhase.getNCols()*2, 0);
         PeriodicPatternDetector::showControlImages();
+    }
+
+    void MegarenaPatternDetector::draw(cv::Mat& image) {
+        PatternDetector::draw(image);
+
+        double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, 0);
+        double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, 0);
+        double alpha = plane1.getAngle();
+        double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
+        Pose(x, y, alpha, pixelSize).draw(image);
+
+        x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
+        y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
+
+        cv::putText(image, "x: " + to_string(x) +
+                ", y: " + to_string(y) +
+                ", rz: " + to_string(alpha) +
+                ", px: " + to_string(pixelSize),
+                cv::Point(3, 35), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 255), 2);
     }
 
     void MegarenaPatternDetector::readJSON(rapidjson::Value& document) {
@@ -132,7 +151,7 @@ namespace vernier {
             }
         } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {
             int codeSize = document["codeSize"].GetInt();
-            if (codeSize >= 4 && codeSize <=12) {
+            if (codeSize >= 4 && codeSize <= 12) {
                 MegarenaBitSequence::generate(codeSize, bitSequence);
             } else {
                 throw Exception("The file is not a valid megarena pattern file, the code size must between 4 and 12.");
@@ -142,6 +161,10 @@ namespace vernier {
         }
 
         decoding.resize(bitSequence);
+    }
+
+    std::string MegarenaPatternDetector::toString() {
+        return PeriodicPatternDetector::toString() + ", codeSize: " + to_string(MegarenaBitSequence::codeDepth(bitSequence.cols())) + "bits";
     }
 
     int MegarenaPatternDetector::getInt(const std::string & attribute) {

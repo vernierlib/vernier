@@ -66,11 +66,11 @@ namespace vernier {
         /** Returns the possible 3D poses of the pattern in case of ambiguities */
         virtual std::vector<Pose> getAll3DPoses(int id = 0) = 0;
         
-        /** Displays the images to check the pattern detector working. 
-         * The function waits for a key event infinitely when delay == 0, or for 
-         * delay milliseconds when delay > 0, or does not wait when delay < 0 
-         * (default). */
-        virtual void showControlImages(int delay = -1) = 0;
+        /** Displays the images to check the pattern detector working. */
+        virtual void showControlImages() = 0;
+        
+        /** Draws the found patterns in a image (analysis must have been done before) */
+        virtual void draw(cv::Mat& image);
 
         virtual std::string toString();
 

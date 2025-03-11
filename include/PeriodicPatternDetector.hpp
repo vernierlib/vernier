@@ -54,7 +54,9 @@ namespace vernier {
          * orthographic projection) */
         std::vector<Pose> getAll3DPoses(int id = 0) override;
         
-        void showControlImages(int delay = -1) override;
+        void showControlImages() override;
+        
+        void draw(cv::Mat& image) override;
         
         std::string toString() override;
 

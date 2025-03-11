@@ -41,7 +41,7 @@ namespace vernier {
         
         void computeArray(const Eigen::ArrayXXd & array) override;
         
-        void showControlImages(int delay = -1) override;
+        void showControlImages() override;
         
         /** Returns the computed thumbnail of the image 
          */ 
