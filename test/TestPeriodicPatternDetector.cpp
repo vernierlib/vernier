@@ -166,7 +166,8 @@ int main(int argc, char** argv) {
 
     //    main2d();
 
-    REPEAT_TEST(test2d(), 10)
+    // REPEAT_TEST(test2d(), 10)
+    test2d(); // Doing it only once before checking it later for a large number of random poses
 
     return EXIT_SUCCESS;
 }

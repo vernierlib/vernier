@@ -466,12 +466,12 @@ namespace vernier {
         for (int row = 0; row < image.rows; ++row) {
             uchar *dst = image.ptr<uchar>(row);
             for (int col = 0; col < image.cols; ++col) {
-                uchar intensity = (uchar) (40 * std::powf((cos(std::arg(phase1(row, col))) + 1), 2));
+                uchar intensity = (uchar) (40 * std::pow((cos(std::arg(phase1(row, col))) + 1), 2));
                 uchar red = dst[4 * col + 2];
                 if (intensity > red)
                     dst[4 * col + 2] = intensity;
 
-                intensity = (uchar) (40 * std::powf((cos(std::abs(std::arg(phase2(row, col)))) + 1), 2));
+                intensity = (uchar) (40 * std::pow((cos(std::abs(std::arg(phase2(row, col)))) + 1), 2));
                 uchar green = dst[4 * col + 1];
                 if (intensity > green)
                     dst[4 * col + 1] = (uchar) intensity;
