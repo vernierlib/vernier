@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/)
 [![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact)
 [![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib)
-![Build](https://img.shields.io/github/actions/workflow/status/AntoineAndre/vernier_ci/CI%20of%20Vernier)
+[![Build](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml/badge.svg)](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml)
 
 The Vernier Library is an open-source C++ library for pose measurement of calibrated patterns with subpixel resolutions.
 
@@ -21,6 +21,7 @@ The Vernier library is cross-platform and required a C++14 compiler. Some platfo
 * Visual C++ 2019/2022 on Windows (64-bit)
 <!--- * GNU C++ 3.8.x on Cygwin -->
 * Clang 14.0 on Mac OS X (64-bit)
+* gcc 11.4 on Ubuntu 22.04 (64-bit)
 
 Users can build and run the unit tests on their platform/compiler.
 
@@ -57,43 +58,60 @@ Alternatively, you can use VS Code.
 
 With Linux, some dependencies must be installed first using apt-get:
 
-	> sudo apt-get install cmake eigen libtool libmatio
-
+```Shell
+	sudo apt-get install cmake eigen libtool libmatio
+```
 Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
 
-	> sudo apt-get install opencv
+```Shell
+	> sudo apt-get install libopencv-dev
+```
+
+We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
 
 Optionnally you may install FFTW (recommanded for speed):
 
+```Shell
 	> sudo apt-get install fftw
+```
 
 Finally, open a terminal and go to the directory of the package
 
+```Shell
 	> mkdir build
 	> cd build
 	> cmake ..
 	> make
+```
 
 ### OSX instructions
 
 With OSX, some dependencies must be installed first using homebrew:
 
+```Shell
 	% brew install autoconfig automake cmake eigen libtool libmatio
+```
 
 Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
 
+```Shell
 	% brew install opencv
+```
 
 Optionnally you may install FFTW (recommanded for speed):
 
+```Shell
 	% brew install fftw
+```
 
 Finally, open a terminal and go to the directory of the package
 
+```Shell
 	% mkdir build
 	% cd build
 	% cmake ..
 	% make
+```
 
 ## Getting started
 
