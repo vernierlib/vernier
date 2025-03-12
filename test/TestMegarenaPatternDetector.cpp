@@ -29,7 +29,7 @@ void main1() {
 
 }
 
-void example2d()
+void example2d(){
 // Loading the layout
     string filename = "megarenaPattern.json";
     PatternLayout* layout = Layout::loadFromJSON(filename);
@@ -40,8 +40,8 @@ void example2d()
     double alpha = 0.2;
     double pixelSize = 2.0;
     Pose patternPose = Pose(x, y, alpha, pixelSize);
-    cout << "------------------------------------------------------------------" << endl;
-    cout << "Pattern pose:   " << patternPose.toString() << endl;
+    std::cout << "------------------------------------------------------------------" << endl;
+    std::cout << "Pattern pose:   " << patternPose.toString() << endl;
 
     // Rendering
     ArrayXXd array(512, 512);
@@ -108,6 +108,8 @@ int example3d() {
 
     // Showing image and is spectrum
     detector->showControlImages();
+
+    return 0;
 }
 
 /** This example captures an image of a megarena pattern and estimates its 2D pose 
@@ -149,7 +151,7 @@ int exampleCapture() {
 
 
 
-void example3d() {
+void example3d_2() {
     
             // Constructing the layout
             double physicalPeriod = randomDouble(5.0, 10.0);
