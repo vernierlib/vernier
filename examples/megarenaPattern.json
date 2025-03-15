@@ -3,8 +3,8 @@
         "description": "Example of 12-bits megarena pattern",
         "unit": "µm",
         "codeDepth": 12,
-        "period": 140.000000000000000,
-        "regionOfInterest": [1000.000000000000000, 1000.000000000000000, 3000.000000000000000, 2000.000000000000000 ],
+        "period": 14.000000000000000,
+        "regionOfInterest": [0.0, 0.0, 3000.000000000000000, 2000.000000000000000 ],
         "author": "FEMTO-ST",
         "date": "2022"
     }

@@ -13,22 +13,21 @@ int main() {
     string filename = "megarenaPattern.json";
 
     // Loading the layout
-    PatternLayout* layout = Layout::loadFromJSON(filename);
+    unique_ptr<PatternLayout> layout(Layout::loadFromJSON(filename));
     cout << "Pattern layout: " << layout->toString() << endl;
 
     // Setting the pose (could be 3D)
-    double x = -6000.0;
-    double y = -8000.0;
-    double alpha = 0.2;
-    double pixelSize = 15.0;
+    double x = -6000.0; // µm
+    double y = -8000.0; // µm
+    double alpha = 0.2; // rad
+    double pixelSize = 2.0; // µm
     Pose patternPose = Pose(x, y, alpha, pixelSize);
 
     // Rendering image
-    ArrayXXd array(512, 512);
-    layout->renderOrthographicProjection(patternPose, array);
+    cv::Mat image(512, 512, CV_64F);
+    layout->renderOrthographicProjection(patternPose, image);
 
     // Showing the image
-    Mat image = array2image(array);
     imshow(filename, image);
     waitKey();
 

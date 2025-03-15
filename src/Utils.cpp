@@ -17,17 +17,17 @@ namespace vernier {
         cv::line(image, cv::Point(cx, cy), cv::Point(cx, cy + cy / 5), cv::Scalar(0, 255, 0));
     }
 
-    cv::Mat array2image(const Eigen::ArrayXXd & array) {
+    void array2image8UC4(const Eigen::ArrayXXd & array, cv::Mat & image) {
         Eigen::MatrixXd matrix;
         matrix = (array.array()-array.minCoeff())/array.maxCoeff();
 
         cv::Mat image64d;
         cv::eigen2cv(matrix, image64d);
-        cv::Mat image8u(image64d.rows, image64d.cols, CV_8UC4);
+        image.create(image64d.rows, image64d.cols, CV_8UC4);
 
         for (int row = 0; row < image64d.rows; ++row) {
             double* src = image64d.ptr<double>(row);
-            uchar* dst = image8u.ptr<uchar>(row);
+            uchar* dst = image.ptr<uchar>(row);
             for (int col = 0; col < image64d.cols; ++col) {
                 uchar value;
                 if (src[col] >= 1.0) {
@@ -41,16 +41,15 @@ namespace vernier {
                 dst[4 * col + 3] = (uchar) 255;
             }
         }
-        return image8u;
     }
 
-    cv::Mat array2image(const Eigen::ArrayXXcd & array) {
+    void array2image8UC4(const Eigen::ArrayXXcd & array, cv::Mat & image) {
         Eigen::ArrayXXd spectrumAbs;
         spectrumAbs = array.abs();
-        return array2image(spectrumAbs);
+        array2image8UC4(spectrumAbs, image);
     }
 
-    Eigen::ArrayXXd image2array(const cv::Mat & image) {
+    void image2arrayXXd(const cv::Mat & image, Eigen::ArrayXXd & array) {
         cv::Mat grayImage;
         if (image.channels() > 1) {
             cv::cvtColor(image, grayImage, cv::COLOR_BGR2GRAY);
@@ -60,36 +59,20 @@ namespace vernier {
 
         grayImage.convertTo(grayImage, CV_64F);
         cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
-        Eigen::MatrixXd patternMatrix;
-        cv::cv2eigen(grayImage, patternMatrix);
-        Eigen::ArrayXXd patternArray;
-        patternArray = patternMatrix.array();
-        return patternArray;
+        cv2eigen(grayImage, array);
     }
 
-    void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage) {
-        if (image.channels() > 1) {
-            cv::cvtColor(image, grayscaleImage, cv::COLOR_BGR2GRAY);
-            if (grayscaleImage.depth() != CV_8U) {
-                grayscaleImage.convertTo(grayscaleImage, CV_8U, 255);
-            }
-        } else {
-            if (image.depth() != CV_8U) {
-                image.convertTo(grayscaleImage, CV_8U, 255);
-            } else {
-                grayscaleImage = image;
-            }
-        }
-    }
 
     void arrayShow(const std::string windowTitle, const Eigen::ArrayXXd & array) {
-        cv::Mat image = array2image(array);
+        cv::Mat image;
+        array2image8UC4(array, image);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
     }
 
     void arrayShow(const std::string windowTitle, const Eigen::ArrayXXcd & array) {
-        cv::Mat image = array2image(array);
+        cv::Mat image;
+        array2image8UC4(array, image);
         drawCameraFrame(image);
         cv::imshow(windowTitle, image);
     }

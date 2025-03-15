@@ -42,6 +42,8 @@ namespace vernier {
 
 #define PRINT(variable) { std::cout << ">>> "<< #variable << " at line " << __LINE__ << " = " << variable << std::endl; }
 
-#define SHOW(variable) { cv::imshow(#variable, variable); }
+#define IMSHOW(variable) { cv::imshow(#variable, variable); }
+
+#define ARSHOW(variable) { arrayShow(#variable, variable); }
 
 #endif

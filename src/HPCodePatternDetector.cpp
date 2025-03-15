@@ -10,6 +10,7 @@ namespace vernier {
 
     HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int numberHalfPeriods, int snapshotSize)
     : PeriodicPatternDetector(physicalPeriod) {
+        classname = "HPCodePattern";
         resize(physicalPeriod, numberHalfPeriods, snapshotSize);
     }
 
@@ -171,6 +172,7 @@ namespace vernier {
     }
 
     void HPCodePatternDetector::draw(cv::Mat & image) {
+        PatternDetector::draw(image);
         for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
             double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
             it->second.draw(image, length, to_string(it->first));

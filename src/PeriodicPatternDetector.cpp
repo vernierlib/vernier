@@ -124,6 +124,8 @@ namespace vernier {
     }
     
     void PeriodicPatternDetector::draw(cv::Mat& image) {
+        PatternDetector::draw(image);
+        
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, 0);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, 0);
         double alpha = plane1.getAngle();

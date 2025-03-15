@@ -315,6 +315,12 @@ namespace vernier {
         }
         file.close();
     }
+    
+    void PatternLayout::renderOrthographicProjection(Pose pose, cv::Mat & outputImage, Eigen::Vector2d principalPoint) {
+        Eigen::ArrayXXd array(outputImage.rows, outputImage.cols);
+        renderOrthographicProjection(pose, array, principalPoint);
+        eigen2cv(array, outputImage);         
+    }
 
     void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {

@@ -13,7 +13,7 @@ namespace vernier {
         description = "";
         date = "";
         author = "";
-        unit = "";
+        unit = "um";
     }
 
     void PatternDetector::readJSON(const rapidjson::Value& document) {
@@ -103,7 +103,7 @@ namespace vernier {
     }
 
     std::string PatternDetector::toString() {
-        std::string result = classname + " detector";
+        std::string result = classname;
         if (description != "") result += " " + description;
         if (author != "") result += " by " + author;
         if (date != "") result += " " + date;

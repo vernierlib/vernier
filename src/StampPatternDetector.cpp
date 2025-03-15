@@ -112,6 +112,7 @@ namespace vernier {
     }
 
     void StampPatternDetector::draw(cv::Mat & image) {
+        PatternDetector::draw(image);
         detector.draw(image);
         for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
             it->second.draw(image, snapshot.cols() / 2, to_string(it->first));

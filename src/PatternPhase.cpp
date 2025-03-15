@@ -429,7 +429,8 @@ namespace vernier {
         double max = spectrumShifted.block(spectrumShifted.rows() / 2 - offsetMin / 2, spectrumShifted.cols() / 2 - offsetMin / 2, offsetMin, offsetMin).abs().maxCoeff();
         spectrumShifted.block(spectrumShifted.rows() / 2 - offsetMin / 2, spectrumShifted.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) /= max;
 
-        cv::Mat image = array2image(spectrumShifted);
+        cv::Mat image;
+        array2image8UC4(spectrumShifted, image);
         
         if (pixelPeriod > 0.0) {
             double frequenceColApprox = ((double) spectrumShifted.cols() / (double) pixelPeriod);
@@ -455,7 +456,8 @@ namespace vernier {
     }
 
     cv::Mat PatternPhase::getFringesImage() {
-        cv::Mat image = array2image(spatial);
+        cv::Mat image;
+        array2image8UC4(spatial, image);
 
         for (int row = 0; row < image.rows; ++row) {
             uchar *dst = image.ptr<uchar>(row);
@@ -489,7 +491,8 @@ namespace vernier {
     }
 
     cv::Mat PatternPhase::getImage() {
-        cv::Mat image = array2image(spatial);
+        cv::Mat image;
+        array2image8UC4(spatial, image);
         return image;
     }
 

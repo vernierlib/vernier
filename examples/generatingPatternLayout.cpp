@@ -10,7 +10,7 @@ int main() {
     string filename = "megarenaPattern";
     
     // Loading the layout
-    PatternLayout* layout = Layout::loadFromJSON(filename + ".json");
+    unique_ptr<PatternLayout> layout(Layout::loadFromJSON(filename + ".json"));
     cout << "Pattern layout: " << layout->toString() << endl;
 
     // Writing the layout in a PNG file
@@ -21,5 +21,8 @@ int main() {
     layout->saveToSVG(filename + ".svg");
     cout << filename + ".svg generation completed." << endl;
     
-    delete layout;
+    // Writing the layout in a OASIS file
+    layout->saveToOASIS(filename + ".oas");
+    cout << filename + ".oas generation completed." << endl;
+    
 }

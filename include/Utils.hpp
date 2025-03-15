@@ -9,10 +9,6 @@
 
 #include "Common.hpp"
 
-namespace Eigen {
-    typedef Array< unsigned char, Dynamic, Dynamic > ArrayXXu;
-}
-
 namespace vernier {
 
     const double PI = 3.14159265358979323846264338327950288419716939937510;
@@ -26,15 +22,7 @@ namespace vernier {
     }
 
     void drawCameraFrame(cv::Mat & image);
-
-    cv::Mat array2image(const Eigen::ArrayXXd & array);
-
-    cv::Mat array2image(const Eigen::ArrayXXcd & array);
-
-    Eigen::ArrayXXd image2array(const cv::Mat & image);
-
-    void imageTo8UC1(const cv::Mat& image, cv::Mat& grayscaleImage);
-
+    
     void arrayShow(const std::string windowTitle, const Eigen::ArrayXXd & array);
 
     void arrayShow(const std::string windowTitle, const Eigen::ArrayXXcd & array);
@@ -50,7 +38,6 @@ namespace vernier {
     template<typename _Tp, int _rows, int _cols, int _options, int _maxRows, int _maxCols>  inline
     void cv2eigen(const cv::Mat& src, Eigen::Array<_Tp, _rows, _cols, _options, _maxRows, _maxCols>& dst) {
         dst.resize(src.rows, src.cols);
-        //CV_DbgAssert(src.rows == _rows && src.cols == _cols);
         if (!(dst.Flags & Eigen::RowMajorBit)) {
             const cv::Mat _dst(src.cols, src.rows, cv::traits::Type<_Tp>::value,
                     dst.data(), (size_t) (dst.outerStride() * sizeof (_Tp)));
@@ -80,6 +67,12 @@ namespace vernier {
             _src.copyTo(dst);
         }
     }
+    
+    void array2image8UC4(const Eigen::ArrayXXd & array, cv::Mat & image);
+    
+    void array2image8UC4(const Eigen::ArrayXXcd & array, cv::Mat & image);
+
+    void image2arrayXXd(const cv::Mat & image, Eigen::ArrayXXd & array);
 
 }
 

@@ -4,27 +4,23 @@ using namespace vernier;
 using namespace cv;
 using namespace std;
 
-/** This example shows how to estimate the pose of a megarena pattern in an image.
+/** This example shows how to estimate the 3D pose of a megarena pattern in an image.
  * 
- * The method is described in the following papers: 
+ * The method is described in the following paper: 
  * 
- * [1] A. N. Andre, P. Sandoz, B. Mauze, M. Jacquot, and G. J. Laurent, 
- * Sensing One Nanometer over Ten Centimeters: A Micro-Encoded Target for Visual 
- * In-Plane Position Measurement, IEEE/ASME Transactions on Mechatronics, 2020.
- * 
- * [2] A. N. Andre, P. Sandoz, B. Mauze, M. Jacquot, and G. J. Laurent, 
- * Robust phase-based decoding for absolute (X, Y, Θ) positioning by vision, 
- * IEEE Transactions on Instrumentation and Measurement, 2020.
+ * [1] A. N. André, P. Sandoz, M. Jacquot, and G. J. Laurent, Pose Measurement 
+ * at Small Scale by Spectral Analysis of Periodic Patterns, International Journal 
+ * of Computer Vision, 2022.
  */
 int main() {
     
     // Loading the image
-    string filename = "megarenaPatternImage_12bits_9um.jpg";
+    string filename = "megarenaPatternImage_8bits_140um.jpg";
     Mat image = cv::imread(filename);
 
     // Detecting the pattern and estimating its pose
-    double physicalPeriod = 9; // µm
-    int codeSize = 12; // bits
+    double physicalPeriod = 140; // µm
+    int codeSize = 8; // bits
     MegarenaPatternDetector detector(physicalPeriod, codeSize);
     detector.compute(image);
      

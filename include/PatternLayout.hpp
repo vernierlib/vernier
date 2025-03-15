@@ -100,6 +100,8 @@ namespace vernier {
          */
         void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
+        void renderOrthographicProjection(Pose pose, cv::Mat & outputImage, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+        
         /** Renders an image with a perspective projection defined by the pinhole camera model:
          * 
          *        [ u ]   [ f/s  0  cx  0 ]         [ x ]
@@ -116,6 +118,8 @@ namespace vernier {
          * 
          */
         void renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+        
+        void renderPerspectiveProjection(Pose pose, cv::Mat & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         virtual std::string toString();
         
