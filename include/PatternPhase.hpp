@@ -42,7 +42,12 @@ namespace vernier {
         Eigen::ArrayXXd unwrappedPhase1, unwrappedPhase2;
         
         PhasePlane plane1, plane2;
+        
+        void compute();
+        
+        void computeWeakPerspective(int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
 
+        
     public:
         
         double MIN_PEAK_POWER = 0.00001;
@@ -69,30 +74,21 @@ namespace vernier {
          *	\param image: image of a pattern in an ArrayXXd form
          */
         void compute(const Eigen::ArrayXXd& image);
-        
-        /** Computes the phase planes of a given pattern 
-         *
-         *	\param image: image of a pattern in an ArrayXXcd form
-         */
-        void compute(const Eigen::ArrayXXcd& image);
-        
-        void compute(const cv::Mat& image);
-        
+              
         /** Computes the phase gradients to find the sign of the out-of-plane 
-         * angles (works only with perspective projection)
+         * angles (works only with slight perspective projection)
          */
         void computePhaseGradients(int& betaSign, int& gammaSign);
 
-        void computeWeakPerspective(Eigen::ArrayXXd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
+//        void computeWeakPerspective(Eigen::ArrayXXd& image, int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
 
-        void computeWeakPerspective(Eigen::ArrayXXcd& patternArray, int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
-
+        
 
         /** Computes the phase retrieving with a given QRCode and returns the phase at the center of the pattern along the two directions
          *
          *	\param patternArray: given pattern in an ArrayXXcd form
          */
-        void computeQRCode(Eigen::ArrayXXcd& patternArray); // a supprimer ?
+//        void computeQRCode(Eigen::ArrayXXcd& patternArray); // a supprimer ?
 
         /** Computes a firstly given image to retrieve all the parameters of the positioning method
          *	Returns the sigma value that best suit the filtering of the spectrum peaks
@@ -100,7 +96,7 @@ namespace vernier {
          *	\param patternArray: given pattern in an ArrayXXcd form
          *	\param pixelPeriod: referenced pixelicPeriod that will be returned
          */
-        double computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod); // a supprimer ?
+//        double computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod); // a supprimer ?
 
         /** Returns true if two peaks with sufficient power have been found */
         bool peaksFound();

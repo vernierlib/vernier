@@ -21,57 +21,61 @@ namespace vernier {
      */
     class PatternDetector {
     protected:
+        
         std::string classname;
+        cv::Mat image32F;
+        cv::Mat image64F;
+        cv::Mat image8U;
+        Eigen::ArrayXXd array;
+
+        virtual void readJSON(const rapidjson::Value& document);
+
+        virtual void computeImage() = 0;
+
+    public:
+
+        /** modifiable variables */
         std::string description;
         std::string date;
         std::string author;
         std::string unit;
 
-        virtual void readJSON(rapidjson::Value& document);
-
-        friend class Detector;
-
-    public:
-
         /** Default constructor */
         PatternDetector();
 
         /** Initializes a pattern detector from a JSON file */
-        void loadFromJSON(std::string filename);
+        void loadFromJSON(const std::string filename);
 
-        /** Estimates the poses of the patterns in the image stored in a char array 
-         *
-         * @param data: pointer to the data of the pattern
-         * @param rows: number of rows of the given data array
-         * @param cols: number of cols of the given data array
+        /** Detects and estimates the poses of the patterns in the image stored in a OpenCV Mat. 
+         * The image must be 8-bit or 32-bit floating-point. */
+        void compute(const cv::Mat & image);
+
+        /** Detects and estimates the poses of the patterns in an image stored in a double array          
          */
-        void compute(char* data, int rows, int cols);
-
-        /** Estimates the poses of the patterns in the image stored in a OpenCV Mat */
-        virtual void compute(const cv::Mat & image);
-
-        /** Estimates the poses of the patterns in an image stored in a double array          
-         */
-        virtual void computeArray(const Eigen::ArrayXXd & array);
+        void compute(const Eigen::ArrayXXd & array);
 
         /** Returns true if patterns have been detected and localized */
-        virtual bool patternFound(int id = 0) = 0;
+        virtual bool patternFound(int id = -1) = 0;
         
+        /** Returns the number of detected patterns */
+        virtual int patternCount() = 0;
+
         /** Returns the 2D pose of the pattern */
-        virtual Pose get2DPose(int id = 0) = 0;
+        virtual Pose get2DPose(int id = -1) = 0;
 
         /** Returns the most likely 3D pose of the pattern */
-        virtual Pose get3DPose(int id = 0) = 0;
+        virtual Pose get3DPose(int id = -1) = 0;
 
         /** Returns the possible 3D poses of the pattern in case of ambiguities */
-        virtual std::vector<Pose> getAll3DPoses(int id = 0) = 0;
-        
+        virtual std::vector<Pose> getAll3DPoses(int id = -1) = 0;
+
         /** Displays the images to check the pattern detector working. */
         virtual void showControlImages() = 0;
-        
+
         /** Draws the found patterns in a image (analysis must have been done before) */
         virtual void draw(cv::Mat& image);
 
+        /** Returns a string describing the detector */        
         virtual std::string toString();
 
         std::string getAuthor();
@@ -111,6 +115,7 @@ namespace vernier {
         /** Sets the attribute value corresponding to the given name */
         virtual void setString(const std::string & attribute, std::string value);
 
+        friend class Detector;
     };
 
 }

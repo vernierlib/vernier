@@ -13,7 +13,7 @@ namespace vernier {
         int sizeY = wrappedPhase.rows();
         int origineX = (sizeX / 2);
         int origineY = (sizeY / 2);
- 
+
         int phaseIterationX, phaseIterationY;
         double phaseValuePrevX, phaseValuePrevY, phaseValueNextX, phaseValueNextY;
         double difference;
@@ -181,4 +181,40 @@ namespace vernier {
             wrappedPhase(row + 1, sizeX - 1) = phaseValueNextY + phaseIterationY * 2 * PI;
         }
     }
+
+    Eigen::ArrayXXd hannWindow(int size, int exposure) {
+        ASSERT_MSG(size > 0, "The size of the window must be positive.")
+        Eigen::ArrayXXd window(size, size);
+        int radius = size / 2;
+        for (int col = -radius; col < radius; col++) {
+            for (int row = -radius; row < radius; row++) {
+                double distanceToCenter = sqrt(row * row + col * col);
+                if (distanceToCenter < radius) {
+                    window(radius + row, radius + col) = (1 + cos(PI * pow(distanceToCenter, exposure) / pow(radius, exposure))) / 2;
+                } else {
+                    window(radius + row, radius + col) = 0.0;
+                }
+            }
+        }
+        return window;
+    };
+
+    void takeSnapshot(int x, int y, int size, const Eigen::ArrayXXd & array, Eigen::ArrayXXd & snapshot) {
+        snapshot.resize(size, size);
+        int radius = size / 2;
+        for (int col = -radius; col < radius; col++) {
+            for (int row = -radius; row < radius; row++) {
+                if (y + row >= 0 && y + row < array.rows() && x + col >= 0 && x + col < array.cols()) {
+                    snapshot(radius + row, radius + col) = array(y + row, x + col);
+                } else {
+                    snapshot(radius + row, radius + col) = 0.0;
+                }
+
+            }
+        }
+    }
+
+
+
+
 }

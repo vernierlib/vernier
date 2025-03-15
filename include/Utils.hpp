@@ -47,8 +47,40 @@ namespace vernier {
 
     const std::string currentDateTime();
 
-}
+    template<typename _Tp, int _rows, int _cols, int _options, int _maxRows, int _maxCols>  inline
+    void cv2eigen(const cv::Mat& src, Eigen::Array<_Tp, _rows, _cols, _options, _maxRows, _maxCols>& dst) {
+        dst.resize(src.rows, src.cols);
+        //CV_DbgAssert(src.rows == _rows && src.cols == _cols);
+        if (!(dst.Flags & Eigen::RowMajorBit)) {
+            const cv::Mat _dst(src.cols, src.rows, cv::traits::Type<_Tp>::value,
+                    dst.data(), (size_t) (dst.outerStride() * sizeof (_Tp)));
+            if (src.type() == _dst.type())
+                transpose(src, _dst);
+            else if (src.cols == src.rows) {
+                src.convertTo(_dst, _dst.type());
+                transpose(_dst, _dst);
+            } else
+                cv::Mat(src.t()).convertTo(_dst, _dst.type());
+        } else {
+            const cv::Mat _dst(src.rows, src.cols, cv::traits::Type<_Tp>::value,
+                    dst.data(), (size_t) (dst.outerStride() * sizeof (_Tp)));
+            src.convertTo(_dst, _dst.type());
+        }
+    }
 
-#define PRINT(variable) { std::cout << "  "<< #variable << " at line " << __LINE__ << " = " << variable << std::endl; }
+    template<typename _Tp, int _rows, int _cols, int _options, int _maxRows, int _maxCols>  inline
+    void eigen2cv(const Eigen::Array<_Tp, _rows, _cols, _options, _maxRows, _maxCols>& src, cv::Mat & dst) { 
+        if (!(src.Flags & Eigen::RowMajorBit)) {
+            cv::Mat _src(src.cols(), src.rows(), cv::traits::Type<_Tp>::value,
+                    (void*) src.data(), src.outerStride() * sizeof (_Tp));
+            transpose(_src, dst);
+        } else {
+            cv::Mat _src(src.rows(), src.cols(), cv::traits::Type<_Tp>::value,
+                    (void*) src.data(), src.outerStride() * sizeof (_Tp));
+            _src.copyTo(dst);
+        }
+    }
+
+}
 
 #endif

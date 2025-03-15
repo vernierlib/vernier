@@ -20,7 +20,7 @@ int main() {
 
     // Analysing the spectrum of the image
     PatternPhase patternPhase;
-    patternPhase.compute(image);
+    patternPhase.compute(image2array(image));
     
     // Displaying the phase planes if two peaks have been found
     if (patternPhase.peaksFound()) {

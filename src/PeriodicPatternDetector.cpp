@@ -10,9 +10,7 @@ namespace vernier {
 
     PeriodicPatternDetector::PeriodicPatternDetector(double physicalPeriod)
     : PatternDetector() {
-        if (physicalPeriod < 0.0) {
-            throw Exception("The period must be positive.");
-        }
+        ASSERT_MSG(physicalPeriod > 0.0 , "The period must be positive.");
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
         computePhaseGradient = false;
@@ -20,7 +18,7 @@ namespace vernier {
         periodShift2 = 0;
     }
 
-    void PeriodicPatternDetector::readJSON(rapidjson::Value& document) {
+    void PeriodicPatternDetector::readJSON(const rapidjson::Value& document) {
         PatternDetector::readJSON(document);
 
         if (document.HasMember("period") && document["period"].IsDouble()) {
@@ -30,11 +28,7 @@ namespace vernier {
         }
     }
 
-    void PeriodicPatternDetector::resize(int nRows, int nCols) {
-        patternPhase.resize(nRows, nCols);
-    }
-
-    void PeriodicPatternDetector::computeArray(const Eigen::ArrayXXd& array) {
+    void PeriodicPatternDetector::computeImage() {
         patternPhase.compute(array);
 
         plane1 = patternPhase.getPlane1();
@@ -66,6 +60,10 @@ namespace vernier {
 
     bool PeriodicPatternDetector::patternFound(int id) {
         return patternPhase.peaksFound();
+    }
+    
+    int PeriodicPatternDetector::patternCount() {
+        return (int)patternPhase.peaksFound();
     }
 
     std::vector<Pose> PeriodicPatternDetector::getAll3DPoses(int id) {

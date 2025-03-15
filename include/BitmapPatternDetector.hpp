@@ -8,6 +8,7 @@
 #define BITMAPPATTERNDETECTOR_HPP
 
 #include "PeriodicPatternDetector.hpp"
+#include "BitmapThumbnail.hpp"
 
 namespace vernier {
 
@@ -16,39 +17,36 @@ namespace vernier {
     class BitmapPatternDetector : public PeriodicPatternDetector {
     protected:
 
-        cv::Mat thumbnail;
+        int maxAngle;
+        BitmapThumbnail bitmapThumbnail;
         std::vector<cv::Mat> bitmap;
 
-        void readJSON(rapidjson::Value& document) override;
+        void readJSON(const rapidjson::Value& document) override;
 
-        void computeAbsolutePose(const Eigen::ArrayXXd & pattern);
-        
-        void computeThumbnail(const Eigen::ArrayXXd & array, double deltaPhase);
+        void computeAbsolutePose();
+
+        void computeImage() override;
 
     public:
-        
-        int THUMBNAIL_ZOOM = 5;
 
         /** Constructs an empty detector for bitmap patterns */
         BitmapPatternDetector();
-        
+
         /** Constructs a detector for bitmap patterns with a specific image
          *
          *	\param physicalPeriod: physical period of the pattern used to build it
-         *	\param filename: name if the image file
+         *	\param filename: name of the bitmap file
          */
-        BitmapPatternDetector(double physicalPeriod, const std::string filename);
-        
-        void computeArray(const Eigen::ArrayXXd & array) override;
-        
+        BitmapPatternDetector(double physicalPeriod, const std::string & filename);
+
         void showControlImages() override;
-        
+
         /** Returns the computed thumbnail of the image 
-         */ 
+         */
         cv::Mat getThumbnail();
 
         int getInt(const std::string & attribute) override;
-        
+
         void* getObject(const std::string & attribute) override;
 
     };

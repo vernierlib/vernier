@@ -19,7 +19,7 @@ void main1() {
     //    HPCodePatternLayout layout(2, 19);
     //    layout.saveToPNG("data/HPCode37.png");
 
-    PeriodicPatternDetector detector(2);//, "data/HPCode37.png");
+    BitmapPatternDetector detector(2, "data/HPCode37.png");
     cout << detector.toString() << endl;
 
     cv::Mat image = cv::imread("data/QRCode/code18_270.jpg");
@@ -78,7 +78,7 @@ void test2d(const string & filename) {
     
     // Detecting
     BitmapPatternDetector detector(physicalPeriod, filename);
-    detector.computeArray(array);
+    detector.compute(array);
 
     // Printing results 
     Pose estimatedPose;
@@ -109,7 +109,6 @@ int main(int argc, char** argv) {
     REPEAT_TEST(test2d("data/HPCode37.png"), 20);
     
     REPEAT_TEST(test2d("data/femto117x45.png"), 20);
-    
 
     return EXIT_SUCCESS;
 }

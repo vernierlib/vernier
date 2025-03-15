@@ -39,7 +39,7 @@ void main2d() {
     detector = Detector::loadFromJSON(filename);
     detector->setDouble("sigma", 1);
     detector->setDouble("cropFactor", 0.4);
-    detector->computeArray(array);
+    detector->compute(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
@@ -148,7 +148,7 @@ void test2d() {
     // Detecting and estimating the pose of the pattern
     PatternDetector* detector;
     detector = new PeriodicPatternDetector(physicalPeriod);
-    detector->computeArray(array);
+    detector->compute(array);
 
     // Printing results 
     Pose estimatedPose;

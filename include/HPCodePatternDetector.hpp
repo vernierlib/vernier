@@ -17,50 +17,49 @@ namespace vernier {
     class HPCodePatternDetector : public PeriodicPatternDetector {
     protected:
 
-        Eigen::ArrayXXcd snapshot;
+        Eigen::ArrayXXd window;
+        Eigen::ArrayXXd snapshot;
         int numberHalfPeriods;
         int snapshotSize;
 
-        void readJSON(rapidjson::Value& document)  override;
-
-        void takeSnapshot(int x, int y, cv::Mat image);
+        void readJSON(const rapidjson::Value& document)  override;
+        
+        void computeImage() override;
 
         unsigned long readNumber(QRCode& code, const cv::Mat& image, double dotSize);
 
     public:
 
         QRCodeDetector detector;
-        //PatternPhase patternPhase;
-
+        
         /** Map of detected codes (key map = code id) */
-        std::map<int, Pose> codes;
+        std::map<int, Pose> markers;
 
         /** Constructs a pose estimator for periodic HP codes
          *
          *	\param physicalPeriod: physical period between the dots of the HP code
-         *	\param snapshotSize: maximal size of the HP code in pixels
          *	\param numberHalfPeriods: number of half periods contained in the HP along one direction.
+         *	\param snapshotSize: maximal size of the HP code in pixels
          */
-        HPCodePatternDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 37);
+        HPCodePatternDetector(double physicalPeriod = 1.0, int numberHalfPeriods = 37, int snapshotSize = 128);
 
         /** Prepares the different required objects for processing
          *
          *	\param physicalPeriod: physical period between the dots of the HP code
-         *	\param snapshotSize: maximal size of the HP code in pixels
          *	\param numberHalfPeriods: number of half periods contained in the HP along one direction.
+         *	\param snapshotSize: maximal size of the HP code in pixels
          */
-        void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
+        void resize(double physicalPeriod, int numberHalfPeriods, int snapshotSize);
 
-        /** Estimate the pose of all HP codes in an image */
-        void compute(const cv::Mat& image) override;
+        Pose get2DPose(int id = -1) override;
 
-        Pose get2DPose(int id) override;
+        Pose get3DPose(int id = -1) override;
 
-        Pose get3DPose(int id) override;
+        std::vector<Pose> getAll3DPoses(int id = -1) override;
 
-        std::vector<Pose> getAll3DPoses(int id) override;
-
-        bool patternFound(int id) override;
+        bool patternFound(int id = -1) override;
+        
+        int patternCount() override;
 
         void draw(cv::Mat& image) override;
 

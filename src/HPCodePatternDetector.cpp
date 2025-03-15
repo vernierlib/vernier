@@ -8,104 +8,89 @@
 
 namespace vernier {
 
-    HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int snapshotSize, int numberHalfPeriods)
+    HPCodePatternDetector::HPCodePatternDetector(double physicalPeriod, int numberHalfPeriods, int snapshotSize)
     : PeriodicPatternDetector(physicalPeriod) {
-        resize(physicalPeriod, snapshotSize, numberHalfPeriods);
+        resize(physicalPeriod, numberHalfPeriods, snapshotSize);
     }
 
-    void HPCodePatternDetector::resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods) {
-        ASSERT(snapshotSize % 2 == 0);
-        ASSERT(physicalPeriod > 0.0);
-        ASSERT((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1));
+    void HPCodePatternDetector::resize(double physicalPeriod, int numberHalfPeriods, int snapshotSize) {
+        ASSERT_MSG(physicalPeriod > 0.0 , "The period must be positive.");
+        ASSERT_MSG((numberHalfPeriods > 0) && (numberHalfPeriods % 4 == 1), "The size s of the HPCode must be s = 4k+1.");
         this->snapshotSize = snapshotSize;
         this->physicalPeriod = physicalPeriod;
         this->numberHalfPeriods = numberHalfPeriods;
         snapshot.resize(snapshotSize, snapshotSize);
         patternPhase.resize(snapshotSize, snapshotSize);
+        window = hannWindow(snapshotSize, 1);
     }
 
-    void HPCodePatternDetector::readJSON(rapidjson::Value& document) {
+    void HPCodePatternDetector::readJSON(const rapidjson::Value& document) {
         throw Exception("HPCodePatternDetector::readJSON is not implemented yet.");
     }
 
-    void HPCodePatternDetector::takeSnapshot(int x, int y, cv::Mat image) {
-        snapshot.setConstant(0);
-        if (image.channels() > 1) {
-            cv::cvtColor(image, image, cv::COLOR_BGR2GRAY);
-        }
+    void HPCodePatternDetector::computeImage() {
 
-        cv::Mat snap64f;
-        image.convertTo(snap64f, CV_64FC1);
-        snap64f /= 256;
-        int radius = snapshotSize / 2;
-        for (int col = -radius; col < radius; col++) {
-            for (int row = -radius; row < radius; row++) {
-                double distanceToCenter = sqrt((row + 0.5) * (row + 0.5) + (col + 0.5) * (col + 0.5)); // +0.5 A VERIFIER MAIS PAS CRITIQUE 
-                double hanning = (1 + cos(PI * distanceToCenter / radius)) / 2;
-                if (distanceToCenter < radius && y + row > 0 && x + row > 0 && y + row < snap64f.rows && x + row < snap64f.cols) {
-                    snapshot.real()(radius + row, radius + col) = hanning * snap64f.at<double>(y + row, x + col);
-                }
-            }
-        }
-    }
+        detector.compute(image8U);
 
-    void HPCodePatternDetector::compute(const cv::Mat& image) {
-
-        detector.compute(image);
-
+        markers.clear();
         for (int i = 0; i < detector.codes.size(); i++) {
 
             QRCode code = detector.codes[i];
-
-            if ((int) code.getRadius()*2 > snapshotSize) {
-                throw Exception("The HPCode is too large for pose estimation: increase the snapshot size.");
+            
+            int diameter = (int) (2 * code.getRadius());
+            if (snapshot.cols() < diameter) {
+                std::cout << "The HPCode is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
             }
-            if ((int) code.getRadius() < numberHalfPeriods) {
-                throw Exception("The HPCode is too tiny for pose estimation: increase the picture quality size.");
+            if (2 * diameter < numberHalfPeriods) {
+                std::cout << "The HPCode is too tiny for pose estimation: increase the picture quality size." << std::endl;
             }
 
             int centerX = (int) code.center.x;
             int centerY = (int) code.center.y;
-            takeSnapshot(centerX, centerY, image);
-            patternPhase.compute(snapshot);
+            
+            takeSnapshot(centerX, centerY, snapshotSize, array, snapshot);
+            patternPhase.compute(snapshot * window);       
+            plane1 = patternPhase.getPlane1();
+            plane2 = patternPhase.getPlane2();
 
-            double alpha;
-            double dx, dy;
-            double diffAngle = angleInPiPi(patternPhase.getPlane1().getAngle() - code.getAngle());
-            if (diffAngle >= -PI / 4 && diffAngle <= PI / 4) {
-                alpha = patternPhase.getPlane1().getAngle();
-                dx = -patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
-                dy = -patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
-            } else if (diffAngle >= 3 * PI / 4 || diffAngle <= -3 * PI / 4) {
-                alpha = patternPhase.getPlane1().getAngle() + PI;
-                dx = +patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
-                dy = +patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
-            } else if (diffAngle >= PI / 4 && diffAngle <= 3 * PI / 4) {
-                alpha = patternPhase.getPlane1().getAngle() - PI / 2;
-                dx = patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
-                dy = -patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
-            } else {
-                alpha = patternPhase.getPlane1().getAngle() + PI / 2;
-                dx = -patternPhase.getPlane2().getPosition(physicalPeriod, 0.0, 0.0);
-                dy = patternPhase.getPlane1().getPosition(physicalPeriod, 0.0, 0.0);
+            if (patternPhase.peaksFound()) {
+
+                double alpha;
+                double dx, dy;
+                double diffAngle = angleInPiPi(plane1.getAngle() - code.getAngle());
+                if (diffAngle >= -PI / 4 && diffAngle <= PI / 4) {
+                    alpha = plane1.getAngle();
+                    dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
+                    dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
+                } else if (diffAngle >= 3 * PI / 4 || diffAngle <= -3 * PI / 4) {
+                    alpha = plane1.getAngle() + PI;
+                    dx = +plane1.getPosition(physicalPeriod, 0.0, 0.0);
+                    dy = +plane2.getPosition(physicalPeriod, 0.0, 0.0);
+                } else if (diffAngle >= PI / 4 && diffAngle <= 3 * PI / 4) {
+                    alpha = plane1.getAngle() - PI / 2;
+                    dx = plane2.getPosition(physicalPeriod, 0.0, 0.0);
+                    dy = -plane1.getPosition(physicalPeriod, 0.0, 0.0);
+                } else {
+                    alpha = plane1.getAngle() + PI / 2;
+                    dx = -plane2.getPosition(physicalPeriod, 0.0, 0.0);
+                    dy = plane1.getPosition(physicalPeriod, 0.0, 0.0);
+                }
+
+                double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+                double xImg = (centerX - image8U.cols / 2);
+                double yImg = (centerY - image8U.rows / 2);
+                double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
+                double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
+
+                Pose pose = Pose(x, y, alpha, pixelSize);
+
+                if (numberHalfPeriods % 4 == 1) {
+                    unsigned long id = readNumber(code, image8U, patternPhase.getPixelPeriod() / 2.0);
+                    markers.insert(std::make_pair(id, pose));
+                } else {
+                    markers.insert(std::make_pair(i, pose));
+                }
             }
-
-            double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
-            double xImg = (centerX - image.cols / 2);
-            double yImg = (centerY - image.rows / 2);
-            double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
-            double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
-
-            Pose pose = Pose(x, y, alpha, pixelSize);
-
-            if ((numberHalfPeriods - 1) % 4 == 0) {
-                unsigned long number = readNumber(code, image, patternPhase.getPixelPeriod() / 2.0);
-
-                codes.insert(std::make_pair(number, pose));
-            } else {
-                codes.insert(std::make_pair(i, pose));
-            }
-
         }
     }
 
@@ -156,27 +141,37 @@ namespace vernier {
     }
 
     Pose HPCodePatternDetector::get2DPose(int id) {
-        return codes.at(id);
-    }
-
-    Pose HPCodePatternDetector::get3DPose(int id) {
-        throw Exception("The 3D pose of HPCode is not implemented yet.");
-        return codes.at(id);
+        if (id < 0) {
+            return markers.begin()->second;
+        } else {
+            return markers.at(id);
+        }
     }
 
     bool HPCodePatternDetector::patternFound(int id) {
-        return (codes.find(id) != codes.end());
+        if (id < 0) {
+            return (markers.size() > 0);
+        } else {
+            return (markers.find(id) != markers.end());
+        }
+    }
+
+    int HPCodePatternDetector::patternCount() {
+        return markers.size();
+    };
+
+    Pose HPCodePatternDetector::get3DPose(int id) {
+        throw Exception("HPCodePatternDetector::get3DPose is not implemented yet.");
+        return Pose();
     }
 
     std::vector<Pose> HPCodePatternDetector::getAll3DPoses(int id) {
-        throw Exception("The 3D pose of HPCode is not implemented yet.");
-        std::vector<Pose> vector;
-        vector.push_back(codes.at(id));
-        return vector;
+        throw Exception("HPCodePatternDetector::getAll3DPoses is not implemented yet.");
+        return std::vector<Pose> ();
     }
 
     void HPCodePatternDetector::draw(cv::Mat & image) {
-        for (std::map<int, Pose>::iterator it = codes.begin(); it != codes.end(); it++) {
+        for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
             double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
             it->second.draw(image, length, to_string(it->first));
         }
@@ -191,8 +186,10 @@ namespace vernier {
     //    }
 
     void HPCodePatternDetector::showControlImages() {
-        cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
-        cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
+        detector.showControlImages();
+        //cv::imshow("Canny image", detector.fiducialDetector.cannyImage);
+        patternPhase.showControlImages();
+        //cv::imshow("Found peaks (red = dir 1, green = dir 2)", patternPhase.getPeaksImage());
         arrayShow("Snapshot image", snapshot);
     }
 

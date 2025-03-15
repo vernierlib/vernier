@@ -56,6 +56,12 @@ namespace vernier {
                 }
             }
         }
+
     };
+
+    Eigen::ArrayXXd hannWindow(int size, int exposure = 1);
+    
+    void takeSnapshot(int x, int y, int size, const Eigen::ArrayXXd & array, Eigen::ArrayXXd & snapshot);
+
 }
 #endif

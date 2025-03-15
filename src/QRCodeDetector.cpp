@@ -162,5 +162,9 @@ namespace vernier {
         result += " }";
         return result;
     }
+    
+    void QRCodeDetector::showControlImages() {
+        cv::imshow("Canny image", fiducialDetector.cannyImage);
+    }
 
 }

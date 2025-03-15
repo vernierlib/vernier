@@ -15,35 +15,37 @@ using namespace cv;
 
 void main1() {
 
-    string filename = "data/stamp/stamp2.png";
-    Mat grayImage, image = imread(filename);
-    imageTo8UC1(image, grayImage);
+    string filename = "data/stamp/stamp3.png";
+    Mat image = imread(filename);
+    
+    StampPatternDetector detector(15.5, "data/stamp/stampF.png", 820);
+    detector.compute(image);
+    detector.showControlImages();
 
-    StampPatternDetector detector(15.5, 512, 61);
-    detector.compute(grayImage);
-
-    cout << "Found " << detector.stamps.size() << " markers in " << filename << endl;
+    cout << "Found " << detector.markers.size() << " markers in " << filename << endl;
+    for (map<int, Pose>::iterator it = detector.markers.begin(); it != detector.markers.end(); it++) {
+        cout << "Stamp " << it->first << " at " << it->second.toString() << endl;
+    }
+    
     detector.draw(image);
     namedWindow("Image", WINDOW_FREERATIO);
     imshow("Image", image);
-
-    detector.showControlImages();
-
+   
     waitKey();
 }
 
-void testFile(string filename, int markerCount) {
-
-    START_UNIT_TEST;
-
-    cv::Mat grayImage, image = cv::imread(filename);
-    imageTo8UC1(image, grayImage);
-
-    StampPatternDetector detector(15.5, 512, 61);
-    detector.compute(grayImage);
-
-    UNIT_TEST(detector.stamps.size() == markerCount);
-}
+//void testFile(string filename, int markerCount) {
+//
+//    START_UNIT_TEST;
+//
+//    cv::Mat grayImage, image = cv::imread(filename);
+//    imageTo8UC1(image, grayImage);
+//
+//    StampPatternDetector detector(15.5, 512, 61);
+//    detector.compute(grayImage);
+//
+//    UNIT_TEST(detector.stamps.size() == markerCount);
+//}
 
 void test2d() {
 
@@ -51,13 +53,13 @@ void test2d() {
 
     // Constructing the layout
     double physicalPeriod = randomDouble(15.0, 16.0)/2;
-    PatternLayout* layout = new BitmapPatternLayout("data/stamp/stampF.png", physicalPeriod);
+    PatternLayout* layout = new BitmapPatternLayout("data/stamp/stampG.png", physicalPeriod);
     cout << "  Physical period: " << physicalPeriod << endl;
 
     // Setting the pose of the pattern in the camera frame for rendering
     double x = randomDouble(-80, 80);
     double y = randomDouble(-80, 80);
-    double alpha = randomDouble(0, PI / 2);
+    double alpha = randomDouble(-PI, PI);
     double pixelSize = 1.0;
     Pose patternPose = Pose(x, y, alpha, pixelSize);
     cout << "  Pattern pose: " << patternPose.toString() << endl;
@@ -65,21 +67,20 @@ void test2d() {
     // Rendering
     Eigen::ArrayXXd array(1024, 1024);
     layout->renderOrthographicProjection(patternPose, array);
-    cv::Mat image = array2image(array);
 
     // Detecting
-    Mat grayImage;
-    imageTo8UC1(image, grayImage);
-    StampPatternDetector detector(physicalPeriod, 512, 69);
-    detector.compute(grayImage);
+    StampPatternDetector detector(physicalPeriod, "data/stamp/stampF.png", 420);
+    detector.compute(array);
 
     Pose estimatedPose;
-    if (detector.stamps.size() == 1) {
-        estimatedPose = detector.stamps[0];
-        cout << "  Estimated pose: " << estimatedPose << endl;
-        detector.draw(image);
+    if (detector.patternFound()) {
+        estimatedPose = detector.get2DPose();
+        cout << "  Estimated pose: " << estimatedPose << endl;      
     }
-
+    
+//    cv::Mat image = array2image(array);
+//    detector.showControlImages();
+//    detector.draw(image);
 //    imshow("Image", image);
 //    waitKey(0);
 
@@ -111,7 +112,7 @@ double speed(unsigned long testCount) {
     // Detecting
     Mat grayImage;
     imageTo8UC1(image, grayImage);
-    StampPatternDetector detector(physicalPeriod, 256, 61);
+    StampPatternDetector detector(physicalPeriod, "data/stamp/stampF.png", 512);
     detector.compute(grayImage);
 
     tic();
@@ -128,9 +129,9 @@ int main(int argc, char** argv) {
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 
-    REPEAT_TEST(test2d(), 20);
+    REPEAT_TEST(test2d(), 10);
 
-    testFile("data/stamp/stamp2.png", 2);
+    //testFile("data/stamp/stamp2.png", 2);
 
     return EXIT_SUCCESS;
 }

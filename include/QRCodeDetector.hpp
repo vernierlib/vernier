@@ -63,6 +63,9 @@ namespace vernier {
 
         /** Converts into a string */
         std::string toString();
+        
+        void showControlImages();
+        
     };
 
 }

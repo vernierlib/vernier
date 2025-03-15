@@ -15,17 +15,13 @@ using namespace std;
 
 void main1() {
 
-    Eigen::ArrayXXcd mireMatrix;
     cv::Mat image = cv::imread("data/im_1.png", 0);
     imshow("Image", image);
-    Eigen::MatrixXd intermediaryMatrix;
-    cv::cv2eigen(image, intermediaryMatrix);
-    mireMatrix = intermediaryMatrix.array();
 
     PatternPhase phaseRetrieving;
     phaseRetrieving.setSigma(1);
     phaseRetrieving.setPixelPeriod(15);
-    phaseRetrieving.compute(mireMatrix);
+    phaseRetrieving.compute(image2array(image));
 
     //            std::cout << "phase at the center : \n" << phaseRetrieving.getPhase1()(768/2,1024/2) << std::endl;
 
@@ -87,10 +83,7 @@ void runAllTests2() {
     phaseRetrieving.setPixelPeriod(15);
 
     cv::Mat image = cv::imread("data/im_1.png", 0);
-    Eigen::MatrixXd intermediaryMatrix;
-    cv::cv2eigen(image, intermediaryMatrix);
-    mireMatrix = intermediaryMatrix.array();
-    phaseRetrieving.compute(mireMatrix);
+    phaseRetrieving.compute(image2array(image));
     Eigen::MatrixXd coeffMatrix(3, 1);
 
     Eigen::Vector3d planeCoefficients;
@@ -115,8 +108,6 @@ double speed(unsigned long testCount) {
     PeriodicPatternLayout layout(period / 2.0, 437, 437);
 
     Eigen::ArrayXXd array(size, size);
-    Eigen::ArrayXXcd patternArray(size, size);
-
 
     std::uniform_real_distribution<double> dist2(-period / 2.0, period / 2.0);
     std::uniform_real_distribution<double> dist3(0, PI * 2.0);
@@ -126,7 +117,6 @@ double speed(unsigned long testCount) {
     double alphaOrientation = dist3(rd);
 
     layout.renderOrthographicProjection(Pose(xPosition, yPosition, 1000, alphaOrientation, 0.0, 0.0, 1.0), array);
-    patternArray.real() = array;
 
     PatternPhase phaseRetrieving(size, size);
     phaseRetrieving.setSigma(0.01 * 1024);
@@ -134,7 +124,7 @@ double speed(unsigned long testCount) {
     tic();
     for (unsigned long i = 0; i < testCount; i++) {
         phaseRetrieving.setPixelPeriod(period);
-        phaseRetrieving.compute(patternArray);
+        phaseRetrieving.compute(array);
     }
     return toc(testCount);
 }

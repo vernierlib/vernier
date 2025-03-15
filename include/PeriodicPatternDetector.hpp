@@ -23,8 +23,10 @@ namespace vernier {
         int betaSign, gammaSign;
         bool computePhaseGradient;
 
-        void readJSON(rapidjson::Value& document) override;
-
+        void readJSON(const rapidjson::Value& document) override;
+        
+        void computeImage() override;
+    
     public:
 
         /** Constructs a detector for periodic patterns
@@ -32,27 +34,25 @@ namespace vernier {
          * \param physicalPeriod: physical period of the pattern
          */
         PeriodicPatternDetector(double physicalPeriod = 1.0);
-
-        void resize(int nRows, int nCols);
-
-        void computeArray(const Eigen::ArrayXXd & array) override;
-        
+       
         /** Returns true of a periodic pattern has been found */
-        bool patternFound(int id = 0) override;
+        bool patternFound(int id = -1) override;
+        
+        int patternCount() override;
 
         /** Returns the 2D pose of the pattern (assuming an orthographic projection) */
-        Pose get2DPose(int id = 0) override;
+        Pose get2DPose(int id = -1) override;
 
         /** Returns the most likely 3D pose of the pattern (assuming a perspective 
          * projection with a long-focus lens) 
          *
          * The phase gradient mode must be actived before image computing.
          */
-        Pose get3DPose(int id = 0) override;
+        Pose get3DPose(int id = -1) override;
         
         /** Returns the four 3D possible poses of the pattern (assuming an 
          * orthographic projection) */
-        std::vector<Pose> getAll3DPoses(int id = 0) override;
+        std::vector<Pose> getAll3DPoses(int id = -1) override;
         
         void showControlImages() override;
         

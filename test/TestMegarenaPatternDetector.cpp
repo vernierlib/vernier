@@ -29,7 +29,7 @@ void main1() {
 
 }
 
-void example2d()
+void example2d() {
 // Loading the layout
     string filename = "megarenaPattern.json";
     PatternLayout* layout = Layout::loadFromJSON(filename);
@@ -50,7 +50,7 @@ void example2d()
     // Detecting and estimating the pose of the pattern
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
-    detector->computeArray(array);
+    detector->compute(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
@@ -68,7 +68,7 @@ void example2d()
 /** This example renders an image of a megarena pattern and estimates its 3D pose 
  * with an orthographic projection
  */
-int example3d() {
+void example3d() {
 
     // Loading the layout
     string filename = "megarenaPattern.json";
@@ -93,7 +93,7 @@ int example3d() {
     PatternDetector* detector;
     detector = Detector::loadFromJSON(filename);
     detector->setDouble("pixelPeriod", 7);
-    detector->computeArray(array);
+    detector->compute(array);
 
     // Printing results 
     cout << "------------------------------------------------------------------" << endl;
@@ -149,7 +149,7 @@ int exampleCapture() {
 
 
 
-void example3d() {
+void example2dbis() {
     
             // Constructing the layout
             double physicalPeriod = randomDouble(5.0, 10.0);
@@ -173,7 +173,7 @@ void example3d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->computeArray(array);
+            detector->compute(array);
             Pose estimatedPose = detector->get2DPose();
 
             // Printing results 
@@ -207,7 +207,7 @@ void example3d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->computeArray(array);
+            detector->compute(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
             
             // Printing results 
@@ -250,7 +250,7 @@ void example3d() {
             detector->setDouble("cropFactor", 0.8);
             detector->setDouble("pixelPeriod", 7);
             detector->setPhaseGradientMode();
-            detector->computeArray(array);
+            detector->compute(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
 
             // Printing results 
@@ -285,7 +285,7 @@ void example3d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->computeArray(array);
+            detector->compute(array);
             Pose estimatedPose = detector->get2DPose();
 
             // Printing results 
@@ -322,7 +322,7 @@ void example3d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-            detector->computeArray(array);
+            detector->compute(array);
             std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
             
             // Printing results 
@@ -367,12 +367,12 @@ void example3d() {
             // Detecting and estimating the pose of the pattern
             PatternDetector* detector;
             detector = new MegarenaPatternDetector(physicalPeriod, 12);
-            detector->computeArray(array);
+            detector->compute(array);
             Pose estimatedPose = detector->get2DPose();
 
             tic();
             for (unsigned long i = 0; i < testCount; i++) {
-                detector->computeArray(array);
+                detector->compute(array);
             }
 
             return toc(testCount);

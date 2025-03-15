@@ -33,18 +33,53 @@ namespace vernier {
         classname = "MegarenaPattern";
         decoding.resize(bitSequence);
     }
+    
+    void MegarenaPatternDetector::readJSON(const rapidjson::Value& document) {
 
-    void MegarenaPatternDetector::computeArray(const Eigen::ArrayXXd& pattern) {
-        resize(pattern.rows(), pattern.cols());
-        PeriodicPatternDetector::computeArray(pattern);
-        computeAbsolutePose(pattern);
+        PatternDetector::readJSON(document);
+
+        if (document.HasMember("period") && document["period"].IsDouble()) {
+            physicalPeriod = document["period"].GetDouble();
+            PeriodicPatternDetector::setPhysicalPeriod(physicalPeriod);
+        } else {
+            throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
+        }
+
+        if (document.HasMember("bitSequence") && document["bitSequence"].IsArray()) {
+            bitSequence.resize(1, document["bitSequence"].Size());
+
+            for (rapidjson::SizeType row = 0; row < bitSequence.cols(); row++) {
+                const rapidjson::Value& value = document["bitSequence"][row];
+                if (value.IsInt()) {
+                    bitSequence(0, row) = value.GetInt();
+                } else {
+                    throw Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
+                }
+            }
+        } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {
+            int codeSize = document["codeSize"].GetInt();
+            if (codeSize >= 4 && codeSize <= 12) {
+                MegarenaBitSequence::generate(codeSize, bitSequence);
+            } else {
+                throw Exception("The file is not a valid megarena pattern file, the code size must between 4 and 12.");
+            }
+        } else {
+            throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");
+        }
+
+        decoding.resize(bitSequence);
     }
 
-    void MegarenaPatternDetector::computeAbsolutePose(const Eigen::ArrayXXd& pattern) {
+    void MegarenaPatternDetector::computeImage() {
+        PeriodicPatternDetector::computeImage();
+        computeAbsolutePose();
+    }
+
+    void MegarenaPatternDetector::computeAbsolutePose() {
         double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
 
-        int length1 = (pattern.rows() / (approxPixelPeriod));
-        int length2 = (pattern.cols() / (approxPixelPeriod));
+        int length1 = (array.rows() / (approxPixelPeriod));
+        int length2 = (array.cols() / (approxPixelPeriod));
 
         length1++;
         length2++;
@@ -57,7 +92,7 @@ namespace vernier {
         }
 
         thumbnail.resize(length1, length2);
-        thumbnail.compute(plane1, plane2, pattern);
+        thumbnail.compute(plane1, plane2, array);
 
         Eigen::ArrayXXd sequence1 = thumbnail.getSequence1();
         Eigen::ArrayXXd sequence2 = thumbnail.getSequence2();
@@ -125,42 +160,6 @@ namespace vernier {
                 ", rz: " + to_string(alpha) +
                 ", px: " + to_string(pixelSize),
                 cv::Point(3, 35), cv::FONT_HERSHEY_PLAIN, 1, cv::Scalar(0, 0, 255), 2);
-    }
-
-    void MegarenaPatternDetector::readJSON(rapidjson::Value& document) {
-
-        PatternDetector::readJSON(document);
-
-        if (document.HasMember("period") && document["period"].IsDouble()) {
-            physicalPeriod = document["period"].GetDouble();
-            PeriodicPatternDetector::setPhysicalPeriod(physicalPeriod);
-        } else {
-            throw Exception("The file is not a valid bitmap pattern file, the period is missing or has a wrong format.");
-        }
-
-        if (document.HasMember("bitSequence") && document["bitSequence"].IsArray()) {
-            bitSequence.resize(1, document["bitSequence"].Size());
-
-            for (rapidjson::SizeType row = 0; row < bitSequence.cols(); row++) {
-                const rapidjson::Value& value = document["bitSequence"][row];
-                if (value.IsInt()) {
-                    bitSequence(0, row) = value.GetInt();
-                } else {
-                    throw Exception("The file is not a valid bitmap pattern file, the row " + to_string(row) + " of the bitmap has a wrong format");
-                }
-            }
-        } else if (document.HasMember("codeSize") && document["codeSize"].IsInt()) {
-            int codeSize = document["codeSize"].GetInt();
-            if (codeSize >= 4 && codeSize <= 12) {
-                MegarenaBitSequence::generate(codeSize, bitSequence);
-            } else {
-                throw Exception("The file is not a valid megarena pattern file, the code size must between 4 and 12.");
-            }
-        } else {
-            throw Exception("The file is not a valid bitmap pattern file, the bitmap is missing or has a wrong format.");
-        }
-
-        decoding.resize(bitSequence);
     }
 
     std::string MegarenaPatternDetector::toString() {

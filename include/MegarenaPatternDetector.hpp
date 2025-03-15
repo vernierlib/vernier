@@ -22,9 +22,13 @@ namespace vernier {
         MegarenaAbsoluteDecoding decoding;
         MegarenaThumbnail thumbnail;
 
-        void readJSON(rapidjson::Value& document) override;
+        void readJSON(const rapidjson::Value& document) override;
 
-        void computeAbsolutePose(const Eigen::ArrayXXd& pattern);
+        void computeAbsolutePose();
+        
+        void computeImage() override;
+
+        
 
     public:
 
@@ -44,10 +48,6 @@ namespace vernier {
          *	\param codeSize: size of the code
          */
         MegarenaPatternDetector(double physicalPeriod, int codeSize);
-
-        ~MegarenaPatternDetector() = default;
-
-        void computeArray(const Eigen::ArrayXXd& pattern) override;
 
         void showControlImages() override;
         

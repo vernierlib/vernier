@@ -5,6 +5,7 @@
  */
 
 #include "BitmapPatternDetector.hpp"
+#include "BitmapThumbnail.hpp"
 
 namespace vernier {
 
@@ -13,12 +14,13 @@ namespace vernier {
         classname = "BitmapPattern";
     }
 
-    BitmapPatternDetector::BitmapPatternDetector(double physicalPeriod, const std::string filename)
+    BitmapPatternDetector::BitmapPatternDetector(double physicalPeriod, const std::string & filename)
     : PeriodicPatternDetector(physicalPeriod) {
         classname = "BitmapPattern";
         description = "created from " + filename;
         bitmap.resize(4);
         cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE);
+        ASSERT_MSG(!image.empty(), "The file " + filename + " is not found or is not an image.")
         image.convertTo(bitmap[0], CV_8U);
 
         for (int k = 0; k < 3; k++) {
@@ -26,23 +28,33 @@ namespace vernier {
         }
     }
 
-    void BitmapPatternDetector::readJSON(rapidjson::Value & document) {
+    void BitmapPatternDetector::readJSON(const rapidjson::Value & document) {
         throw Exception("BitmapPatternDetector::readJSON is not implemented yet.");
     }
 
-    void BitmapPatternDetector::computeArray(const Eigen::ArrayXXd & array) {
-        PeriodicPatternDetector::computeArray(array);
-        computeThumbnail(array, PI / 4);
-        computeAbsolutePose(array);
+    void BitmapPatternDetector::computeImage() {
+        PeriodicPatternDetector::computeImage();
+        
+        double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
+        int length1 = (int) (2.82 * array.rows() / approxPixelPeriod);
+        int length2 = (int) (2.82 * array.cols() / approxPixelPeriod);
+        if (length1 % 2 == 0) length1++;
+        if (length2 % 2 == 0) length2++;
+        bitmapThumbnail.resize(std::max(length1, length2));
+        bitmapThumbnail.compute(array, patternPhase.getPlane1(), patternPhase.getPlane2());
+        
+        computeAbsolutePose();
     }
 
-    void BitmapPatternDetector::computeAbsolutePose(const Eigen::ArrayXXd& array) {
+    void BitmapPatternDetector::computeAbsolutePose() {
         double maxmaxVal = -1;
-        int maxAngle;
         for (int k = 0; k < 4; k++) {
             int angle = k * 90;
             cv::Mat result;
-            cv::matchTemplate(thumbnail, bitmap[k], result, cv::TM_CCOEFF);
+            //SHOW(bitmapThumbnail.thumbnail);
+            //SHOW(bitmap[k]);
+            //cv::waitKey(0);
+            cv::matchTemplate(bitmapThumbnail.thumbnail, bitmap[k], result, cv::TM_CCOEFF);
 
             double maxVal;
             cv::Point maxLoc;
@@ -82,68 +94,13 @@ namespace vernier {
         }
     }
 
-    void BitmapPatternDetector::computeThumbnail(const Eigen::ArrayXXd& array, double deltaPhase) {
-        double approxPixelPeriod = (plane1.getPixelicPeriod() + plane2.getPixelicPeriod()) / 2.0;
-        int length1 = (int) (2.82 * array.rows() / approxPixelPeriod);
-        int length2 = (int) (2.82 * array.cols() / approxPixelPeriod);
-        if (length1 % 2 == 0) length1++;
-        if (length2 % 2 == 0) length2++;
-
-        thumbnail = cv::Mat(length2, length1, CV_8U);
-
-        Eigen::ArrayXXd numberWhiteDots(length1, length2);
-        Eigen::ArrayXXd cumulWhiteDots(length1, length2);
-        Eigen::ArrayXXd numberBackgroundDots(length1, length2);
-        Eigen::ArrayXXd cumulBackgroundDots(length1, length2);
-
-        numberWhiteDots.fill(0);
-        cumulWhiteDots.fill(0);
-        numberBackgroundDots.fill(0);
-        cumulBackgroundDots.fill(0);
-
-        int phaseIteration1, phaseIteration2;
-
-        Eigen::Vector3d tempPlane1Coeff(plane1.getA(), plane1.getB(), plane1.getC());
-        Eigen::Vector3d tempPlane2Coeff(plane2.getA(), plane2.getB(), plane2.getC());
-
-        PhasePlane tempPlane1(tempPlane1Coeff);
-        PhasePlane tempPlane2(tempPlane2Coeff);
-
-
-        for (int col = 0; col < array.cols(); col++) {
-            for (int row = 0; row < array.rows(); row++) {
-
-                double phaseCol = tempPlane1.getPhase(row - array.rows() / 2, col - array.cols() / 2);
-                double phaseRow = tempPlane2.getPhase(row - array.rows() / 2, col - array.cols() / 2);
-
-                phaseIteration1 = round(phaseCol / PI) + length1 / 2;
-                phaseIteration2 = round(phaseRow / PI) + length2 / 2;
-
-                if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
-                    if ((abs(std::fmod(phaseCol, PI)) <= deltaPhase || abs(std::fmod(phaseCol, PI)) >= PI - deltaPhase) && (abs(std::fmod(phaseRow, PI)) <= deltaPhase || abs(std::fmod(phaseRow, PI)) >= PI - deltaPhase)) {
-                        numberWhiteDots(phaseIteration1, phaseIteration2) += 1;
-                        cumulWhiteDots(phaseIteration1, phaseIteration2) += array(row, col);
-                    }
-                }
-            }
-        }
-
-        for (int col = 0; col < thumbnail.cols; col++) {
-            for (int row = 0; row < thumbnail.rows; row++) {
-                thumbnail.at<char>(row, col) = (char) (255 * cumulWhiteDots(col, row) / numberWhiteDots(col, row));
-            }
-        }
-    }
-
     cv::Mat BitmapPatternDetector::getThumbnail() {
-        return thumbnail;
+        return bitmapThumbnail.thumbnail;
     }
 
     void BitmapPatternDetector::showControlImages() {
         PeriodicPatternDetector::showControlImages();
-        cv::Mat zoom;
-        cv::resize(thumbnail, zoom, cv::Size(thumbnail.rows * THUMBNAIL_ZOOM, thumbnail.cols * THUMBNAIL_ZOOM), THUMBNAIL_ZOOM, THUMBNAIL_ZOOM, cv::INTER_NEAREST);
-        cv::imshow("Thumbnail", zoom);
+        bitmapThumbnail.showControlImages();
     }
 
     int BitmapPatternDetector::getInt(const std::string & attribute) {
@@ -160,7 +117,7 @@ namespace vernier {
         if (attribute == "bitmap") {
             return &bitmap;
         } else if (attribute == "thumbnail") {
-            return &thumbnail;
+            return &(bitmapThumbnail.thumbnail);
         } else {
             return PeriodicPatternDetector::getObject(attribute);
         }

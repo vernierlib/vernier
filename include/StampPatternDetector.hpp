@@ -7,57 +7,50 @@
 #ifndef STAMPPATTERNDETECTOR_HPP
 #define STAMPPATTERNDETECTOR_HPP
 
-#include "PeriodicPatternDetector.hpp"
+#include "BitmapPatternDetector.hpp"
 #include "SquareDetector.hpp"
 #include "PatternPhase.hpp"
+#include "BitmapThumbnail.hpp"
 #include <map>
 
 namespace vernier {
 
-    class StampPatternDetector : public PeriodicPatternDetector {
+    class StampPatternDetector : public BitmapPatternDetector {
     protected:
-
-        Eigen::ArrayXXcd snapshot;
-        int numberHalfPeriods;
-        int snapshotSize;
         
-        void readJSON(rapidjson::Value& document) override;
+        Eigen::ArrayXXd window;
+        Eigen::ArrayXXd snapshot;
 
-        void takeSnapshot(int x, int y, cv::Mat image);
+        void readJSON(const rapidjson::Value& document) override;
+
+        void computeImage() override;
 
     public:
 
         SquareDetector detector;
         
-        /** Vector of detected stamps */
-        std::vector<Pose> stamps;
+        /** Map of detected stamps (key map = stamp id) */
+        std::map<int, Pose> markers;
+        
+        StampPatternDetector();
 
         /** Constructs a pose estimator for stamps
          *
          *	\param physicalPeriod: physical period between the dots of the stamp
-         *	\param snapshotSize: maximal size of the stamp in pixels
-         *	\param numberHalfPeriods: number of half periods contained in the stamp along one direction.
+         *	\param filename: name of the bitmap file
+         *	\param snapshotSize: maximal size of diagonal of the stamp in pixels (used to cut the image)
          */
-        StampPatternDetector(double physicalPeriod = 1.0, int snapshotSize = 128, int numberHalfPeriods = 61);
+        StampPatternDetector(double physicalPeriod, const std::string & filename, int snapshotSize);
 
-        /** Prepares the different required objects for processing
-         *
-         *	\param physicalPeriod: physical period between the dots of the stamp
-         *	\param snapshotSize: maximal size of the stamp in pixels
-         *	\param numberHalfPeriods: number of half periods contained in the stamp one direction.
-         */
-        void resize(double physicalPeriod, int snapshotSize, int numberHalfPeriods);
+        Pose get2DPose(int id = -1) override;
 
-        /** Estimate the pose of all stamps in an image */
-        void compute(const cv::Mat& image) override;
+        Pose get3DPose(int id = -1) override;
 
-        Pose get2DPose(int id) override;
+        std::vector<Pose> getAll3DPoses(int id = -1) override;
 
-        Pose get3DPose(int id) override;
-
-        std::vector<Pose> getAll3DPoses(int id) override;
-
-        bool patternFound(int id) override;
+        bool patternFound(int id = -1) override;
+        
+        int patternCount() override;
 
         void draw(cv::Mat& image) override;
 

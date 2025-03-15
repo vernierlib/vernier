@@ -17,7 +17,7 @@ void main1() {
 
     Mat image = cv::imread("data/QRCode/code31.jpg");
 
-    HPCodePatternDetector estimator(15.5, 256, 37);
+    HPCodePatternDetector estimator(15.5, 37, 256);
 
     estimator.detector.fiducialDetector.lowCannyThreshold = 50;
     estimator.detector.fiducialDetector.highCannyThreshold = 100;
@@ -33,9 +33,9 @@ void main1() {
     imshow("QR codes", image);
 
 
-    cout << "Found " << estimator.codes.size() << " markers" << endl;
+    cout << "Found " << estimator.markers.size() << " markers" << endl;
 
-    for (map<int, Pose>::iterator it = estimator.codes.begin(); it != estimator.codes.end(); it++) {
+    for (map<int, Pose>::iterator it = estimator.markers.begin(); it != estimator.markers.end(); it++) {
         cout << "QR code " << it->first << " at " << it->second.toString() << endl;
     }
 
@@ -46,7 +46,7 @@ void main2() {
 
     Mat image = cv::imread("data/QRCode/code25.png");
 
-    HPCodePatternDetector estimator(15.5, 512, 33);
+    HPCodePatternDetector estimator(15.5, 33, 512);
 
     estimator.detector.fiducialDetector.lowCannyThreshold = 100;
     estimator.detector.fiducialDetector.highCannyThreshold = 200;
@@ -75,11 +75,11 @@ void main3() {
         //image = image(myROI);
         //bitwise_not(image, image);
 
-        HPCodePatternDetector estimator(15.5, 512, 33);
+        HPCodePatternDetector estimator(15.5, 33, 512);
         estimator.detector.fiducialDetector.lowCannyThreshold = 200;
         estimator.detector.fiducialDetector.highCannyThreshold = 400;
         estimator.compute(image);
-        cout << "Found " << estimator.codes.size() << " markers" << endl;
+        cout << "Found " << estimator.markers.size() << " markers" << endl;
 
         estimator.showControlImages();
         estimator.draw(image);
@@ -89,7 +89,7 @@ void main3() {
         //            cout << "QR code " << it->first << " at " << it->second.toString() << endl;
         //            file << it->first << ";" << it->second.x << ";" << it->second.y << ";" << it->second.alpha << ";" << it->second.pixelSize << ";";
         //        }
-        if (estimator.codes.size() == 2) {
+        if (estimator.markers.size() == 2) {
             file << i << ";";
             Pose p0 = estimator.get2DPose(0);
             file << 0 << ";" << p0.x << ";" << p0.y << ";" << p0.alpha << ";" << p0.pixelSize << ";";
@@ -129,13 +129,13 @@ void test2d(int codeSize) {
     //waitKey();
 
     // Detecting
-    HPCodePatternDetector estimator(physicalPeriod, 256, codeSize);
+    HPCodePatternDetector estimator(physicalPeriod, codeSize, 256);
     //estimator.detector.markerDetector.lowCannyThreshold = 100;
     //estimator.detector.markerDetector.highCannyThreshold = 200;
     //estimator.patternPhase.setSigma(1);
     estimator.compute(image);
 
-    for (map<int, Pose>::iterator it = estimator.codes.begin(); it != estimator.codes.end(); it++) {
+    for (map<int, Pose>::iterator it = estimator.markers.begin(); it != estimator.markers.end(); it++) {
         cout << "  Marker " << it->first << " pose:" << it->second.toString() << endl;
         //it->second.draw(image);
     }
@@ -151,25 +151,25 @@ void test2d(int codeSize) {
     //    imshow("HP codes", image);
     //    waitKey(1);
 
-    if (estimator.codes.size() == 1) {
-        Pose estimatedPose = estimator.codes.begin()->second;
+    if (estimator.markers.size() == 1) {
+        Pose estimatedPose = estimator.markers.begin()->second;
         UNIT_TEST(areEqual(patternPose, estimatedPose, 0.1));
     }
 
 }
 
-void test(string filename, int lowCannyThreshold, int highCannyThreshold, int numberOfMarkers, int snapshotSize, int numberOfHalfPeriod) {
+void test(string filename, int lowCannyThreshold, int highCannyThreshold, int numberOfMarkers, int numberOfHalfPeriod, int snapshotSize) {
 
     START_UNIT_TEST;
     cv::Mat image = imread(filename);
 
-    HPCodePatternDetector estimator = HPCodePatternDetector(15.5, snapshotSize, numberOfHalfPeriod);
+    HPCodePatternDetector estimator = HPCodePatternDetector(15.5, numberOfHalfPeriod, snapshotSize);
     estimator.detector.fiducialDetector.lowCannyThreshold = lowCannyThreshold;
     estimator.detector.fiducialDetector.highCannyThreshold = highCannyThreshold;
 
     estimator.compute(image);
-    cout << "  Found " << estimator.codes.size() << " markers" << endl;
-    for (map<int, Pose>::iterator it = estimator.codes.begin(); it != estimator.codes.end(); it++) {
+    cout << "  Found " << estimator.markers.size() << " markers" << endl;
+    for (map<int, Pose>::iterator it = estimator.markers.begin(); it != estimator.markers.end(); it++) {
         cout << "  QR code " << it->first << " at " << it->second.toString() << endl;
     }
 
@@ -178,16 +178,16 @@ void test(string filename, int lowCannyThreshold, int highCannyThreshold, int nu
 //    imshow("QR codes", image);
 //    waitKey(0);
 
-    UNIT_TEST(estimator.codes.size() == numberOfMarkers);
+    UNIT_TEST(estimator.markers.size() == numberOfMarkers);
 
 }
 
 void runAllTests() {
-    test("data/QRCode/code17.jpg", 100, 200, 1, 512, 37);
-    test("data/QRCode/code23.png", 200, 400, 2, 512, 33);
-    test("data/QRCode/code24.png", 100, 300, 2, 512, 33);
-    test("data/QRCode/code31.jpg", 50, 100, 3, 256, 37);
-    test("data/QRCode/code61.jpg", 100, 210, 6, 256, 37);
+    test("data/QRCode/code17.jpg", 100, 200, 1, 37, 512);
+    test("data/QRCode/code23.png", 200, 400, 2, 33, 512);
+    test("data/QRCode/code24.png", 100, 300, 2, 33, 512);
+    test("data/QRCode/code31.jpg", 50, 100, 3, 37, 256);
+    test("data/QRCode/code61.jpg", 100, 210, 6, 37, 256);
     REPEAT_TEST(test2d(33), 10)
     REPEAT_TEST(test2d(37), 10)
 
@@ -196,7 +196,7 @@ void runAllTests() {
 double speed(unsigned long testCount) {
     Mat image = imread("data/QRCode/code31.jpg", -1);
 
-    HPCodePatternDetector poses = HPCodePatternDetector(15.5, 256, 37);
+    HPCodePatternDetector poses = HPCodePatternDetector(15.5, 37, 256);
     poses.detector.fiducialDetector.lowCannyThreshold = 50;
     poses.detector.fiducialDetector.highCannyThreshold = 100;
 

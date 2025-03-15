@@ -38,4 +38,10 @@ namespace vernier {
 
 #define ASSERT(condition) if (!(condition)) throw Exception(std::string("runtime error: ")+std::string(#condition),__FILE__,__LINE__);
 
+#define ASSERT_MSG(condition, message) if (!(condition)) throw Exception(std::string("runtime error: ")+std::string(#message),__FILE__,__LINE__);
+
+#define PRINT(variable) { std::cout << ">>> "<< #variable << " at line " << __LINE__ << " = " << variable << std::endl; }
+
+#define SHOW(variable) { cv::imshow(#variable, variable); }
+
 #endif

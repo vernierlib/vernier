@@ -6,7 +6,7 @@ using namespace std;
 using namespace Eigen;
 
 /** This example shows how to renders an image of a pattern from a virtual camera 
- * at a given pose and with an orthographic projection
+ * at a given pose and with an orthographic projection.
  */
 int main() {
 
@@ -16,7 +16,7 @@ int main() {
     PatternLayout* layout = Layout::loadFromJSON(filename);
     cout << "Pattern layout: " << layout->toString() << endl;
 
-    // Setting the pose of the pattern in the camera frame
+    // Setting the pose (could be 3D)
     double x = -6000.0;
     double y = -8000.0;
     double alpha = 0.2;
