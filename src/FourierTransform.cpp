@@ -71,7 +71,7 @@ namespace vernier {
         out.resize(nRows, nCols);
         fftw_execute_dft(plan, (fftw_complex*) in.data(), (fftw_complex*) out.data());
     }
-    
+
     void FourierTransform::setSign(int sign) {
         resize(nRows, nCols, sign);
     }
@@ -104,10 +104,16 @@ namespace vernier {
     }
 
     FourierTransform::~FourierTransform() {
-        if (workArea != NULL) {
+        if (data != NULL) {
             free(data);
+        }
+        if (workArea != NULL) {
             free(workArea);
+        }
+        if (bitReversal != NULL) {
             free(bitReversal);
+        }
+        if (cosSinTable != NULL) {
             free(cosSinTable);
         }
     }
@@ -118,10 +124,16 @@ namespace vernier {
         } else if (((nRows & (nRows - 1)) != 0) || ((nCols & (nCols - 1)) != 0)) {
             throw Exception("The dimensions of a FourierTransform must be a power of two");
         } else if (nRows != this->nRows || nCols != this->nCols || sign != this->sign) {
-            if (workArea != NULL) {
+            if (data != NULL) {
                 free(data);
+            }
+            if (workArea != NULL) {
                 free(workArea);
+            }
+            if (bitReversal != NULL) {
                 free(bitReversal);
+            }
+            if (cosSinTable != NULL) {
                 free(cosSinTable);
             }
 
@@ -133,27 +145,30 @@ namespace vernier {
             workArea = NULL;
             int n = 2 + (int) sqrt(std::max(nRows, nCols));
             bitReversal = (int*) malloc(sizeof (int) * n);
+            for (int i = 0; i < n; i++) {
+                bitReversal[i] = 0;
+            }
             n = std::max(nRows, nCols) / 2;
             cosSinTable = (double*) malloc(sizeof (double) * n);
-            bitReversal[0] = 0;
         }
     }
 
-    void FourierTransform::compute(Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out) {
+    void FourierTransform::compute(const Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out) {
         resize(in.rows(), in.cols(), sign);
+        out.resize(nRows, nCols);
         out = in;
         // Eigen is column major but Ooura's fft is row major
-        for (int j = 0; j < out.cols(); j++) {
+        for (int j = 0; j < nCols; j++) {
             data[j] = (double*) (&out(0, j));
         }
-        cdft2d(nCols, 2 * nRows, sign, data, workArea, bitReversal, cosSinTable);
+        cdft2d(nCols, 2*nRows, sign, data, workArea, bitReversal, cosSinTable);
         out = out.conjugate();
     }
 
-    void FourierTransform::compute(Eigen::ArrayXcd& in, Eigen::ArrayXcd& out) {
+    void FourierTransform::compute(const Eigen::ArrayXcd& in, Eigen::ArrayXcd& out) {
         throw Exception("Computing of 1D FFT not yet supported by FourierTransform::compute without FFTW");
     }
-    
+
     void FourierTransform::setSign(int sign) {
         resize(nRows, nCols, sign);
     }

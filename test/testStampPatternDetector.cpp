@@ -78,7 +78,8 @@ void test2d() {
         cout << "  Estimated pose: " << estimatedPose << endl;      
     }
     
-//    cv::Mat image = array2image(array);
+//    cv::Mat image;
+//    array2image8UC4(array, image);
 //    detector.showControlImages();
 //    detector.draw(image);
 //    imshow("Image", image);
@@ -107,17 +108,16 @@ double speed(unsigned long testCount) {
     // Rendering
     Eigen::ArrayXXd array(1024, 1024);
     layout->renderOrthographicProjection(patternPose, array);
-    cv::Mat image = array2image(array);
+    cv::Mat image;
+    array2image8UC4(array, image);
 
     // Detecting
-    Mat grayImage;
-    imageTo8UC1(image, grayImage);
     StampPatternDetector detector(physicalPeriod, "data/stamp/stampF.png", 512);
-    detector.compute(grayImage);
+    detector.compute(array);
 
     tic();
     for (unsigned long i = 0; i < testCount; i++) {
-        detector.compute(grayImage);
+        detector.compute(array);
     }
 
     return toc(testCount);

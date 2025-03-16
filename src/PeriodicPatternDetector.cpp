@@ -10,12 +10,11 @@ namespace vernier {
 
     PeriodicPatternDetector::PeriodicPatternDetector(double physicalPeriod)
     : PatternDetector() {
-        ASSERT_MSG(physicalPeriod > 0.0 , "The period must be positive.");
+        ASSERT_MSG(physicalPeriod > 0.0, "The period must be positive.");
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
         computePhaseGradient = false;
-        periodShift1 = 0;
-        periodShift2 = 0;
+
     }
 
     void PeriodicPatternDetector::readJSON(const rapidjson::Value& document) {
@@ -30,18 +29,19 @@ namespace vernier {
 
     void PeriodicPatternDetector::computeImage() {
         patternPhase.compute(array);
-
+        periodShift1 = 0;
+        periodShift2 = 0;
         plane1 = patternPhase.getPlane1();
         plane2 = patternPhase.getPlane2();
 
-        if (computePhaseGradient==false) {
+        if (computePhaseGradient == false) {
             betaSign = 1;
             gammaSign = 1;
         } else {
             patternPhase.computePhaseGradients(betaSign, gammaSign);
         }
     }
-        
+
     Pose PeriodicPatternDetector::get2DPose(int id) {
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
@@ -50,7 +50,7 @@ namespace vernier {
 
         return Pose(x, y, alpha, pixelSize);
     }
-    
+
     Pose PeriodicPatternDetector::get3DPose(int id) {
         Pose pose = getAll3DPoses()[0];
         pose.beta *= betaSign;
@@ -61,9 +61,9 @@ namespace vernier {
     bool PeriodicPatternDetector::patternFound(int id) {
         return patternPhase.peaksFound();
     }
-    
+
     int PeriodicPatternDetector::patternCount() {
-        return (int)patternPhase.peaksFound();
+        return (int) patternPhase.peaksFound();
     }
 
     std::vector<Pose> PeriodicPatternDetector::getAll3DPoses(int id) {
@@ -103,7 +103,7 @@ namespace vernier {
 
         return poseVec;
     }
-    
+
     std::string PeriodicPatternDetector::toString() {
         return PatternDetector::toString() + " period: " + to_string(this->physicalPeriod) + unit;
     }
@@ -122,18 +122,17 @@ namespace vernier {
         cv::imshow("Phase fringes (red = dir 1, green = dir 2)", patternPhase.getFringesImage());
         //cv::moveWindow("Phase fringes (red = dir 1, green = dir 2)", 0, 0);
     }
-    
+
     void PeriodicPatternDetector::draw(cv::Mat& image) {
         PatternDetector::draw(image);
-        
+
         double x = -plane1.getPosition(physicalPeriod, 0.0, 0.0, 0);
         double y = -plane2.getPosition(physicalPeriod, 0.0, 0.0, 0);
         double alpha = plane1.getAngle();
         double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
 
-        Pose(x, y, alpha, pixelSize).draw(image);        
+        Pose(x, y, alpha, pixelSize).draw(image);
     }
-
 
     void PeriodicPatternDetector::setPhaseGradientMode(bool isPerspective) {
         this->computePhaseGradient = !isPerspective;

@@ -21,13 +21,13 @@ void main1() {
     PatternPhase phaseRetrieving;
     phaseRetrieving.setSigma(1);
     phaseRetrieving.setPixelPeriod(15);
-    phaseRetrieving.compute(image2array(image));
+    phaseRetrieving.compute(image);
 
     //            std::cout << "phase at the center : \n" << phaseRetrieving.getPhase1()(768/2,1024/2) << std::endl;
 
     std::cout << "planes coefficients : \n" << phaseRetrieving.getPlane1().toString() << std::endl;
-    cv::imshow("Plane 1", array2image(phaseRetrieving.getUnwrappedPhase1()));
-    cv::imshow("Plane 2", array2image(phaseRetrieving.getUnwrappedPhase2()));
+    arrayShow("Plane 1", phaseRetrieving.getUnwrappedPhase1());
+    arrayShow("Plane 2", phaseRetrieving.getUnwrappedPhase2());
     //            imshow("spectrumFiltered1", array2image(phaseRetrieving.spectrumFiltered1, 0.00001 ));
     //            imshow("spectrumFiltered2", array2image(phaseRetrieving.spectrumFiltered2, 0.00001 ));
     //            imshow("Spectrum", array2image(phaseRetrieving.spectrumShifted, 0.00001));
@@ -83,7 +83,7 @@ void runAllTests2() {
     phaseRetrieving.setPixelPeriod(15);
 
     cv::Mat image = cv::imread("data/im_1.png", 0);
-    phaseRetrieving.compute(image2array(image));
+    phaseRetrieving.compute(image);
     Eigen::MatrixXd coeffMatrix(3, 1);
 
     Eigen::Vector3d planeCoefficients;

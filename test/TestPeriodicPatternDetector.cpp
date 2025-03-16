@@ -126,12 +126,12 @@ void main2d() {
 
 void test2d() {
     START_UNIT_TEST;
-
+    
     // Constructing the layout
     double physicalPeriod = randomDouble(5.0, 10.0);
     PatternLayout* layout = new PeriodicPatternLayout(physicalPeriod, 81, 61);
     cout << "  Physical period: " << physicalPeriod << endl;
-
+    
     // Setting the pose of the pattern in the camera frame for rendering
     double x = randomDouble(0.0, physicalPeriod / 2.01);
     double y = randomDouble(0.0, physicalPeriod / 2.01);
@@ -164,7 +164,7 @@ void test2d() {
 
 int main(int argc, char** argv) {
 
-    //    main2d();
+       // main2d();
 
     REPEAT_TEST(test2d(), 10)
 

@@ -41,6 +41,15 @@ namespace vernier {
         spatial.real() = image;
         compute();
     }
+    
+    void PatternPhase::compute(const cv::Mat& image) {
+        resize(image.rows, image.cols);
+        spatial.setZero();
+        Eigen::ArrayXXd array;
+        cv2eigen(image, array);
+        spatial.real() = array;
+        compute();
+    }
 
     void PatternPhase::compute() {
         fft.compute(spatial, spectrum);

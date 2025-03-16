@@ -124,7 +124,9 @@ void test2d(int codeSize) {
     // Rendering
     Eigen::ArrayXXd array(512, 512);
     layout->renderOrthographicProjection(patternPose, array);
-    cv::Mat image = array2image(array);
+    
+    cv::Mat image;
+    array2image8UC4(array, image);
     //imshow("QR codes", image);
     //waitKey();
 

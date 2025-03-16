@@ -18,15 +18,23 @@ void main1() {
 
     spatial << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32;
 
-    FourierTransform ft;
+    FourierTransform fft(8, 4, FFTW_FORWARD);
     std::cout << "spatial = " << spatial << std::endl;
 
-    ft.compute(spatial, spectral);
+    fft.compute(spatial, spectral);
 
     Eigen::ArrayXXcd spectralShifted(spectral.rows(), spectral.cols());
     Spectrum::shift(spectral, spectralShifted);
 
+    std::cout << "spectral = " << spectral << std::endl;
     std::cout << "spectral shifted = " << spectralShifted << std::endl;
+
+    FourierTransform ifft(8, 4, FFTW_BACKWARD);
+
+    fft.compute(spectral, spatial);
+
+    std::cout << "spatial = " << spatial << std::endl;
+
 }
 
 void main2() {
@@ -60,7 +68,9 @@ void main2() {
         layout->renderOrthographicProjection(patternPose, array);
 
         // Showing image
-        cv::imshow("Spatial", array2image(array));
+        cv::Mat image;
+        array2image8UC4(spatial, image);
+        cv::imshow("Spatial", image);
 
         // Fourier transform
         spatial.resize(array.rows(), array.cols());
@@ -70,16 +80,17 @@ void main2() {
 
         // Showing spectrum
         spectrumAbs = spectrumShifted.abs() / 10000;
-        cv::imshow("Spectrum", array2image(spectrumAbs));
+        array2image8UC4(spectrumAbs, image);
+        cv::imshow("Spectrum", image);
         cv::waitKey();
     }
 
 }
 
 void runAllTests() {
-    
+
     START_UNIT_TEST;
-    
+
     std::random_device rd;
     std::uniform_real_distribution<double> dist(0, 1);
 
@@ -104,6 +115,11 @@ void runAllTests() {
         spectralAnalytic(i) = sum;
     }
 
+    //    cout << spectral << endl <<"--------------" << endl;
+    //    cout << spectralAnalytic << endl <<"--------------"<< endl;
+    //    cout << spectral-spectralAnalytic << endl <<"--------------" << endl;
+
+
     UNIT_TEST(areEqual(spectral, spectralAnalytic, 1e-12));
 }
 
@@ -122,6 +138,8 @@ double speed(unsigned long testCount) {
 }
 
 int main(int argc, char** argv) {
+
+    main1();
 
     runAllTests();
 

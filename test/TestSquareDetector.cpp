@@ -15,11 +15,10 @@ void main1() {
 
     //string filename = "data/stamp/stamp2.png";
     string filename = "data/QRCode/code17.jpg";
-    Mat grayImage, image = imread(filename);
-    imageTo8UC1(image, grayImage);
+    Mat image = imread(filename, cv::IMREAD_GRAYSCALE);
 
     SquareDetector detector;
-    detector.compute(grayImage);
+    detector.compute(image);
     cout << "Found " << detector.squares.size() << " squares in " << filename << endl;
     cout << "Squares: " << detector.toString() << endl;
 

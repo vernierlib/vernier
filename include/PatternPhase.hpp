@@ -71,10 +71,16 @@ namespace vernier {
 
         /** Computes the phase planes of a given pattern 
          *
-         *	\param image: image of a pattern in an ArrayXXd form
+         *	\param image: image of a pattern in an Eigen::ArrayXXd
          */
         void compute(const Eigen::ArrayXXd& image);
-              
+          
+        /** Computes the phase planes of a given pattern 
+         *
+         *	\param image: image of a pattern in a cv::Mat
+         */
+        void compute(const cv::Mat& image);
+       
         /** Computes the phase gradients to find the sign of the out-of-plane 
          * angles (works only with slight perspective projection)
          */
