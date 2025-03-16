@@ -28,6 +28,7 @@ namespace vernier {
         numberWhiteDots.fill(0);
         cumulWhiteDots.fill(0);
 
+
         for (int col = 0; col < array.cols(); col++) {
             for (int row = 0; row < array.rows(); row++) {
 
@@ -45,6 +46,7 @@ namespace vernier {
                 }
             }
         }
+
 
         for (int row = 0; row < thumbnail.rows; row++) {
             for (int col = 0; col < thumbnail.cols; col++) {

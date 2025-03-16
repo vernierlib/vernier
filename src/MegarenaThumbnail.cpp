@@ -265,6 +265,7 @@ namespace vernier {
         PhasePlane tempPlane2(tempPlane2Coeff);
 
 
+
         for (int col = 0; col < patternArray.cols(); col++) {
             for (int row = 0; row < patternArray.rows(); row++) {
                 //double phaseCol = plane1.getPhase(row, col);
@@ -298,6 +299,7 @@ namespace vernier {
 
         PhasePlane tempPlane1(tempPlane1Coeff);
         PhasePlane tempPlane2(tempPlane2Coeff);
+
 
 
         for (int col = 0; col < patternArray.cols(); col++) {

@@ -24,6 +24,7 @@ namespace vernier {
             int kernelCenterRow = nRows / 2;
             int kernelCenterCol = nCols / 2;
             double sigma2 = 2 * sigma * sigma;
+
             for (int col = 0; col < kernel.cols(); col++) {
                 double dCol = col - kernelCenterCol;
                 for (int row = 0; row < kernel.rows(); row++) {
@@ -49,6 +50,7 @@ namespace vernier {
     void GaussianFilter::applyTo(Eigen::ArrayXXcd& inputArray, int centerRow, int centerCol) {
         int kernelCenterRow = kernel.rows() / 2;
         int kernelCenterCol = kernel.cols() / 2;
+
         for (int col = 0; col < inputArray.cols(); col++) {
             int kernelCol = col - (centerCol - kernelCenterCol);
             if (kernelCol >= 0 && kernelCol < kernel.cols()) {
@@ -70,6 +72,7 @@ namespace vernier {
 
     void gaussianFilter(Eigen::ArrayXXcd& array, double centerRow, double centerCol, double sigma) {
         double sigma2 = 2 * sigma * sigma;
+
         for (int col = 0; col < array.cols(); col++) {
             double dCol = col - centerCol;
             for (int row = 0; row < array.rows(); row++) {

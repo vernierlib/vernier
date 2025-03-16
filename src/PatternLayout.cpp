@@ -351,6 +351,7 @@ namespace vernier {
         Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
         Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
 
+
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
                 //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
@@ -389,6 +390,7 @@ namespace vernier {
 
         Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
         Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
+
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {

@@ -38,19 +38,28 @@ else(USE_FFTW)
   add_subdirectory(3rdparty/ooura/fft2d)
 endif(USE_FFTW)
 
-# OpenCV usage
-if (USE_OPENCV)
-  if (WIN32) # true when the target system is Windows, including Win64.
-    message(STATUS "Enabling OpenCV support.")    
-    find_package(OpenCV REQUIRED) 
-    execute_process(COMMAND ${CMAKE_SOURCE_DIR}/3rdparty/pathed/pathed.exe -a ${_OpenCV_LIB_PATH})
-  else(WIN32)
-    message(STATUS "Enabling OpenCV support.")
-    find_package(OpenCV REQUIRED)
-  endif(WIN32)
-else(USE_OPENCV)
-  message(STATUS "Disabling OpenCV support.")
-endif(USE_OPENCV)
+# Find OpenCV, you may need to set OpenCV_DIR variable
+# to the absolute path to the directory containing OpenCVConfig.cmake file
+# via the command line or GUI
+find_package(OpenCV REQUIRED)
+message(STATUS "OpenCV library status:")
+message(STATUS "    version: ${OpenCV_VERSION}")
+message(STATUS "    config: ${OpenCV_DIR}")
+message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
+message(STATUS "    libraries: ${OpenCV_LIBS}")
+if (WIN32) # true when the target system is Windows, including Win64.
+  execute_process(COMMAND ${CMAKE_SOURCE_DIR}/3rdparty/pathed/pathed.exe -a ${OpenCV_LIB_PATH})
+endif(WIN32)
+
+# Find OpenMP (optional)
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+  message(STATUS "OpenMP_CXX library status:")
+  message(STATUS "    version: ${OpenMP_CXX_VERSION}")
+  message(STATUS "    include path: ${OpenMP_CXX_INCLUDE_DIRS}")
+  message(STATUS "    library path: ${OpenMP_CXX_LIBRARIES}")
+  message(STATUS "    libraries: ${OpenMP_CXX_LIB_NAMES}")
+endif(OpenMP_CXX_FOUND)
 
 # add library core
 add_subdirectory(src)

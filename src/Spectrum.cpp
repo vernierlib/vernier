@@ -32,7 +32,6 @@ namespace vernier {
             for (int row = source.rows() / 2 - offset; row < source.rows() / 2 + offset; row++) {
                 std::complex<double> complexValue = source(row, col);
 
-
                 double frequenceColApprox = ((double) col - (double) source.cols() / 2.0) / ((double) source.cols() / (double) approxPixelPeriod);
                 double frequenceRowApprox = ((double) row - (double) source.rows() / 2.0) / ((double) source.rows() / (double) approxPixelPeriod);
                 double frequenceColMin = frequenceColApprox - frequenceColApprox * (sqrt(2) - 1) / 2.0;
@@ -168,7 +167,7 @@ namespace vernier {
             double maxValue = 0;
             mainPeakList.conservativeResize(mainPeakList.rows() + 1, 3);
 
-            for (int col = 0; col < source.cols(); col++) {
+        for (int col = 0; col < source.cols(); col++) {
                 for (int row = 0; row < source.rows(); row++) {
                     std::complex<double> complexValue = source(row, col);
                     double norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
@@ -247,13 +246,12 @@ namespace vernier {
 
         double maxValue = -1.0;
         std::complex<double> complexValue;
-        double norm = 0.0;
 
         for (int col = 1; col < source.cols()-1; col++) {
             for (int row = source.rows()/2; row < source.rows()-1; row++) {
                 //complexValue = source(row, col);
                 //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-                norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
+                double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
                 if (norm > maxValue) {
                     maxValue = norm;
                     mainPeak1.x() = col;
@@ -278,7 +276,7 @@ namespace vernier {
             for (int row = source.rows()/2; row < source.rows()-1; row++) {
                 //complexValue = source(row, col);
                 //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-                norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
+                double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
                 if (norm > maxValue) {
                     maxValue = norm;
                     mainPeak2.x() = col;

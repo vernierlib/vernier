@@ -13,12 +13,10 @@ foreach(file ${EXAMPLES})
     DESTINATION bin
     RENAME ${CMAKE_PROJECT_NAME}-${exampleName})
 
-  if (USE_OPENCV)
-    include_directories (${OpenCV_INCLUDE_DIRS})
-    add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
-    target_link_libraries(${exampleName} ${OpenCV_LIBS})
-    target_compile_definitions(${exampleName} PUBLIC USE_OPENCV)
-  endif()
+  include_directories (${OpenCV_INCLUDE_DIRS})
+  add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
+  target_link_libraries(${exampleName} ${OpenCV_LIBS})
+  target_compile_definitions(${exampleName} PUBLIC USE_OPENCV)
   
   if (USE_FFTW)
     include_directories (${FFTW3_INCLUDE_DIRS})
