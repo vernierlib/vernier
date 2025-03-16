@@ -256,8 +256,6 @@ namespace vernier {
     void MegarenaThumbnail::computeThumbnail(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
-        int phaseIteration1, phaseIteration2;
-
         Eigen::Vector3d tempPlane1Coeff(plane1.getA(), plane1.getB(), plane1.getC());
         Eigen::Vector3d tempPlane2Coeff(plane2.getA(), plane2.getB(), plane2.getC());
 
@@ -265,7 +263,7 @@ namespace vernier {
         PhasePlane tempPlane2(tempPlane2Coeff);
 
 
-
+#pragma omp parallel for
         for (int col = 0; col < patternArray.cols(); col++) {
             for (int row = 0; row < patternArray.rows(); row++) {
                 //double phaseCol = plane1.getPhase(row, col);
@@ -273,8 +271,8 @@ namespace vernier {
                 double phaseCol = tempPlane1.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
                 double phaseRow = tempPlane2.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
 
-                phaseIteration1 = round(phaseCol / (2.0 * PI)) + length1 / 2;
-                phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
+                int phaseIteration1 = round(phaseCol / (2.0 * PI)) + length1 / 2;
+                int phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
 
                 if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
                     if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
@@ -292,7 +290,6 @@ namespace vernier {
     void MegarenaThumbnail::computeThumbnailTotal(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
 
-        int phaseIteration1, phaseIteration2;
 
         Eigen::Vector3d tempPlane1Coeff(plane1.getA() * 2.0, plane1.getB() * 2.0, plane1.getC() * 2.0);
         Eigen::Vector3d tempPlane2Coeff(plane2.getA() * 2.0, plane2.getB() * 2.0, plane2.getC() * 2.0);
@@ -301,7 +298,7 @@ namespace vernier {
         PhasePlane tempPlane2(tempPlane2Coeff);
 
 
-
+#pragma omp parallel for
         for (int col = 0; col < patternArray.cols(); col++) {
             for (int row = 0; row < patternArray.rows(); row++) {
                 //double phaseCol = plane1.getPhase(row, col);
@@ -309,8 +306,8 @@ namespace vernier {
                 double phaseCol = tempPlane1.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
                 double phaseRow = tempPlane2.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
 
-                phaseIteration1 = round(phaseCol / (2.0 * PI)) + length1 / 2;
-                phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
+                int phaseIteration1 = round(phaseCol / (2.0 * PI)) + length1 / 2;
+                int phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
 
                 if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
                     if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {

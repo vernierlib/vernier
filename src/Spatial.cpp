@@ -186,6 +186,7 @@ namespace vernier {
         ASSERT_MSG(size > 0, "The size of the window must be positive.")
         Eigen::ArrayXXd window(size, size);
         int radius = size / 2;
+#pragma omp parallel for
         for (int col = -radius; col < radius; col++) {
             for (int row = -radius; row < radius; row++) {
                 double distanceToCenter = sqrt(row * row + col * col);
@@ -202,7 +203,7 @@ namespace vernier {
     void takeSnapshot(int x, int y, int size, const Eigen::ArrayXXd & array, Eigen::ArrayXXd & snapshot) {
         snapshot.resize(size, size);
         int radius = size / 2;
-#pragma omp parallel for num_threads(8)
+#pragma omp parallel for
         for (int col = -radius; col < radius; col++) {
             for (int row = -radius; row < radius; row++) {
                 if (y + row >= 0 && y + row < array.rows() && x + col >= 0 && x + col < array.cols()) {

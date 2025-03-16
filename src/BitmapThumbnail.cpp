@@ -28,7 +28,7 @@ namespace vernier {
         numberWhiteDots.fill(0);
         cumulWhiteDots.fill(0);
 
-
+#pragma omp parallel for
         for (int col = 0; col < array.cols(); col++) {
             for (int row = 0; row < array.rows(); row++) {
 
@@ -47,7 +47,7 @@ namespace vernier {
             }
         }
 
-
+#pragma omp parallel for
         for (int row = 0; row < thumbnail.rows; row++) {
             for (int col = 0; col < thumbnail.cols; col++) {
                 thumbnail.at<char>(row, col) = (char) (255 * cumulWhiteDots(col, row) / numberWhiteDots(col, row));
