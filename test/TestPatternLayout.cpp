@@ -182,6 +182,16 @@ void runAllTests() {
     UNIT_TEST(areFilesEqual("BitmapPattern.json", "BitmapPattern2.json"));
 
     START_UNIT_TEST;
+    BitmapPatternLayout layout52("data/stamp69x69.png", 20);
+    layout52.saveToJSON("StampPattern.json");
+    layout52.saveToSVG();
+    layout52.saveToPNG();
+    layout52.loadFromJSON("StampPattern.json");
+    layout52.saveToJSON("StampPattern2.json");
+    //    remove("BitmapPattern.json");
+    UNIT_TEST(areFilesEqual("StampPattern.json", "StampPattern2.json"));
+
+    START_UNIT_TEST;
     CustomPatternLayout layout6;
     layout6.loadFromCSV("HPCodePattern.csv");
     layout6.saveToJSON();

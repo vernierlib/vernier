@@ -7,7 +7,9 @@ using namespace std;
  */
 int main() {
     
-    string filename = "megarenaPattern";
+    //string filename = "megarenaPattern";
+    string filename = "stampPattern";
+    //string filename = "bitmapPattern";
     
     // Loading the layout
     unique_ptr<PatternLayout> layout(Layout::loadFromJSON(filename + ".json"));

@@ -3,23 +3,19 @@ cmake_minimum_required(VERSION 3.10)
 cmake_policy(SET CMP0048 NEW)
 
 # project name and language
-project(VernierLibrary VERSION 1.1 LANGUAGES CXX)
+project(VernierLibrary VERSION 1.2 LANGUAGES CXX)
 
 # build options, for example to skip tests building use $ cmake .. -DBUILD_TESTS=OFF
 option(BUILD_TESTS "Build tests" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(USE_FFTW "Use FFTW" ON)
-option(USE_OPENCV "Use OpenCV" ON)
 
 # set build mode type
-set(CMAKE_BUILD_TYPE Debug)
+set(CMAKE_BUILD_TYPE Release)
 
 # require C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-# Add path to a FindSomePackage.cmake file
-# list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake")
 
 # FFTW usage
 if (USE_FFTW)
@@ -61,24 +57,31 @@ if(OpenMP_CXX_FOUND)
   message(STATUS "    libraries: ${OpenMP_CXX_LIB_NAMES}")
 endif(OpenMP_CXX_FOUND)
 
+# add GDS Toolkit
+add_subdirectory(3rdparty/gdstk)
+
 # add library core
 add_subdirectory(src)
-add_subdirectory(3rdparty/gdstk)
 
 # add examples
 add_subdirectory(examples)
 
 # unit tests
 if (BUILD_TESTS)
-  message(STATUS "Generating tests.")
+  message(STATUS "Generating tests (including examples).")
   add_subdirectory(3rdparty/matio)
   add_subdirectory(test)
 
   file(GLOB TESTS test/*.cpp)
-
   foreach(file ${TESTS})
     get_filename_component(testName ${file} NAME_WE) 
     add_test(NAME ${testName} COMMAND ${testName} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/test)
+  endforeach(file)
+
+  file(GLOB EXAMPLES examples/*.cpp)
+  foreach(file ${EXAMPLES})
+    get_filename_component(testName ${file} NAME_WE) 
+    add_test(NAME ${testName} COMMAND ${testName} WORKING_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/examples)
   endforeach(file)
 
   enable_testing ()

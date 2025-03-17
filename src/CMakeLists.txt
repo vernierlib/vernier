@@ -4,10 +4,6 @@ file(GLOB SOURCES *.cpp)
 
 add_library(vernier STATIC ${SOURCES})
 
-install(TARGETS vernier DESTINATION lib)
-
-install(FILES ${HEADERS} DESTINATION include/${CMAKE_PROJECT_NAME})
-
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
@@ -32,5 +28,9 @@ endif()
 if(OpenMP_CXX_FOUND)
   target_link_libraries(vernier OpenMP::OpenMP_CXX)
 endif()
+
+install(TARGETS vernier DESTINATION lib)
+
+install(FILES ${HEADERS} DESTINATION include/${CMAKE_PROJECT_NAME})
 
 

@@ -16,7 +16,7 @@ using namespace std;
 int main() {
 
     // Loading the image
-    Mat image = imread("megarena12bits.jpg");
+    Mat image = imread("megarenaPatternImage_12bits_9um.jpg");
 
     // Analysing the spectrum of the image
     PatternPhase patternPhase;
@@ -30,7 +30,7 @@ int main() {
         cout << "Peaks not found..." << endl;
     }
     
-    // Showing image spectrum and fringes
+    // Showing image spectrum and fringes 
     patternPhase.showControlImages();
     waitKey();
     

@@ -17,9 +17,9 @@ using namespace cv;
 void main1() {
 
     //    HPCodePatternLayout layout(2, 19);
-    //    layout.saveToPNG("data/HPCode37.png");
+    //    layout.saveToPNG("data/HPCode37x37.png");
 
-    BitmapPatternDetector detector(2, "data/HPCode37.png");
+    BitmapPatternDetector detector(2, "data/HPCode37x37.png");
     cout << detector.toString() << endl;
 
     cv::Mat image = cv::imread("data/QRCode/code18_270.jpg");
@@ -36,7 +36,7 @@ void main1() {
 
 void main2() {
 
-    //    BitmapPatternLayout layout5("data/HPCode33.png", 2);
+    //    BitmapPatternLayout layout5("data/HPCode33x33.png", 2);
     //    layout5.saveToJSON("BitmapPatternDetector.json");
 
     PatternDetector* detector;
@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 
-    REPEAT_TEST(test2d("data/HPCode37.png"), 20);
+    REPEAT_TEST(test2d("data/HPCode37x37.png"), 20);
     
     REPEAT_TEST(test2d("data/femto117x45.png"), 20);
 

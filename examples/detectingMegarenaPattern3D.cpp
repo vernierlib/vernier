@@ -15,12 +15,12 @@ using namespace std;
 int main() {
     
     // Loading the image
-    string filename = "megarenaPatternImage_8bits_140um.jpg";
+    string filename = "megarenaPatternImage_12bits_9um.jpg";
     Mat image = cv::imread(filename);
 
     // Detecting the pattern and estimating its pose
-    double physicalPeriod = 140; // µm
-    int codeSize = 8; // bits
+    double physicalPeriod = 9; // µm
+    int codeSize = 12; // bits
     MegarenaPatternDetector detector(physicalPeriod, codeSize);
     detector.compute(image);
      
@@ -36,5 +36,5 @@ int main() {
     // Showing image and its spectrum
     detector.showControlImages();
     imshow(filename, image);
-    waitKey(0);
+    waitKey();
 }

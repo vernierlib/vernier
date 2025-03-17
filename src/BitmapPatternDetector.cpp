@@ -6,6 +6,7 @@
 
 #include "BitmapPatternDetector.hpp"
 #include "BitmapThumbnail.hpp"
+#include "PatternLayout.hpp"
 
 namespace vernier {
 
@@ -29,6 +30,10 @@ namespace vernier {
     }
 
     void BitmapPatternDetector::readJSON(const rapidjson::Value & document) {
+//        BitmapPatternLayout layout;
+//        layout.readJSON(document);
+//        description = layout.description;
+//        
         throw Exception("BitmapPatternDetector::readJSON is not implemented yet.");
     }
 

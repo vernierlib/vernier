@@ -19,7 +19,7 @@ The Vernier library is cross-platform and required a C++14 compiler. Some platfo
 
 * Visual C++ 2019/2022 on Windows (64-bit)
 <!--- * GNU C++ 3.8.x on Cygwin -->
-* Clang 14.0 on Mac OS X (64-bit)
+* Clang 19.1.7 on macOS 15 Sequoia
 
 Users can build and run the unit tests on their platform/compiler.
 

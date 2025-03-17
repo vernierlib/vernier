@@ -19,6 +19,7 @@ namespace vernier {
     }
 
     void PatternPhase::resize(int nRows, int nCols) {
+        ASSERT_MSG(nCols > 0 && nRows > 0, "The image is empty.")
         if (nRows != spectrum.rows() || nCols != spectrum.cols()) {
             fft.resize(nRows, nCols, FFTW_FORWARD);
             ifft.resize(nRows, nCols, FFTW_BACKWARD);
@@ -41,12 +42,12 @@ namespace vernier {
         spatial.real() = image;
         compute();
     }
-    
+
     void PatternPhase::compute(const cv::Mat& image) {
         resize(image.rows, image.cols);
-        spatial.setZero();
         Eigen::ArrayXXd array;
-        cv2eigen(image, array);
+        image2arrayXXd(image, array);
+        spatial.setZero();
         spatial.real() = array;
         compute();
     }
@@ -440,7 +441,7 @@ namespace vernier {
 
         cv::Mat image;
         array2image8UC4(spectrumShifted, image);
-        
+
         if (pixelPeriod > 0.0) {
             double frequenceColApprox = ((double) spectrumShifted.cols() / (double) pixelPeriod);
             double frequenceRowApprox = ((double) spectrumShifted.rows() / (double) pixelPeriod);
