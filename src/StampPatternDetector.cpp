@@ -40,39 +40,39 @@ namespace vernier {
             if (snapshot.cols() < diameter) {
                 std::cout << "The stamp is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
             }
-            if (2 * diameter < bitmapThumbnail.size()) {
+            if (diameter < 2 * bitmapThumbnail.size()) {
                 std::cout << "The stamp is too tiny for pose estimation: increase the picture quality size." << std::endl;
+            } else {
+
+                int centerX = (int) square.getCenter().x;
+                int centerY = (int) square.getCenter().y;
+                takeSnapshot(centerX, centerY, snapshot.cols(), array, snapshot);
+
+                patternPhase.compute(snapshot * window);
+                plane1 = patternPhase.getPlane1();
+                plane2 = patternPhase.getPlane2();
+
+                if (patternPhase.peaksFound()) {
+
+                    bitmapThumbnail.compute(snapshot.real(), patternPhase.getPlane1(), patternPhase.getPlane2());
+                    computeAbsolutePose();
+
+                    double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
+                    double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
+                    double alpha = plane1.getAngle();
+
+                    double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+                    double xImg = (centerX - image8U.cols / 2);
+                    double yImg = (centerY - image8U.rows / 2);
+                    double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
+                    double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
+
+                    Pose pose = Pose(x, y, alpha, pixelSize);
+
+                    int id = bitmapThumbnail.hashCode(maxAngle);
+                    markers.insert(std::make_pair(id, pose));
+                }
             }
-
-            int centerX = (int) square.getCenter().x;
-            int centerY = (int) square.getCenter().y;
-            takeSnapshot(centerX, centerY, snapshot.cols(), array, snapshot);
-
-            patternPhase.compute(snapshot * window);
-            plane1 = patternPhase.getPlane1();
-            plane2 = patternPhase.getPlane2();
-
-            if (patternPhase.peaksFound()) {
-
-                bitmapThumbnail.compute(snapshot.real(), patternPhase.getPlane1(), patternPhase.getPlane2());
-                computeAbsolutePose();
-
-                double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
-                double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
-                double alpha = plane1.getAngle();
-
-                double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
-                double xImg = (centerX - image8U.cols / 2);
-                double yImg = (centerY - image8U.rows / 2);
-                double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
-                double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
-
-                Pose pose = Pose(x, y, alpha, pixelSize);
-
-                int id = bitmapThumbnail.hashCode(maxAngle);
-                markers.insert(std::make_pair(id, pose));
-            }
-
         }
     }
 
