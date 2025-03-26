@@ -7,7 +7,7 @@
 
 The Vernier Library is an open-source C++ library for pose measurement of calibrated patterns with subpixel resolutions.
 
-The library gathers a collection of classes for detection and rendering different kind of calibrated patterns (periodic patterns, megarena patterns, QR-code-like and bitmap patterns).
+The library defines a collection of classes for detection and rendering different kind of calibrated patterns (periodic patterns, megarena patterns, QR-code-like and stamps patterns).
 
 ## Documentation
 
@@ -15,7 +15,7 @@ The [documentation](https://vernierlib.github.io/) is automatically generated fr
 
 ## Compatibility
 
-The Vernier library is cross-platform and required a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
+The Vernier library is cross-platform and requires a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
 
 * Visual C++ 2019/2022 on Windows (64-bit)
 <!--- * GNU C++ 3.8.x on Cygwin -->
@@ -32,9 +32,9 @@ Many packages are included inside the repositories ([see all dependencies](3rdpa
 
 ### Windows instructions
 
-The package comes with all binaries files for Windows 64bits except OpenCV ones.
+The package comes with all the 3rd parties for Windows 64bits except the OpenCV library.
 
-First you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
+Thus, you have to install OpenCV first:
 
 1. Download the OpenCV release from [https://opencv.org/releases/](https://github.com/opencv/opencv/releases/download/4.7.0/opencv-4.7.0-windows.exe)
 2. Unpack the self-extracting archive in a local directory, for example `C:\lib\opencv`
@@ -50,23 +50,21 @@ To get everything running with Visual Studio (and other EDI):
 3. Restart the computer for system path updating
 4. Open the generated project
 
-Alternatively, you can use VS Code.
-
 OpenCV requires the Media Feature Pack for Windows to run, you may have to install it if some MF???.dll are missing.
 
 ### Linux instructions
 
-With Linux, some dependencies must be installed first using apt-get:
+With Linux, some dependencies must be installed first using the package manager:
 
-	> sudo apt-get install cmake eigen libtool libmatio
+	> sudo apt install cmake libtool libmatio
 
-Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
+Then, you have to install OpenCV:
 
-	> sudo apt-get install opencv
+	> sudo apt install libopencv-dev
 
 Optionnally you may install FFTW (recommanded for speed):
 
-	> sudo apt-get install fftw
+	> sudo apt install fftw
 
 Finally, open a terminal and go to the directory of the package
 
@@ -75,13 +73,13 @@ Finally, open a terminal and go to the directory of the package
 	> cmake ..
 	> make
 
-### OSX instructions
+### macOS instructions
 
-With OSX, some dependencies must be installed first using homebrew:
+With macOS, some dependencies must be installed first using homebrew:
 
 	% brew install autoconfig automake cmake eigen libtool libmatio
 
-Then, you may install OpenCV (optionnal but higly recommanded for GUI and image file management):
+Then, you have to install OpenCV:
 
 	% brew install opencv
 
@@ -99,7 +97,6 @@ Finally, open a terminal and go to the directory of the package
 ## Getting started
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/examples.html)
-
 
 ## Licence
 
@@ -121,5 +118,5 @@ Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
-Copyright (c) 2018-2023 ENSMM, UFC, CNRS.
+Copyright (c) 2018-2025 ENSMM, CNRS, UMLP.
 

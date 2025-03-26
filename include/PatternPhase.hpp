@@ -21,6 +21,8 @@ namespace vernier {
      * All the memory allocation and possible pre-calculations are done at the 
      * construction of the detector, then the images can be computed without any delays 
      * (but all the computed images must have the same size).
+     * 
+     * \example analysingImage.cpp
      *    
      */
     class PatternPhase {

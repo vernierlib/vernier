@@ -15,11 +15,10 @@
 namespace vernier {
 
     /** \brief Abstract class to define the interface of pattern detectors. 
-     *  
-     * \example renderingPatternIn2D.cpp
-     * \example renderingPatternIn3D.cpp
-     * \example generatingPNGfromJSON.cpp
-     * \example generatingSVGfromJSON.cpp
+     * 
+     * \example generatingPatternLayout.cpp 
+     * \example renderingPatternImage.cpp
+     * 
      */
     class PatternLayout {
     protected:

@@ -12,12 +12,11 @@
 namespace vernier {
 
     /** Abstract class to define the interface of pattern detectors. 
-     * 
-     * \example detectingMegarenaPattern2D.cpp
-     * \example detectingMegarenaPattern3D.cpp  
-     * \example detectingPeriodicPattern2D.cpp
-     * \example detectingPeriodicPattern3D.cpp
-     * \example detectingPeriodicPattern2DPerspective.cpp  
+     *  
+     * \example detectingStampPattern.cpp     
+     * \example detectingHPCodePattern.cpp 
+     * \example detectingMegarenaPattern.cpp
+     * \example detectingMegarenaPattern3D.cpp 
      */
     class PatternDetector {
     protected:
