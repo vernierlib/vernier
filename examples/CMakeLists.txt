@@ -24,12 +24,10 @@ foreach(file ${EXAMPLES})
   endif()
   
   if(NOT WIN32)
-    target_link_libraries(${testName} gdstk)
+    target_link_libraries(${exampleName} gdstk)
   endif()
 
-  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${exampleName}
-  DESTINATION bin
-  RENAME ${CMAKE_PROJECT_NAME}-${exampleName})
+  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${exampleName} DESTINATION bin RENAME ${CMAKE_PROJECT_NAME}-${exampleName})
   
 endforeach(file)
 

@@ -55,7 +55,7 @@ endif(OpenMP_CXX_FOUND)
 
 ###############################################################################
 # configuration for linux/macox
-elseif(WIN32)
+else(WIN32)
 
 # find FFTW or Ooura
 if(USE_FFTW)
