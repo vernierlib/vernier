@@ -23,8 +23,4 @@ int main() {
     layout->saveToSVG(filename + ".svg");
     cout << filename + ".svg generation completed." << endl;
     
-    // Writing the layout in a OASIS file
-    layout->saveToOASIS(filename + ".oas");
-    cout << filename + ".oas generation completed." << endl;
-    
 }

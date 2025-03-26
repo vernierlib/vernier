@@ -8,6 +8,9 @@
 #define PATTERNLAYOUT_HPP
 
 #include "Common.hpp"
+#ifndef WIN32
+#include <gdstk/gdstk.hpp>
+#endif
 
 namespace vernier {
 
@@ -59,7 +62,8 @@ namespace vernier {
 
         /** Creates a macro file for LayoutEditor corresponding to the pattern layout */
         void saveToLayoutEditorMacro(std::string filename = "");
-        
+
+#ifndef WIN32
         /** Creates a SVG file corresponding to the pattern layout */
         void saveToGDS(std::string filename = "");
 
@@ -68,6 +72,7 @@ namespace vernier {
         
         /** Creates a new GDS cell corresponding to the pattern layout (must be deleted afterward) */
         gdstk::Cell * convertToGDSCell(std::string name = "");
+#endif
 
         /** Creates a CSV file listing all the dots of the pattern layout */
         void saveToCSV(std::string filename = "");

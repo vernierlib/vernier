@@ -220,6 +220,7 @@ namespace vernier {
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
 
+#ifndef WIN32
     gdstk::Cell * PatternLayout::convertToGDSCell(std::string name) {
         if (name == "") {
             name = classname;
@@ -291,6 +292,7 @@ namespace vernier {
         delete cell;
         std::cout << "\r Writing " << filename << " : completed            " << std::endl;
     }
+#endif
 
     void PatternLayout::saveToCSV(std::string filename) {
         if (filename == "") {

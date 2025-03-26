@@ -52,6 +52,8 @@ To get everything running with Visual Studio (and other EDI):
 
 Alternatively, you can use VS Code.
 
+OpenCV requires the Media Feature Pack for Windows to run, you may have to install it if some MF???.dll are missing.
+
 ### Linux instructions
 
 With Linux, some dependencies must be installed first using apt-get:

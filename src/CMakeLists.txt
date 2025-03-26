@@ -7,7 +7,6 @@ add_library(vernier STATIC ${SOURCES})
 include_directories(${CMAKE_SOURCE_DIR}/include)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty)
 include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
-target_link_libraries(vernier gdstk)
 
 include_directories (${OpenCV_INCLUDE_DIRS})
 add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
@@ -27,6 +26,10 @@ endif()
 
 if(OpenMP_CXX_FOUND)
   target_link_libraries(vernier OpenMP::OpenMP_CXX)
+endif()
+
+if(NOT WIN32)
+  target_link_libraries(vernier gdstk)
 endif()
 
 install(TARGETS vernier DESTINATION lib)

@@ -5,7 +5,9 @@
  */
 
 #include "BitmapThumbnail.hpp"
+#ifndef WIN32 
 #include "opencv2/img_hash.hpp"
+#endif
 
 namespace vernier {
 
@@ -85,6 +87,7 @@ namespace vernier {
 //    };
 
     int BitmapThumbnail::hashCode(int angle) {
+#ifndef WIN32         
         cv::Mat horizontalThumbnail;
         if (angle == 0) {
             binaryThumbnail.copyTo(horizontalThumbnail);
@@ -95,9 +98,14 @@ namespace vernier {
         } else {
             cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_90_CLOCKWISE);
         }
+
         cv::Mat hash;
         cv::img_hash::averageHash(horizontalThumbnail, hash);
         return (int) hash.at<unsigned char>(0);
+#else      
+        return 0;
+#endif
+
     }
 
     //    void BitmapThumbnail::threshold() {

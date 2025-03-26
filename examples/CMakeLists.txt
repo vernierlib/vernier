@@ -10,7 +10,6 @@ foreach(file ${EXAMPLES})
   add_executable (${exampleName} ${file})
 
   target_link_libraries(${exampleName} vernier)
-  target_link_libraries(${exampleName} gdstk)
 
   include_directories (${OpenCV_INCLUDE_DIRS})
   add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
@@ -18,11 +17,14 @@ foreach(file ${EXAMPLES})
   
   if (USE_FFTW)
     include_directories (${FFTW3_INCLUDE_DIRS})
-#    link_directories(${FFTW3_LIBRARY_DIRS})
     target_link_libraries(${exampleName} ${FFTW3_LIBRARIES})
     target_compile_definitions(${exampleName} PUBLIC USE_FFTW)
   else()
     target_link_libraries(${exampleName} ooura)
+  endif()
+  
+  if(NOT WIN32)
+    target_link_libraries(${testName} gdstk)
   endif()
 
   install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${exampleName}

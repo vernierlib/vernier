@@ -34,7 +34,6 @@
 #include <opencv2/calib3d.hpp>
 
 #include <rapidjson/document.hpp>
-#include <gdstk/gdstk.hpp>
 
 #include "Exception.hpp"
 #include "Utils.hpp"
