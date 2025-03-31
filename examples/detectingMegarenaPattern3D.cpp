@@ -15,19 +15,19 @@ using namespace std;
 int main() {
     
     // Loading the image
-    string filename = "megarenaPatternImage_12bits_9um.jpg";
+    string filename = "megarenaPatternImage_8bits_140um.png";
     Mat image = cv::imread(filename);
 
     // Detecting the pattern and estimating its pose
-    double physicalPeriod = 9; // µm
-    int codeSize = 12; // bits
+    double physicalPeriod = 140; // µm
+    int codeSize = 8; // bits
     MegarenaPatternDetector detector(physicalPeriod, codeSize);
     detector.compute(image);
      
     // Displaying the pose if a pattern has been found
     cout << "Detector: " << detector.toString() << endl;
     if (detector.patternFound()) {    
-        cout << "Estimated pose: " << detector.get2DPose().toString() << endl;
+        cout << "Estimated 3D pose: " << detector.get3DPose().toString() << endl;
         detector.draw(image);
     } else {
         cout <<"Pattern not found..." << endl;
