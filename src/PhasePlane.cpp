@@ -62,7 +62,7 @@ namespace vernier {
 
     double PhasePlane::getPosition(double physicalPeriod, double y, double x, int periodShift) {
         double phiCenter = getPhase(y, x);
-        if (physicalPeriod != 0.0) {
+        if (physicalPeriod > 0.0) {
             return physicalPeriod * (phiCenter / (2.0 * PI) + (double) (periodShift));
         } else {
             return (2.0 * PI / (std::sqrt(pow(a, 2) + pow(b, 2)))) * (phiCenter / (2.0 * PI) + (double) (periodShift));

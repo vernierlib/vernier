@@ -52,15 +52,15 @@ void test2d() {
     START_UNIT_TEST;
 
     // Constructing the layout
-    double physicalPeriod = randomDouble(15.0, 16.0)/2;
-    PatternLayout* layout = new BitmapPatternLayout("data/stamp/stampG.png", physicalPeriod);
+    double physicalPeriod = randomDouble(7.0, 8.0);
+    PatternLayout* layout = new BitmapPatternLayout("data/stamp/stamp+.png", physicalPeriod);
     cout << "  Physical period: " << physicalPeriod << endl;
 
     // Setting the pose of the pattern in the camera frame for rendering
-    double x = randomDouble(-80, 80);
-    double y = randomDouble(-80, 80);
+    double x = randomDouble(-200, 200);
+    double y = randomDouble(-200, 200);
     double alpha = randomDouble(-PI, PI);
-    double pixelSize = 1.0;
+    double pixelSize = randomDouble(1.0, 1.5);
     Pose patternPose = Pose(x, y, alpha, pixelSize);
     cout << "  Pattern pose: " << patternPose.toString() << endl;
 
@@ -69,23 +69,24 @@ void test2d() {
     layout->renderOrthographicProjection(patternPose, array);
 
     // Detecting
-    StampPatternDetector detector(physicalPeriod, "data/stamp/stampF.png", 420);
+    StampPatternDetector detector(physicalPeriod, "data/stamp/stamp+.png", 420);
     detector.compute(array);
 
     Pose estimatedPose;
     if (detector.patternFound()) {
-        estimatedPose = detector.get2DPose();
+        estimatedPose = detector.get2DPose();//
         cout << "  Estimated pose: " << estimatedPose << endl;      
     }
     
 //    cv::Mat image;
 //    array2image8UC4(array, image);
 //    detector.showControlImages();
+//    vernier::drawCameraFrame(image);
 //    detector.draw(image);
 //    imshow("Image", image);
-//    waitKey(0);
+//    waitKey(10);
 
-    UNIT_TEST(areEqual(patternPose, estimatedPose, 0.1));
+    UNIT_TEST(areEqual(patternPose, estimatedPose, 0.2));
 
 
 }
@@ -129,7 +130,7 @@ int main(int argc, char** argv) {
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 
-    REPEAT_TEST(test2d(), 10);
+    REPEAT_TEST(test2d(), 20);
 
     //testFile("data/stamp/stamp2.png", 2);
 

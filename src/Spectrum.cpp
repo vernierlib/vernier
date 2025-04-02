@@ -55,7 +55,7 @@ namespace vernier {
             }
         }
         //std::cout<< "Peak value (circle method) : " << maxValue/source.cols()/source.rows() <<std::endl;
-        
+
         Eigen::Matrix3d KTotal;
 
         KTotal << 0.0, -(double) source.cols() / (double) source.rows(), (double) source.cols(),
@@ -167,7 +167,7 @@ namespace vernier {
             double maxValue = 0;
             mainPeakList.conservativeResize(mainPeakList.rows() + 1, 3);
 
-        for (int col = 0; col < source.cols(); col++) {
+            for (int col = 0; col < source.cols(); col++) {
                 for (int row = 0; row < source.rows(); row++) {
                     std::complex<double> complexValue = source(row, col);
                     double norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
@@ -240,202 +240,210 @@ namespace vernier {
 
     void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
         int offsetMin = source.rows() / 100.0; // MAGIC NUMBER
-        if (offsetMin < 20) 
+        if (offsetMin < 20)
             offsetMin = 20;
+
         source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
 
         double maxValue = -1.0;
         std::complex<double> complexValue;
 
-        for (int col = 1; col < source.cols()-1; col++) {
-            for (int row = source.rows()/2; row < source.rows()-1; row++) {
+        mainPeak1.setConstant(-1);
+        mainPeak2.setConstant(-1);
+
+        for (int col = 1; col < source.cols() - 1; col++) {
+            for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
                 //complexValue = source(row, col);
                 //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-                double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
+                double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col)) + std::abs(source(row, col + 1));
                 if (norm > maxValue) {
                     maxValue = norm;
                     mainPeak1.x() = col;
                     mainPeak1.y() = row;
-                    mainPeak1.z() = norm/source.cols()/source.rows()/5; // MAGIC NUMBER
+                    mainPeak1.z() = norm / source.cols() / source.rows() / 5; // MAGIC NUMBER
                 }
             }
         }
+
         //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
-//        if (mainPeak1.z() < 1e-5) { // MAGIC NUMBER
-//            //cv::imshow("Peaks not found", array2image(source) );
-//            //cv::waitKey();
-//            throw Exception("Houston, we have a problem here, the first peak has not be found.");
-//        }
-        
-        source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
-        source.block((source.rows()-mainPeak1.y()) - 4, (source.cols()-mainPeak1.x()) - 4, 8, 8) = 0;
+        if (mainPeak1.z() > 1e-5) { // MAGIC NUMBER
 
-        maxValue = 0;
+            source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
+            source.block((source.rows() - mainPeak1.y()) - 4, (source.cols() - mainPeak1.x()) - 4, 8, 8) = 0;
 
-        for (int col = 1; col < source.cols()-1; col++) {
-            for (int row = source.rows()/2; row < source.rows()-1; row++) {
-                //complexValue = source(row, col);
-                //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-                double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col ))+ std::abs(source(row , col +1));
-                if (norm > maxValue) {
-                    maxValue = norm;
-                    mainPeak2.x() = col;
-                    mainPeak2.y() = row;
-                    mainPeak2.z() = norm/source.cols()/source.rows()/5;
-                }
-            }
-        }
-        
-        if (mainPeak1.x()<mainPeak2.x()) {
-            std::swap(mainPeak1,mainPeak2);
-        }
-        
-//        std::cout<<"Image size"<<source.rows()<<"x"<<source.cols()<<std::endl;
-//        
-//        std::cout<<"Peak 1"<<mainPeak1<<std::endl;
-//        std::cout<<"Peak 2"<<mainPeak2<<std::endl;
-//        
-        
-        
-    }
+            maxValue = -1;
 
-    //    void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
-    //        int offsetMin = source.rows() / 100.0;
-    //        source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
-    //
-    //        double maxValue = 0;
-    //        std::complex<double> complexValue;
-    //        double norm;
-    //
-    //        for (int col = source.cols() / 2 + 10; col < source.cols(); col++) {
-    //            for (int row = source.rows() / 2 - 20; row < source.rows(); row++) {
-    //                complexValue = source(row, col);
-    //                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-    //                if (norm > maxValue) {
-    //                    maxValue = norm;
-    //                    mainPeak1.x() = col;
-    //                    mainPeak1.y() = row;
-    //                    mainPeak1.z() = 1;
-    //                }
-    //            }
-    //        }
-    //        source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
-    //
-    //        maxValue = 0;
-    //
-    //        for (int col = 0; col < source.cols(); col++) {
-    //            for (int row = source.rows() / 2 + 2; row < source.rows(); row++) {
-    //                complexValue = source(row, col);
-    //                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
-    //                if (norm > maxValue) {
-    //                    maxValue = norm;
-    //                    mainPeak2.x() = col;
-    //                    mainPeak2.y() = row;
-    //                    mainPeak2.z() = 1;
-    //                }
-    //            }
-    //        }
-    //    }
-
-    void Spectrum::mainPeak4Search(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
-
-        Eigen::ArrayXXd mainPeakList(0, 4);
-
-        Eigen::ArrayXXcd sourceSave = source;
-
-
-        sourceSave.block(sourceSave.rows() / 2 - 4, sourceSave.cols() / 2 - 4, 8, 8) = 0;
-        sourceSave = sourceSave / 50;
-
-        int offsetMin = source.rows() / 100.0;
-        source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
-
-        int count = 0;
-
-        while (mainPeakList.rows() < 10) {
-
-            double maxValue = 0;
-            mainPeakList.conservativeResize(mainPeakList.rows() + 1, mainPeakList.cols());
-
-            for (int col = 0; col < source.cols(); col++) {
-                for (int row = 0; row < source.rows(); row++) {
-                    std::complex<double> complexValue = source(row, col);
-                    double norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+            for (int col = 1; col < source.cols() - 1; col++) {
+                for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
+                    //complexValue = source(row, col);
+                    //norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+                    double norm = std::abs(source(row, col)) + std::abs(source(row - 1, col)) + std::abs(source(row, col - 1)) + std::abs(source(row + 1, col)) + std::abs(source(row, col + 1));
                     if (norm > maxValue) {
                         maxValue = norm;
-                        mainPeakList(mainPeakList.rows() - 1, 0) = col;
-                        mainPeakList(mainPeakList.rows() - 1, 1) = row;
-                        mainPeakList(mainPeakList.rows() - 1, 2) = atan2(row - source.rows() / 2, col - source.cols() / 2);
+                        mainPeak2.x() = col;
+                        mainPeak2.y() = row;
+                        mainPeak2.z() = norm / source.cols() / source.rows() / 5;
                     }
                 }
             }
 
-            double sum;
-            if (mainPeakList(mainPeakList.rows() - 1, 1) - 1 > 0 && mainPeakList(mainPeakList.rows() - 1, 0) - 1 > 0 && mainPeakList(mainPeakList.rows() - 1, 1) + 1 < source.rows() && mainPeakList(mainPeakList.rows() - 1, 0) + 1 < source.cols()) {
-                sum = source.block(mainPeakList(mainPeakList.rows() - 1, 1) - 1, mainPeakList(mainPeakList.rows() - 1, 0) - 1, 2, 2).abs().sum();
-                mainPeakList(mainPeakList.rows() - 1, 3) = sum;
-            } else {
-                sum = 0;
-                mainPeakList(mainPeakList.rows() - 1, 3) = sum;
+            if (mainPeak1.x() < mainPeak2.x()) {
+                std::swap(mainPeak1, mainPeak2);
             }
-
-            if (mainPeakList(mainPeakList.rows() - 1, 1) - 4 > 0 && mainPeakList(mainPeakList.rows() - 1, 0) - 4 > 0 && mainPeakList(mainPeakList.rows() - 1, 1) + 4 < source.rows() && mainPeakList(mainPeakList.rows() - 1, 0) + 4 < source.cols()) {
-                source.block(mainPeakList(mainPeakList.rows() - 1, 1) - 4, mainPeakList(mainPeakList.rows() - 1, 0) - 4, 8, 8) = 0;
-            } else {
-                source(mainPeakList(mainPeakList.rows() - 1, 1), mainPeakList(mainPeakList.rows() - 1, 0)) = 0;
-            }
-
-            count++;
 
         }
 
-        Eigen::ArrayXXd mainPeakListOrderedMag(mainPeakList.rows(), mainPeakList.cols());
-        for (int k = 0; k < mainPeakList.rows(); k++) {
-            double maxSum = 0;
-            int iterator = 0;
-            for (int i = 0; i < mainPeakList.rows(); i++) {
-                if (mainPeakList(i, 3) > maxSum) {
-                    maxSum = mainPeakList(i, 3);
-                    iterator = i;
+//        if (mainPeak1.z() < 1e-5 || mainPeak2.z() < 1e-5) {
+//            throw Exception("Houston, we have a problem here, the first peak has not be found.");
+//        }
+    
+
+    //        std::cout<<"Image size"<<source.rows()<<"x"<<source.cols()<<std::endl;
+    //        
+    //        std::cout<<"Peak 1"<<mainPeak1<<std::endl;
+    //        std::cout<<"Peak 2"<<mainPeak2<<std::endl;
+    //        
+    }
+
+
+
+//    void Spectrum::mainPeakHalfPlane(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
+//        int offsetMin = source.rows() / 100.0;
+//        source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
+//
+//        double maxValue = 0;
+//        std::complex<double> complexValue;
+//        double norm;
+//
+//        for (int col = source.cols() / 2 + 10; col < source.cols(); col++) {
+//            for (int row = source.rows() / 2 - 20; row < source.rows(); row++) {
+//                complexValue = source(row, col);
+//                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+//                if (norm > maxValue) {
+//                    maxValue = norm;
+//                    mainPeak1.x() = col;
+//                    mainPeak1.y() = row;
+//                    mainPeak1.z() = 1;
+//                }
+//            }
+//        }
+//        source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
+//
+//        maxValue = 0;
+//
+//        for (int col = 0; col < source.cols(); col++) {
+//            for (int row = source.rows() / 2 + 2; row < source.rows(); row++) {
+//                complexValue = source(row, col);
+//                norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+//                if (norm > maxValue) {
+//                    maxValue = norm;
+//                    mainPeak2.x() = col;
+//                    mainPeak2.y() = row;
+//                    mainPeak2.z() = 1;
+//                }
+//            }
+//        }
+//    }
+
+void Spectrum::mainPeak4Search(Eigen::ArrayXXcd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
+
+    Eigen::ArrayXXd mainPeakList(0, 4);
+
+    Eigen::ArrayXXcd sourceSave = source;
+
+
+    sourceSave.block(sourceSave.rows() / 2 - 4, sourceSave.cols() / 2 - 4, 8, 8) = 0;
+    sourceSave = sourceSave / 50;
+
+    int offsetMin = source.rows() / 100.0;
+    source.block(source.rows() / 2 - offsetMin / 2, source.cols() / 2 - offsetMin / 2, offsetMin, offsetMin) = 0;
+
+    int count = 0;
+
+    while (mainPeakList.rows() < 10) {
+
+        double maxValue = 0;
+        mainPeakList.conservativeResize(mainPeakList.rows() + 1, mainPeakList.cols());
+
+        for (int col = 0; col < source.cols(); col++) {
+            for (int row = 0; row < source.rows(); row++) {
+                std::complex<double> complexValue = source(row, col);
+                double norm = complexValue.real() * complexValue.real() + complexValue.imag() * complexValue.imag();
+                if (norm > maxValue) {
+                    maxValue = norm;
+                    mainPeakList(mainPeakList.rows() - 1, 0) = col;
+                    mainPeakList(mainPeakList.rows() - 1, 1) = row;
+                    mainPeakList(mainPeakList.rows() - 1, 2) = atan2(row - source.rows() / 2, col - source.cols() / 2);
                 }
             }
-            mainPeakListOrderedMag.block(k, 0, 1, mainPeakList.cols()) = mainPeakList.block(iterator, 0, 1, mainPeakList.cols());
-            mainPeakList(iterator, 3) = 0;
         }
 
-        Eigen::ArrayXXd mainPeakListReduced = mainPeakListOrderedMag.block(0, 0, 4, mainPeakListOrderedMag.cols());
-        Eigen::ArrayXXd mainPeakListOrdered(mainPeakListReduced.rows(), mainPeakList.cols());
-        for (int k = 0; k < mainPeakListReduced.rows(); k++) {
-            double minAngle = 10e10;
-            int iterator = 0;
-            for (int i = 0; i < mainPeakListReduced.rows(); i++) {
-                if (mainPeakListReduced(i, 2) < minAngle) {
-                    minAngle = mainPeakListReduced(i, 2);
-                    iterator = i;
-                }
-            }
-            mainPeakListOrdered.block(k, 0, 1, mainPeakListReduced.cols()) = mainPeakListReduced.block(iterator, 0, 1, mainPeakList.cols());
-            mainPeakListReduced(iterator, 2) = 10e6;
-        }
-
-        if (mainPeakListOrdered(3, 2) > 7.0 * PI / 8.0) {
-            mainPeak1.x() = mainPeakListOrdered(1, 0);
-            mainPeak1.y() = mainPeakListOrdered(1, 1);
-            mainPeak2.x() = mainPeakListOrdered(2, 0);
-            mainPeak2.y() = mainPeakListOrdered(2, 1);
+        double sum;
+        if (mainPeakList(mainPeakList.rows() - 1, 1) - 1 > 0 && mainPeakList(mainPeakList.rows() - 1, 0) - 1 > 0 && mainPeakList(mainPeakList.rows() - 1, 1) + 1 < source.rows() && mainPeakList(mainPeakList.rows() - 1, 0) + 1 < source.cols()) {
+            sum = source.block(mainPeakList(mainPeakList.rows() - 1, 1) - 1, mainPeakList(mainPeakList.rows() - 1, 0) - 1, 2, 2).abs().sum();
+            mainPeakList(mainPeakList.rows() - 1, 3) = sum;
         } else {
-            mainPeak1.x() = mainPeakListOrdered(2, 0);
-            mainPeak1.y() = mainPeakListOrdered(2, 1);
-            mainPeak2.x() = mainPeakListOrdered(3, 0);
-            mainPeak2.y() = mainPeakListOrdered(3, 1);
+            sum = 0;
+            mainPeakList(mainPeakList.rows() - 1, 3) = sum;
         }
 
-        source = sourceSave;
+        if (mainPeakList(mainPeakList.rows() - 1, 1) - 4 > 0 && mainPeakList(mainPeakList.rows() - 1, 0) - 4 > 0 && mainPeakList(mainPeakList.rows() - 1, 1) + 4 < source.rows() && mainPeakList(mainPeakList.rows() - 1, 0) + 4 < source.cols()) {
+            source.block(mainPeakList(mainPeakList.rows() - 1, 1) - 4, mainPeakList(mainPeakList.rows() - 1, 0) - 4, 8, 8) = 0;
+        } else {
+            source(mainPeakList(mainPeakList.rows() - 1, 1), mainPeakList(mainPeakList.rows() - 1, 0)) = 0;
+        }
+
+        count++;
 
     }
 
-    double Spectrum::getDistancePoints(double x1, double y1, double x2, double y2) {
-        return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    Eigen::ArrayXXd mainPeakListOrderedMag(mainPeakList.rows(), mainPeakList.cols());
+    for (int k = 0; k < mainPeakList.rows(); k++) {
+        double maxSum = 0;
+        int iterator = 0;
+        for (int i = 0; i < mainPeakList.rows(); i++) {
+            if (mainPeakList(i, 3) > maxSum) {
+                maxSum = mainPeakList(i, 3);
+                iterator = i;
+            }
+        }
+        mainPeakListOrderedMag.block(k, 0, 1, mainPeakList.cols()) = mainPeakList.block(iterator, 0, 1, mainPeakList.cols());
+        mainPeakList(iterator, 3) = 0;
     }
+
+    Eigen::ArrayXXd mainPeakListReduced = mainPeakListOrderedMag.block(0, 0, 4, mainPeakListOrderedMag.cols());
+    Eigen::ArrayXXd mainPeakListOrdered(mainPeakListReduced.rows(), mainPeakList.cols());
+    for (int k = 0; k < mainPeakListReduced.rows(); k++) {
+        double minAngle = 10e10;
+        int iterator = 0;
+        for (int i = 0; i < mainPeakListReduced.rows(); i++) {
+            if (mainPeakListReduced(i, 2) < minAngle) {
+                minAngle = mainPeakListReduced(i, 2);
+                iterator = i;
+            }
+        }
+        mainPeakListOrdered.block(k, 0, 1, mainPeakListReduced.cols()) = mainPeakListReduced.block(iterator, 0, 1, mainPeakList.cols());
+        mainPeakListReduced(iterator, 2) = 10e6;
+    }
+
+    if (mainPeakListOrdered(3, 2) > 7.0 * PI / 8.0) {
+        mainPeak1.x() = mainPeakListOrdered(1, 0);
+        mainPeak1.y() = mainPeakListOrdered(1, 1);
+        mainPeak2.x() = mainPeakListOrdered(2, 0);
+        mainPeak2.y() = mainPeakListOrdered(2, 1);
+    } else {
+        mainPeak1.x() = mainPeakListOrdered(2, 0);
+        mainPeak1.y() = mainPeakListOrdered(2, 1);
+        mainPeak2.x() = mainPeakListOrdered(3, 0);
+        mainPeak2.y() = mainPeakListOrdered(3, 1);
+    }
+
+    source = sourceSave;
+
+}
+
+double Spectrum::getDistancePoints(double x1, double y1, double x2, double y2) {
+    return sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+}
 
 }
