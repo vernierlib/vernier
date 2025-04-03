@@ -36,8 +36,8 @@ void example2d() {
     PatternLayout* layout = new MegarenaPatternLayout(physicalPeriod, codeSize);
 
     // Setting the pose for rendering
-    double x = 8.0;//-15 * 400.0;
-    double y = 0.0;//-15 * 200.0;
+    double x = -15 * 400.0;
+    double y = -15 * 200.0;
     double alpha = 0.2;
     double pixelSize = 1.0;
     Pose patternPose = Pose(x, y, alpha, pixelSize);
@@ -276,8 +276,8 @@ void test2d(int codeSize) {
     cout << "  Physical period: " << physicalPeriod << endl;
 
     // Setting the pose of the pattern in the camera frame for rendering
-    double x = -randomDouble(-layout->getWidth() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
-    double y = -randomDouble(-layout->getHeight() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double x = randomDouble(-layout->getWidth() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double y = randomDouble(-layout->getHeight() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
     double alpha = randomDouble(-PI, PI);
     double pixelSize = randomDouble(1.0, 1.1);
     Pose patternPose = Pose(x, y, alpha, pixelSize);
@@ -311,8 +311,8 @@ void test3d(int codeSize) {
     cout << "  Physical period: " << physicalPeriod << endl;
 
     // Setting the pose of the pattern in the camera frame for rendering
-    double x = -randomDouble(-layout->getWidth() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
-    double y = -randomDouble(-layout->getHeight() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double x = randomDouble(-layout->getWidth() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double y = randomDouble(-layout->getHeight() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
     double alpha = randomDouble(-PI, PI);
     double beta = randomDouble(-0.5, 0.5);
     double gamma = randomDouble(-0.5, 0.5);
@@ -385,6 +385,7 @@ double speed(unsigned long testCount) {
 
 int main(int argc, char** argv) {
     
+   // example2d();
 //    main1();
 
 //    main3d();
