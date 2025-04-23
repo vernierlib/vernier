@@ -79,6 +79,9 @@ namespace vernier {
          * 
          *   cTp = rotz(alpha).transl(x,y,0) else
          * 
+         * The matrix transforms a 3D point expressed in the pattern coordinate frame to the camera 
+         * coordinate frame.
+         * 
          */
         Eigen::Matrix4d getCameraToPatternTransformationMatrix();
 
@@ -90,8 +93,21 @@ namespace vernier {
          * 
          *   pTc = transl(-x,-y,0).rotz(-alpha) else
          * 
+         * The matrix transforms a 3D point expressed in the camera coordinate frame to the pattern 
+         * coordinate frame.
+         * 
          */
         Eigen::Matrix4d getPatternToCameraTransformationMatrix();
+        
+        
+        /** Returns the rotation and the translation vectors that transform a 
+         * 3D point expressed in the object coordinate frame to the camera 
+         * coordinate frame.
+         *
+         *	\param rvec: output rotation vector (see Rodrigues). 
+	 *      \param tvec: output translation vector. 
+         */
+        void getOpenCVRepresentation(cv::Mat & rvec, cv::Mat & tvec);
 
         void draw(cv::Mat & image, double length = -1.0, std::string name ="");
         

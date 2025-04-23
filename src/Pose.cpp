@@ -72,6 +72,20 @@ namespace vernier {
         }
         return pTc;
     }
+    
+    void Pose::getOpenCVRepresentation(cv::Mat & rvec, cv::Mat & tvec) {
+        Eigen::Matrix4d cTp = getCameraToPatternTransformationMatrix();
+        
+        cv::Mat rotationMatrix;
+        Eigen::Matrix3d rot = cTp.block(0,0,3,3);
+        cv::eigen2cv(rot, rotationMatrix);
+        cv::Rodrigues(rotationMatrix, rvec);
+        
+        tvec.create(3, 1, CV_64F);
+        tvec.at<double>(0) = cTp(0,3);
+        tvec.at<double>(1) = cTp(1,3);
+        tvec.at<double>(2) = cTp(2,3);
+    }
 
     void Pose::draw(cv::Mat & image, double length, std::string name) {
         if (length < 0.0) {

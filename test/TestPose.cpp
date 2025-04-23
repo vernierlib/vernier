@@ -12,14 +12,19 @@ using namespace std;
 
 void main1() {
 
-    vernier::Pose pose2d(-3, -5, 0.2);
+    vernier::Pose pose(3, 5, 0.2);
 
-    std::cout << "Pattern pose definition : " << std::endl << pose2d.toString() << std::endl;
+    std::cout << "Pattern pose definition: " << std::endl << pose.toString() << std::endl;
 
-    std::cout << "Pattern pose in camera frame : " << std::endl << pose2d.getCameraToPatternTransformationMatrix() << std::endl;
+    std::cout << "Pattern pose in camera frame: " << std::endl << pose.getCameraToPatternTransformationMatrix() << std::endl;
 
-    std::cout << "Camera pose in pattern frame : " << std::endl << pose2d.getPatternToCameraTransformationMatrix() << std::endl;
-
+    std::cout << "Camera pose in pattern frame: " << std::endl << pose.getPatternToCameraTransformationMatrix() << std::endl;
+    
+    cv::Mat rvec, tvec;
+    pose.getOpenCVRepresentation(rvec, tvec);
+    std::cout << "OpenCV representation: " << std::endl;
+    std::cout << "rvec" << rvec << std::endl;
+    std::cout << "tvec" << tvec << std::endl;
 }
 
 void runAllTests() {
@@ -51,9 +56,9 @@ void runAllTests() {
 
 int main(int argc, char** argv) {
 
-//    main1();
+    main1();
     
-    runAllTests();
+    //runAllTests();
 
     return EXIT_SUCCESS;
 }
