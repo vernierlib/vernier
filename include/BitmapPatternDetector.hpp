@@ -20,6 +20,7 @@ namespace vernier {
         int maxAngle;
         BitmapThumbnail bitmapThumbnail;
         std::vector<cv::Mat> bitmap;
+        int bitmapIndex;
 
         void readJSON(const rapidjson::Value& document) override;
 

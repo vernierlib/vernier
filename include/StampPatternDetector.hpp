@@ -42,6 +42,8 @@ namespace vernier {
          */
         StampPatternDetector(double physicalPeriod, const std::string & filename, int snapshotSize);
 
+        void addBitmap(const std::string & filename);
+
         Pose get2DPose(int id = -1) override;
 
         Pose get3DPose(int id = -1) override;

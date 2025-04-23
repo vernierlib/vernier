@@ -69,28 +69,30 @@ namespace vernier {
         meanBackground /= countBackground;
         meanForeground /= countForeground;
 
-        unsigned char highThreshold = (unsigned char) ((meanBackground + 3 * meanForeground) / 4);
-        unsigned char lowThreshold = (unsigned char) ((3 * meanBackground + meanForeground) / 4);
+        unsigned char threshold = (unsigned char) ((meanBackground + meanForeground) / 2);
+        cv::threshold(thumbnail, binaryThumbnail, threshold, 255, cv::THRESH_BINARY);
 
-        //cv::threshold(thumbnail, binaryThumbnail, threshold, 255, cv::THRESH_BINARY);
         //cv::threshold(thumbnail, binaryThumbnail, 127, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+
         //cv::adaptiveThreshold(thumbnail, binaryThumbnail,255,cv::ADAPTIVE_THRESH_MEAN_C ,cv ::THRESH_BINARY, 5, 0);
 
-#pragma omp parallel for
-        for (int row = 0; row < thumbnail.rows; row++) {
-            for (int col = 0; col < thumbnail.cols; col++) {
-                binaryThumbnail.at<unsigned char>(row, col) = 0;
-                if (row % 2 == 0 && col % 2 == 0) {
-                    if (thumbnail.at<unsigned char>(row, col) > lowThreshold) {
-                        binaryThumbnail.at<unsigned char>(row, col) = 255;
-                    }
-                } else {
-                    if (thumbnail.at<unsigned char>(row, col) > highThreshold) {
-                        binaryThumbnail.at<unsigned char>(row, col) = 255;
-                    }
-                }
-            }
-        }
+        //        unsigned char highThreshold = (unsigned char) ((meanBackground + 2 * meanForeground) / 3);
+        //        unsigned char lowThreshold = (unsigned char) ((2 * meanBackground + meanForeground) / 3);
+        //#pragma omp parallel for
+        //        for (int row = 0; row < thumbnail.rows; row++) {
+        //            for (int col = 0; col < thumbnail.cols; col++) {
+        //                binaryThumbnail.at<unsigned char>(row, col) = 0;
+        //                if (row % 2 == 0 && col % 2 == 0) {
+        //                    if (thumbnail.at<unsigned char>(row, col) > lowThreshold) {
+        //                        binaryThumbnail.at<unsigned char>(row, col) = 255;
+        //                    }
+        //                } else {
+        //                    if (thumbnail.at<unsigned char>(row, col) > highThreshold) {
+        //                        binaryThumbnail.at<unsigned char>(row, col) = 255;
+        //                    }
+        //                }
+        //            }
+        //        }
 
 
     }
@@ -120,27 +122,27 @@ namespace vernier {
     //        return angle;
     //    };
 
-    int BitmapThumbnail::hashCode(int angle) {
-#ifndef WIN32         
-        cv::Mat horizontalThumbnail;
-        if (angle == 0) {
-            binaryThumbnail.copyTo(horizontalThumbnail);
-        } else if (angle == 90) {
-            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_90_COUNTERCLOCKWISE);
-        } else if (angle == 180) {
-            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_180);
-        } else {
-            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_90_CLOCKWISE);
-        }
-
-        cv::Mat hash;
-        cv::img_hash::averageHash(horizontalThumbnail, hash);
-        return (int) hash.at<unsigned char>(0);
-#else      
-        return 0;
-#endif
-
-    }
+    //    int BitmapThumbnail::hashCode(int angle) {
+    //#ifndef WIN32         
+    //        cv::Mat horizontalThumbnail;
+    //        if (angle == 0) {
+    //            binaryThumbnail.copyTo(horizontalThumbnail);
+    //        } else if (angle == 90) {
+    //            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_90_COUNTERCLOCKWISE);
+    //        } else if (angle == 180) {
+    //            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_180);
+    //        } else {
+    //            cv::rotate(binaryThumbnail, horizontalThumbnail, cv::ROTATE_90_CLOCKWISE);
+    //        }
+    //
+    //        cv::Mat hash;
+    //        cv::img_hash::averageHash(horizontalThumbnail, hash);
+    //        return (int) hash.at<unsigned char>(0);
+    //#else      
+    //        return 0;
+    //#endif
+    //
+    //    }
 
     //    void BitmapThumbnail::threshold() {
     //        double sumWhite=0;

@@ -102,7 +102,7 @@ void test2d(const string & filename) {
 
 int main(int argc, char** argv) {
 
-    //main1();
+//    main1();
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 

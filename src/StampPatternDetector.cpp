@@ -18,10 +18,25 @@ namespace vernier {
     : BitmapPatternDetector(physicalPeriod, filename) {
         classname = "StampPattern";
         ASSERT_MSG(bitmap[0].cols == bitmap[0].rows, "The stamp bitmap must be square");
+        ASSERT_MSG(bitmap[0].cols % 2 == 1, "The size of the stamp bitmap must be odd");
         snapshot.resize(snapshotSize, snapshotSize);
         window = hannWindow(snapshotSize, 4);
         bitmapThumbnail.resize(bitmap[0].cols - 8);
         patternPhase.resize(snapshotSize, snapshotSize);
+    }
+    
+    void StampPatternDetector::addBitmap(const std::string & filename) {
+        cv::Mat image = cv::imread(filename, cv::IMREAD_GRAYSCALE);
+        ASSERT_MSG(!image.empty(), "The file " + filename + " is not found or is not an image.");
+        ASSERT_MSG(image.cols == image.rows, "The stamp bitmap must be square");
+        ASSERT_MSG(bitmap[0].cols == image.cols, "The size of the stamp bitmaps must have the same sizes.");
+        bitmap.push_back(cv::Mat());
+        image.convertTo(bitmap[bitmap.size()-1], CV_8U);
+
+        for (int k = 0; k < 3; k++) {
+            bitmap.push_back(cv::Mat());
+            cv::rotate(bitmap[bitmap.size()-2], bitmap[bitmap.size()-1], cv::ROTATE_90_CLOCKWISE);
+        }
     }
 
     void StampPatternDetector::readJSON(const rapidjson::Value& document) {
@@ -41,7 +56,7 @@ namespace vernier {
                 std::cout << "The stamp is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
             }
             if (diameter < 2 * bitmapThumbnail.size()) {
-                std::cout << "The stamp is too tiny for pose estimation: increase the picture quality size." << std::endl;
+                //std::cout << "The stamp is too tiny for pose estimation: increase the picture quality size." << std::endl;
             } else {
 
                 int centerX = (int) square.getCenter().x;
@@ -56,7 +71,7 @@ namespace vernier {
 
                     bitmapThumbnail.compute(snapshot.real(), patternPhase.getPlane1(), patternPhase.getPlane2());
                     computeAbsolutePose();
-
+ 
                     double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
                     double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
                     double alpha = plane1.getAngle();
@@ -69,7 +84,8 @@ namespace vernier {
 
                     Pose pose = Pose(x, y, alpha, pixelSize);
 
-                    int id = bitmapThumbnail.hashCode(maxAngle);
+                    //int id = bitmapThumbnail.hashCode(maxAngle);
+                    int id = bitmapIndex/4;
                     markers.insert(std::make_pair(id, pose));
                 }
             }

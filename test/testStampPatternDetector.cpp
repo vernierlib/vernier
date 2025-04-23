@@ -14,11 +14,12 @@ using namespace std;
 using namespace cv;
 
 void main1() {
-
+    
     string filename = "data/stamp/stamp3.png";
     Mat image = imread(filename);
     
-    StampPatternDetector detector(15.5, "data/stamp/stampF.png", 820);
+    StampPatternDetector detector(15.5, "data/stamp/stampD.png", 820);
+    detector.addBitmap("data/stamp/stampG.png");
     detector.compute(image);
     detector.showControlImages();
 
@@ -126,7 +127,7 @@ double speed(unsigned long testCount) {
 
 int main(int argc, char** argv) {
 
-    //main1();
+//    main1();
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 

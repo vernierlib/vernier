@@ -53,8 +53,9 @@ namespace vernier {
 
     void BitmapPatternDetector::computeAbsolutePose() {
         double maxmaxVal = -1;
-        for (int k = 0; k < 4; k++) {
-            int angle = k * 90;
+        bitmapIndex = -1;
+        for (int k = 0; k < bitmap.size(); k++) {
+            int angle = (k%4) * 90;
             cv::Mat result;
             //SHOW(bitmapThumbnail.thumbnail);
             //SHOW(bitmap[k]);
@@ -67,6 +68,7 @@ namespace vernier {
 
             if (maxVal > maxmaxVal) {
                 maxmaxVal = maxVal;
+                bitmapIndex = k;
                 maxAngle = angle;
                 periodShift1 = -(maxLoc.x - result.cols / 2) / 2;
                 periodShift2 = -(maxLoc.y - result.rows / 2) / 2;

@@ -19,7 +19,7 @@ namespace vernier {
     public:
 
         int THUMBNAIL_ZOOM = 5;
-        double DELTA_PHASE = PI / 4;
+        double DELTA_PHASE = PI / 4 ;
 
         cv::Mat thumbnail;
         cv::Mat binaryThumbnail;
@@ -38,8 +38,6 @@ namespace vernier {
         void resize(int size);
 
         void compute(const Eigen::ArrayXXd & array, PhasePlane plane1, PhasePlane plane2);
-
-        int hashCode(int angle);
 
         void showControlImages();
 
