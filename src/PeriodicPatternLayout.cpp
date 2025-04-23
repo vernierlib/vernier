@@ -96,7 +96,7 @@ namespace vernier {
             double x = col * period * 0.5 + 0.25 * period - originX;
             for (int row = 0; row < image.rows; row++) {
                 double y = row * period * 0.5 + 0.25 * period - originY;
-                image.at<char>(row, col) = (char) (255 * (getIntensity(x, y) > 0.5));
+                image.at<unsigned char>(row, col) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
         if (filename == "") {

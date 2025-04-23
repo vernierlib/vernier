@@ -126,7 +126,7 @@ namespace vernier {
 //        cv::Mat image(bitmap.rows(), bitmap.cols(), CV_8U);
 //        for (int col = 0; col < image.cols; col++) {
 //            for (int row = 0; row < image.rows; row++) {
-//                image.at<char>(row, col) = (char) (255 * bitmap(row,col));
+//                image.at<unsigned char>(row, col) = (unsigned char) (255 * bitmap(row,col));
 //            }
 //        }
 //        if (filename == "") {

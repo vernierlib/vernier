@@ -5,9 +5,9 @@
  */
 
 #include "BitmapThumbnail.hpp"
-#ifndef WIN32 
-#include "opencv2/img_hash.hpp"
-#endif
+//#ifndef WIN32 
+//#include "opencv2/img_hash.hpp"
+//#endif
 
 namespace vernier {
 
@@ -153,10 +153,10 @@ namespace vernier {
     //            for (int col = 0; col < thumbnail.cols; col++) { 
     //                if (col%2 == 0 && row%2 == 0) {
     //                    countWhite++;
-    //                    sumWhite += thumbnail.at<char>(row, col);
+    //                    sumWhite += thumbnail.at<unsigned char>(row, col);
     //                } else {
     //                    countBlack++;
-    //                    sumBlack += thumbnail.at<char>(row, col);
+    //                    sumBlack += thumbnail.at<unsigned char>(row, col);
     //                }                  
     //            }
     //        } 
