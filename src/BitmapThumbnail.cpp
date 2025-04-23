@@ -49,42 +49,76 @@ namespace vernier {
             }
         }
 
+        double meanBackground = 0.0;
+        int countBackground = 0;
+        double meanForeground = 0.0;
+        int countForeground = 0;
 #pragma omp parallel for
         for (int row = 0; row < thumbnail.rows; row++) {
             for (int col = 0; col < thumbnail.cols; col++) {
-                thumbnail.at<char>(row, col) = (char) (255 * cumulWhiteDots(col, row) / numberWhiteDots(col, row));
+                thumbnail.at<unsigned char>(row, col) = (unsigned char) (255 * cumulWhiteDots(col, row) / numberWhiteDots(col, row));
+                if (row % 2 == 0 && col % 2 == 0) {
+                    meanForeground += thumbnail.at<unsigned char>(row, col);
+                    countForeground++;
+                } else {
+                    meanBackground += thumbnail.at<unsigned char>(row, col);
+                    countBackground++;
+                }
+            }
+        }
+        meanBackground /= countBackground;
+        meanForeground /= countForeground;
+
+        unsigned char highThreshold = (unsigned char) ((meanBackground + 3 * meanForeground) / 4);
+        unsigned char lowThreshold = (unsigned char) ((3 * meanBackground + meanForeground) / 4);
+
+        //cv::threshold(thumbnail, binaryThumbnail, threshold, 255, cv::THRESH_BINARY);
+        //cv::threshold(thumbnail, binaryThumbnail, 127, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
+        //cv::adaptiveThreshold(thumbnail, binaryThumbnail,255,cv::ADAPTIVE_THRESH_MEAN_C ,cv ::THRESH_BINARY, 5, 0);
+
+#pragma omp parallel for
+        for (int row = 0; row < thumbnail.rows; row++) {
+            for (int col = 0; col < thumbnail.cols; col++) {
+                binaryThumbnail.at<unsigned char>(row, col) = 0;
+                if (row % 2 == 0 && col % 2 == 0) {
+                    if (thumbnail.at<unsigned char>(row, col) > lowThreshold) {
+                        binaryThumbnail.at<unsigned char>(row, col) = 255;
+                    }
+                } else {
+                    if (thumbnail.at<unsigned char>(row, col) > highThreshold) {
+                        binaryThumbnail.at<unsigned char>(row, col) = 255;
+                    }
+                }
             }
         }
 
-        cv::threshold(thumbnail, binaryThumbnail, 127, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-        //    cv::adaptiveThreshold(thumbnail, binaryThumbnail,255,cv::ADAPTIVE_THRESH_MEAN_C ,cv ::THRESH_BINARY, 3, 0);
 
     }
 
-//    cv::Point2d BitmapThumbnail::getCentroid() {
-//        cv::Moments mom = cv::moments(binaryThumbnail, false);
-//        return cv::Point2d(mom.m10 / mom.m00 - 0.5 * thumbnail.cols, mom.m01 / mom.m00 - 0.5 * thumbnail.rows);
-//    }
+    //    cv::Point2d BitmapThumbnail::getCentroid() {
+    //        cv::Moments mom = cv::moments(binaryThumbnail, false);
+    //        return cv::Point2d(mom.m10 / mom.m00 - 0.5 * thumbnail.cols, mom.m01 / mom.m00 - 0.5 * thumbnail.rows);
+    //    }
 
-//    int BitmapThumbnail::getCentroidDirection() {
-//        cv::Point2d direction = getCentroid();
-//        double angle = atan2(direction.y, direction.x);
-//        PRINT(angle)
-//        if (angle > -PI / 4 && angle < PI / 4)
-//            return 0;
-//        else if (angle > PI / 4 && angle < 3 * PI / 4)
-//            return 90;
-//        else if (angle > -3 * PI / 4 && angle < -PI / 4)
-//            return 270;
-//        else
-//            return 180;
-//    };
-//
-//    double BitmapThumbnail::getAngle() {
-//        cv::Point2d direction = getCentroid();
-//        double angle = atan2(direction.y, direction.x);
-//        return angle;
-//    };
+    //    int BitmapThumbnail::getCentroidDirection() {
+    //        cv::Point2d direction = getCentroid();
+    //        double angle = atan2(direction.y, direction.x);
+    //        PRINT(angle)
+    //        if (angle > -PI / 4 && angle < PI / 4)
+    //            return 0;
+    //        else if (angle > PI / 4 && angle < 3 * PI / 4)
+    //            return 90;
+    //        else if (angle > -3 * PI / 4 && angle < -PI / 4)
+    //            return 270;
+    //        else
+    //            return 180;
+    //    };
+    //
+    //    double BitmapThumbnail::getAngle() {
+    //        cv::Point2d direction = getCentroid();
+    //        double angle = atan2(direction.y, direction.x);
+    //        return angle;
+    //    };
 
     int BitmapThumbnail::hashCode(int angle) {
 #ifndef WIN32         
