@@ -8,6 +8,7 @@
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
+#include <opencv4/opencv2/core/mat.hpp>
 
 using namespace vernier;
 using namespace std;
@@ -20,6 +21,10 @@ void main1() {
     
     StampPatternDetector detector(15.5, "data/stamp/stampD.png", 820);
     detector.addBitmap("data/stamp/stampG.png");
+    
+    detector.setPrincipalPoint(image.cols/2, image.rows/2);
+    detector.setFocalLength(1.0);
+    
     detector.compute(image);
     detector.showControlImages();
 
@@ -71,6 +76,8 @@ void test2d() {
 
     // Detecting
     StampPatternDetector detector(physicalPeriod, "data/stamp/stamp+.png", 420);
+    detector.setPrincipalPoint(array.cols()/2, array.rows()/2);
+    detector.setFocalLength(1.0);
     detector.compute(array);
 
     Pose estimatedPose;
@@ -127,7 +134,7 @@ double speed(unsigned long testCount) {
 
 int main(int argc, char** argv) {
 
-//    main1();
+    main1();
 
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 

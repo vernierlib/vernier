@@ -72,18 +72,33 @@ namespace vernier {
                     bitmapThumbnail.compute(snapshot.real(), patternPhase.getPlane1(), patternPhase.getPlane2());
                     computeAbsolutePose();
  
+//                    double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
+//                    double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
+//                    double alpha = plane1.getAngle();
+//
+//                    double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+//                    double xImg = (centerX - image8U.cols / 2);
+//                    double yImg = (centerY - image8U.rows / 2);
+//                    double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
+//                    double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
+//
+//                    Pose pose = Pose(x, y, alpha, pixelSize);
+
                     double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
                     double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
                     double alpha = plane1.getAngle();
 
                     double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
-                    double xImg = (centerX - image8U.cols / 2);
-                    double yImg = (centerY - image8U.rows / 2);
+                    double xImg = (centerX - principalPointX);
+                    double yImg = (centerY - principalPointY);
                     double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
                     double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
+                    double z = pixelSize * focalLength;
 
-                    Pose pose = Pose(x, y, alpha, pixelSize);
+                    Pose pose = Pose(x, y, z, alpha, 0.0, 0.0, pixelSize);
 
+                    
+                    
                     //int id = bitmapThumbnail.hashCode(maxAngle);
                     int id = bitmapIndex/4;
                     markers.insert(std::make_pair(id, pose));
@@ -133,6 +148,15 @@ namespace vernier {
         for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
             it->second.draw(image, snapshot.cols() / 2, to_string(it->first));
         }
+    }
+    
+    void StampPatternDetector::setPrincipalPoint(double x, double y) {
+        this->principalPointX = x;
+        this->principalPointY = y;
+    }
+    
+    void StampPatternDetector::setFocalLength(double focalLength) {
+        this->focalLength = focalLength;      
     }
 
 }
