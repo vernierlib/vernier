@@ -4,6 +4,9 @@
 [![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/)
 [![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact) 
 [![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib) 
+[![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact)
+[![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib)
+[![Build](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml/badge.svg)](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml)
 
 The Vernier Library is an open-source C++ library for pose measurement of calibrated patterns with subpixel resolutions.
 
@@ -17,9 +20,9 @@ The [documentation](https://vernierlib.github.io/) is automatically generated fr
 
 The Vernier library is cross-platform and requires a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
 
-* Visual C++ 2019/2022 on Windows (64-bit)
-<!--- * GNU C++ 3.8.x on Cygwin -->
-* Clang 19.1.7 on macOS 15 Sequoia
+* visual C++ 2019/2022 on Windows (64-bit)
+* clang 19.1.7 on macOS 15 Sequoia
+* gcc 11.4 on Ubuntu 22.04 (64-bit)
 
 Users can build and run the unit tests on their platform/compiler.
 
@@ -56,43 +59,60 @@ OpenCV requires the Media Feature Pack for Windows to run, you may have to insta
 
 With Linux, some dependencies must be installed first using the package manager:
 
-	> sudo apt install cmake libtool libmatio
-
+```Shell
+	sudo apt-get install cmake eigen libtool libmatio
+```
 Then, you have to install OpenCV:
 
-	> sudo apt install libopencv-dev
+```Shell
+	> sudo apt-get install libopencv-dev
+```
+
+We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
 
 Optionnally you may install FFTW (recommanded for speed):
 
-	> sudo apt install fftw
+```Shell
+	> sudo apt-get install fftw
+```
 
 Finally, open a terminal and go to the directory of the package
 
+```Shell
 	> mkdir build
 	> cd build
 	> cmake ..
 	> make
+```
 
 ### macOS instructions
 
 With macOS, some dependencies must be installed first using homebrew:
 
+```Shell
 	% brew install autoconfig automake cmake eigen libtool libmatio
+```
 
 Then, you have to install OpenCV:
 
+```Shell
 	% brew install opencv
+```
 
 Optionnally you may install FFTW (recommanded for speed):
 
+```Shell
 	% brew install fftw
+```
 
 Finally, open a terminal and go to the directory of the package
 
+```Shell
 	% mkdir build
 	% cd build
 	% cmake ..
 	% make
+```
 
 ## Getting started
 

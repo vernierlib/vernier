@@ -41,8 +41,8 @@ void example2d() {
     double alpha = 0.2;
     double pixelSize = 1.0;
     Pose patternPose = Pose(x, y, alpha, pixelSize);
-    cout << "------------------------------------------------------------------" << endl;
-    cout << "Pattern pose:   " << patternPose.toString() << endl;
+    std::cout << "------------------------------------------------------------------" << endl;
+    std::cout << "Pattern pose:   " << patternPose.toString() << endl;
 
     // Rendering
     ArrayXXd array(512, 512);
@@ -113,6 +113,8 @@ void example3d() {
 
     // Showing image and is spectrum
     detector->showControlImages();
+
+    return 0;
 }
 
 /** This example captures an image of a megarena pattern and estimates its 2D pose 

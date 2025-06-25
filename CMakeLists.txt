@@ -1,6 +1,7 @@
 ###############################################################################
 # set minimum cmake version and policy
 cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.5)
 cmake_policy(SET CMP0048 NEW)
 
 # project name and language
@@ -8,11 +9,13 @@ project(VernierLibrary VERSION 1.2 LANGUAGES CXX)
 
 # build options, for example to skip tests building use $ cmake .. -DBUILD_TESTS=OFF
 option(BUILD_TESTS "Build tests" ON)
+option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(USE_FFTW "Use FFTW" ON)
 
 # set build mode type
 set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # require C++14
 set(CMAKE_CXX_STANDARD 14)
@@ -60,7 +63,11 @@ else(WIN32)
 # find FFTW or Ooura
 if(USE_FFTW)
   message(STATUS "Enabling FFTW support.")
-  find_package(FFTW3 REQUIRED)
+  #find_package(FFTW3 REQUIRED)
+  find_package(PkgConfig REQUIRED)
+  pkg_search_module(FFTW REQUIRED fftw3 IMPORTED_TARGET)
+  include_directories(PkgConfig::FFTW)
+  link_libraries(PkgConfig::FFTW)
   message(STATUS "    version: ${FFTW3_VERSION}")
   message(STATUS "    config: ${FFTW3_LIBRARY_DIRS}")
   message(STATUS "    include path: ${FFTW3_INCLUDE_DIRS}")
@@ -99,7 +106,9 @@ add_subdirectory(src)
 
 ###############################################################################
 # add examples
+if (BUILD_EXAMPLES)
 add_subdirectory(examples)
+endif()
 
 ###############################################################################
 # unit tests

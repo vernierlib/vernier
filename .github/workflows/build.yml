@@ -1,0 +1,70 @@
+name: CI of Vernier
+
+on:
+  push:
+    branches:
+      - main  # Set a branch name to trigger deployment
+  pull_request:
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest]
+        build-type: [Debug]
+        compiler: [gcc]
+    runs-on: ${{ matrix.os }}
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        submodules: recursive
+    - name: Install dependencies Linux 
+      uses: jrl-umi3218/github-actions/install-dependencies@master
+      with:
+        compiler: ${{ matrix.compiler }}
+        build-type: ${{ matrix.build-type }}
+        ubuntu: |
+          apt: cmake libeigen3-dev libgtest-dev wget unzip libqhull-dev doxygen doxygen-latex
+        macos: |
+          brew: autoconf automake cmake eigen libtool libmatio opencv fftw
+    
+    - name: add latest ubuntu apt repository
+      if: runner.os == 'Linux'
+      run: |
+        echo "deb http://archive.ubuntu.com/ubuntu plucky main universe" | sudo tee /etc/apt/sources.list.d/plucky.list
+        echo "deb http://archive.ubuntu.com/ubuntu plucky-updates main universe" | sudo tee -a /etc/apt/sources.list.d/plucky.list
+        echo "deb http://security.ubuntu.com/ubuntu plucky-security main universe" | sudo tee -a /etc/apt/sources.list.d/plucky.list
+        sudo apt-get update -y
+        sudo apt-get install -y libopencv-dev
+
+    - name: install fftw3
+      if: runner.os == 'Linux'
+      run: |
+        wget -P ./ "https://fftw.org/fftw-3.3.10.tar.gz"
+        tar -xvf fftw-3.3.10.tar.gz
+        cd fftw-3.3.10
+        ./configure --enable-shared
+        make
+        sudo make install
+        sudo ldconfig
+
+    # - name: Build and test
+    #   run: |
+    #     mkdir build
+    #     cd build
+    #     cmake .. -DBUILD_TESTS=OFF -DUSE_OPENCV=OFF
+    #     make doc
+    - name: Build and test
+      uses: jrl-umi3218/github-actions/build-cmake-project@master
+      with:
+        compiler: ${{ matrix.compiler }}
+        build-type: ${{ matrix.build-type }}
+        options: '-DBUILD_EXAMPLES:BOOL=OFF'
+
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./build/doc/html
