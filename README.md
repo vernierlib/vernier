@@ -2,8 +2,6 @@
 
 [![Information](https://img.shields.io/badge/info-on_website-purple.svg)](https://projects.femto-st.fr/vernier/en)
 [![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/)
-[![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact) 
-[![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib) 
 [![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact)
 [![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib)
 [![Build](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml/badge.svg)](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml)
