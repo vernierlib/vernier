@@ -43,7 +43,7 @@ message(STATUS "    version: ${OpenCV_VERSION}")
 message(STATUS "    config: ${OpenCV_DIR}")
 message(STATUS "    include path: ${OpenCV_INCLUDE_DIRS}")
 message(STATUS "    libraries: ${OpenCV_LIBS}")
-#execute_process(COMMAND ${CMAKE_SOURCE_DIR}/3rdparty/pathed/pathed.exe -a ${OpenCV_LIB_PATH})
+execute_process(COMMAND ${CMAKE_SOURCE_DIR}/3rdparty/pathed/pathed.exe -a ${OpenCV_LIB_PATH})
 
 # find OpenMP (optional)
 find_package(OpenMP)

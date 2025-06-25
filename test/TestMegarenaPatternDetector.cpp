@@ -114,7 +114,6 @@ void example3d() {
     // Showing image and is spectrum
     detector->showControlImages();
 
-    return 0;
 }
 
 /** This example captures an image of a megarena pattern and estimates its 2D pose 

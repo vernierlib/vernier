@@ -58,12 +58,7 @@ OpenCV requires the Media Feature Pack for Windows to run, you may have to insta
 With Linux, some dependencies must be installed first using the package manager:
 
 ```Shell
-	sudo apt-get install cmake eigen libtool libmatio
-```
-Then, you have to install OpenCV:
-
-```Shell
-	> sudo apt-get install libopencv-dev
+	> sudo apt-get install cmake eigen libtool libmatio libopencv-dev
 ```
 
 We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
@@ -88,13 +83,7 @@ Finally, open a terminal and go to the directory of the package
 With macOS, some dependencies must be installed first using homebrew:
 
 ```Shell
-	% brew install autoconfig automake cmake eigen libtool libmatio
-```
-
-Then, you have to install OpenCV:
-
-```Shell
-	% brew install opencv
+	% brew install autoconfig automake cmake eigen libtool libmatio opencv
 ```
 
 Optionnally you may install FFTW (recommanded for speed):
@@ -136,5 +125,6 @@ Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
-Copyright (c) 2018-2025 ENSMM, CNRS, UMLP.
+Copyright (c) 2018-2025 SUPMICROTECH, CNRS, UMLP.
 
+ 
