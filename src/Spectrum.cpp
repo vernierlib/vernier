@@ -267,9 +267,9 @@ namespace vernier {
 
         //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
         if (mainPeak1.z() > 1e-5) { // MAGIC NUMBER
-
-            source.block(mainPeak1.y() - 4, mainPeak1.x() - 4, 8, 8) = 0;
-            source.block((source.rows() - mainPeak1.y()) - 4, (source.cols() - mainPeak1.x()) - 4, 8, 8) = 0;
+            int PEAK_MASK = 8;
+            source.block(mainPeak1.y() - PEAK_MASK, mainPeak1.x() - PEAK_MASK, 2*PEAK_MASK, 2*PEAK_MASK) = 0;
+            source.block((source.rows() - mainPeak1.y()) - PEAK_MASK, (source.cols() - mainPeak1.x()) - PEAK_MASK, 2*PEAK_MASK, 2*PEAK_MASK) = 0;
 
             maxValue = -1;
 
