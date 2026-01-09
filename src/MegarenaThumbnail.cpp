@@ -601,10 +601,10 @@ namespace vernier {
 
         for (int i = 0; i < meanWhiteDots.rows(); i++) {
             for (int j = 0; j < meanWhiteDots.cols(); j++) {
-                if (isnan(meanWhiteDots(i, j))) {
+                if (std::isnan(meanWhiteDots(i, j))) {
                     meanWhiteDots(i, j) = 0;
                 }
-                if (isnan(meanBackDots(i, j))) {
+                if (std::isnan(meanBackDots(i, j))) {
                     meanBackDots(i, j) = 0;
                 }
             }
@@ -840,7 +840,7 @@ namespace vernier {
     void MegarenaThumbnail::removeNanFromArray(Eigen::ArrayXXd& image) {
         for (int i = 0; i < image.rows(); i++) {
             for (int j = 0; j < image.cols(); j++) {
-                if (isnan(image(i, j))) {
+                if (std::isnan(image(i, j))) {
                     image(i, j) = 0;
                 }
             }

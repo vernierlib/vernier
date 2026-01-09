@@ -4,9 +4,7 @@ file(GLOB SOURCES *.cpp)
 
 add_library(vernier STATIC ${SOURCES})
 
-include_directories(${CMAKE_SOURCE_DIR}/include)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty)
-include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
+
 
 include_directories (${OpenCV_INCLUDE_DIRS})
 add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
@@ -29,8 +27,13 @@ if(OpenMP_CXX_FOUND)
 endif()
 
 if(NOT WIN32)
+#  include_directories(${EIGEN3_INCLUDE_DIR})
   target_link_libraries(vernier gdstk)
 endif()
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
+include_directories(${CMAKE_SOURCE_DIR}/3rdparty)
+include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
 
 install(TARGETS vernier DESTINATION lib)
 

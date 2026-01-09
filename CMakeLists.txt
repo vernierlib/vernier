@@ -59,6 +59,14 @@ endif(OpenMP_CXX_FOUND)
 # configuration for linux/macox
 else(WIN32)
 
+# find Eigen
+find_package(Eigen3 REQUIRED)
+message(STATUS "Eigen library status:")
+#message(STATUS "    version: ${EIGEN3_VER}")
+#message(STATUS "    config: ${EIGEN3_DIR}")
+message(STATUS "    include path: ${EIGEN3_INCLUDE_DIR}")
+#message(STATUS "    libraries: ${EIGEN3_INCLUDE_LIB}")
+
 # find FFTW or Ooura
 if(USE_FFTW)
   message(STATUS "Enabling FFTW support.")
