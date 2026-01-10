@@ -8,9 +8,6 @@
 #define SQUAREDETECTOR_HPP
 
 #include "Common.hpp"
-#include <opencv2/objdetect/aruco_detector.hpp>
-//        void CustomArucoDetector::detectCandidates2(const cv::Mat& image, std::vector<std::vector<cv::Point2f>>&candidates, std::vector<std::vector<cv::Point>>&contours) {
-//            arucoDetectorImpl->detectCandidates(image, candidates, contours);
 
 namespace vernier {
     
