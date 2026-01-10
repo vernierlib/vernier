@@ -9,20 +9,30 @@
 
 #include "Common.hpp"
 #include <opencv2/objdetect/aruco_detector.hpp>
-
-//class CustomArucoDetector : protected cv::aruco::ArucoDetector {
-//    public:
-//        using cv::aruco::ArucoDetector::ArucoDetector; // Hérite du constructeur
-//
-//        // Méthode pour exposer detectCandidates()
-//
 //        void CustomArucoDetector::detectCandidates2(const cv::Mat& image, std::vector<std::vector<cv::Point2f>>&candidates, std::vector<std::vector<cv::Point>>&contours) {
 //            arucoDetectorImpl->detectCandidates(image, candidates, contours);
-//        }
-//    };
 
 namespace vernier {
-
+    
+    /** Parameters of the square detector (see OpenCV documention about ArUco detector) */
+    struct SquareDetectorParameters {
+        int adaptiveThreshWinSizeMin = 3;
+        int adaptiveThreshWinSizeMax = 23;
+        int adaptiveThreshWinSizeStep = 10;
+        int adaptiveThreshConstant = 7;
+        double minMarkerPerimeterRate = 0.03;
+        double maxMarkerPerimeterRate = 4.;
+        double polygonalApproxAccuracyRate = 0.03;
+        double minCornerDistanceRate = 0.05;
+        int minDistanceToBorder = 3;
+        double minMarkerDistanceRate = 0.125;
+        int markerBorderBits = 1;
+        bool detectInvertedMarker = false;
+        int minSideLengthCanonicalImg = 32;
+        double minGroupDistance = 0.21f;
+        int markerSize = 6;     
+    };
+    
     class Square {
     public:
 
@@ -56,9 +66,9 @@ namespace vernier {
 
     class SquareDetector {
     public:
-        
+
         /** Parameters of the square detector (see OpenCV documention about ArUco detector) */
-        cv::aruco::DetectorParameters parameters;
+        SquareDetectorParameters parameters;
 
         /** Vector of detected squares (unsort) */
         std::vector<Square> squares;
