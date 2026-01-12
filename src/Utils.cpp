@@ -80,7 +80,7 @@ namespace vernier {
     void removeNanFromArray(Eigen::ArrayXXd& array) {
         for (int i = 0; i < array.rows(); i++) {
             for (int j = 0; j < array.cols(); j++) {
-                if (isnan(array(i, j))) {
+                if (std::isnan(array(i, j))) {
                     array(i, j) = 0;
                 }
             }
