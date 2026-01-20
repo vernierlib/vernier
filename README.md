@@ -58,7 +58,7 @@ OpenCV requires the Media Feature Pack for Windows to run, you may have to insta
 With Linux, some dependencies must be installed first using the package manager:
 
 ```Shell
-	> sudo apt install cmake libeigen3-dev libtool libmatio-dev libopencv-dev
+	> sudo apt install cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev
 ```
 
 We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
