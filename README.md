@@ -14,6 +14,15 @@ The library defines a collection of classes for detection and rendering differen
 
 The [documentation](https://vernierlib.github.io/) is automatically generated from the code using Doxygen.
 
+The implemented methods are described in the following papers:
+
+1. A. André et al., Sensing One Nanometer Over Ten Centimeters: A Microencoded Target for Visual In-Plane Position Measurement, 
+*Transactions on Mechatronics*, vol. 25, 2020.
+
+2. A. André et al., Robust Phase-Based Decoding for Absolute (X, Y, Θ) Positioning by Vision, *Transactions on Instrumentation and Measurement*, vol. 70, 2020.
+
+3. A. André et al., Pose Measurement at Small Scale by Spectral Analysis of Periodic Patterns, *International Journal of Computer Vision*, vol. 130, 2022.
+
 ## Compatibility
 
 The Vernier library is cross-platform and requires a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
@@ -109,14 +118,14 @@ Run one of the demo files from the [examples page](https://vernierlib.github.io/
 
 The Vernier Library is Free Software in the technical sense defined by the Free Software Foundation, and is distributed under the terms of the [GNU General Public License](LICENSE.txt). 
 
-Non-free licenses are also available for companies that wish to use the Vernier library in their products but are unwilling to release their software under the GPL (which would require them to release source code and allow free redistribution). Contact us for more details: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
+Non-free licenses are also available for companies that wish to use the Vernier library in their products but are unwilling to release their software under the GPL (which would require them to release source code and allow free redistribution). Contact us for more details.
 
 ## Acknowledgements
 
 We kindly ask you to acknowledge this library in any program or publication in which you use it. 
 
-For general publications, we suggest referencing: Andre, A. N., Sandoz, P., Mauze, B., Jacquot, M., & Laurent, G. J. (2020). Sensing one nanometer over ten centimeters: A micro-encoded target for visual in-plane position measurement. IEEE/ASME Trans. Mechatronics.
-
+For general publications, we suggest referencing: A. André et al., Sensing One Nanometer Over Ten Centimeters: A Microencoded Target for Visual In-Plane Position Measurement, 
+*Transactions on Mechatronics*, vol. 25, 2020.
 ## About
 
 The Vernier Library is written and maintained by researchers with the FEMTO-ST Institute located in Besançon, France.
@@ -125,6 +134,6 @@ Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
-Copyright (c) 2018-2025 SUPMICROTECH, CNRS, UMLP.
+Copyright (c) 2018-2026 SUPMICROTECH, CNRS, UMLP.
 
  
