@@ -350,15 +350,14 @@ namespace vernier {
                 0, 0, 0,
                 0, 0, 1;
 
-        Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
-        Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
-
+        Eigen::Matrix3d homography = cameraMatrix * cTp * M;
+        Eigen::Matrix3d inversedHomography = homography.inverse();
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
                 //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
                 Eigen::Vector3d pointImage(col, row, 1);
-                Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
+                Eigen::Vector3d pointPattern = inversedHomography * pointImage;
                 outputImage(row, col) = this->getIntensity(pointPattern.x(), pointPattern.y());
             }
         }
@@ -396,15 +395,14 @@ namespace vernier {
                 0, 0, 0,
                 0, 0, 1;
 
-        Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
-        Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
-
+        Eigen::Matrix3d homography = cameraMatrix * cTp * M;
+        Eigen::Matrix3d inversedHomography = homography.inverse();
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
                 //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
                 Eigen::Vector3d pointImage(col, row, 1);
-                Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
+                Eigen::Vector3d pointPattern = inversedHomography * pointImage;
                 pointPattern /= pointPattern.z();
                 outputImage(row, col) = this->getIntensity(pointPattern.x(), pointPattern.y());
             }
