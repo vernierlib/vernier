@@ -363,6 +363,12 @@ namespace vernier {
             }
         }
     }
+    
+    void PatternLayout::renderPerspectiveProjection(Pose pose, cv::Mat & outputImage, double focalLength, Eigen::Vector2d principalPoint) {
+        Eigen::ArrayXXd array(outputImage.rows, outputImage.cols);
+        renderPerspectiveProjection(pose, array, focalLength, principalPoint);
+        eigen2cv(array, outputImage);         
+    }
 
     void PatternLayout::renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
