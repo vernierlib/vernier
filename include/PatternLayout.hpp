@@ -90,12 +90,12 @@ namespace vernier {
 
         /** Renders an image with an orthographic projection defined by:
          * 
-         *       [ u ]   [ 1  0  0  cx ]         [ x ]
-         *   s * [ v ] = [ 0  1  0  cy ] * cTp * [ y ]
-         *       [ 1 ]   [ 0  0  0   1 ]         [ z ]
-         *                                       [ 1 ]
+         *       [ u ]   [ 1/p  0  0  cx ]         [ x ]
+         *       [ v ] = [ 0  1/p  0  cy ] * cTp * [ y ]
+         *       [ 1 ]   [ 0    0  0   1 ]         [ z ]
+         *                                         [ 1 ]
          * 
-         *   with cx and cy the coordinates of the principal point (in pixels) and s the pixel-to-millimeter scale factor
+         *   with cx and cy the coordinates of the principal point (in pixels) and p the pixel-to-millimeter scale factor
          * 
          *	\param pose: pattern pose (defines cTp and the scale factor)
          *	\param outputImage: any size double array 
@@ -108,12 +108,12 @@ namespace vernier {
         
         /** Renders an image with a perspective projection defined by the pinhole camera model:
          * 
-         *        [ u ]   [ f  0  cx  0 ]         [ x ]
-         *    s * [ v ] = [ 0  f  cy  0 ] * cTp * [ y ]
-         *        [ 1 ]   [ 0  0   1  0 ]         [ z ]
-         *                                        [ 1 ]
+         *        [ u ]   [ f/p  0  cx  0 ]         [ x ]
+         *    s * [ v ] = [ 0  f/p  cy  0 ] * cTp * [ y ]
+         *        [ 1 ]   [ 0    0   1  0 ]         [ z ]
+         *                                          [ 1 ]
          * 
-         *   with cx and cy the coordinates of the principal point (in pixels), f the focal length (metrics) and s the pixel-to-millimeter scale factor
+         *   with cx and cy the coordinates of the principal point (in pixels), f the focal length (metrics) and p the pixel-to-millimeter scale factor
          * 
          *	\param pose: pattern pose (defines cTp and the scale factor)
          *	\param outputImage: any size double array 
