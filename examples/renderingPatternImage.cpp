@@ -24,7 +24,7 @@ int main() {
     Pose patternPose = Pose(x, y, alpha, pixelSize);
 
     // Rendering image
-    cv::Mat image(512, 512, CV_64F);
+    Mat image(512, 512, CV_64F);
     layout->renderOrthographicProjection(patternPose, image);
 
     // Showing the image
