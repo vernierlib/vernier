@@ -100,7 +100,7 @@ namespace vernier {
          *
          *	\param y: row where the position is computed (default = 0 = center)
          *	\param x: column where the position is computed (default = 0 = center)
-         *	\param eriodShift: number of periods to shift (default = 0)
+         *	\param periodShift: number of periods to shift (default = 0)
          */
         double getPositionPixels(double y = 0.0, double x = 0.0, int periodShift = 0);
 

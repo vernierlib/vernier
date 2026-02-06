@@ -17,9 +17,12 @@ namespace vernier {
 
     class StampPatternDetector : public BitmapPatternDetector {
     protected:
-        
+
         Eigen::ArrayXXd window;
         Eigen::ArrayXXd snapshot;
+        double principalPointX, principalPointY, focalLength;
+        int centerX, centerY;
+
 
         void readJSON(const rapidjson::Value& document) override;
 
@@ -28,10 +31,10 @@ namespace vernier {
     public:
 
         SquareDetector detector;
-        
+
         /** Map of detected stamps (key map = stamp id) */
         std::map<int, Pose> markers;
-        
+
         StampPatternDetector();
 
         /** Constructs a pose estimator for stamps
@@ -43,7 +46,9 @@ namespace vernier {
         StampPatternDetector(double physicalPeriod, const std::string & filename, int snapshotSize);
 
         void addBitmap(const std::string & filename);
-
+        
+        void get3DPose(const cv::Mat & cameraMatrix, const cv::Mat & distortionCoefficients, cv::Mat & rvec, cv::Mat & tvec);
+    
         Pose get2DPose(int id = -1) override;
 
         Pose get3DPose(int id = -1) override;
@@ -51,12 +56,16 @@ namespace vernier {
         std::vector<Pose> getAll3DPoses(int id = -1) override;
 
         bool patternFound(int id = -1) override;
-        
+
         int patternCount() override;
 
         void draw(cv::Mat& image) override;
 
         void showControlImages() override;
+
+        void setPrincipalPoint(double x, double y);
+
+        void setFocalLength(double focalLength);
 
     };
 
