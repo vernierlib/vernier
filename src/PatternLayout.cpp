@@ -41,12 +41,11 @@ namespace vernier {
 
         writeJSON(file);
 
-        //file << "        \"copyright\": \"Creative Commons Attribution 4.0\"" << std::endl;
         if (author != "") {
-        file << "        \"author\": \"" << author << "\"," << std::endl;
+            file << "        \"author\": \"" << author << "\"," << std::endl;
         }
         if (date != "") {
-        file << "        \"date\": \"" << date << "\"" << std::endl;
+            file << "        \"date\": \"" << date << "\"" << std::endl;
         } else {
             file << "        \"date\": \"" << currentDateTime() << "\"" << std::endl;
         }
@@ -61,7 +60,7 @@ namespace vernier {
             file << "        \"description\": \"" << description << "\"," << std::endl;
         }
         if (unit != "") {
-        file << "        \"unit\": \"" << unit << "\"," << std::endl;
+            file << "        \"unit\": \"" << unit << "\"," << std::endl;
         }
         if (leftMargin > 0) {
             file << "        \"leftMargin\": " << to_string(leftMargin) << "," << std::endl;
@@ -221,6 +220,7 @@ namespace vernier {
     }
 
 #ifndef WIN32
+
     gdstk::Cell * PatternLayout::convertToGDSCell(std::string name) {
         if (name == "") {
             name = classname;
@@ -317,14 +317,22 @@ namespace vernier {
         }
         file.close();
     }
-    
-    void PatternLayout::renderOrthographicProjection(Pose pose, cv::Mat & outputImage, Eigen::Vector2d principalPoint) {
-        Eigen::ArrayXXd array(outputImage.rows, outputImage.cols);
-        renderOrthographicProjection(pose, array, principalPoint);
-        eigen2cv(array, outputImage);         
+
+    void PatternLayout::renderOrthographicProjection(Pose pose, cv::Mat & outputImage) {
+        renderOrthographicProjection(pose, outputImage, 1.0 / pose.pixelSize);
     }
 
-    void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint) {
+    void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage) {
+        renderOrthographicProjection(pose, outputImage, 1.0 / pose.pixelSize);
+    }
+
+    void PatternLayout::renderOrthographicProjection(Pose pose, cv::Mat & outputImage, double scale, Eigen::Vector2d principalPoint) {
+        Eigen::ArrayXXd array(outputImage.rows, outputImage.cols);
+        renderOrthographicProjection(pose, array, scale, principalPoint);
+        eigen2cv(array, outputImage);
+    }
+
+    void PatternLayout::renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, double scale, Eigen::Vector2d principalPoint) {
         if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
             throw Exception("The number of rows must be positive and even.");
         }
@@ -338,17 +346,17 @@ namespace vernier {
         }
 
         Eigen::MatrixXd cameraMatrix(3, 4);
-        cameraMatrix << 1 / pose.pixelSize, 0, 0, principalPoint(0),
-                0, 1 / pose.pixelSize, 0, principalPoint(1),
-                0, 0, 0, 1;
+        cameraMatrix << scale, 0.0, 0.0, principalPoint(0),
+                0.0, scale, 0.0, principalPoint(1),
+                0.0, 0.0, 0.0, 1;
 
         Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
 
         Eigen::MatrixXd M(4, 3);
-        M << 1, 0, 0,
-                0, 1, 0,
-                0, 0, 0,
-                0, 0, 1;
+        M << 1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0;
 
         Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
         Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
@@ -356,7 +364,6 @@ namespace vernier {
 
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
-                //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
                 Eigen::Vector3d pointImage(col, row, 1);
                 Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
                 outputImage(row, col) = this->getIntensity(pointPattern.x(), pointPattern.y());
@@ -378,25 +385,23 @@ namespace vernier {
         }
 
         Eigen::MatrixXd cameraMatrix(3, 4);
-        cameraMatrix << focalLength / pose.pixelSize, 0, principalPoint(0), 0,
-                0, focalLength / pose.pixelSize, principalPoint(1), 0,
-                0, 0, 1, 0;
+        cameraMatrix << focalLength, 0.0, principalPoint(0), 0.0,
+                0.0, focalLength, principalPoint(1), 0.0,
+                0.0, 0.0, 1.0, 0.0;
 
         Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
 
         Eigen::MatrixXd M(4, 3);
-        M << 1, 0, 0,
-                0, 1, 0,
-                0, 0, 0,
-                0, 0, 1;
+        M << 1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0;
 
         Eigen::Matrix3d projectionMatrix = cameraMatrix * cTp * M;
         Eigen::Matrix3d inverseMatrix = projectionMatrix.inverse();
 
-
         for (int col = 0; col < outputImage.cols(); col++) {
             for (int row = 0; row < outputImage.rows(); row++) {
-                //Eigen::Vector3d pointImage(col + 0.5, row + 0.5, 1);
                 Eigen::Vector3d pointImage(col, row, 1);
                 Eigen::Vector3d pointPattern = inverseMatrix * pointImage;
                 pointPattern /= pointPattern.z();
