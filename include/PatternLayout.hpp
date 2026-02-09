@@ -28,7 +28,7 @@ namespace vernier {
         double height;
         double originX;
         double originY;
-        
+
         virtual void writeJSON(std::ofstream & file);
 
         void writeApproxPxPeriod(std::ofstream& file);
@@ -47,7 +47,7 @@ namespace vernier {
         double rightMargin;
         double topMargin;
         double bottomMargin;
-        
+
         PatternLayout();
 
         virtual ~PatternLayout() {
@@ -68,7 +68,7 @@ namespace vernier {
 
         /** Creates a OASIS file corresponding to the pattern layout */
         void saveToOASIS(std::string filename = "");
-        
+
         /** Creates a new GDS cell corresponding to the pattern layout (must be deleted afterward) */
         gdstk::Cell * convertToGDSCell(std::string name = "");
 #endif
@@ -90,43 +90,65 @@ namespace vernier {
 
         /** Renders an image with an orthographic projection defined by:
          * 
-         *       [ u ]   [ 1/p  0  0  cx ]         [ x ]
-         *       [ v ] = [ 0  1/p  0  cy ] * cTp * [ y ]
-         *       [ 1 ]   [ 0    0  0   1 ]         [ z ]
-         *                                         [ 1 ]
+         *       [ u ]   [ 1/ps  0     0  cx ]         [ x ]
+         *       [ v ] = [ 0     1/ps  0  cy ] * cTp * [ y ]
+         *       [ 1 ]   [ 0     0     0   1 ]         [ z ]
+         *                                             [ 1 ]
          * 
-         *   with cx and cy the coordinates of the principal point (in pixels) and p the pixel-to-millimeter scale factor
+         *   with cx and cy the coordinates of the principal point (in pixels) and ps the pixel size (pixel-to-meter scale factor)
          * 
-         *	\param pose: pattern pose (defines cTp and the scale factor)
+         *	\param pose: pattern pose (defines cTp and the pixel-to-meter scale factor)
+         *	\param outputImage: any size double array 
+         *      \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         *
+         * OBSOLETE
+         */
+        void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage);
+
+        /* Same as renderOrthographicProjection() but with OpenCV mat array */
+        void renderOrthographicProjection(Pose pose, cv::Mat & outputImage);
+
+        /** Renders an image with an orthographic projection defined by:
+         * 
+         *       [ u ]   [ s  0  0  cx ]         [ x ]
+         *       [ v ] = [ 0  s  0  cy ] * cTp * [ y ]
+         *       [ 1 ]   [ 0  0  0   1 ]         [ z ]
+         *                                       [ 1 ]
+         * 
+         *   with cx and cy the coordinates of the principal point (in pixels) and s the meter-to-pixel scale factor
+         * 
+         *	\param pose: pattern pose (defines cTp)
          *	\param outputImage: any size double array 
          *      \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
          *
          */
-        void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+        void renderOrthographicProjection(Pose pose, Eigen::ArrayXXd & outputImage, double scale, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
-        void renderOrthographicProjection(Pose pose, cv::Mat & outputImage, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
-        
+        /* Same as renderOrthographicProjection() but with OpenCV mat array */
+        void renderOrthographicProjection(Pose pose, cv::Mat & outputImage, double scale, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
         /** Renders an image with a perspective projection defined by the pinhole camera model:
          * 
-         *        [ u ]   [ f/p  0  cx  0 ]         [ x ]
-         *    s * [ v ] = [ 0  f/p  cy  0 ] * cTp * [ y ]
-         *        [ 1 ]   [ 0    0   1  0 ]         [ z ]
-         *                                          [ 1 ]
+         *        [ u ]   [ f  0  cx  0 ]         [ x ]
+         *    s * [ v ] = [ 0  f  cy  0 ] * cTp * [ y ]
+         *        [ 1 ]   [ 0  0   1  0 ]         [ z ]
+         *                                        [ 1 ]
          * 
-         *   with cx and cy the coordinates of the principal point (in pixels), f the focal length (metrics) and p the pixel-to-millimeter scale factor
+         *   with cx and cy the coordinates of the principal point (in pixels) and f the focal length (in pixels)
          * 
-         *	\param pose: pattern pose (defines cTp and the scale factor)
+         *	\param pose: pattern pose (defines cTp)
          *	\param outputImage: any size double array 
          *      \param focalLength: focal length of the camera
          *      \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
          * 
          */
         void renderPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
-        
+
+        /* Same as renderPerspectiveProjection() but with OpenCV mat array */
         void renderPerspectiveProjection(Pose pose, cv::Mat & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         virtual std::string toString();
-        
+
         std::string getClassname();
 
         double getOriginX();
@@ -136,7 +158,7 @@ namespace vernier {
         double getHeight();
 
         double getWidth();
-        
+
         void setMargins(double margins);
 
         /** Returns the attribute address corresponding to the given name */

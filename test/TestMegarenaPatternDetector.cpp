@@ -224,7 +224,7 @@ void main3d() {
     waitKey(0);
 }
 
-void main3dPerspective() {
+void main3dLongFocalPerspective() {
 
     // Constructing the layout
     double physicalPeriod = 15.0;
@@ -264,6 +264,68 @@ void main3dPerspective() {
     cout << "  Estimated pose 2: " << estimatedPoses[2].toString() << endl;
     cout << "  Estimated pose 4: " << estimatedPoses[3].toString() << endl;
     detector->showControlImages();
+    waitKey(0);
+}
+
+void main3dPerspective() {
+
+    // Constructing the layout
+    double physicalPeriod = 1.0;
+    int codeSize = 8;
+    PatternLayout* layout = new MegarenaPatternLayout(physicalPeriod, codeSize);
+    cout << "  Code size: " << codeSize << endl;
+    cout << "  Physical period: " << physicalPeriod << endl;
+
+    // Setting the pose of the pattern in the camera frame for rendering
+    double x = -200 ;
+    double y = -300 ;
+    double z = 600.0;
+    double alpha = -0.0;
+    double beta = 0.00;
+    double gamma = 0.50;
+    double pixelSize = 0.002;
+    Pose patternPose = Pose(x, y, z, alpha, beta, gamma, pixelSize);
+    cout << "  Pattern pose:     " << patternPose.toString() << endl;
+
+    // Rendering
+    Eigen::ArrayXXd array(512, 512);
+    double focalLength = 12;
+    layout->renderPerspectiveProjection(patternPose, array, focalLength);
+
+    // Detecting and estimating the pose of the pattern
+    MegarenaPatternDetector* detector;
+    detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
+    detector->setDouble("sigma", 5);
+    detector->setDouble("cropFactor", 0.8);
+    detector->setDouble("pixelPeriod", 7);
+    detector->setPhaseGradientMode();
+    detector->compute(array);
+    std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
+    detector->showControlImages();
+    
+    // Printing results 
+    cout << "  Estimated pose 0: " << estimatedPoses[0].toString() << endl;
+    cout << "  Estimated pose 1: " << estimatedPoses[1].toString() << endl;
+    cout << "  Estimated pose 2: " << estimatedPoses[2].toString() << endl;
+    cout << "  Estimated pose 4: " << estimatedPoses[3].toString() << endl;
+    
+    // Detecting and estimating the pose of the pattern
+    cv::Mat cameraMatrix = (Mat_<double>(3, 3) << focalLength / pixelSize, 0.0, array.cols()/2.0, 0.0, focalLength / pixelSize, array.rows()/2.0, 0.0, 0.0, 1.0);
+    cv::Mat distortionCoefficients = (Mat_<double>(1, 5) << 0.0, 0.0, 0.0, 0.0, 0.0);
+    cv::Mat rvec;
+    cv::Mat tvec;  
+    detector->get3DPosePerspective(cameraMatrix, distortionCoefficients, rvec, tvec);
+    cout << "  Estimated tvec: " << tvec.t() << endl;  
+    cout << "  Estimated rvec: " << rvec.t() << endl;   
+    //cout << "  Matrix : " << cameraMatrix << endl;  
+    
+    cv::Mat image;
+    array2image8UC4(array, image);
+    tvec = (Mat_<double>(1, 3) << 0.0, 0.0, 0.0);
+    cv::drawFrameAxes(image, cameraMatrix, distortionCoefficients, rvec, tvec, 100.0f);
+    cv::imshow("Image", image);
+    
+    
     waitKey(0);
 }
 
@@ -393,7 +455,9 @@ int main(int argc, char** argv) {
     
 //    cout << "Computing time: " << speed(10) << " ms" << endl;
     
-    runAllTests();
+    main3dPerspective();
+    
+    //runAllTests();
 
     return EXIT_SUCCESS;
 }

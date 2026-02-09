@@ -13,8 +13,6 @@ namespace vernier {
         ASSERT_MSG(physicalPeriod > 0.0, "The period must be positive.");
         classname = "PeriodicPattern";
         this->physicalPeriod = physicalPeriod;
-        computePhaseGradient = false;
-
     }
 
     void PeriodicPatternDetector::readJSON(const rapidjson::Value& document) {
@@ -33,13 +31,6 @@ namespace vernier {
         periodShift2 = 0;
         plane1 = patternPhase.getPlane1();
         plane2 = patternPhase.getPlane2();
-
-        if (computePhaseGradient == false) {
-            betaSign = 1;
-            gammaSign = 1;
-        } else {
-            patternPhase.computePhaseGradients(betaSign, gammaSign);
-        }
     }
 
     Pose PeriodicPatternDetector::get2DPose(int id) {
@@ -52,9 +43,12 @@ namespace vernier {
     }
 
     Pose PeriodicPatternDetector::get3DPose(int id) {
+        int betaSign, gammaSign;
+        patternPhase.computePhaseGradients(betaSign, gammaSign);
         Pose pose = getAll3DPoses()[0];
         pose.beta *= betaSign;
         pose.gamma *= gammaSign;
+        pose.z = 0.0;
         return pose;
     }
 
@@ -103,6 +97,57 @@ namespace vernier {
 
         return poseVec;
     }
+    
+    Pose PeriodicPatternDetector::get3DPosePerspective(double focalLength) {
+        int betaSign, gammaSign;
+        patternPhase.computePhaseGradients(betaSign, gammaSign);
+        Pose pose = getAll3DPoses()[0];
+        pose.beta *= betaSign;
+        pose.gamma *= gammaSign;
+        pose.z = pose.pixelSize * focalLength;
+        return pose;
+    }
+    
+    void PeriodicPatternDetector::get3DPosePerspective(const cv::Mat & cameraMatrix, const cv::Mat & distortionCoefficients, cv::Mat & rvec, cv::Mat & tvec) {
+
+        // cv::SOLVEPNP_IPPE_SQUARE Method is based on the paper of Toby Collins and Adrien Bartoli. 
+        // "Infinitesimal Plane-Based Pose Estimation" ([63]). This method is suitable for marker pose estimation. 
+        // It requires 4 coplanar object points defined in the following order:
+        //    point 0: [-squareLength / 2, squareLength / 2, 0]
+        //    point 1: [ squareLength / 2, squareLength / 2, 0]
+        //    point 2: [ squareLength / 2, -squareLength / 2, 0]
+        //    point 3: [-squareLength / 2, -squareLength / 2, 0]
+
+        Eigen::Matrix2d A;
+        A << plane1.a, plane1.b, plane2.a, plane2.b;
+        Eigen::Vector2d B;
+        B << -2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
+        Eigen::Vector2d X0 = A.colPivHouseholderQr().solve(B);
+        B << 2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
+        Eigen::Vector2d X1 = A.colPivHouseholderQr().solve(B);
+        B << 2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
+        Eigen::Vector2d X2 = A.colPivHouseholderQr().solve(B);
+        B << -2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
+        Eigen::Vector2d X3 = A.colPivHouseholderQr().solve(B);
+        
+        float centerX = array.cols()/2;
+        float centerY = array.rows()/2;
+        std::vector<cv::Point2f> markerCorners(4);
+        markerCorners[0] = cv::Point2f(centerX + X0(0), centerY + X0(1));
+        markerCorners[1] = cv::Point2f(centerX + X1(0), centerY + X1(1));
+        markerCorners[2] = cv::Point2f(centerX + X2(0), centerY + X2(1));
+        markerCorners[3] = cv::Point2f(centerX + X3(0), centerY + X3(1));
+        
+        cv::Mat objPoints(4, 1, CV_32FC3);
+        objPoints.ptr<cv::Vec3f>(0)[0] = cv::Vec3f(-physicalPeriod, physicalPeriod, 0);
+        objPoints.ptr<cv::Vec3f>(0)[1] = cv::Vec3f(physicalPeriod, physicalPeriod, 0);
+        objPoints.ptr<cv::Vec3f>(0)[2] = cv::Vec3f(physicalPeriod, -physicalPeriod, 0);
+        objPoints.ptr<cv::Vec3f>(0)[3] = cv::Vec3f(-physicalPeriod, -physicalPeriod, 0);
+
+        cv::solvePnP(objPoints, markerCorners, cameraMatrix, distortionCoefficients, rvec, tvec, false, cv::SOLVEPNP_IPPE_SQUARE);
+        
+    }
+
 
     std::string PeriodicPatternDetector::toString() {
         return PatternDetector::toString() + " period: " + to_string(this->physicalPeriod) + unit;
@@ -132,14 +177,6 @@ namespace vernier {
         double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
 
         Pose(x, y, alpha, pixelSize).draw(image);
-    }
-
-    void PeriodicPatternDetector::setPhaseGradientMode(bool isPerspective) {
-        this->computePhaseGradient = !isPerspective;
-    }
-
-    bool PeriodicPatternDetector::isPhaseGradientMode() {
-        return computePhaseGradient;
     }
 
     Eigen::ArrayXXd PeriodicPatternDetector::getUnwrappedPhase1() {
@@ -205,22 +242,10 @@ namespace vernier {
     }
 
     bool PeriodicPatternDetector::getBool(const std::string & attribute) {
-        if (attribute == "computePhaseGradient") {
-            return computePhaseGradient;
-        } else if (attribute == "phaseGradientMode") {
-            return computePhaseGradient;
-        } else {
-            return PatternDetector::getBool(attribute);
-        }
+        return PatternDetector::getBool(attribute);
     }
 
     void PeriodicPatternDetector::setBool(const std::string & attribute, bool value) {
-        if (attribute == "computePhaseGradient") {
-            computePhaseGradient = value;
-        } else if (attribute == "phaseGradientMode") {
-            computePhaseGradient = value;
-        } else {
-            PatternDetector::setBool(attribute, value);
-        }
+        PatternDetector::setBool(attribute, value);
     }
 }

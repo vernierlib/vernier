@@ -13,10 +13,11 @@ using namespace std;
 using namespace Eigen;
 
 void main2d() {
-    // Loading the layout
-    string filename = "data/periodicPattern.json";
-    PatternLayout* layout = Layout::loadFromJSON(filename);
-
+    // Constructing the layout
+    double physicalPeriod = 15.0;
+    PatternLayout* layout = new PeriodicPatternLayout(physicalPeriod, 31, 31);
+    cout << "  Physical period: " << physicalPeriod << endl;
+    
     // Setting the pose of the pattern in the camera frame for rendering
     double x = 6.0;
     double y = 3.0;
@@ -35,8 +36,8 @@ void main2d() {
     layout->renderOrthographicProjection(patternPose, array);
 
     // Dectecting and estimating the pose of the pattern
-    PatternDetector* detector;
-    detector = Detector::loadFromJSON(filename);
+    PeriodicPatternDetector* detector;
+    detector = new PeriodicPatternDetector(physicalPeriod);
     detector->setDouble("sigma", 1);
     detector->setDouble("cropFactor", 0.4);
     detector->compute(array);
@@ -51,7 +52,7 @@ void main2d() {
 
     // Showing image and is spectrum
     PatternPhase *patternPhase = (PatternPhase*) (detector->getObject("patternPhase"));
-    arrayShow(layout->getClassname() + " (" + filename + ")", array);
+    arrayShow("Image", array);
     //arrayShow("Phase 1 (wrapped)", patternPhase->getPhase1());
     //arrayShow("Phase 2 (wrapped)", patternPhase->getPhase2());
     //imshow("Spectrum", array2image(patternPhase->getSpectrum()));
@@ -63,66 +64,67 @@ void main2d() {
     waitKey();
 }
 
-//void main3d() {
-//            // Loading the layout
-//            string filename = "periodicPattern.json";
-//            PatternLayout* layout = Layout::loadFromJSON(filename);
-//
-// Setting the pose of the pattern in the camera frame for rendering
-//    srand(time(NULL));
-//    double x = 7.0 * rand() / RAND_MAX; // 6.0
-//    double y = 7.0 * rand() / RAND_MAX; // 3.0
-//    double alpha = 0.2 * PI * rand() / RAND_MAX; // 0.3;
-//    double beta = 0.2 * PI * rand() / RAND_MAX; // 0.2;
-//    double gamma = 0.2 * PI * rand() / RAND_MAX; // 0.4;
-//    double pixelSize = 2.0;
-//    Pose patternPose = Pose(x, y, 0, alpha, beta, gamma, pixelSize);
-//            // Setting the pose of the pattern in the camera frame for rendering
-//            double x = 5.0;
-//            double y = 4.0;
-//            double z = 1000.0;
-//            double rz = 0.0;
-//            double ry = 0.3;
-//            double rx = 0.0;
-//            Eigen::Matrix4d patternPose = pose3d(x, y, z, rz, ry, rx);
-//
-//            // Allocating an array for rendering
-//            Eigen::ArrayXXd array(512, 512);
-//
-//            // Rendering
-//            double pixelSize = 1.0;
-//            double focalLength = 1000.0;
-//            PatternRenderer patternRenderer(layout, pixelSize, focalLength);
-//            patternRenderer.renderOrthographicProjection(patternPose, array);
-//
-//            // Dectecting and estimating the pose of the pattern
-//            PatternDetector* detector;
-//            detector = Detector::loadFromJSON(filename);
-//            detector->computePerspective(array);
-//
-//            // Printing results 
-//            // cout << "Pattern pose in camera frame for rendering : " << endl << patternPose.getCameraPatternTransformation() << endl;
-//            cout << "Pattern pose in camera frame for rendering : " << endl << patternPose << endl;
-//            //  cout << "Estimation of pattern pose in camera frame : " << endl << detector->getPatternPose() << endl;
-//            cout << "------------------------------------------------------------------" << endl;
-//            std::vector<Pose> tab = detector->get3DPose();
-//            cout << "Estimation of pattern pose in camera frame : " << endl << tab[0].getCameraPatternTransformation() << endl;
-//            cout << "------------------------------------------------------------------" << endl;
-//            cout << "Estimation of pattern pose in camera frame : " << endl << tab[1].getCameraPatternTransformation() << endl;
-//            cout << "------------------------------------------------------------------" << endl;
-//            cout << "Estimation of pattern pose in camera frame : " << endl << tab[2].getCameraPatternTransformation() << endl;
-//            cout << "------------------------------------------------------------------" << endl;
-//            cout << "Estimation of pattern pose in camera frame : " << endl << tab[3].getCameraPatternTransformation() << endl;
-//
-//
-//            // Converting the array in opencv mat and showing it
-//            Mat image(array.cols(), array.rows(), CV_64F, array.data());
-//            transpose(image, image);
-//            drawCameraFrame(image);
-//            imshow(layout->getDescription() + " (" + filename + ")", image);
-//            imshow("Spectrum", detector->getGuiSpectrum());
-//            waitKey();
-//}
+void main3dPerspective() {
+
+    // Constructing the layout
+    double physicalPeriod = 15;
+    PatternLayout* layout = new PeriodicPatternLayout(physicalPeriod, 31, 31);
+    cout << "  Physical period: " << physicalPeriod << endl;
+
+    // Setting the pose of the pattern in the camera frame for rendering
+    double x = 0 ;
+    double y = 0 ;
+    double z = 600.0;
+    double alpha = 0.1;
+    double beta = 0.00;
+    double gamma = 0.00;
+    double pixelSize = 1.0;
+    Pose patternPose = Pose(x, y, z, alpha, beta, gamma);
+    cout << "  Pattern pose:     " << patternPose.toString() << endl;
+
+    // Rendering
+    Eigen::ArrayXXd array(512, 512);
+    double focalLength = 100/0.5;
+    layout->renderPerspectiveProjection(patternPose, array, focalLength);
+
+    // Detecting and estimating the pose of the pattern
+    PeriodicPatternDetector* detector;
+    detector = new PeriodicPatternDetector(physicalPeriod);
+    detector->setDouble("sigma", 5);
+    detector->setDouble("cropFactor", 0.8);
+    detector->compute(array);
+      
+    Pose pose = detector->get3DPosePerspective(focalLength);
+    cout << "  Estimated pose 0: " << pose.toString() << endl;
+    /*
+    std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
+    detector->showControlImages();
+    
+    // Printing results 
+    cout << "  Estimated pose 0: " << estimatedPoses[0].toString() << endl;
+    cout << "  Estimated pose 1: " << estimatedPoses[1].toString() << endl;
+    cout << "  Estimated pose 2: " << estimatedPoses[2].toString() << endl;
+    cout << "  Estimated pose 4: " << estimatedPoses[3].toString() << endl;*/
+    
+    // Detecting and estimating the pose of the pattern
+    cv::Mat cameraMatrix = (Mat_<double>(3, 3) << focalLength / pixelSize, 0.0, array.cols()/2.0, 0.0, focalLength / pixelSize, array.rows()/2.0, 0.0, 0.0, 1.0);
+    cv::Mat distortionCoefficients = (Mat_<double>(1, 5) << 0.0, 0.0, 0.0, 0.0, 0.0);
+    cv::Mat rvec;
+    cv::Mat tvec;  
+    detector->get3DPosePerspective(cameraMatrix, distortionCoefficients, rvec, tvec);
+    cout << "  Estimated tvec: " << tvec.t() << endl;  
+    cout << "  Estimated rvec: " << rvec.t() << endl;   
+    //cout << "  Matrix : " << cameraMatrix << endl;  
+    
+    cv::Mat image;
+    array2image8UC4(array, image);
+    tvec = (Mat_<double>(1, 3) << 0.0, 0.0, 0.0);
+    cv::drawFrameAxes(image, cameraMatrix, distortionCoefficients, rvec, tvec, 10.0);
+    cv::imshow("Image", image);
+    
+    
+    waitKey(0);
+}
 
 void test2d() {
     START_UNIT_TEST;
@@ -164,10 +166,11 @@ void test2d() {
 
 int main(int argc, char** argv) {
 
-       // main2d();
+    //main2d();
 
-    // REPEAT_TEST(test2d(), 10)
-    test2d(); // Doing it only once before checking it later for a large number of random poses
+    main3dPerspective();
+    
+    //REPEAT_TEST(test2d(), 10)
 
     return EXIT_SUCCESS;
 }

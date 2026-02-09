@@ -33,7 +33,7 @@ namespace vernier {
          */
         double gamma;
 
-        /** pixel-to-millimeter scale factor 
+        /** pixel-to-meter scale factor 
          */
         double pixelSize;
 
@@ -51,7 +51,7 @@ namespace vernier {
          *	\param x: translation along X axis (in the same unit than the period of the pattern)
          *	\param y: translation along Y axis (in the same unit than the period of the pattern)
          *	\param alpha: rotation angle about the Z axis (in radian)
-         *      \param pixelSize: pixel-to-millimeter scale factor
+         *      \param pixelSize: pixel-to-meter scale factor
          */
         Pose(double x, double y, double alpha, double pixelSize = 1.0);
 
@@ -63,7 +63,7 @@ namespace vernier {
          *	\param alpha: rotation angle about the Z axis (in radian)
          *	\param beta: rotation angle about the Y intrinsic axis (in radian)
          *	\param gamma: rotation angle about the X intrinnsic axis (in radian)
-         *      \param pixelSize: pixel-to-millimeter scale factor
+         *      \param pixelSize: pixel-to-meter scale factor
          */
         Pose(double x, double y, double z, double alpha, double beta, double gamma, double pixelSize = 1.0);
 

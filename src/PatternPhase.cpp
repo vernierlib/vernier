@@ -59,7 +59,8 @@ namespace vernier {
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
 
-        if (pixelPeriod == 0.0) {
+        Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
+        /*if (pixelPeriod == 0.0) {
             Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
         } else {
             switch (peaksSearchMethod) {
@@ -77,7 +78,7 @@ namespace vernier {
                     ;
                     break;
             }
-        }
+        }*/
 
         // Compute first plane phase from peak 1
         gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
