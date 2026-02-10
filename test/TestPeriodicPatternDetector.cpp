@@ -75,8 +75,8 @@ void main3dPerspective() {
     double x = 0 ;
     double y = 0 ;
     double z = 600.0;
-    double alpha = 0.1;
-    double beta = 0.00;
+    double alpha = 0.0;
+    double beta = 0.30;
     double gamma = 0.00;
     double pixelSize = 1.0;
     Pose patternPose = Pose(x, y, z, alpha, beta, gamma);
@@ -95,16 +95,8 @@ void main3dPerspective() {
     detector->compute(array);
       
     Pose pose = detector->get3DPosePerspective(focalLength);
-    cout << "  Estimated pose 0: " << pose.toString() << endl;
-    /*
-    std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
+    cout << "  Estimated pose: " << pose.toString() << endl;
     detector->showControlImages();
-    
-    // Printing results 
-    cout << "  Estimated pose 0: " << estimatedPoses[0].toString() << endl;
-    cout << "  Estimated pose 1: " << estimatedPoses[1].toString() << endl;
-    cout << "  Estimated pose 2: " << estimatedPoses[2].toString() << endl;
-    cout << "  Estimated pose 4: " << estimatedPoses[3].toString() << endl;*/
     
     // Detecting and estimating the pose of the pattern
     cv::Mat cameraMatrix = (Mat_<double>(3, 3) << focalLength / pixelSize, 0.0, array.cols()/2.0, 0.0, focalLength / pixelSize, array.rows()/2.0, 0.0, 0.0, 1.0);

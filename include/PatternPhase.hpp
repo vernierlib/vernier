@@ -32,9 +32,6 @@ namespace vernier {
         FourierTransform fft, ifft;
         GaussianFilter gaussianFilter;
         
-        double pixelPeriod;
-        int peaksSearchMethod;
-        
         Eigen::ArrayXXcd spatial;  // Image of the pattern converted in complex<double> array for FFT computing
         Eigen::ArrayXXcd spectrum, spectrumShifted;
         Eigen::ArrayXXcd spectrumFiltered1;
@@ -88,24 +85,6 @@ namespace vernier {
          */
         void computePhaseGradients(int& betaSign, int& gammaSign);
 
-//        void computeWeakPerspective(Eigen::ArrayXXd& image, int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
-
-        
-
-        /** Computes the phase retrieving with a given QRCode and returns the phase at the center of the pattern along the two directions
-         *
-         *	\param patternArray: given pattern in an ArrayXXcd form
-         */
-//        void computeQRCode(Eigen::ArrayXXcd& patternArray); // a supprimer ?
-
-        /** Computes a firstly given image to retrieve all the parameters of the positioning method
-         *	Returns the sigma value that best suit the filtering of the spectrum peaks
-         *
-         *	\param patternArray: given pattern in an ArrayXXcd form
-         *	\param pixelPeriod: referenced pixelicPeriod that will be returned
-         */
-//        double computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod); // a supprimer ?
-
         /** Returns true if two peaks with sufficient power have been found */
         bool peaksFound();
         
@@ -149,23 +128,11 @@ namespace vernier {
         /** Sets the ratio of pixels to crop from the border for the regression */
         void setCropFactor(double cropFactor);
 
-        /** Selects the method to find the peaks in the spectrum */     
-        void setPeaksSearchMethod(int methodNumber);
-
-        /** Returns the method to find the peaks in the spectrum */
-        int getPeaksSearchMethod();
-
         /** Sets the size of the Gaussian filter */
         void setSigma(double sigma);
 
         /** Returns the size of the Gaussian filter */
         double getSigma();
-
-        /** Sets the length of period in pixel.
-         * 
-         * This value is used to search the peaks more effiently if the search method is 2. 
-         */
-        void setPixelPeriod(double periodLengthInPixel);
 
         /** Returns the length of the period in pixels */
         double getPixelPeriod();

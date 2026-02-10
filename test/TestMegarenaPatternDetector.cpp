@@ -97,7 +97,6 @@ void example3d() {
     // Estimating the pose of the pattern
     PatternDetector* detector;
     detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-    detector->setDouble("pixelPeriod", 7);
     detector->compute(array);
 
     // Printing results 
@@ -253,8 +252,6 @@ void main3dLongFocalPerspective() {
     detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
     detector->setDouble("sigma", 5);
     detector->setDouble("cropFactor", 0.8);
-    detector->setDouble("pixelPeriod", 7);
-    detector->setPhaseGradientMode();
     detector->compute(array);
     std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
 
@@ -297,8 +294,6 @@ void main3dPerspective() {
     detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
     detector->setDouble("sigma", 5);
     detector->setDouble("cropFactor", 0.8);
-    detector->setDouble("pixelPeriod", 7);
-    detector->setPhaseGradientMode();
     detector->compute(array);
     std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
     detector->showControlImages();

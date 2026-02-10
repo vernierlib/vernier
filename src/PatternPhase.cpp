@@ -9,8 +9,6 @@
 namespace vernier {
 
     PatternPhase::PatternPhase() {
-        this->peaksSearchMethod = 0;
-        this->pixelPeriod = 0.0;
         setSigma(3);
     }
 
@@ -60,25 +58,6 @@ namespace vernier {
         spectrumFiltered2 = spectrumShifted;
 
         Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
-        /*if (pixelPeriod == 0.0) {
-            Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
-        } else {
-            switch (peaksSearchMethod) {
-                case 0:
-                    Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
-                    break;
-                case 1:
-                    Spectrum::mainPeak4Search(spectrumShifted, mainPeak1, mainPeak2);
-                    break;
-                case 2:
-                    Spectrum::mainPeakPerimeter(spectrumShifted, mainPeak1, mainPeak2);
-                    break;
-                default:
-                    Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, pixelPeriod);
-                    ;
-                    break;
-            }
-        }*/
 
         // Compute first plane phase from peak 1
         gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
@@ -92,8 +71,6 @@ namespace vernier {
 
         plane1 = regressionPlane.compute(unwrappedPhase1);
 
-        this->pixelPeriod = plane1.getPixelicPeriod();
-
         // Compute second plase from peak 2
         gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
         ifft.compute(spectrumFiltered2, phase2);
@@ -104,11 +81,6 @@ namespace vernier {
         Spatial::quartersUnwrapPhase(unwrappedPhase2);
 
         plane2 = regressionPlane.compute(unwrappedPhase2);
-
-#ifndef USE_FFTW
-        // plane1.setC(-plane1.getC());   // supprimé le 19/11/2022 quelle différence avec oouda fft ?
-        // plane2.setC(-plane2.getC());
-#endif 
     }
 
     void PatternPhase::computePhaseGradients(int& betaSign, int& gammaSign) {
@@ -179,255 +151,6 @@ namespace vernier {
         gammaSign = (mean2 > 0) - (mean2 < 0);
     }
 
-    //    void PatternPhase::computeWeakPerspective(Eigen::ArrayXXd& image, int& betaSign, int& gammaSign, double approxPixelPeriod) {
-    //        resize(image.rows(), image.cols());
-    //        spatial.real() = image.array();
-    //        computeWeakPerspective(betaSign, gammaSign, approxPixelPeriod);
-    //    }
-    //
-    //    void PatternPhase::computeWeakPerspective(int& betaSign, int& gammaSign, double approxPixelPeriod) {
-    //        fft.compute(patternArray, spectrum);
-    //
-    //        Spectrum::shift(spectrum, spectrumShifted);
-    //        spectrumFiltered1 = spectrumShifted;
-    //        spectrumFiltered2 = spectrumShifted;
-    //
-    //        if (approxPixelPeriod != 0) {
-    //            this->pixelPeriod = approxPixelPeriod;
-    //            Spectrum::mainPeakCircle(spectrumShifted, mainPeak1, mainPeak2, approxPixelPeriod);
-    //        } else {
-    //            Spectrum::mainPeakQuarter(spectrumShifted, mainPeak1, mainPeak2);
-    //        }
-    //
-    //
-    //        // Quarter 1
-    //        gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
-    //
-    //        ifft.compute(spectrumFiltered1, phase1);
-    //        Spatial::shift(phase1);
-    //
-    //        unwrappedPhase1 = phase1.array().arg();
-    //        Eigen::ArrayXXd phase1Wrapped = unwrappedPhase1;
-    //        Spatial::quartersUnwrapPhase(unwrappedPhase1);
-    //
-    //
-    //        plane1 = regressionPlane.compute(unwrappedPhase1);
-    //
-    //        if (approxPixelPeriod == 0) {
-    //            this->pixelPeriod = plane1.getPixelicPeriod();
-    //        }
-    //
-    //        int sideOffset = regressionPlane.getColOffset();
-    //        Eigen::ArrayXXd phaseCropped = unwrappedPhase1.block(sideOffset, sideOffset, unwrappedPhase1.rows() - 2 * sideOffset, unwrappedPhase1.cols() - 2 * sideOffset);
-    //
-    //        cv::Mat phase1img(phaseCropped.rows(), phaseCropped.cols(), CV_64FC1, phaseCropped.data());
-    //        cv::Mat phaseResult(phase1img.rows, phase1img.cols, CV_64FC1);
-    //
-    //        double a = plane1.getA();
-    //        double b = plane1.getB();
-    //
-    //        cv::Mat phaseDerived(phase1img.rows - 1, phase1img.cols - 1, CV_64FC1);
-    //        cv::Mat sobelX, sobelY;
-    //
-    //        for (int i = 0; i < phase1img.rows - 1; i++) {
-    //            for (int j = 0; j < phase1img.cols - 1; j++) {
-    //                double dXdU = -(phaseCropped(i + 1, j) - phaseCropped(i, j)) * a / (pow(a, 2) + pow(b, 2));
-    //                double dYdU = (phaseCropped(i, j + 1) - phaseCropped(i, j)) * b / (pow(a, 2) + pow(b, 2));
-    //                phaseDerived.at<double>(i, j) = dXdU + dYdU;
-    //            }
-    //        }
-    //
-    //        cv::Sobel(phaseDerived, sobelX, CV_64F, 1, 0);
-    //        double mean = cv::mean(sobelX)[0];
-    //        betaSign = (mean > 0) - (mean < 0);
-    //
-    //        //std::cout << "mean first direction SOBEL : " << mean << std::endl;
-    //        //cv::normalize(phaseDerived, phaseDerived, 1, 0, cv::NORM_MINMAX);
-    //        //cv::imshow("phase 1 derived", phaseDerived);
-    //
-    //
-    //
-    //        // Quarter 2
-    //        gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
-    //        ifft.compute(spectrumFiltered2, phase1);
-    //        Spatial::shift(phase1);
-    //
-    //        unwrappedPhase2 = phase1.array().arg();
-    //        Spatial::quartersUnwrapPhase(unwrappedPhase2);
-    //
-    //        plane2 = regressionPlane.compute(unwrappedPhase2);
-    //
-    //        phaseCropped = unwrappedPhase2.block(sideOffset, sideOffset, unwrappedPhase2.rows() - 2 * sideOffset, unwrappedPhase2.cols() - 2 * sideOffset);
-    //        cv::Mat phase2img(phaseCropped.rows(), phaseCropped.cols(), CV_64FC1, phaseCropped.data());
-    //        cv::Mat phase2HSV;
-    //        cv::Mat phase2BGR;
-    //        cv::normalize(phase2img, phase2img, 255, 0, cv::NORM_MINMAX);
-    //        phase2img.convertTo(phase2BGR, CV_8UC3);
-    //        cv::cvtColor(phase2BGR, phase2BGR, cv::COLOR_GRAY2BGR);
-    //
-    //        a = plane2.getA();
-    //        b = plane2.getB();
-    //
-    //        //cv::applyColorMap(phase2BGR, phase2HSV, cv::COLORMAP_VIRIDIS);
-    //        //cv::line(phase2HSV, cv::Point(phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Point(3 * phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Scalar(255, 255, 255), 1);
-    //        //cv::line(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 4), cv::Point(phase2HSV.cols / 2, 3 * phase2HSV.rows / 4), cv::Scalar(255, 255, 255), 1);
-    //        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(3 * phase2HSV.cols / 4, phase2HSV.rows / 2), cv::Scalar(255, 255, 255), 3);
-    //        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2, 3 * phase2HSV.rows / 4), cv::Scalar(255, 255, 255), 3);
-    //        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2 + 30.0 / a, phase2HSV.rows / 2 + 30.0 / b), cv::Scalar(0, 0, 255), 3);
-    //        //cv::arrowedLine(phase2HSV, cv::Point(phase2HSV.cols / 2, phase2HSV.rows / 2), cv::Point(phase2HSV.cols / 2 - 30.0 / b, phase2HSV.rows / 2 + 30.0 / a), cv::Scalar(0, 0, 255), 3);
-    //        //cv::imshow("phase 2", phase2HSV);
-    //        //cv::imwrite("D:/Nextcloud2/classic3Dpatterns/analysis_scripts/perspectivePhaseEvolution/phaseMap.png", phase2HSV);
-    //
-    //        for (int i = 0; i < phase1img.rows - 1; i++) {
-    //            for (int j = 0; j < phase1img.cols - 1; j++) {
-    //                double dXdV = -(phaseCropped(i + 1, j) - phaseCropped(i, j)) * a / (pow(a, 2) + pow(b, 2));
-    //                double dYdV = (phaseCropped(i, j + 1) - phaseCropped(i, j)) * b / (pow(a, 2) + pow(b, 2));
-    //                phaseDerived.at<double>(i, j) = dXdV + dYdV;
-    //            }
-    //        }
-    //
-    //        cv::Sobel(phaseDerived, sobelY, CV_64F, 0, 1);
-    //        double mean2 = cv::mean(sobelY)[0];
-    //
-    //        //std::cout << "mean second direction SOBEL : " << mean2 << std::endl;
-    //        gammaSign = (mean2 > 0) - (mean2 < 0);
-    //    }
-    //
-    //    void PatternPhase::computeQRCode(Eigen::ArrayXXcd& patternArray) {
-    //
-    //        Eigen::ArrayXXcd meanPattern = patternArray - patternArray.mean();
-    //        fft.compute(meanPattern, spectrum);
-    //        Spectrum::shift(spectrum, spectrumShifted);
-    //        spectrumFiltered1 = spectrumShifted;
-    //        spectrumFiltered2 = spectrumShifted;
-    //
-    //        Spectrum::mainPeakQuarter(spectrumShifted, mainPeak1, mainPeak2);
-    //
-    //
-    //        gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
-    //        ifft.compute(spectrumFiltered1, phase1);
-    //        Spatial::shift(phase1);
-    //        unwrappedPhase1 = phase1.array().arg();
-    //
-    //        ////__________
-    //        ////affichage
-    //        //cv::Mat phaseImage;
-    //        //Eigen::MatrixXd intermediaryMatrix;
-    //        //intermediaryMatrix = phase1.matrix();
-    //        //intermediaryMatrix = (intermediaryMatrix + PI * Eigen::MatrixXd::Ones(intermediaryMatrix.rows(), intermediaryMatrix.cols())) / (2 * PI);
-    //
-    //        //cv::eigen2cv(intermediaryMatrix, phaseImage);
-    //
-    //        //cv::imshow("spectrum inverse fringes direction 1", phaseImage);
-    //        //phaseImage *= 255;
-    //        //cv::imwrite("PhaseImage1.png", phaseImage);
-    //        ////_____________
-    //
-    //
-    //        Spatial::quartersUnwrapPhase(unwrappedPhase1);
-    //        //        phaseCropped = phase1.block(sideOffset, sideOffset, phase1.rows() - 2 * sideOffset, phase1.cols() - 2 * sideOffset);
-    //        this->plane1 = regressionPlane.compute(unwrappedPhase1);
-    //
-    //        gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
-    //        ifft.compute(spectrumFiltered2, phase1);
-    //        Spatial::shift(phase1);
-    //        unwrappedPhase2 = phase1.array().arg();
-    //
-    //        //Eigen::MatrixXd intermediaryMatrix;
-    //        //cv::Mat phaseImage;
-    //        //intermediaryMatrix = phase2.matrix();
-    //        //intermediaryMatrix = (intermediaryMatrix + PI * Eigen::MatrixXd::Ones(intermediaryMatrix.rows(), intermediaryMatrix.cols())) / (2 * PI);
-    //        //cv::eigen2cv(intermediaryMatrix, phaseImage);
-    //        //cv::imshow("spectrum inverse fringes direction 2", phaseImage);
-    //
-    //        ////_________
-    //        ////affichage
-    //        //intermediaryMatrix = phase2.matrix();
-    //        //intermediaryMatrix = (intermediaryMatrix + PI * Eigen::MatrixXd::Ones(intermediaryMatrix.rows(), intermediaryMatrix.cols())) / (2 * PI);
-    //        //cv::eigen2cv(intermediaryMatrix, phaseImage);
-    //
-    //        //cv::imshow("spectrum inverse fringes direction 2", phaseImage);
-    //        //phaseImage *= 255;
-    //        //cv::imwrite("phaseImage2.png", phaseImage);
-    //        ////_________
-    //
-    //        Spatial::quartersUnwrapPhase(unwrappedPhase2);
-    //        //        phaseCropped = phase2.block(sideOffset, sideOffset, phase2.rows() - 2 * sideOffset, phase2.cols() - 2 * sideOffset);
-    //        this->plane2 = regressionPlane.compute(unwrappedPhase2);
-    //
-    //    }
-    //
-    //    double PatternPhase::computeFirst(Eigen::ArrayXXcd& patternArray, double& pixelPeriod) {
-    //        Eigen::ArrayXXcd meanPattern = patternArray - patternArray.mean();
-    //        fft.compute(meanPattern, spectrum);
-    //        Spectrum::shift(spectrum, spectrumShifted);
-    //        spectrumFiltered1 = spectrumShifted;
-    //        Eigen::ArrayXXcd spectrumShift2(patternArray.rows(), patternArray.cols());
-    //        Eigen::ArrayXXcd gaussian2D(patternArray.rows(), patternArray.cols());
-    //        gaussian2D.setConstant(1);
-    //        Eigen::ArrayXXcd Jcriterion(patternArray.rows(), patternArray.cols());
-    //
-    //        Spectrum::mainPeakQuarter(spectrumShifted, mainPeak1, mainPeak2);
-    //
-    //        //std::cout << "main peak : " << mainPeak1(1) << " ; " << mainPeak1(0) << std::endl;
-    //
-    //        double sigma = 0.333;
-    //        spectrumShift2 = spectrumShifted;
-    //
-    //        gaussianFilter.setSigma(sigma);
-    //        gaussianFilter.applyTo(gaussian2D, mainPeak1(1), mainPeak1(0));
-    //
-    //        gaussian2D *= spectrumShift2(mainPeak1(1), mainPeak1(0));
-    //
-    //        gaussian2D = gaussian2D.abs();
-    //        spectrumShift2 = spectrumShift2.abs();
-    //
-    //        spectrumShift2 -= gaussian2D;
-    //
-    //        Jcriterion = spectrumShift2 * spectrumShift2;
-    //
-    //        double meanJPrev = Jcriterion.abs().sum() * 10;
-    //
-    //        double meanJ = 0;
-    //        while (true) {
-    //            sigma += 0.001;
-    //
-    //            spectrumShift2 = spectrumShifted;
-    //            gaussian2D.setConstant(1);
-    //            gaussianFilter.setSigma(sigma);
-    //            gaussianFilter.applyTo(gaussian2D, mainPeak1(1), mainPeak1(0));
-    //
-    //            gaussian2D *= spectrumShift2(mainPeak1(1), mainPeak1(0));
-    //
-    //            gaussian2D = gaussian2D.abs();
-    //
-    //            spectrumShift2 -= gaussian2D;
-    //
-    //            Jcriterion = spectrumShift2 * spectrumShift2;
-    //
-    //            meanJ = Jcriterion.abs().sum();
-    //
-    //            if (meanJ > meanJPrev) break;
-    //            else {
-    //                meanJPrev = meanJ;
-    //            }
-    //
-    //            //std::cout << "mean criterion : " <<  meanJ  << " ; sigma : " << sigma << std::endl;
-    //        }
-    //
-    //        gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
-    //        ifft.compute(spectrumFiltered1, phase1);
-    //        Spatial::shift(phase1);
-    //        unwrappedPhase1 = phase1.array().arg();
-    //        Spatial::quartersUnwrapPhase(unwrappedPhase1);
-    //        //        phaseCropped = phase1.block(sideOffset, sideOffset, phase1.rows() - 2 * sideOffset, phase1.cols() - 2 * sideOffset);
-    //        this->plane1 = regressionPlane.compute(unwrappedPhase1);
-    //
-    //        pixelPeriod = plane1.getPixelicPeriod();
-    //
-    //        return sigma;
-    //    }
-
     void PatternPhase::showControlImages() {
         cv::imshow("Found peaks (red = direction 1, green = direction 2)", getPeaksImage());
         cv::moveWindow("Found peaks (red = direction 1, green = direction 2)", 0, 0);
@@ -443,16 +166,16 @@ namespace vernier {
         cv::Mat image;
         array2image8UC4(spectrumShifted, image);
 
-        if (pixelPeriod > 0.0) {
-            double frequenceColApprox = ((double) spectrumShifted.cols() / (double) pixelPeriod);
-            double frequenceRowApprox = ((double) spectrumShifted.rows() / (double) pixelPeriod);
-            double frequenceColMin = frequenceColApprox - frequenceColApprox * (sqrt(2) - 1) / 2.0;
-            double frequenceRowMin = frequenceRowApprox - frequenceRowApprox * (sqrt(2) - 1) / 2.0;
-            double frequenceColMax = frequenceColApprox + frequenceColApprox * (sqrt(2) - 1) / 2.0;
-            double frequenceRowMax = frequenceRowApprox + frequenceRowApprox * (sqrt(2) - 1) / 2.0;
-            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMin, frequenceRowMin), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMax, frequenceRowMax), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-        }
+//        if (pixelPeriod > 0.0) {
+//            double frequenceColApprox = ((double) spectrumShifted.cols() / (double) pixelPeriod);
+//            double frequenceRowApprox = ((double) spectrumShifted.rows() / (double) pixelPeriod);
+//            double frequenceColMin = frequenceColApprox - frequenceColApprox * (sqrt(2) - 1) / 2.0;
+//            double frequenceRowMin = frequenceRowApprox - frequenceRowApprox * (sqrt(2) - 1) / 2.0;
+//            double frequenceColMax = frequenceColApprox + frequenceColApprox * (sqrt(2) - 1) / 2.0;
+//            double frequenceRowMax = frequenceRowApprox + frequenceRowApprox * (sqrt(2) - 1) / 2.0;
+//            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMin, frequenceRowMin), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+//            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMax, frequenceRowMax), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+//        }
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak1.x(), mainPeak1.y()), cv::Scalar(0, 0, 255, 128));
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak2.x(), mainPeak2.y()), cv::Scalar(0, 255, 0, 128));
 
@@ -547,14 +270,6 @@ namespace vernier {
         regressionPlane.setCropFactor(cropFactor);
     }
 
-    void PatternPhase::setPeaksSearchMethod(int methodNumber) {
-        this->peaksSearchMethod = methodNumber;
-    }
-
-    int PatternPhase::getPeaksSearchMethod() {
-        return peaksSearchMethod;
-    }
-
     void PatternPhase::setSigma(double sigma) {
         gaussianFilter.setSigma(sigma);
     }
@@ -563,13 +278,8 @@ namespace vernier {
         return gaussianFilter.getSigma();
     }
 
-    void PatternPhase::setPixelPeriod(double periodLengthInPixel) {
-        this->peaksSearchMethod = 4;
-        this->pixelPeriod = periodLengthInPixel;
-    }
-
     double PatternPhase::getPixelPeriod() {
-        return pixelPeriod;
+        return plane1.getPixelicPeriod();
     }
 
     int PatternPhase::getNRows() {

@@ -20,7 +20,6 @@ void main1() {
 
     PatternPhase phaseRetrieving;
     phaseRetrieving.setSigma(1);
-    phaseRetrieving.setPixelPeriod(15);
     phaseRetrieving.compute(image);
 
     //            std::cout << "phase at the center : \n" << phaseRetrieving.getPhase1()(768/2,1024/2) << std::endl;
@@ -80,7 +79,6 @@ void runAllTests2() {
 
     PatternPhase phaseRetrieving;
     phaseRetrieving.setSigma(5);
-    phaseRetrieving.setPixelPeriod(15);
 
     cv::Mat image = cv::imread("data/im_1.png", 0);
     phaseRetrieving.compute(image);
@@ -123,7 +121,6 @@ double speed(unsigned long testCount) {
 
     tic();
     for (unsigned long i = 0; i < testCount; i++) {
-        phaseRetrieving.setPixelPeriod(period);
         phaseRetrieving.compute(array);
     }
     return toc(testCount);

@@ -187,10 +187,6 @@ namespace vernier {
         return patternPhase.getUnwrappedPhase2();
     }
 
-    void PeriodicPatternDetector::setPixelPeriod(double pixelPeriod) {
-        this->patternPhase.setPixelPeriod(pixelPeriod);
-    }
-
     void PeriodicPatternDetector::setSigma(double sigma) {
         this->patternPhase.setSigma(sigma);
     }
@@ -208,8 +204,6 @@ namespace vernier {
             setPhysicalPeriod(value);
         } else if (attribute == "sigma") {
             setSigma(value);
-        } else if (attribute == "pixelPeriod") {
-            setPixelPeriod(value);
         } else if (attribute == "cropFactor") {
             setCropFactor(value);
         } else {

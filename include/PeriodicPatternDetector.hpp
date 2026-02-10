@@ -84,9 +84,6 @@ namespace vernier {
             return &patternPhase;
         }
 
-        /** Sets the approximate length of one period in pixels */
-        void setPixelPeriod(double pixelPeriod);
-
         /** Sets the physical period of the pattern */
         void setPhysicalPeriod(double physicalPeriod);
 
