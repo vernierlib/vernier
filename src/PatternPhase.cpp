@@ -53,34 +53,86 @@ namespace vernier {
     void PatternPhase::compute() {
         fft.compute(spatial, spectrum);
 
-        Spectrum::shift(spectrum, spectrumShifted);
+        shift(spectrum, spectrumShifted);
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
-
-        Spectrum::mainPeakHalfPlane(spectrumShifted, mainPeak1, mainPeak2);
+        
+        Eigen::ArrayXXd magnitude = spectrumShifted.abs();
+        peaksSearch(magnitude, mainPeak1, mainPeak2);
 
         // Compute first plane phase from peak 1
-        gaussianFilter.applyTo(spectrumFiltered1, mainPeak1(1), mainPeak1(0));
+        applyGaussianFilter(spectrumFiltered1, mainPeak1(1), mainPeak1(0), sigma);
 
         ifft.compute(spectrumFiltered1, phase1);
-        Spatial::shift(phase1);
+        shift(phase1);
 
         unwrappedPhase1 = phase1.arg();
 
-        Spatial::quartersUnwrapPhase(unwrappedPhase1);
+        quartersUnwrapPhase(unwrappedPhase1);
 
         plane1 = regressionPlane.compute(unwrappedPhase1);
 
         // Compute second plase from peak 2
-        gaussianFilter.applyTo(spectrumFiltered2, mainPeak2(1), mainPeak2(0));
+        applyGaussianFilter(spectrumFiltered2, mainPeak2(1), mainPeak2(0), sigma);
         ifft.compute(spectrumFiltered2, phase2);
-        Spatial::shift(phase2);
+        shift(phase2);
 
         unwrappedPhase2 = phase2.arg();
 
-        Spatial::quartersUnwrapPhase(unwrappedPhase2);
+        quartersUnwrapPhase(unwrappedPhase2);
 
         plane2 = regressionPlane.compute(unwrappedPhase2);
+    }
+    
+    void PatternPhase::peaksSearch(Eigen::ArrayXXd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
+        mainPeak1.setConstant(-1);
+        mainPeak2.setConstant(-1);
+        
+        applyBandPassCut(source, MIN_FREQUENCY, MAX_FREQUENCY);
+        
+        // Filtre moyenneur 3x3 -> à faire avant dans le domaine spatial
+        // puis utiliser source.maxCoeff(&row, &col);
+        
+        double maxValue = -1.0;
+        for (int col = 1; col < source.cols() - 1; col++) {
+            for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
+                double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1) + source(row + 1, col) + source(row, col + 1)) / 5.0;
+                if (mean > maxValue) {
+                    maxValue = mean;
+                    mainPeak1.x() = col;
+                    mainPeak1.y() = row;
+                    mainPeak1.z() = mean / source.cols() / source.rows();
+                }
+            }
+        }
+        
+        if (mainPeak1.z() > MIN_PEAK_POWER) {
+            double vx = mainPeak1.x() - source.cols() / 2;
+            double vy = mainPeak1.y() - source.rows() / 2;
+            double distance = std::hypot(vx,vy);
+            
+            double centerAngle = std::atan2(vy, vx);
+            double widthAngle = 2.0 * std::atan2(3.0 * sigma, distance);
+            applyAngularCut(source, centerAngle, widthAngle);
+            
+            maxValue = -1;
+            for (int col = 1; col < source.cols() - 1; col++) {
+                for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
+                    double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1)+ source(row + 1, col) + source(row, col + 1)) / 5.0;
+                    if (mean > maxValue) {
+                        maxValue = mean;
+                        mainPeak2.x() = col;
+                        mainPeak2.y() = row;
+                        mainPeak2.z() = mean / source.cols() / source.rows();
+                    }
+                }
+            }
+            
+            if (mainPeak1.x() < mainPeak2.x()) {
+                std::swap(mainPeak1, mainPeak2);
+            }
+
+        }      
     }
 
     void PatternPhase::computePhaseGradients(int& betaSign, int& gammaSign) {
@@ -166,25 +218,18 @@ namespace vernier {
         cv::Mat image;
         array2image8UC4(spectrumShifted, image);
 
-//        if (pixelPeriod > 0.0) {
-//            double frequenceColApprox = ((double) spectrumShifted.cols() / (double) pixelPeriod);
-//            double frequenceRowApprox = ((double) spectrumShifted.rows() / (double) pixelPeriod);
-//            double frequenceColMin = frequenceColApprox - frequenceColApprox * (sqrt(2) - 1) / 2.0;
-//            double frequenceRowMin = frequenceRowApprox - frequenceRowApprox * (sqrt(2) - 1) / 2.0;
-//            double frequenceColMax = frequenceColApprox + frequenceColApprox * (sqrt(2) - 1) / 2.0;
-//            double frequenceRowMax = frequenceRowApprox + frequenceRowApprox * (sqrt(2) - 1) / 2.0;
-//            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMin, frequenceRowMin), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-//            cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(frequenceColMax, frequenceRowMax), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-//        }
+        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(MIN_FREQUENCY, MIN_FREQUENCY), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(MAX_FREQUENCY, MAX_FREQUENCY), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+        
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak1.x(), mainPeak1.y()), cv::Scalar(0, 0, 255, 128));
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak2.x(), mainPeak2.y()), cv::Scalar(0, 255, 0, 128));
 
-        double radius = 3 * gaussianFilter.getSigma();
+        double radius = 3 * sigma;
         if (radius < 1.0) {
             radius = 1.0;
         }
         cv::ellipse(image, cv::Point(mainPeak1.x(), mainPeak1.y()), cv::Size(radius, radius), 0, 0, 360, cv::Scalar(0, 0, 255, 128));
-        cv::ellipse(image, cv::Point(mainPeak2.x(), mainPeak2.y()), cv::Size(radius + 1, radius), 0, 0, 360, cv::Scalar(0, 255, 0, 128));
+        cv::ellipse(image, cv::Point(mainPeak2.x(), mainPeak2.y()), cv::Size(radius, radius), 0, 0, 360, cv::Scalar(0, 255, 0, 128));
 
         return image;
     }
@@ -271,11 +316,11 @@ namespace vernier {
     }
 
     void PatternPhase::setSigma(double sigma) {
-        gaussianFilter.setSigma(sigma);
+        this->sigma = sigma;
     }
 
     double PatternPhase::getSigma() {
-        return gaussianFilter.getSigma();
+        return sigma;
     }
 
     double PatternPhase::getPixelPeriod() {

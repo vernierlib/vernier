@@ -12,7 +12,6 @@
 #include "Spatial.hpp"
 #include "FourierTransform.hpp"
 #include "RegressionPlane.hpp"
-#include "GaussianFilter.hpp"
 
 namespace vernier {
 
@@ -30,7 +29,6 @@ namespace vernier {
         
         RegressionPlane regressionPlane;
         FourierTransform fft, ifft;
-        GaussianFilter gaussianFilter;
         
         Eigen::ArrayXXcd spatial;  // Image of the pattern converted in complex<double> array for FFT computing
         Eigen::ArrayXXcd spectrum, spectrumShifted;
@@ -44,12 +42,12 @@ namespace vernier {
         
         void compute();
         
-        void computeWeakPerspective(int& betaSign, int& gammaSign, double approxPixelPeriod); // a supprimer ?
-
-        
     public:
         
+        double sigma = 3.0;
         double MIN_PEAK_POWER = 0.00001;
+        double MIN_FREQUENCY = 20;
+        double MAX_FREQUENCY = 500;
 
         /** Default constructor*/
         PatternPhase();
@@ -79,6 +77,8 @@ namespace vernier {
          *	\param image: image of a pattern in a cv::Mat
          */
         void compute(const cv::Mat& image);
+        
+        void peaksSearch(Eigen::ArrayXXd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2);
        
         /** Computes the phase gradients to find the sign of the out-of-plane 
          * angles (works only with slight perspective projection)

@@ -36,9 +36,9 @@ void main1() {
 }
 
 void runAllTests() {
-    
+
     START_UNIT_TEST;
-     
+
     double period = 10.0;
     PeriodicPatternLayout layout(period, 81, 81);
     double x = 4.0;
@@ -51,17 +51,18 @@ void runAllTests() {
     PatternPhase patternPhase;
     patternPhase.setSigma(1);
     patternPhase.compute(array);
+    
+    
 
     //            std::cout << "Plane 1 position : \n" << -patternPhase.getPlane1().getPosition(period) << std::endl;
     //            std::cout << "Plane 2 position : \n" << -patternPhase.getPlane2().getPosition(period) << std::endl;
     //            std::cout << "Plane 1 angle : \n" << patternPhase.getPlane1().getAngle() << std::endl;
     //            std::cout << "Plane 2 angle : \n" << patternPhase.getPlane2().getAngle() - PI / 2 << std::endl;
+    
+    patternPhase.showControlImages();
+    cv::waitKey();
 
-    //            cv::imshow("Image", array2image(array));
-    //            cv::imshow("Spectrum", patternPhase.getControlImage());
-    //            cv::waitKey();
-
-    //            UNIT_TEST(areEqual(x, -patternPhase.getPlane1().getPosition(period), 0.001)); // marche pas (je sais pas pk)
+    UNIT_TEST(areEqual(x, -patternPhase.getPlane1().getPosition(period), 0.001));
 
     UNIT_TEST(areEqual(y, -patternPhase.getPlane2().getPosition(period), 0.001));
 
@@ -129,6 +130,7 @@ double speed(unsigned long testCount) {
 int main(int argc, char** argv) {
 
     runAllTests();
+    //runAllTests2();
 
     return EXIT_SUCCESS;
 }
