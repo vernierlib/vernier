@@ -5,6 +5,7 @@
  */
 
 #include "Spatial.hpp"
+#include "Spectrum.hpp"
 #include "eigen-matio/MatioFile.hpp"
 #include "UnitTest.hpp"
 
@@ -34,7 +35,7 @@ void main1() {
 
     std::cout << wrappedPhase << "\n\n\n" << std::endl;
 
-    Spatial::quartersUnwrapPhase(wrappedPhase);
+    quartersUnwrapPhase(wrappedPhase);
 
     std::cout << wrappedPhase << "\n\n\n" << std::endl;
 }
@@ -55,7 +56,7 @@ void main2() {
     Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDWR);
     file.read_mat("wrappedPhasePeak1", wrappedPhasePeak1);
 
-    Spatial::quartersUnwrapPhase(wrappedPhasePeak1);
+    quartersUnwrapPhase(wrappedPhasePeak1);
 
 }
 
@@ -73,7 +74,7 @@ void runAllTests() {
     Eigen::MatioFile file("data/TestFilesMat.mat", MAT_ACC_RDWR);
     file.read_mat("wrappedPhasePeak1", wrappedPhasePeak1);
 
-    Spatial::quartersUnwrapPhase(wrappedPhasePeak1);
+    quartersUnwrapPhase(wrappedPhasePeak1);
     file.read_mat("unwrapCenterMatlab", unwrappedReference);
 
     UNIT_TEST(areEqual(unwrappedReference, wrappedPhasePeak1));
@@ -91,7 +92,7 @@ double speed(unsigned long testCount) {
     tic();
 
     for (unsigned long i = 0; i < testCount; i++) {
-        Spatial::quartersUnwrapPhase(wrappedPhasePeak1);
+        quartersUnwrapPhase(wrappedPhasePeak1);
     }
 
     return toc(testCount);
@@ -102,7 +103,7 @@ double speed2(unsigned long testCount) {
 
     tic();
     for (unsigned long i = 0; i < testCount; i++) {
-        Spatial::shift(in);
+        shift(in);
     }
     return toc(testCount);
 }

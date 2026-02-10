@@ -24,7 +24,7 @@ void main1() {
     fft.compute(spatial, spectral);
 
     Eigen::ArrayXXcd spectralShifted(spectral.rows(), spectral.cols());
-    Spectrum::shift(spectral, spectralShifted);
+    shift(spectral, spectralShifted);
 
     std::cout << "spectral = " << spectral << std::endl;
     std::cout << "spectral shifted = " << spectralShifted << std::endl;
@@ -76,7 +76,7 @@ void main2() {
         spatial.resize(array.rows(), array.cols());
         spatial.real() = array;
         ft.compute(spatial, spectrum);
-        Spectrum::shift(spectrum, spectrumShifted);
+        shift(spectrum, spectrumShifted);
 
         // Showing spectrum
         spectrumAbs = spectrumShifted.abs() / 10000;

@@ -87,14 +87,6 @@ namespace vernier {
         }
     }
 
-    double angleInPiPi(double angle) {
-        while (angle >= PI)
-            angle -= 2 * PI;
-        while (angle<-PI)
-            angle += 2 * PI;
-        return angle;
-    }
-
     const std::string currentDateTime() {
         time_t now = time(0);
         struct tm tstruct;

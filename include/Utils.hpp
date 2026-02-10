@@ -31,7 +31,13 @@ namespace vernier {
      */
     void removeNanFromArray(Eigen::ArrayXXd & image);
 
-    double angleInPiPi(double angle);
+    inline double angleInPiPi(double angle) {
+        while (angle >= PI)
+            angle -= 2 * PI;
+        while (angle<-PI)
+            angle += 2 * PI;
+        return angle;
+    }
 
     const std::string currentDateTime();
 

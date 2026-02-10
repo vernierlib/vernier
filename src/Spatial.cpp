@@ -8,7 +8,7 @@
 
 namespace vernier {
 
-    void Spatial::quartersUnwrapPhase(Eigen::ArrayXXd& wrappedPhase) {
+    void quartersUnwrapPhase(Eigen::ArrayXXd& wrappedPhase) {
         int sizeX = wrappedPhase.cols();
         int sizeY = wrappedPhase.rows();
         int origineX = (sizeX / 2);
