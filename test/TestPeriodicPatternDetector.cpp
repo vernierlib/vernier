@@ -77,7 +77,7 @@ void main3dPerspective() {
     double z = 600.0;
     double alpha = 0.0;
     double beta = 0.30;
-    double gamma = 0.00;
+    double gamma = 0.10;
     double pixelSize = 1.0;
     Pose patternPose = Pose(x, y, z, alpha, beta, gamma);
     cout << "  Pattern pose:     " << patternPose.toString() << endl;
@@ -90,30 +90,13 @@ void main3dPerspective() {
     // Detecting and estimating the pose of the pattern
     PeriodicPatternDetector* detector;
     detector = new PeriodicPatternDetector(physicalPeriod);
-    detector->setDouble("sigma", 5);
+    detector->setDouble("sigma", 15);
     detector->setDouble("cropFactor", 0.8);
     detector->compute(array);
       
     Pose pose = detector->get3DPosePerspective(focalLength);
     cout << "  Estimated pose: " << pose.toString() << endl;
-    detector->showControlImages();
-    
-    // Detecting and estimating the pose of the pattern
-    cv::Mat cameraMatrix = (Mat_<double>(3, 3) << focalLength / pixelSize, 0.0, array.cols()/2.0, 0.0, focalLength / pixelSize, array.rows()/2.0, 0.0, 0.0, 1.0);
-    cv::Mat distortionCoefficients = (Mat_<double>(1, 5) << 0.0, 0.0, 0.0, 0.0, 0.0);
-    cv::Mat rvec;
-    cv::Mat tvec;  
-    detector->get3DPosePerspective(cameraMatrix, distortionCoefficients, rvec, tvec);
-    cout << "  Estimated tvec: " << tvec.t() << endl;  
-    cout << "  Estimated rvec: " << rvec.t() << endl;   
-    //cout << "  Matrix : " << cameraMatrix << endl;  
-    
-    cv::Mat image;
-    array2image8UC4(array, image);
-    tvec = (Mat_<double>(1, 3) << 0.0, 0.0, 0.0);
-    cv::drawFrameAxes(image, cameraMatrix, distortionCoefficients, rvec, tvec, 10.0);
-    cv::imshow("Image", image);
-    
+    detector->showControlImages();    
     
     waitKey(0);
 }
@@ -160,9 +143,9 @@ int main(int argc, char** argv) {
 
     //main2d();
 
-    main3dPerspective();
+    //main3dPerspective();
     
-    //REPEAT_TEST(test2d(), 10)
+    REPEAT_TEST(test2d(), 10)
 
     return EXIT_SUCCESS;
 }

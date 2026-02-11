@@ -47,8 +47,6 @@ namespace vernier {
 
         void addBitmap(const std::string & filename);
         
-        void get3DPose(const cv::Mat & cameraMatrix, const cv::Mat & distortionCoefficients, cv::Mat & rvec, cv::Mat & tvec);
-    
         Pose get2DPose(int id = -1) override;
 
         Pose get3DPose(int id = -1) override;

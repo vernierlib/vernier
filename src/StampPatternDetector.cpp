@@ -107,46 +107,6 @@ namespace vernier {
         }
     }
 
-    void StampPatternDetector::get3DPose(const cv::Mat & cameraMatrix, const cv::Mat & distortionCoefficients, cv::Mat & rvec, cv::Mat & tvec) {
-
-        // cv::SOLVEPNP_IPPE_SQUARE Method is based on the paper of Toby Collins and Adrien Bartoli. 
-        // "Infinitesimal Plane-Based Pose Estimation" ([63]). This method is suitable for marker pose estimation. 
-        // It requires 4 coplanar object points defined in the following order:
-        //    point 0: [-squareLength / 2, squareLength / 2, 0]
-        //    point 1: [ squareLength / 2, squareLength / 2, 0]
-        //    point 2: [ squareLength / 2, -squareLength / 2, 0]
-        //    point 3: [-squareLength / 2, -squareLength / 2, 0]
-
-        Eigen::Matrix2d A;
-        A << plane1.a, plane1.b, plane2.a, plane2.b;
-        Eigen::Vector2d B;
-        B << -2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X0 = A.colPivHouseholderQr().solve(B);
-        B << 2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X1 = A.colPivHouseholderQr().solve(B);
-        B << 2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X2 = A.colPivHouseholderQr().solve(B);
-        B << -2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X3 = A.colPivHouseholderQr().solve(B);
-
-        std::vector<cv::Point2f> markerCorners(4);
-        markerCorners[0] = cv::Point2f(centerX + X0(0), centerY + X0(1));
-        markerCorners[1] = cv::Point2f(centerX + X1(0), centerY + X1(1));
-        markerCorners[2] = cv::Point2f(centerX + X2(0), centerY + X2(1));
-        markerCorners[3] = cv::Point2f(centerX + X3(0), centerY + X3(1));
-        
-        cv::Mat objPoints(4, 1, CV_32FC3);
-        objPoints.ptr<cv::Vec3f>(0)[0] = cv::Vec3f(-physicalPeriod, physicalPeriod, 0);
-        objPoints.ptr<cv::Vec3f>(0)[1] = cv::Vec3f(physicalPeriod, physicalPeriod, 0);
-        objPoints.ptr<cv::Vec3f>(0)[2] = cv::Vec3f(physicalPeriod, -physicalPeriod, 0);
-        objPoints.ptr<cv::Vec3f>(0)[3] = cv::Vec3f(-physicalPeriod, -physicalPeriod, 0);
-
-        cv::solvePnP(objPoints, markerCorners, cameraMatrix, distortionCoefficients, rvec, tvec, false, cv::SOLVEPNP_IPPE_SQUARE);
-        
-        //rvec = (cv::Mat_<double>(1, 3) << 0.0, 0.0, 0.0);
-        //tvec = (cv::Mat_<double>(1, 3) << 0.0, 0.0, 0.0);
-    }
-
     Pose StampPatternDetector::get2DPose(int id) {
         if (id < 0) {
             return markers.begin()->second;
