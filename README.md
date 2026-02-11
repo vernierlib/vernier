@@ -4,7 +4,7 @@
 [![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/)
 [![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact)
 [![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib)
-[![Build](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml/badge.svg)](https://github.com/AntoineAndre/vernier_ci/actions/workflows/build.yml)
+[![Build](https://github.com/vernierlib/vernier/actions/workflows/build.yml/badge.svg)](https://github.com/vernierlib/vernier/actions/workflows/build.yml)
 
 The Vernier Library is an open-source C++ library for pose measurement of calibrated patterns with subpixel resolutions.
 
