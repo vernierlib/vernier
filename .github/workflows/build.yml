@@ -26,3 +26,9 @@ jobs:
       - name: Run tests
         run: cd build && make test
 
+      - name: Deploy documentation to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./docs/html
+          keep_files: false
