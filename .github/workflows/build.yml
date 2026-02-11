@@ -9,10 +9,10 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
+      fail-fast: true
       matrix:
         os: [ubuntu-latest]
-        build-type: [Debug]
+        build-type: [Release]
         compiler: [gcc]
     runs-on: ${{ matrix.os }}
     steps:
@@ -25,9 +25,9 @@ jobs:
         compiler: ${{ matrix.compiler }}
         build-type: ${{ matrix.build-type }}
         ubuntu: |
-          apt: cmake libeigen3-dev libgtest-dev wget unzip libqhull-dev doxygen doxygen-latex
+          apt: cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev libfftw3-dev doxygen doxygen-latex
         macos: |
-          brew: autoconf automake cmake eigen libtool libmatio opencv fftw
+          brew: cmake autoconfig automake cmake eigen libtool libmatio opencv fftw
     
     - name: add latest ubuntu apt repository
       if: runner.os == 'Linux'
