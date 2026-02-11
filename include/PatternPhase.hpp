@@ -40,14 +40,15 @@ namespace vernier {
         
         PhasePlane plane1, plane2;
         
+        double sigma = 3.0;
+        double minPeakPower = 0.00001;
+        double minFrequency = 20;
+        double maxFrequency = 500;
+        
         void compute();
         
     public:
         
-        double sigma = 3.0;
-        double MIN_PEAK_POWER = 0.00001;
-        double MIN_FREQUENCY = 20;
-        double MAX_FREQUENCY = 500;
 
         /** Default constructor*/
         PatternPhase();
@@ -133,6 +134,24 @@ namespace vernier {
 
         /** Returns the size of the Gaussian filter */
         double getSigma();
+        
+        /** Returns the maximum frequency for peak detection */
+        double getMaxFrequency();
+
+        /** Sets the maximum frequency for peak detection */
+        void setMaxFrequency(double maxFrequency);
+
+        /** Returns the minimum frequency for peak detection */
+        double getMinFrequency();
+
+        /** Sets the minimum frequency for peak detection */
+        void setMinFrequency(double minFrequency);
+
+        /** Returns the minimum power of detected peaks */
+        double getMinPeakPower();
+
+        /** Sets the minimum power of detected peaks */
+        void setMinPeakPower(double minPeakPower);
 
         /** Returns the length of the period in pixels */
         double getPixelPeriod();

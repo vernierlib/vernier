@@ -65,13 +65,8 @@ namespace vernier {
          *   
          * The method is described in the paper: André, A. N., Sandoz, P., Jacquot, M., & Laurent, G. J. (2022). Pose measurement at small scale by spectral analysis of periodic patterns. International Journal of Computer Vision, 130(6), 1566-1582.
          *
-         * The phase gradient mode must be actived before image computing.
          */
         Pose get3DPosePerspective(double focalLength);
-        
-        /** Returns the pose of the pattern assuming a perspective projection 
-         * rvec is the estimated rotation vector and tvec the estimated translation vector */
-        void get3DPosePerspective(const cv::Mat & cameraMatrix, const cv::Mat & distortionCoefficients, cv::Mat & rvec, cv::Mat & tvec);
         
         void showControlImages() override;
         
@@ -92,7 +87,16 @@ namespace vernier {
 
         /** Sets the ratio of pixels to crop from the border for the regression */
         void setCropFactor(double cropFactor);
+        
+        /** Sets the maximum frequency for peak detection */
+        void setMaxFrequency(double maxFrequency);
 
+        /** Sets the minimum frequency for peak detection */
+        void setMinFrequency(double minFrequency);
+
+        /** Sets the minimum power of detected peaks */
+        void setMinPeakPower(double minPeakPower);
+        
         /** Returns the phase plane corresponding to the first direction of the pattern */
         PhasePlane getPlane1();
 

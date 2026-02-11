@@ -56,7 +56,7 @@ namespace vernier {
         shift(spectrum, spectrumShifted);
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
-        
+
         Eigen::ArrayXXd magnitude = spectrumShifted.abs();
         peaksSearch(magnitude, mainPeak1, mainPeak2);
 
@@ -83,16 +83,16 @@ namespace vernier {
 
         plane2 = regressionPlane.compute(unwrappedPhase2);
     }
-    
+
     void PatternPhase::peaksSearch(Eigen::ArrayXXd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
         mainPeak1.setConstant(-1);
         mainPeak2.setConstant(-1);
-        
-        applyBandPassCut(source, MIN_FREQUENCY, MAX_FREQUENCY);
-        
+
+        applyBandPassCut(source, minFrequency, maxFrequency);
+
         // Filtre moyenneur 3x3 -> à faire avant dans le domaine spatial
         // puis utiliser source.maxCoeff(&row, &col);
-        
+
         double maxValue = -1.0;
         for (int col = 1; col < source.cols() - 1; col++) {
             for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
@@ -105,20 +105,20 @@ namespace vernier {
                 }
             }
         }
-        
-        if (mainPeak1.z() > MIN_PEAK_POWER) {
+
+        if (mainPeak1.z() > minPeakPower) {
             double vx = mainPeak1.x() - source.cols() / 2;
             double vy = mainPeak1.y() - source.rows() / 2;
-            double distance = std::hypot(vx,vy);
-            
+            double distance = std::hypot(vx, vy);
+
             double centerAngle = std::atan2(vy, vx);
             double widthAngle = 2.0 * std::atan2(3.0 * sigma, distance);
             applyAngularCut(source, centerAngle, widthAngle);
-            
+
             maxValue = -1;
             for (int col = 1; col < source.cols() - 1; col++) {
                 for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
-                    double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1)+ source(row + 1, col) + source(row, col + 1)) / 5.0;
+                    double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1) + source(row + 1, col) + source(row, col + 1)) / 5.0;
                     if (mean > maxValue) {
                         maxValue = mean;
                         mainPeak2.x() = col;
@@ -127,12 +127,12 @@ namespace vernier {
                     }
                 }
             }
-            
+
             if (mainPeak1.x() < mainPeak2.x()) {
                 std::swap(mainPeak1, mainPeak2);
             }
 
-        }      
+        }
     }
 
     void PatternPhase::computePhaseGradients(int& betaSign, int& gammaSign) {
@@ -218,9 +218,9 @@ namespace vernier {
         cv::Mat image;
         array2image8UC4(spectrumShifted, image);
 
-        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(MIN_FREQUENCY, MIN_FREQUENCY), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(MAX_FREQUENCY, MAX_FREQUENCY), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
-        
+        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(minFrequency, minFrequency), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+        cv::ellipse(image, cv::Point2d(spectrumShifted.cols() / 2, spectrumShifted.rows() / 2), cv::Size(maxFrequency, maxFrequency), 0, 0, 360, cv::Scalar(255, 0, 0, 128));
+
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak1.x(), mainPeak1.y()), cv::Scalar(0, 0, 255, 128));
         cv::line(image, cv::Point(image.cols / 2, image.rows / 2), cv::Point(mainPeak2.x(), mainPeak2.y()), cv::Scalar(0, 255, 0, 128));
 
@@ -266,7 +266,7 @@ namespace vernier {
     }
 
     bool PatternPhase::peaksFound() {
-        return (mainPeak1.z() > MIN_PEAK_POWER && mainPeak2.z() > MIN_PEAK_POWER);
+        return (mainPeak1.z() > minPeakPower && mainPeak2.z() > minPeakPower);
     }
 
     cv::Mat PatternPhase::getImage() {
@@ -321,6 +321,30 @@ namespace vernier {
 
     double PatternPhase::getSigma() {
         return sigma;
+    }
+
+    double PatternPhase::getMaxFrequency() {
+        return maxFrequency;
+    }
+
+    void PatternPhase::setMaxFrequency(double maxFrequency) {
+        this->maxFrequency = maxFrequency;
+    }
+
+    double PatternPhase::getMinFrequency() {
+        return minFrequency;
+    }
+
+    void PatternPhase::setMinFrequency(double minFrequency) {
+        this->minFrequency = minFrequency;
+    }
+
+    double PatternPhase::getMinPeakPower() {
+        return minPeakPower;
+    }
+
+    void PatternPhase::setMinPeakPower(double minPeakPower) {
+        this->minPeakPower = minPeakPower;
     }
 
     double PatternPhase::getPixelPeriod() {
