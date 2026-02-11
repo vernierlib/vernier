@@ -40,5 +40,5 @@ int main() {
     // Showing image and its spectrum
     detector.showControlImages();
     imshow(filename, image);
-    waitKey();
+    waitKey(3000);
 }

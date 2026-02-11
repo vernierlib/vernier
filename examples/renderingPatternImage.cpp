@@ -29,6 +29,6 @@ int main() {
 
     // Showing the image
     imshow(filename, image);
-    waitKey();
+    waitKey(3000);
 
 }

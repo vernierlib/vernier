@@ -106,7 +106,7 @@ int main(int argc, char** argv) {
 
     //mainOrthographic2d();
     
-    mainPerspective();
+    //mainPerspective();
 
     //runAllTests();
 

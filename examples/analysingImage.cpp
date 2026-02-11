@@ -32,6 +32,6 @@ int main() {
     
     // Showing image spectrum and fringes 
     patternPhase.showControlImages();
-    waitKey();
+    waitKey(3000);
     
 }

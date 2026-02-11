@@ -49,22 +49,25 @@ jobs:
         sudo make install
         sudo ldconfig
 
-    # - name: Build and test
-    #   run: |
-    #     mkdir build
-    #     cd build
-    #     cmake .. -DBUILD_TESTS=OFF -DUSE_OPENCV=OFF
-    #     make doc
     - name: Build and test
-      uses: jrl-umi3218/github-actions/build-cmake-project@master
-      with:
-        compiler: ${{ matrix.compiler }}
-        build-type: ${{ matrix.build-type }}
-        options: '-DBUILD_EXAMPLES:BOOL=OFF'
+      run: |
+        mkdir build
+        cd build
+        cmake ..
+        make
+        make test
 
-    - name: Deploy
-      uses: peaceiris/actions-gh-pages@v4
-      if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        publish_dir: ./build/doc/html
+    # - name: Build and test
+    #   uses: jrl-umi3218/github-actions/build-cmake-project@master
+    #   with:
+    #     compiler: ${{ matrix.compiler }}
+    #     build-type: ${{ matrix.build-type }}
+    #     options: '-DBUILD_EXAMPLES:BOOL=OFF'
+    #   run: make test
+
+    # - name: Deploy
+    #   uses: peaceiris/actions-gh-pages@v4
+    #   if: github.ref == 'refs/heads/main' && matrix.os == 'ubuntu-latest'
+    #   with:
+    #     github_token: ${{ secrets.GITHUB_TOKEN }}
+    #     publish_dir: ./build/doc/html

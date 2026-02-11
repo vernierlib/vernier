@@ -383,10 +383,9 @@ double speed(unsigned long testCount) {
 
 int main(int argc, char** argv) {
     
-   // example2d();
-//    main1();
-
-//    main3d();
+    //example2d();
+    //main1();
+    //main3d();
     
 //    cout << "Computing time: " << speed(10) << " ms" << endl;
   

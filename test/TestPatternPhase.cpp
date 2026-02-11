@@ -59,8 +59,8 @@ void runAllTests() {
     //            std::cout << "Plane 1 angle : \n" << patternPhase.getPlane1().getAngle() << std::endl;
     //            std::cout << "Plane 2 angle : \n" << patternPhase.getPlane2().getAngle() - PI / 2 << std::endl;
     
-    patternPhase.showControlImages();
-    cv::waitKey();
+    //patternPhase.showControlImages();
+    //cv::waitKey();
 
     UNIT_TEST(areEqual(x, -patternPhase.getPlane1().getPosition(period), 0.001));
 
