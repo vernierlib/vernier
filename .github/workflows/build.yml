@@ -1,4 +1,4 @@
-name: C++ CI with OpenCV
+name: tests
 
 on:
   push:
