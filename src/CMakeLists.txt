@@ -29,6 +29,7 @@ endif()
 if(NOT WIN32)
 #  include_directories(${EIGEN3_INCLUDE_DIR})
   target_link_libraries(vernier gdstk)
+  target_compile_options(vernier PRIVATE -march=native)
 endif()
 
 include_directories(${CMAKE_SOURCE_DIR}/include)
