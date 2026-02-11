@@ -2,7 +2,7 @@
 
 [![GPL](https://img.shields.io/badge/license-GPLv3-blue)](https://www.gnu.org/licenses/gpl-3.0.en.html)
 [![Information](https://img.shields.io/badge/info-on_website-purple.svg)](https://projects.femto-st.fr/vernier/en)
-[![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/)
+[![Documentation](https://img.shields.io/badge/doc-on_website-blue.svg)](https://vernierlib.github.io/vernier)
 [![Contact](https://img.shields.io/badge/contact-form-green.svg)](https://projects.femto-st.fr/vernier/en/contact)
 [![GithHb](https://img.shields.io/badge/sources-on_github-orange.svg)](https://github.com/vernierlib)
 [![Build](https://github.com/vernierlib/vernier/actions/workflows/build.yml/badge.svg)](https://github.com/vernierlib/vernier/actions/workflows/build.yml)
@@ -13,7 +13,7 @@ The library defines a collection of classes for detection and rendering differen
 
 ## Documentation
 
-The [documentation](https://vernierlib.github.io/) is automatically generated from the code using Doxygen.
+The [documentation](https://vernierlib.github.io/vernier) is automatically generated from the code using Doxygen.
 
 The implemented methods are described in the following papers:
 
