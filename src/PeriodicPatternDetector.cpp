@@ -169,7 +169,19 @@ namespace vernier {
     void PeriodicPatternDetector::setMinPeakPower(double minPeakPower) {
         this->patternPhase.setMinPeakPower(minPeakPower);
     }
+    
+    void PeriodicPatternDetector::setSmoothingKernelSize(int smoothingKernelSize) {
+        this->patternPhase.setSmoothingKernelSize(smoothingKernelSize);
+    }
 
+    void PeriodicPatternDetector::setInt(const std::string & attribute, int value) {
+        if (attribute == "smoothingKernelSize") {
+            setSmoothingKernelSize(value);
+        } else {
+            PatternDetector::setInt(attribute, value);
+        }
+    }
+    
     void PeriodicPatternDetector::setDouble(const std::string & attribute, double value) {
         if (attribute == "physicalPeriod") {
             setPhysicalPeriod(value);

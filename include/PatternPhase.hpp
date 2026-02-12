@@ -44,6 +44,7 @@ namespace vernier {
         double minPeakPower = 0.00001;
         double minFrequency = 20;
         double maxFrequency = 500;
+        int smoothingKernelSize = 3;
         
         void compute();
         
@@ -152,8 +153,14 @@ namespace vernier {
 
         /** Sets the minimum power of detected peaks */
         void setMinPeakPower(double minPeakPower);
+        
+        /** Returns the size of the gaussian smoothing filter */
+        int getSmoothingKernelSize();
 
-        /** Returns the length of the period in pixels */
+        /** Sets the size of the gaussian smoothing filter */
+        void setSmoothingKernelSize(int smoothingKernelSize);
+
+        /** Returns the length of the detected period in pixels */
         double getPixelPeriod();
 
         int getNRows();

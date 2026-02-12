@@ -89,49 +89,38 @@ namespace vernier {
         mainPeak2.setConstant(-1);
 
         applyBandPassCut(source, minFrequency, maxFrequency);
+        source.block(0, 0, source.rows() /2 , source.cols()) = 0.0;
 
-        // Filtre moyenneur 3x3 -> à faire avant dans le domaine spatial
-        // puis utiliser source.maxCoeff(&row, &col);
+        cv::Mat wrapper(source.cols(), source.rows(), CV_64F, source.data());
+        cv::GaussianBlur(wrapper, wrapper, cv::Size(smoothingKernelSize, smoothingKernelSize), smoothingKernelSize / 6.0);
 
-        double maxValue = -1.0;
-        for (int col = 1; col < source.cols() - 1; col++) {
-            for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
-                double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1) + source(row + 1, col) + source(row, col + 1)) / 5.0;
-                if (mean > maxValue) {
-                    maxValue = mean;
-                    mainPeak1.x() = col;
-                    mainPeak1.y() = row;
-                    mainPeak1.z() = mean / source.cols() / source.rows();
-                }
-            }
-        }
+        int row, col;
+        source.maxCoeff(&row, &col);
+        double power = source(row, col) / source.cols() / source.rows();
+        
+        if (power > minPeakPower) {
+            mainPeak1.x() = col;
+            mainPeak1.y() = row;
+            mainPeak1.z() = power;
 
-        if (mainPeak1.z() > minPeakPower) {
             double vx = mainPeak1.x() - source.cols() / 2;
             double vy = mainPeak1.y() - source.rows() / 2;
             double distance = std::hypot(vx, vy);
-
             double centerAngle = std::atan2(vy, vx);
             double widthAngle = 2.0 * std::atan2(3.0 * sigma, distance);
             applyAngularCut(source, centerAngle, widthAngle);
 
-            maxValue = -1;
-            for (int col = 1; col < source.cols() - 1; col++) {
-                for (int row = source.rows() / 2; row < source.rows() - 1; row++) {
-                    double mean = (source(row, col) + source(row - 1, col) + source(row, col - 1) + source(row + 1, col) + source(row, col + 1)) / 5.0;
-                    if (mean > maxValue) {
-                        maxValue = mean;
-                        mainPeak2.x() = col;
-                        mainPeak2.y() = row;
-                        mainPeak2.z() = mean / source.cols() / source.rows();
-                    }
+            source.maxCoeff(&row, &col);
+            power = source(row, col) / source.cols() / source.rows();
+            if (power > minPeakPower) {
+                mainPeak2.x() = col;
+                mainPeak2.y() = row;
+                mainPeak2.z() = power;
+                
+                if (mainPeak1.x() < mainPeak2.x()) {
+                    std::swap(mainPeak1, mainPeak2);
                 }
             }
-
-            if (mainPeak1.x() < mainPeak2.x()) {
-                std::swap(mainPeak1, mainPeak2);
-            }
-
         }
     }
 
@@ -345,6 +334,14 @@ namespace vernier {
 
     void PatternPhase::setMinPeakPower(double minPeakPower) {
         this->minPeakPower = minPeakPower;
+    }
+    
+    int PatternPhase::getSmoothingKernelSize() {
+            return smoothingKernelSize;
+    }
+
+    void PatternPhase::setSmoothingKernelSize(int smoothingKernelSize) {
+            this->smoothingKernelSize = smoothingKernelSize;
     }
 
     double PatternPhase::getPixelPeriod() {

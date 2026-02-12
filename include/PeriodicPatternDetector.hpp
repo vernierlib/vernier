@@ -97,6 +97,9 @@ namespace vernier {
         /** Sets the minimum power of detected peaks */
         void setMinPeakPower(double minPeakPower);
         
+        /** Sets the size of the gaussian smoothing filter */
+        void setSmoothingKernelSize(int smoothingKernelSize);
+        
         /** Returns the phase plane corresponding to the first direction of the pattern */
         PhasePlane getPlane1();
 
@@ -106,6 +109,8 @@ namespace vernier {
         Eigen::ArrayXXd getUnwrappedPhase1();
 
         Eigen::ArrayXXd getUnwrappedPhase2();
+        
+        void setInt(const std::string & attribute, int value) override;
 
         void setDouble(const std::string & attribute, double value) override;
 
