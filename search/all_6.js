@@ -41,13 +41,14 @@ var searchData=
   ['getpositionpixels_64',['getPositionPixels',['../classvernier_1_1_phase_plane.html#a10726eb0b69ba3111453bbee726b8edc',1,'vernier::PhasePlane']]],
   ['getradius_65',['getRadius',['../classvernier_1_1_square.html#adeb5251ce2ba9222bb92e66d354dfd6c',1,'vernier::Square']]],
   ['getsigma_66',['getSigma',['../classvernier_1_1_pattern_phase.html#a40a273020fbc53f1d3cf41e62b5d488c',1,'vernier::PatternPhase']]],
-  ['getspectrum_67',['getSpectrum',['../classvernier_1_1_pattern_phase.html#ab38749adba3ee21416a2742719fe96c4',1,'vernier::PatternPhase']]],
-  ['getspectrumpeak1_68',['getSpectrumPeak1',['../classvernier_1_1_pattern_phase.html#a2309bef16d5e6b6231ab74fe57060005',1,'vernier::PatternPhase']]],
-  ['getspectrumpeak2_69',['getSpectrumPeak2',['../classvernier_1_1_pattern_phase.html#aea4a6acc3163b9986cc5f7b16b8c6e36',1,'vernier::PatternPhase']]],
-  ['getstring_70',['getString',['../classvernier_1_1_pattern_detector.html#aa9938cf9122b08a60aad034d99f2b2eb',1,'vernier::PatternDetector::getString()'],['../classvernier_1_1_pattern_layout.html#a81e2c3ac7b2a2154dce74d0384ff0037',1,'vernier::PatternLayout::getString()']]],
-  ['getthumbnail_71',['getThumbnail',['../classvernier_1_1_bitmap_pattern_detector.html#a4f026b75191992542f0196d79a46d171',1,'vernier::BitmapPatternDetector::getThumbnail()'],['../classvernier_1_1_megarena_pattern_detector.html#a06a4f2a4315bf6b563e1abe14d3ab1c4',1,'vernier::MegarenaPatternDetector::getThumbnail()']]],
-  ['getunwrappedphase1_72',['getUnwrappedPhase1',['../classvernier_1_1_pattern_phase.html#a142e98d2120642dbc69ad777ba4a8946',1,'vernier::PatternPhase']]],
-  ['getunwrappedphase2_73',['getUnwrappedPhase2',['../classvernier_1_1_pattern_phase.html#a8738ea735164b295f0ef96a776039b54',1,'vernier::PatternPhase']]],
-  ['grayimage_74',['grayImage',['../classvernier_1_1_q_r_fiducial_detector.html#ab1ec7bd8998c9f7adfdf0f27e2b348bf',1,'vernier::QRFiducialDetector']]],
-  ['guidisplaycell_75',['guiDisplayCell',['../classvernier_1_1_megarena_cell.html#ad170fa3c54bc22db716c540fb7b31ce1',1,'vernier::MegarenaCell']]]
+  ['getsmoothingkernelsize_67',['getSmoothingKernelSize',['../classvernier_1_1_pattern_phase.html#a50eb0f0d4dcc71ddf9998321f372b5ec',1,'vernier::PatternPhase']]],
+  ['getspectrum_68',['getSpectrum',['../classvernier_1_1_pattern_phase.html#ab38749adba3ee21416a2742719fe96c4',1,'vernier::PatternPhase']]],
+  ['getspectrumpeak1_69',['getSpectrumPeak1',['../classvernier_1_1_pattern_phase.html#a2309bef16d5e6b6231ab74fe57060005',1,'vernier::PatternPhase']]],
+  ['getspectrumpeak2_70',['getSpectrumPeak2',['../classvernier_1_1_pattern_phase.html#aea4a6acc3163b9986cc5f7b16b8c6e36',1,'vernier::PatternPhase']]],
+  ['getstring_71',['getString',['../classvernier_1_1_pattern_detector.html#aa9938cf9122b08a60aad034d99f2b2eb',1,'vernier::PatternDetector::getString()'],['../classvernier_1_1_pattern_layout.html#a81e2c3ac7b2a2154dce74d0384ff0037',1,'vernier::PatternLayout::getString()']]],
+  ['getthumbnail_72',['getThumbnail',['../classvernier_1_1_bitmap_pattern_detector.html#a4f026b75191992542f0196d79a46d171',1,'vernier::BitmapPatternDetector::getThumbnail()'],['../classvernier_1_1_megarena_pattern_detector.html#a06a4f2a4315bf6b563e1abe14d3ab1c4',1,'vernier::MegarenaPatternDetector::getThumbnail()']]],
+  ['getunwrappedphase1_73',['getUnwrappedPhase1',['../classvernier_1_1_pattern_phase.html#a142e98d2120642dbc69ad777ba4a8946',1,'vernier::PatternPhase']]],
+  ['getunwrappedphase2_74',['getUnwrappedPhase2',['../classvernier_1_1_pattern_phase.html#a8738ea735164b295f0ef96a776039b54',1,'vernier::PatternPhase']]],
+  ['grayimage_75',['grayImage',['../classvernier_1_1_q_r_fiducial_detector.html#ab1ec7bd8998c9f7adfdf0f27e2b348bf',1,'vernier::QRFiducialDetector']]],
+  ['guidisplaycell_76',['guiDisplayCell',['../classvernier_1_1_megarena_cell.html#ad170fa3c54bc22db716c540fb7b31ce1',1,'vernier::MegarenaCell']]]
 ];

@@ -118,6 +118,8 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>getNRows</b> ()</td></
 <tr class="separator:aa69641406fb63237355d7aa83c6ca602"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a40a273020fbc53f1d3cf41e62b5d488c"><td class="memItemLeft" align="right" valign="top">double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#a40a273020fbc53f1d3cf41e62b5d488c">getSigma</a> ()</td></tr>
 <tr class="separator:a40a273020fbc53f1d3cf41e62b5d488c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a50eb0f0d4dcc71ddf9998321f372b5ec"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#a50eb0f0d4dcc71ddf9998321f372b5ec">getSmoothingKernelSize</a> ()</td></tr>
+<tr class="separator:a50eb0f0d4dcc71ddf9998321f372b5ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab38749adba3ee21416a2742719fe96c4"><td class="memItemLeft" align="right" valign="top">Eigen::ArrayXXcd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#ab38749adba3ee21416a2742719fe96c4">getSpectrum</a> ()</td></tr>
 <tr class="separator:ab38749adba3ee21416a2742719fe96c4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2309bef16d5e6b6231ab74fe57060005"><td class="memItemLeft" align="right" valign="top">Eigen::ArrayXXcd &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#a2309bef16d5e6b6231ab74fe57060005">getSpectrumPeak1</a> ()</td></tr>
@@ -145,6 +147,8 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 <tr class="separator:a6c558e02e9e2175b8dd48a25e0624489"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a4ce8f85bd6a4cfb13f641e10facf9b05"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#a4ce8f85bd6a4cfb13f641e10facf9b05">setSigma</a> (double sigma)</td></tr>
 <tr class="separator:a4ce8f85bd6a4cfb13f641e10facf9b05"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a783ee64f474a48b250df623a08897e03"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#a783ee64f474a48b250df623a08897e03">setSmoothingKernelSize</a> (int smoothingKernelSize)</td></tr>
+<tr class="separator:a783ee64f474a48b250df623a08897e03"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab91f44f477949c0b0018794328b6b2e1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_phase.html#ab91f44f477949c0b0018794328b6b2e1">showControlImages</a> ()</td></tr>
 <tr class="separator:ab91f44f477949c0b0018794328b6b2e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
@@ -292,7 +296,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Computes the phase gradients to find the sign of the out-of-plane angles (works only with slight perspective projection) </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00138">138</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00127">127</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -312,7 +316,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the maximum frequency for peak detection </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00326">326</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00315">315</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -332,7 +336,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the minimum frequency for peak detection </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00334">334</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00323">323</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -352,7 +356,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the minimum power of detected peaks </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00342">342</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00331">331</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -372,7 +376,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns an image of the spectrum with the peak locations </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00213">213</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00202">202</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -392,7 +396,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the first raw (wrapped) phase </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00298">298</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00287">287</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -412,7 +416,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the second raw (wrapped) phase </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00302">302</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00291">291</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -430,9 +434,9 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Returns the length of the period in pixels </p>
+<p>Returns the length of the detected period in pixels </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00350">350</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00347">347</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -452,7 +456,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the first phase plane </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00306">306</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00295">295</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -472,7 +476,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the second phase plane </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00310">310</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00299">299</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -492,7 +496,27 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the size of the Gaussian filter </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00322">322</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00311">311</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a50eb0f0d4dcc71ddf9998321f372b5ec"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a50eb0f0d4dcc71ddf9998321f372b5ec">&#9670;&nbsp;</a></span>getSmoothingKernelSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int vernier::PatternPhase::getSmoothingKernelSize </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Returns the size of the gaussian smoothing filter </p>
+
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00339">339</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -512,7 +536,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the shifted spectrum </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00278">278</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00267">267</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -532,7 +556,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the filtered spectrum around peak 1 </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00282">282</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00271">271</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -552,7 +576,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the filtered spectrum around peak 2 </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00286">286</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00275">275</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -572,7 +596,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the first unwrapped phase </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00290">290</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00279">279</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -592,7 +616,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns the second unwrapped phase </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00294">294</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00283">283</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -612,7 +636,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Returns true if two peaks with sufficient power have been found </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00268">268</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00257">257</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -671,7 +695,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Sets the ratio of pixels to crop from the border for the regression </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00314">314</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00303">303</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -692,7 +716,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Sets the maximum frequency for peak detection </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00330">330</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00319">319</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -713,7 +737,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Sets the minimum frequency for peak detection </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00338">338</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00327">327</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -734,7 +758,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Sets the minimum power of detected peaks </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00346">346</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00335">335</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -755,7 +779,28 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Sets the size of the Gaussian filter </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00318">318</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00307">307</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a783ee64f474a48b250df623a08897e03"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a783ee64f474a48b250df623a08897e03">&#9670;&nbsp;</a></span>setSmoothingKernelSize()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vernier::PatternPhase::setSmoothingKernelSize </td>
+          <td>(</td>
+          <td class="paramtype">int&#160;</td>
+          <td class="paramname"><em>smoothingKernelSize</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Sets the size of the gaussian smoothing filter </p>
+
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00343">343</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
@@ -775,7 +820,7 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>peaksSearch</b> (Eige
 </div><div class="memdoc">
 <p>Displays the images to check the spectrum analyse. </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00206">206</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_phase_8cpp_source.html#l00195">195</a> of file <a class="el" href="_pattern_phase_8cpp_source.html">PatternPhase.cpp</a>.</p>
 
 </div>
 </div>
