@@ -17,7 +17,7 @@ namespace vernier {
     }
 
     void PatternPhase::resize(int nRows, int nCols) {
-        ASSERT_MSG(nCols > 0 && nRows > 0, "The image is empty.")
+        ASSERT_MSG(nCols > 0 && nRows > 0, "The image is empty.");
         if (nRows != spectrum.rows() || nCols != spectrum.cols()) {
             fft.resize(nRows, nCols, FFTW_FORWARD);
             ifft.resize(nRows, nCols, FFTW_BACKWARD);
@@ -60,27 +60,24 @@ namespace vernier {
         Eigen::ArrayXXd magnitude = spectrumShifted.abs();
         peaksSearch(magnitude, mainPeak1, mainPeak2);
 
-        // Compute first plane phase from peak 1
+        // Compute unwrapped phase from peak 1
         applyGaussianFilter(spectrumFiltered1, mainPeak1(1), mainPeak1(0), sigma);
 
         ifft.compute(spectrumFiltered1, phase1);
         shift(phase1);
 
         unwrappedPhase1 = phase1.arg();
-
         quartersUnwrapPhase(unwrappedPhase1);
 
-        plane1 = regressionPlane.compute(unwrappedPhase1);
-
-        // Compute second plase from peak 2
+        // Compute unwrapped plase from peak 2
         applyGaussianFilter(spectrumFiltered2, mainPeak2(1), mainPeak2(0), sigma);
         ifft.compute(spectrumFiltered2, phase2);
         shift(phase2);
 
         unwrappedPhase2 = phase2.arg();
-
         quartersUnwrapPhase(unwrappedPhase2);
 
+        plane1 = regressionPlane.compute(unwrappedPhase1);
         plane2 = regressionPlane.compute(unwrappedPhase2);
     }
 
@@ -293,10 +290,14 @@ namespace vernier {
     }
 
     PhasePlane PatternPhase::getPlane1() {
+        PhasePlane plane1;
+        plane1 = regressionPlane.compute(unwrappedPhase1);
         return plane1;
     }
 
     PhasePlane PatternPhase::getPlane2() {
+        PhasePlane plane2;
+        plane2 = regressionPlane.compute(unwrappedPhase2);
         return plane2;
     }
 

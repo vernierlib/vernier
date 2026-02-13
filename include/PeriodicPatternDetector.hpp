@@ -110,6 +110,16 @@ namespace vernier {
 
         Eigen::ArrayXXd getUnwrappedPhase2();
         
+        int getCols();
+
+        int getPeriodShift1();
+
+        int getPeriodShift2();
+
+        double getPhysicalPeriod();
+
+        int getRows();
+
         void setInt(const std::string & attribute, int value) override;
 
         void setDouble(const std::string & attribute, double value) override;

@@ -146,6 +146,26 @@ namespace vernier {
         return patternPhase.getUnwrappedPhase2();
     }
 
+    int PeriodicPatternDetector::getCols() {
+        return array.cols();
+    }
+
+    int PeriodicPatternDetector::getPeriodShift1() {
+        return periodShift1;
+    }
+
+    int PeriodicPatternDetector::getPeriodShift2() {
+        return periodShift2;
+    }
+
+    double PeriodicPatternDetector::getPhysicalPeriod() {
+        return physicalPeriod;
+    }
+
+    int PeriodicPatternDetector::getRows() {
+        return array.rows();
+    }
+
     void PeriodicPatternDetector::setSigma(double sigma) {
         this->patternPhase.setSigma(sigma);
     }
@@ -169,7 +189,7 @@ namespace vernier {
     void PeriodicPatternDetector::setMinPeakPower(double minPeakPower) {
         this->patternPhase.setMinPeakPower(minPeakPower);
     }
-    
+
     void PeriodicPatternDetector::setSmoothingKernelSize(int smoothingKernelSize) {
         this->patternPhase.setSmoothingKernelSize(smoothingKernelSize);
     }
@@ -181,7 +201,7 @@ namespace vernier {
             PatternDetector::setInt(attribute, value);
         }
     }
-    
+
     void PeriodicPatternDetector::setDouble(const std::string & attribute, double value) {
         if (attribute == "physicalPeriod") {
             setPhysicalPeriod(value);
