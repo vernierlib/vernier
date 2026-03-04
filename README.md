@@ -127,11 +127,12 @@ We kindly ask you to acknowledge this library in any program or publication in w
 
 For general publications, we suggest referencing: A. André et al., Sensing One Nanometer Over Ten Centimeters: A Microencoded Target for Visual In-Plane Position Measurement, 
 *Transactions on Mechatronics*, vol. 25, 2020.
+
 ## About
 
 The Vernier Library is written and maintained by researchers with the FEMTO-ST Institute located in Besançon, France.
 
-Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz
+Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
