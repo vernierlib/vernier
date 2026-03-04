@@ -147,6 +147,25 @@ namespace vernier {
         /* Same as renderPerspectiveProjection() but with OpenCV mat array */
         void renderPerspectiveProjection(Pose pose, cv::Mat & outputImage, double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
+        /**
+         * Renders an image with an omnidirectional projection defined by the unified omnidirectional camera model:
+         * 
+         * All the mathematical details of the projection can be found in the paper Caron, G., Marchand, E. & Mouaddib, E.M. Photometric visual servoing for omnidirectional cameras. Auton Robot 35, 177–193 (2013).
+         * 
+         * \param pose: pattern pose (defines cTp)
+         * \param outputImage: any size double array
+         *     \param focalLength: focal length of the camera (in pixels)
+         *     \param xi: parameter of the unified omnidirectional camera model (UCM)
+         *     \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         * 
+         */
+        void renderUCMProjection(Pose pose, Eigen::ArrayXXd & outputImage, 
+            double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
+        /* Same as renderUCMProjection() but with OpenCV mat array */
+        void renderUCMProjection(Pose pose, cv::Mat & outputImage, 
+            double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
         virtual std::string toString();
 
         std::string getClassname();
@@ -187,7 +206,6 @@ namespace vernier {
 
         /** Sets the attribute value corresponding to the given name */
         virtual void setString(const std::string & attribute, std::string value);
-
     };
 
 }

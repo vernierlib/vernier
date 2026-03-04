@@ -415,6 +415,69 @@ namespace vernier {
         }
     }
 
+    void PatternLayout::renderUCMProjection(Pose pose, cv::Mat & outputImage, double focalLength, double xi, Eigen::Vector2d principalPoint) {
+        Eigen::ArrayXXd array(outputImage.rows, outputImage.cols);
+        renderUCMProjection(pose, array, focalLength, xi, principalPoint);
+        eigen2cv(array, outputImage);         
+    }
+
+    void PatternLayout::renderUCMProjection(Pose pose, Eigen::ArrayXXd & outputImage, double focalLength, double xi, Eigen::Vector2d principalPoint) {
+        if (outputImage.rows() <= 0 || outputImage.rows() % 2 == 1) {
+            throw Exception("The number of rows must be positive and even.");
+        }
+        if (outputImage.cols() <= 0 || outputImage.cols() % 2 == 1) {
+            throw Exception("The number of columns must be positive and even.");
+        }
+
+        if (principalPoint(0) < 0) {
+            principalPoint(0) = outputImage.cols() / 2.0;
+            principalPoint(1) = outputImage.rows() / 2.0;
+        }
+
+        Eigen::MatrixXd cameraMatrix(3, 3);
+        cameraMatrix << focalLength, 0.0, principalPoint(0),
+                0.0, focalLength, principalPoint(1),
+                0.0, 0.0, 1.0;
+        Eigen::Matrix3d inverseCameraMatrix = cameraMatrix.inverse();
+
+        Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
+        Eigen::Matrix4d inverseTransform = cTp.inverse();
+
+        Eigen::Vector3d xiVector(0.0, 0.0, xi);
+        Eigen::Vector3d planPose(pose.x, pose.y, pose.z - xi);
+        Eigen::Vector3d planNormal = (inverseTransform * Eigen::Vector4d(0.0, 0.0, 1.0, 0.0)).head<3>().normalized();
+
+        for (int col = 0; col < outputImage.cols(); col++) {
+            for (int row = 0; row < outputImage.rows(); row++) {
+                // Projection of Xi (homogeneous coordinates of the 2D point in the sensor plane) to 
+                // Xpi (normalized image frame) using the inverse of the intrinsic matrix
+                Eigen::Vector3d pointImage(col, row, 1);
+                Eigen::Vector3d pointCamera = inverseCameraMatrix * pointImage;
+
+                // Projection of Xpi (normalized image frame) to Xs (surface of the sphere) using 
+                // the inverse of the omnidirectional distortion model
+                double sommeCarres = pointCamera.norm() - 1;
+                double lambda1 = (xi + sqrt(1 + (1 - xi * xi) * sommeCarres)) / (sommeCarres + 1);
+                Eigen::Vector3d pointSphere = pointCamera * lambda1;
+                
+                // Projection of Xs (surface of the sphere) to Xp (object plane) using the 
+                // intersection of the ray defined by Xs and the plane defined by the pattern (Z=0)
+                double lambda2 = planNormal.dot(planPose) / planNormal.dot(pointSphere - xiVector);
+                Eigen::Vector3d pointPattern = (pointSphere * lambda2) + xiVector * (1 - lambda2);
+
+                // Check if the calculated lambda2 value is negative, which means that the point 
+                // is projected behind the camera
+                if (lambda2 <= 0) {
+                    outputImage(row, col) = 0.0;
+                } else {
+                    Eigen::Vector4d pointPatternHomogeneous = inverseTransform * pointPattern.homogeneous();
+                    outputImage(row, col) = this->getIntensity(pointPatternHomogeneous.x(), pointPatternHomogeneous.y());
+                }
+            }
+        }
+    }   
+
+
     std::string PatternLayout::toString() {
         return classname;
     }

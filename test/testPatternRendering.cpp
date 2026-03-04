@@ -99,7 +99,37 @@ void mainPerspective() {
     cv::waitKey();
 }
 
+void mainUCM() {
+    // Constructing the layout
+    double physicalPeriod = 1.0;
+    int codeSize = 12;
+    PatternLayout* layout = new MegarenaPatternLayout(physicalPeriod, codeSize);
+    cout << "  Code size: " << codeSize << endl;
+    cout << "  Physical period: " << physicalPeriod << endl;
 
+    // Setting the pose of the pattern in the camera frame for rendering
+    double x = -100.0;
+    double y = -100.0;
+    double z = 30.0;
+    double alpha = 0.0;
+    double beta = 0.0;
+    double gamma = 0.0;
+    double pixelSize = 0.002;
+    Pose patternPose = Pose(x, y, z, alpha, beta, gamma, pixelSize);
+    cout << "  Pattern pose:     " << patternPose.toString() << endl;
+
+    // Rendering image
+    cv::Mat image(1800, 1800, CV_64F);
+    
+    double focalLength = 1334.0;
+    double xi = 1.62124;
+    layout->renderUCMProjection(patternPose, image, focalLength, xi);
+
+    // Showing the image
+    namedWindow("Render", cv::WINDOW_NORMAL);
+    imshow("Render", image);
+    cv::waitKey();
+}
 
 
 int main(int argc, char** argv) {
@@ -107,6 +137,8 @@ int main(int argc, char** argv) {
     //mainOrthographic2d();
     
     //mainPerspective();
+
+    mainUCM();
 
     //runAllTests();
 
