@@ -107,12 +107,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>addBitmap</b> (const 
 <tr class="separator:a880e5da56081fa5f7a11294e432606da"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a34e3251fa682876026672d4d289b447e"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_stamp_pattern_detector.html#a34e3251fa682876026672d4d289b447e">patternFound</a> (int id=-1) override</td></tr>
 <tr class="separator:a34e3251fa682876026672d4d289b447e"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a294ba4744ee73c10fd89a65a36ff7753"><td class="memItemLeft" align="right" valign="top"><a id="a294ba4744ee73c10fd89a65a36ff7753"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setFocalLength</b> (double focalLength)</td></tr>
-<tr class="separator:a294ba4744ee73c10fd89a65a36ff7753"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a3db2608dcf3e50d632483675654b1983"><td class="memItemLeft" align="right" valign="top"><a id="a3db2608dcf3e50d632483675654b1983"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>setPrincipalPoint</b> (double x, double y)</td></tr>
-<tr class="separator:a3db2608dcf3e50d632483675654b1983"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac9eb5ba9584f82e1023d11bf0f071a10"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_stamp_pattern_detector.html#ac9eb5ba9584f82e1023d11bf0f071a10">showControlImages</a> () override</td></tr>
 <tr class="separator:ac9eb5ba9584f82e1023d11bf0f071a10"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="inherit_header pub_methods_classvernier_1_1_bitmap_pattern_detector"><td colspan="2" onclick="javascript:toggleInherit('pub_methods_classvernier_1_1_bitmap_pattern_detector')"><img src="closed.png" alt="-"/>&#160;Public Member Functions inherited from <a class="el" href="classvernier_1_1_bitmap_pattern_detector.html">vernier::BitmapPatternDetector</a></td></tr>
@@ -250,21 +244,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>computeAbsolutePose</
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pro-attribs"></a>
 Protected Attributes</h2></td></tr>
-<tr class="memitem:af7ef5aca8e5fad1c23c3b26929c7c97c"><td class="memItemLeft" align="right" valign="top"><a id="af7ef5aca8e5fad1c23c3b26929c7c97c"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>centerX</b></td></tr>
-<tr class="separator:af7ef5aca8e5fad1c23c3b26929c7c97c"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab22705e4f1c8f799f654acb55996e652"><td class="memItemLeft" align="right" valign="top"><a id="ab22705e4f1c8f799f654acb55996e652"></a>
-int&#160;</td><td class="memItemRight" valign="bottom"><b>centerY</b></td></tr>
-<tr class="separator:ab22705e4f1c8f799f654acb55996e652"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a28b05a1a95374524d7cf9495626172fb"><td class="memItemLeft" align="right" valign="top"><a id="a28b05a1a95374524d7cf9495626172fb"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>focalLength</b></td></tr>
-<tr class="separator:a28b05a1a95374524d7cf9495626172fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a58b8089dd5dd0f2c001864d6d3ae64fb"><td class="memItemLeft" align="right" valign="top"><a id="a58b8089dd5dd0f2c001864d6d3ae64fb"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>principalPointX</b></td></tr>
-<tr class="separator:a58b8089dd5dd0f2c001864d6d3ae64fb"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae9c3155d7f036778dff875435432a710"><td class="memItemLeft" align="right" valign="top"><a id="ae9c3155d7f036778dff875435432a710"></a>
-double&#160;</td><td class="memItemRight" valign="bottom"><b>principalPointY</b></td></tr>
-<tr class="separator:ae9c3155d7f036778dff875435432a710"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab5dc011125a3c7509ac318d11a0170cc"><td class="memItemLeft" align="right" valign="top"><a id="ab5dc011125a3c7509ac318d11a0170cc"></a>
 Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>snapshot</b></td></tr>
 <tr class="separator:ab5dc011125a3c7509ac318d11a0170cc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -397,7 +376,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#ab1eb8c89cdfed22f57dd27cbb6c162c7">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00130">130</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00129">129</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -429,7 +408,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#aaab456297b8c79c7a8d5bcf5235b3deb">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00095">95</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00094">94</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -462,7 +441,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#abc340ff2a855e07af48d513116907a00">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00115">115</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00114">114</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -494,7 +473,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#a3c89514afba95aaf184e92786244dee8">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00120">120</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00119">119</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -524,7 +503,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#a798f2c6142a8b559e4bc44f8cfd6bbf9">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00111">111</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00110">110</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -555,7 +534,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_periodic_pattern_detector.html#a51b7a5c4c40aa815a4fff034c8a7ae1f">vernier::PeriodicPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00103">103</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00102">102</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -585,7 +564,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 
 <p>Reimplemented from <a class="el" href="classvernier_1_1_bitmap_pattern_detector.html#a2c5a56ba766e6d674c3b8fba2493b65f">vernier::BitmapPatternDetector</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00125">125</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8cpp_source.html#l00124">124</a> of file <a class="el" href="_stamp_pattern_detector_8cpp_source.html">StampPatternDetector.cpp</a>.</p>
 
 </div>
 </div>
@@ -603,7 +582,7 @@ cv::Mat&#160;</td><td class="memItemRight" valign="bottom"><b>image8U</b></td></
 </div><div class="memdoc">
 <p>Map of detected stamps (key map = stamp id) </p>
 
-<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8hpp_source.html#l00036">36</a> of file <a class="el" href="_stamp_pattern_detector_8hpp_source.html">StampPatternDetector.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_stamp_pattern_detector_8hpp_source.html#l00033">33</a> of file <a class="el" href="_stamp_pattern_detector_8hpp_source.html">StampPatternDetector.hpp</a>.</p>
 
 </div>
 </div>
