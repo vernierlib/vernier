@@ -22,9 +22,6 @@ void main1() {
     StampPatternDetector detector(15.5, "data/stamp/stampD.png", 820);
     detector.addBitmap("data/stamp/stampG.png");
     
-    detector.setPrincipalPoint(image.cols/2, image.rows/2);
-    detector.setFocalLength(1.0);
-    
     detector.compute(image);
     detector.showControlImages();
 

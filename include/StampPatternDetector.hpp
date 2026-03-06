@@ -20,10 +20,7 @@ namespace vernier {
 
         Eigen::ArrayXXd window;
         Eigen::ArrayXXd snapshot;
-        double principalPointX, principalPointY, focalLength;
-        int centerX, centerY;
-
-
+        
         void readJSON(const rapidjson::Value& document) override;
 
         void computeImage() override;
@@ -60,10 +57,6 @@ namespace vernier {
         void draw(cv::Mat& image) override;
 
         void showControlImages() override;
-
-        void setPrincipalPoint(double x, double y);
-
-        void setFocalLength(double focalLength);
 
     };
 
