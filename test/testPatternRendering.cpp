@@ -138,7 +138,7 @@ int main(int argc, char** argv) {
     
     //mainPerspective();
 
-    mainUCM();
+    //mainUCM();
 
     //runAllTests();
 
