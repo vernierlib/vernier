@@ -73,8 +73,6 @@ void test2d() {
 
     // Detecting
     StampPatternDetector detector(physicalPeriod, "data/stamp/stamp+.png", 420);
-    detector.setPrincipalPoint(array.cols()/2, array.rows()/2);
-    detector.setFocalLength(1.0);
     detector.compute(array);
 
     Pose estimatedPose;
