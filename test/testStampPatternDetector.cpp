@@ -139,7 +139,7 @@ int main(int argc, char** argv) {
     //cout << "Computing time: " << speed(100) << " ms" << endl;
 
     REPEAT_TEST(test2d(), 20);
-
+    
     //testFile("data/stamp/stamp2.png", 2);
 
     return EXIT_SUCCESS;

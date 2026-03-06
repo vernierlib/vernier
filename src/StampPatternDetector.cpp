@@ -72,18 +72,6 @@ namespace vernier {
                     bitmapThumbnail.compute(snapshot.real(), patternPhase.getPlane1(), patternPhase.getPlane2());
                     computeAbsolutePose();
 
-                    //                    double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
-                    //                    double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
-                    //                    double alpha = plane1.getAngle();
-                    //
-                    //                    double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
-                    //                    double xImg = (centerX - image8U.cols / 2);
-                    //                    double yImg = (centerY - image8U.rows / 2);
-                    //                    double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
-                    //                    double y = pixelSize * (xImg * sin(-alpha) + yImg * cos(alpha)) + dy;
-                    //
-                    //                    Pose pose = Pose(x, y, alpha, pixelSize);
-
                     double dx = -plane1.getPosition(physicalPeriod, 0.0, 0.0, periodShift1);
                     double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
                     double alpha = plane1.getAngle();
@@ -97,9 +85,6 @@ namespace vernier {
 
                     Pose pose = Pose(x, y, z, alpha, 0.0, 0.0, pixelSize);
 
-
-
-                    //int id = bitmapThumbnail.hashCode(maxAngle);
                     int id = bitmapIndex / 4;
                     markers.insert(std::make_pair(id, pose));
                 }
@@ -144,35 +129,10 @@ namespace vernier {
 
     void StampPatternDetector::draw(cv::Mat & image) {
         PatternDetector::draw(image);
-        //        detector.draw(image);
-        //        for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
-        //            it->second.draw(image, snapshot.cols() / 2, to_string(it->first));
-        //        }
-
-
-        Eigen::Matrix2d A;
-        A << plane1.a, plane1.b, plane2.a, plane2.b;
-        Eigen::Vector2d B;
-        B << -2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X0 = A.colPivHouseholderQr().solve(B);
-        B << 2 * PI - plane1.c - 2 * PI*periodShift1, 2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X1 = A.colPivHouseholderQr().solve(B);
-        B << 2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X2 = A.colPivHouseholderQr().solve(B);
-        B << -2 * PI - plane1.c - 2 * PI*periodShift1, -2 * PI - plane2.c - 2 * PI*periodShift2;
-        Eigen::Vector2d X3 = A.colPivHouseholderQr().solve(B);
-
-        std::vector<cv::Point> markerCorners(4);
-        markerCorners[0] = cv::Point(centerX + X0(0), centerY + X0(1));
-        markerCorners[1] = cv::Point(centerX + X1(0), centerY + X1(1));
-        markerCorners[2] = cv::Point(centerX + X2(0), centerY + X2(1));
-        markerCorners[3] = cv::Point(centerX + X3(0), centerY + X3(1));
-        cv::line(image, markerCorners[0], markerCorners[1], cv::Scalar(0, 0, 255));
-        cv::line(image, markerCorners[1], markerCorners[2], cv::Scalar(0, 0, 255));
-        cv::line(image, markerCorners[2], markerCorners[3], cv::Scalar(0, 0, 255));
-        cv::line(image, markerCorners[3], markerCorners[0], cv::Scalar(0, 0, 255));
-
-
+        detector.draw(image);
+        for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
+            it->second.draw(image, snapshot.cols() / 2, to_string(it->first));
+        }
     }
 
     void StampPatternDetector::setPrincipalPoint(double x, double y) {
