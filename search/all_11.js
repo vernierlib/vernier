@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['vernier_20library_155',['Vernier Library',['../index.html',1,'']]]
+  ['what_154',['what',['../classvernier_1_1_exception.html#a0a3d6ccabfa8546b8d65c8c1961ef972',1,'vernier::Exception']]]
 ];

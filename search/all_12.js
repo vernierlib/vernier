@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['what_156',['what',['../classvernier_1_1_exception.html#a0a3d6ccabfa8546b8d65c8c1961ef972',1,'vernier::Exception']]]
+  ['x_155',['x',['../classvernier_1_1_pose.html#ac3699147550a1b2491458ae2887819f6',1,'vernier::Pose']]]
 ];
