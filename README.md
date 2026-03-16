@@ -113,7 +113,7 @@ Finally, open a terminal and go to the directory of the package
 
 ## Getting started
 
-Run one of the demo files from the [examples page](https://vernierlib.github.io/examples.html)
+Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)
 
 ## Licence
 
