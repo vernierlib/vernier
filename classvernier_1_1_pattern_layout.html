@@ -118,6 +118,10 @@ double&#160;</td><td class="memItemRight" valign="bottom"><b>getOriginX</b> ()</
 <tr class="memitem:a9a11ba30fb9a420c92757570963be8c0"><td class="memItemLeft" align="right" valign="top"><a id="a9a11ba30fb9a420c92757570963be8c0"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>getOriginY</b> ()</td></tr>
 <tr class="separator:a9a11ba30fb9a420c92757570963be8c0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aef0d68564740d648f2096092cd911641"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#aef0d68564740d648f2096092cd911641">getPhase1</a> (double x, double y)=0</td></tr>
+<tr class="separator:aef0d68564740d648f2096092cd911641"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab01f36a4eccfcf76f30f01558511207f"><td class="memItemLeft" align="right" valign="top">virtual double&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#ab01f36a4eccfcf76f30f01558511207f">getPhase2</a> (double x, double y)=0</td></tr>
+<tr class="separator:ab01f36a4eccfcf76f30f01558511207f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a81e2c3ac7b2a2154dce74d0384ff0037"><td class="memItemLeft" align="right" valign="top">virtual std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#a81e2c3ac7b2a2154dce74d0384ff0037">getString</a> (const std::string &amp;attribute)</td></tr>
 <tr class="separator:a81e2c3ac7b2a2154dce74d0384ff0037"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e3462576cbdf855e5b4affe47d70533"><td class="memItemLeft" align="right" valign="top"><a id="a2e3462576cbdf855e5b4affe47d70533"></a>
@@ -140,6 +144,16 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>renderPerspectiveProj
 <tr class="separator:ab42ce827e2c2048b446efe6029f81228"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a47f709128ca50aecb19ba6382fe0da90"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#a47f709128ca50aecb19ba6382fe0da90">renderPerspectiveProjection</a> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, Eigen::ArrayXXd &amp;outputImage, double focalLength, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
 <tr class="separator:a47f709128ca50aecb19ba6382fe0da90"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adc1f7d863c0957af5f945b3123753d7b"><td class="memItemLeft" align="right" valign="top"><a id="adc1f7d863c0957af5f945b3123753d7b"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>renderPhaseImagesPerspectiveProjection</b> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, cv::Mat &amp;outputPhase1, cv::Mat &amp;outputPhase2, double focalLength, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
+<tr class="separator:adc1f7d863c0957af5f945b3123753d7b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a89b5fc66862592ca7049607f526aeae4"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#a89b5fc66862592ca7049607f526aeae4">renderPhaseImagesPerspectiveProjection</a> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, Eigen::ArrayXXd &amp;outputPhase1, Eigen::ArrayXXd &amp;outputPhase2, double focalLength, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
+<tr class="separator:a89b5fc66862592ca7049607f526aeae4"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a5bf7e46a698d58052b4c645d266a5772"><td class="memItemLeft" align="right" valign="top"><a id="a5bf7e46a698d58052b4c645d266a5772"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>renderPhaseImagesUCMProjection</b> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, cv::Mat &amp;outputPhase1, cv::Mat &amp;outputPhase2, double focalLength, double xi, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
+<tr class="separator:a5bf7e46a698d58052b4c645d266a5772"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a82263d12f01d4b39d40ecd122d601564"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_pattern_layout.html#a82263d12f01d4b39d40ecd122d601564">renderPhaseImagesUCMProjection</a> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, Eigen::ArrayXXd &amp;outputPhase1, Eigen::ArrayXXd &amp;outputPhase2, double focalLength, double xi, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
+<tr class="separator:a82263d12f01d4b39d40ecd122d601564"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a868bf1daee8644fc785eefc30145078a"><td class="memItemLeft" align="right" valign="top"><a id="a868bf1daee8644fc785eefc30145078a"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>renderUCMProjection</b> (<a class="el" href="classvernier_1_1_pose.html">Pose</a> pose, cv::Mat &amp;outputImage, double focalLength, double xi, Eigen::Vector2d principalPoint=Eigen::Vector2d(-1.0, -1.0))</td></tr>
 <tr class="separator:a868bf1daee8644fc785eefc30145078a"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -289,7 +303,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00539">539</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00665">665</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -320,7 +334,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a654bb558c0df322cfceeb25be6646a94">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00513">513</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00639">639</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -351,7 +365,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a3197eb41355d56d80386b1d1c1611161">vernier::PeriodicPatternLayout</a>, and <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#aa63236f408d496b6218157112e1f61fb">vernier::MegarenaPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00535">535</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00661">661</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -421,7 +435,85 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a81aec6e5ff67df4a985c474d51eb0b81">vernier::MegarenaPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00509">509</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00635">635</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+
+</div>
+</div>
+<a id="aef0d68564740d648f2096092cd911641"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#aef0d68564740d648f2096092cd911641">&#9670;&nbsp;</a></span>getPhase1()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double vernier::PatternLayout::getPhase1 </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the phase1 of the pattern at point (x,y) </p>
+
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a5c9b6e425a1df17f30e884cb36c77723">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#ad41381029a373ce56fa7d420b3178e1b">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_custom_pattern_layout.html#aafc970cac10bef672b4c5342a204fbe6">vernier::CustomPatternLayout</a>.</p>
+
+</div>
+</div>
+<a id="ab01f36a4eccfcf76f30f01558511207f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab01f36a4eccfcf76f30f01558511207f">&#9670;&nbsp;</a></span>getPhase2()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">virtual double vernier::PatternLayout::getPhase2 </td>
+          <td>(</td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>x</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>y</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">pure virtual</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Returns the phase2 of the pattern at point (x,y) </p>
+
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#ababeb60224fe1abd32ed8bba214f1200">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a18285a6c71506840efbe8a3b29a11da7">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_custom_pattern_layout.html#a3ccf1e003d1b27f9fac5d6b412c79431">vernier::CustomPatternLayout</a>.</p>
 
 </div>
 </div>
@@ -450,7 +542,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00550">550</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00676">676</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -625,6 +717,134 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00379">379</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a89b5fc66862592ca7049607f526aeae4"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a89b5fc66862592ca7049607f526aeae4">&#9670;&nbsp;</a></span>renderPhaseImagesPerspectiveProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vernier::PatternLayout::renderPhaseImagesPerspectiveProjection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvernier_1_1_pose.html">Pose</a>&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>outputPhase1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>outputPhase2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>focalLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Vector2d&#160;</td>
+          <td class="paramname"><em>principalPoint</em> = <code>Eigen::Vector2d(-1.0,&#160;-1.0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Renders the phase1 and phase2 images with a perspective projection defined by the pinhole camera model: </p><pre class="fragment">  [ u ]   [ f  0  cx  0 ]         [ x ]
+</pre><p> s * [ v ] = [ 0 f cy 0 ] * cTp * [ y ] [ 1 ] [ 0 0 1 0 ] [ z ] [ 1 ]</p>
+<p>with cx and cy the coordinates of the principal point (in pixels) and f the focal length (in pixels)</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>pattern pose (defines cTp) </td></tr>
+    <tr><td class="paramname">outputPhase1</td><td>any size double array </td></tr>
+    <tr><td class="paramname">outputPhase2</td><td>same size double array as outputPhase1 </td></tr>
+    <tr><td class="paramname">focalLength</td><td>focal length of the camera (in pixels) </td></tr>
+    <tr><td class="paramname">principalPoint</td><td>(optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00490">490</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a82263d12f01d4b39d40ecd122d601564"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a82263d12f01d4b39d40ecd122d601564">&#9670;&nbsp;</a></span>renderPhaseImagesUCMProjection()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vernier::PatternLayout::renderPhaseImagesUCMProjection </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvernier_1_1_pose.html">Pose</a>&#160;</td>
+          <td class="paramname"><em>pose</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>outputPhase1</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>outputPhase2</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>focalLength</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">double&#160;</td>
+          <td class="paramname"><em>xi</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">Eigen::Vector2d&#160;</td>
+          <td class="paramname"><em>principalPoint</em> = <code>Eigen::Vector2d(-1.0,&#160;-1.0)</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Renders the phase1 and phase2 images with an omnidirectional projection defined by the unified omnidirectional camera model:</p>
+<p>All the mathematical details of the projection can be found in the paper Caron, G., Marchand, E. &amp; Mouaddib, E.M. Photometric visual servoing for omnidirectional cameras. Auton Robot 35, 177–193 (2013).</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">pose</td><td>pattern pose (defines cTp) </td></tr>
+    <tr><td class="paramname">outputPhase1</td><td>any size double array </td></tr>
+    <tr><td class="paramname">outputPhase2</td><td>same size double array as outputPhase1 </td></tr>
+    <tr><td class="paramname">focalLength</td><td>focal length of the camera (in pixels) </td></tr>
+    <tr><td class="paramname">xi</td><td>parameter of the unified omnidirectional camera model (UCM) </td></tr>
+    <tr><td class="paramname">principalPoint</td><td>(optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00544">544</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -820,7 +1040,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a4e24b4b189ba41f09442100b65a41664">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#ac1b8ca70bbe298953efad282790d2b9e">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00485">485</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00611">611</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -880,7 +1100,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00588">588</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00714">714</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -921,7 +1141,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a41c51000406f7acdd4d7cf9e8b777ebb">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00568">568</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00694">694</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -960,7 +1180,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00584">584</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00710">710</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -999,7 +1219,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00592">592</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00718">718</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
