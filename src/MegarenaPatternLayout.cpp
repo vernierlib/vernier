@@ -170,6 +170,22 @@ namespace vernier {
         }
     }
 
+    double MegarenaPatternLayout::getPhase1(double x, double y) {
+        if (x<-0.5 * period || y<-0.5 * period || x > width || y > height) {
+            return 0;
+        } else {
+            return 2* PI * x / period;
+        }
+    }
+
+    double MegarenaPatternLayout::getPhase2(double x, double y) {
+        if (x<-0.5 * period || y<-0.5 * period || x > width || y > height) {
+            return 0;
+        } else {
+            return 2* PI * y / period;
+        }
+    }
+
     void MegarenaPatternLayout::saveToPNG(std::string filename) {
         int colStart = (int) (regionOfInterest.x / (period * 0.5));
         int colStop = (int) ((regionOfInterest.x + regionOfInterest.width) / (period * 0.5));

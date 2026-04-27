@@ -125,4 +125,14 @@ namespace vernier {
         return intensity;
     }
 
+    double CustomPatternLayout::getPhase1(double x, double y) {
+        throw Exception("getPhase1 is not implemented for " + this->classname);
+        return 0.0;
+    }
+
+    double CustomPatternLayout::getPhase2(double x, double y) {
+        throw Exception("getPhase2 is not implemented for " + this->classname);
+        return 0.0;
+    }
+
 }

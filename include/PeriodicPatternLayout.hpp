@@ -36,6 +36,10 @@ namespace vernier {
 
         double getIntensity(double x, double y) override;
 
+        double getPhase1(double x, double y) override;
+
+        double getPhase2(double x, double y) override;
+
         void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
 
         void saveToPNG(const std::string filename = "") override;

@@ -85,6 +85,12 @@ namespace vernier {
         /** Returns the intensity (between 0.0 and 1.0) of the pattern at point (x,y) */
         virtual double getIntensity(double x, double y) = 0;
 
+        /** Returns the phase1 of the pattern at point (x,y) */
+        virtual double getPhase1(double x, double y) = 0;
+
+        /** Returns the phase2 of the pattern at point (x,y) */
+        virtual double getPhase2(double x, double y) = 0;
+
         /** Returns a vector listing all the dots of the pattern */
         virtual void toRectangleVector(std::vector<Rectangle>& rectangleList) = 0;
 
@@ -157,13 +163,53 @@ namespace vernier {
          *     \param focalLength: focal length of the camera (in pixels)
          *     \param xi: parameter of the unified omnidirectional camera model (UCM)
          *     \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
-         * 
          */
         void renderUCMProjection(Pose pose, Eigen::ArrayXXd & outputImage, 
             double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         /* Same as renderUCMProjection() but with OpenCV mat array */
         void renderUCMProjection(Pose pose, cv::Mat & outputImage, 
+            double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
+        /** Renders the phase1 and phase2 images with a perspective projection defined by the pinhole camera model:
+         * 
+         *        [ u ]   [ f  0  cx  0 ]         [ x ]
+         *    s * [ v ] = [ 0  f  cy  0 ] * cTp * [ y ]
+         *        [ 1 ]   [ 0  0   1  0 ]         [ z ]
+         *                                        [ 1 ]
+         * 
+         *  with cx and cy the coordinates of the principal point (in pixels) and f the focal length (in pixels)
+         * 
+         *  \param pose: pattern pose (defines cTp)
+         *  \param outputPhase1: any size double array
+         *  \param outputPhase2: same size double array as outputPhase1
+         *  \param focalLength: focal length of the camera (in pixels)
+         *  \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         */
+        void renderPhaseImagesPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputPhase1, Eigen::ArrayXXd & outputPhase2,
+            double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
+        /* Same as renderPhase1PerspectiveProjection() but with OpenCV mat array */
+        void renderPhaseImagesPerspectiveProjection(Pose pose, cv::Mat & outputPhase1, cv::Mat & outputPhase2, 
+            double focalLength, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
+        /**
+         * Renders the phase1 and phase2 images with an omnidirectional projection defined by the unified omnidirectional camera model:
+         * 
+         * All the mathematical details of the projection can be found in the paper Caron, G., Marchand, E. & Mouaddib, E.M. Photometric visual servoing for omnidirectional cameras. Auton Robot 35, 177–193 (2013).
+         * 
+         * \param pose: pattern pose (defines cTp)
+         * \param outputPhase1: any size double array
+         * \param outputPhase2: same size double array as outputPhase1
+         * \param focalLength: focal length of the camera (in pixels)
+         * \param xi: parameter of the unified omnidirectional camera model (UCM)
+         * \param principalPoint (optional): coordinates of the optical center on the sensor, by default they are calculated to be the image center coordinates.
+         */
+        void renderPhaseImagesUCMProjection(Pose pose, Eigen::ArrayXXd & outputPhase1, Eigen::ArrayXXd & outputPhase2,
+            double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
+
+        /* Same as renderPhase1UCMProjection() but with OpenCV mat array */
+        void renderPhaseImagesUCMProjection(Pose pose, cv::Mat & outputPhase1, cv::Mat & outputPhase2,
             double focalLength, double xi, Eigen::Vector2d principalPoint = Eigen::Vector2d(-1.0, -1.0));
 
         virtual std::string toString();

@@ -40,6 +40,10 @@ namespace vernier {
 
         double getIntensity(double x, double y) override;
 
+        double getPhase1(double x, double y) override;
+
+        double getPhase2(double x, double y) override;
+
         void saveToPNG(std::string filename = "") override;
         
         std::string toString() override;

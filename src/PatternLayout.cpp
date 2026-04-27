@@ -477,7 +477,133 @@ namespace vernier {
         }
     }   
 
+    void PatternLayout::renderPhaseImagesPerspectiveProjection(Pose pose, cv::Mat & outputPhase1, cv::Mat & outputPhase2, 
+        double focalLength, Eigen::Vector2d principalPoint) {
 
+        Eigen::ArrayXXd arrayPhase1(outputPhase1.rows, outputPhase1.cols);
+        Eigen::ArrayXXd arrayPhase2(outputPhase2.rows, outputPhase2.cols);
+        renderPhaseImagesPerspectiveProjection(pose, arrayPhase1, arrayPhase2, focalLength, principalPoint);
+        eigen2cv(arrayPhase1, outputPhase1);
+        eigen2cv(arrayPhase2, outputPhase2);
+    }
+
+    void PatternLayout::renderPhaseImagesPerspectiveProjection(Pose pose, Eigen::ArrayXXd & outputPhase1, Eigen::ArrayXXd & outputPhase2, 
+        double focalLength, Eigen::Vector2d principalPoint) {
+        if (outputPhase1.rows() <= 0 || outputPhase1.rows() % 2 == 1) {
+            throw Exception("The number of rows must be positive and even.");
+        }
+        if (outputPhase1.cols() <= 0 || outputPhase1.cols() % 2 == 1) {
+            throw Exception("The number of columns must be positive and even.");
+        }
+        if (outputPhase2.rows() != outputPhase1.rows() || outputPhase2.cols() != outputPhase1.cols()) {
+            throw Exception("The dimensions of the two output images must be the same.");
+        }
+
+        if (principalPoint(0) < 0) {
+            principalPoint(0) = outputPhase1.cols() / 2.0;
+            principalPoint(1) = outputPhase1.rows() / 2.0;
+        }
+
+        Eigen::MatrixXd cameraMatrix(3, 4);
+        cameraMatrix << focalLength, 0.0, principalPoint(0), 0.0,
+                0.0, focalLength, principalPoint(1), 0.0,
+                0.0, 0.0, 1.0, 0.0;
+
+        Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
+
+        Eigen::MatrixXd M(4, 3);
+        M << 1.0, 0.0, 0.0,
+                0.0, 1.0, 0.0,
+                0.0, 0.0, 0.0,
+                0.0, 0.0, 1.0;
+
+        Eigen::Matrix3d homography = cameraMatrix * cTp * M;
+        Eigen::Matrix3d inversedHomography = homography.inverse();
+
+        for (int col = 0; col < outputPhase1.cols(); col++) {
+            for (int row = 0; row < outputPhase1.rows(); row++) {
+                Eigen::Vector3d pointImage(col, row, 1);
+                Eigen::Vector3d pointPattern = inversedHomography * pointImage;
+                pointPattern /= pointPattern.z();
+                outputPhase1(row, col) = this->getPhase1(pointPattern.x(), pointPattern.y());
+                outputPhase2(row, col) = this->getPhase2(pointPattern.x(), pointPattern.y());
+            }
+        }
+    }
+
+    void PatternLayout::renderPhaseImagesUCMProjection(Pose pose, cv::Mat & outputPhase1, cv::Mat & outputPhase2,
+        double focalLength, double xi, Eigen::Vector2d principalPoint) {
+
+        Eigen::ArrayXXd arrayPhase1(outputPhase1.rows, outputPhase1.cols);
+        Eigen::ArrayXXd arrayPhase2(outputPhase2.rows, outputPhase2.cols);
+        renderPhaseImagesUCMProjection(pose, arrayPhase1, arrayPhase2, focalLength, xi, principalPoint);
+        eigen2cv(arrayPhase1, outputPhase1);
+        eigen2cv(arrayPhase2, outputPhase2);
+    }
+
+    void PatternLayout::renderPhaseImagesUCMProjection(Pose pose, Eigen::ArrayXXd & outputPhase1, Eigen::ArrayXXd & outputPhase2,
+        double focalLength, double xi, Eigen::Vector2d principalPoint) {
+        if (outputPhase1.rows() <= 0 || outputPhase1.rows() % 2 == 1) {
+            throw Exception("The number of rows must be positive and even.");
+        }
+        if (outputPhase1.cols() <= 0 || outputPhase1.cols() % 2 == 1) {
+            throw Exception("The number of columns must be positive and even.");
+        }
+        if (outputPhase2.rows() != outputPhase1.rows() || outputPhase2.cols() != outputPhase1.cols()) {
+            throw Exception("The dimensions of the two output images must be the same.");
+        }
+
+        if (principalPoint(0) < 0) {
+            principalPoint(0) = outputPhase1.cols() / 2.0;
+            principalPoint(1) = outputPhase1.rows() / 2.0;
+        }
+
+        Eigen::MatrixXd cameraMatrix(3, 3);
+        cameraMatrix << focalLength, 0.0, principalPoint(0),
+                0.0, focalLength, principalPoint(1),
+                0.0, 0.0, 1.0;
+        Eigen::Matrix3d inverseCameraMatrix = cameraMatrix.inverse();
+
+        Eigen::Matrix4d cTp = pose.getCameraToPatternTransformationMatrix();
+        Eigen::Matrix4d inverseTransform = cTp.inverse();
+
+        Eigen::Vector3d xiVector(0.0, 0.0, xi);
+        Eigen::Vector3d planPose(pose.x, pose.y, pose.z - xi);
+        Eigen::Vector3d planNormal = (inverseTransform * Eigen::Vector4d(0.0, 0.0, 1.0, 0.0)).head<3>().normalized();
+
+        for (int col = 0; col < outputPhase1.cols(); col++) {
+            for (int row = 0; row < outputPhase1.rows(); row++) {
+                // Projection of Xi (homogeneous coordinates of the 2D point in the sensor plane) to 
+                // Xpi (normalized image frame) using the inverse of the intrinsic matrix
+                Eigen::Vector3d pointImage(col, row, 1);
+                Eigen::Vector3d pointCamera = inverseCameraMatrix * pointImage;
+
+                // Projection of Xpi (normalized image frame) to Xs (surface of the sphere) using 
+                // the inverse of the omnidirectional distortion model
+                double sommeCarres = pointCamera.norm() - 1;
+                double lambda1 = (xi + sqrt(1 + (1 - xi * xi) * sommeCarres)) / (sommeCarres + 1);
+                Eigen::Vector3d pointSphere = pointCamera * lambda1;
+                
+                // Projection of Xs (surface of the sphere) to Xp (object plane) using the 
+                // intersection of the ray defined by Xs and the plane defined by the pattern (Z=0)
+                double lambda2 = planNormal.dot(planPose) / planNormal.dot(pointSphere - xiVector);
+                Eigen::Vector3d pointPattern = (pointSphere * lambda2) + xiVector * (1 - lambda2);
+
+                // Check if the calculated lambda2 value is negative, which means that the point 
+                // is projected behind the camera
+                if (lambda2 <= 0) {
+                    outputPhase1(row, col) = 0.0;
+                    outputPhase2(row, col) = 0.0;
+                } else {
+                    Eigen::Vector4d pointPatternHomogeneous = inverseTransform * pointPattern.homogeneous();
+                    outputPhase1(row, col) = this->getPhase1(pointPatternHomogeneous.x(), pointPatternHomogeneous.y());
+                    outputPhase2(row, col) = this->getPhase2(pointPatternHomogeneous.x(), pointPatternHomogeneous.y());
+                }
+            }
+        }
+    }
+
+    
     std::string PatternLayout::toString() {
         return classname;
     }

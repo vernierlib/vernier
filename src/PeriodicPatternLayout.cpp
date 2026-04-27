@@ -90,6 +90,22 @@ namespace vernier {
         }
     }
 
+    double PeriodicPatternLayout::getPhase1(double x, double y) {
+        if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
+            return 0;
+        } else {
+            return 2* PI * x / period;
+        }
+    }
+
+    double PeriodicPatternLayout::getPhase2(double x, double y) {
+        if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
+            return 0;
+        } else {
+            return 2* PI * y / period;
+        }
+    }
+
     void PeriodicPatternLayout::saveToPNG(std::string filename) {
         cv::Mat image(2 * nRows - 1, 2 * nCols - 1, CV_8U);
         for (int col = 0; col < image.cols; col++) {
