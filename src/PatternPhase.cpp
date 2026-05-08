@@ -357,4 +357,25 @@ namespace vernier {
         return spectrum.cols();
     }
 
+    void PatternPhase::rotate90() {
+        std::swap(plane1, plane2);
+        std::swap(unwrappedPhase1, unwrappedPhase2);
+        plane1.flip();
+        unwrappedPhase1 *= -1.0;
+    }
+
+    void PatternPhase::rotate180() {
+        plane1.flip();
+        plane2.flip();
+        unwrappedPhase1 *= -1.0;
+        unwrappedPhase2 *= -1.0;
+    }
+
+    void PatternPhase::rotate270() {
+        std::swap(plane1, plane2);
+        std::swap(unwrappedPhase1, unwrappedPhase2);
+        plane2.flip();
+        unwrappedPhase2 *= -1.0;
+    }
+
 }

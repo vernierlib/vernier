@@ -49,7 +49,6 @@ namespace vernier {
         void compute();
         
     public:
-        
 
         /** Default constructor*/
         PatternPhase();
@@ -166,6 +165,15 @@ namespace vernier {
         int getNRows();
 
         int getNCols();
+
+        /** Rotates the pattern by 90 degrees */
+        void rotate90();
+
+        /** Rotates the pattern by 180 degrees */
+        void rotate180();
+
+        /** Rotates the pattern by 270 degrees */
+        void rotate270();
     };
 }
 #endif // PATTERNPHASE_HPP

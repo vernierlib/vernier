@@ -115,22 +115,24 @@ namespace vernier {
             plane2.flip();
             //std::cout<<"code1<0 && code2>0"<<std::endl;
             thumbnail.rotate270();
+            patternPhase.rotate270();
         } else if (periodShift1 >= 0 && periodShift2 < 0) {
             std::swap(periodShift1, periodShift2);
             std::swap(plane1, plane2);
             plane1.flip();
             //std::cout<<"code1>0 && code2<0"<<std::endl;
             thumbnail.rotate90();
+            patternPhase.rotate90();
         } else {
             plane1.flip();
             plane2.flip();
             //std::cout<<"code1<0 && code2<0"<<std::endl;
             thumbnail.rotate180();
+            patternPhase.rotate180();
         }
 
         periodShift1 = std::abs(periodShift1);
         periodShift2 = std::abs(periodShift2);
-
     }
 
     MegarenaThumbnail MegarenaPatternDetector::getThumbnail() {
