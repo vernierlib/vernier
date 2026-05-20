@@ -52,20 +52,20 @@ namespace vernier {
 
         /**Computes the thumbnail and fill the arrays and vectors prepared in the resize method
          *
-         *	\param plane1: first plane of the unwrapped phase (in the first direction)
-         *	\param plane2: second plane of the unwrapped phase (in the second direction)
+         *	\param phase1: first image phase of the unwrapped phase (in the first direction)
+         *	\param phase2: second image phase of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void compute(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray);
+        void compute(Eigen::ArrayXXd& phase1, Eigen::ArrayXXd& phase2, const Eigen::ArrayXXd& patternArray);
 
         /** Computes the thumbnail and stores it in an array
          *	This method is used in intern for the compute function
          *
-         *	\param plane1: first plane of the unwrapped phase (in the first direction)
-         *	\param plane2: second plane of the unwrapped phase (in the second direction)
+         *	\param phase1: first image phase of the unwrapped phase (in the first direction)
+         *	\param phase2: second image phase of the unwrapped phase (in the second direction)
          *	\param patternArray: array that will receive the thumbnail
          */
-        void computeThumbnail(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
+        void computeThumbnail(Eigen::ArrayXXd& phase1, Eigen::ArrayXXd& phase2, const Eigen::ArrayXXd& patternArray, double deltaPhase = PI / 3);
 
         void computeThumbnailTotal(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase);
 

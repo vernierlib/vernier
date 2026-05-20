@@ -225,8 +225,8 @@ namespace vernier {
         }
     }
 
-    void MegarenaThumbnail::compute(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray) {
-        computeThumbnail(plane1, plane2, patternArray, PI / 4.0);
+    void MegarenaThumbnail::compute(Eigen::ArrayXXd& phase1, Eigen::ArrayXXd& phase2, const Eigen::ArrayXXd& patternArray) {
+        computeThumbnail(phase1, phase2, patternArray, PI / 4.0);
 
         cell.getGlobalCell(numberWhiteDots, cumulWhiteDots);
         this->codeOrientation = cell.getCodeOrientation();
@@ -253,29 +253,22 @@ namespace vernier {
         }
     }
 
-    void MegarenaThumbnail::computeThumbnail(PhasePlane plane1, PhasePlane plane2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
+    void MegarenaThumbnail::computeThumbnail(Eigen::ArrayXXd& phase1, Eigen::ArrayXXd& phase2, const Eigen::ArrayXXd& patternArray, double deltaPhase) {
         //this method is used in intern to save space and time
-
-        Eigen::Vector3d tempPlane1Coeff(plane1.getA(), plane1.getB(), plane1.getC());
-        Eigen::Vector3d tempPlane2Coeff(plane2.getA(), plane2.getB(), plane2.getC());
-
-        PhasePlane tempPlane1(tempPlane1Coeff);
-        PhasePlane tempPlane2(tempPlane2Coeff);
-
 
 #pragma omp parallel for
         for (int col = 0; col < patternArray.cols(); col++) {
             for (int row = 0; row < patternArray.rows(); row++) {
-                //double phaseCol = plane1.getPhase(row, col);
-                //double phaseRow = plane2.getPhase(row, col);
-                double phaseCol = tempPlane1.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
-                double phaseRow = tempPlane2.getPhase(row - patternArray.rows() / 2, col - patternArray.cols() / 2);
+                double phaseCol = phase1(row, col);
+                double phaseRow = phase2(row, col);
 
                 int phaseIteration1 = round(phaseCol / (2.0 * PI)) + length1 / 2;
                 int phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
 
                 if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
-                    if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
+                    if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) 
+                        && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
+                        
                         numberWhiteDots(phaseIteration1, phaseIteration2) += 1;
                         cumulWhiteDots(phaseIteration1, phaseIteration2) += patternArray(row, col);
                     } else if ((abs(std::fmod(phaseCol, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseCol, 2 * PI)) <= PI + deltaPhase) || (abs(std::fmod(phaseRow, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseRow, 2 * PI)) <= PI + deltaPhase)) {

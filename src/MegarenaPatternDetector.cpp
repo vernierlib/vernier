@@ -92,7 +92,7 @@ namespace vernier {
         }
 
         thumbnail.resize(length1, length2);
-        thumbnail.compute(plane1, plane2, array);
+        thumbnail.compute(patternPhase.getUnwrappedPhase1(), patternPhase.getUnwrappedPhase2(), array);
 
         Eigen::ArrayXXd sequence1 = thumbnail.getSequence1();
         Eigen::ArrayXXd sequence2 = thumbnail.getSequence2();
