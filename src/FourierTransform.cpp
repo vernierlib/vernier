@@ -49,11 +49,15 @@ namespace vernier {
             fftw_complex* in = (fftw_complex*) fftw_malloc(sizeof (fftw_complex) * nRows * nCols);
             fftw_complex* out = (fftw_complex*) fftw_malloc(sizeof (fftw_complex) * nRows * nCols);
 
-            if (nRows == 1 || nCols == 1) {
-                plan = fftw_plan_dft_1d(nRows * nCols, in, out, sign, FFTW_MEASURE);
-            } else {
-                plan = fftw_plan_dft_2d(nCols, nRows, in, out, sign, FFTW_MEASURE);
+            #pragma omp critical (fftw_plan_creation) 
+            {
+                if (nRows == 1 || nCols == 1) {
+                    plan = fftw_plan_dft_1d(nRows * nCols, in, out, sign, FFTW_MEASURE);
+                } else {
+                    plan = fftw_plan_dft_2d(nCols, nRows, in, out, sign, FFTW_MEASURE);
+                }
             }
+            
 
             fftw_free(in);
             fftw_free(out);
