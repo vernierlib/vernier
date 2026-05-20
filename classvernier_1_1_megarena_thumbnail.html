@@ -82,13 +82,13 @@ $(function() {
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
-<tr class="memitem:adfda6a44ff383414d4496ce783bfb03b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_megarena_thumbnail.html#adfda6a44ff383414d4496ce783bfb03b">compute</a> (<a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane1, <a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane2, const Eigen::ArrayXXd &amp;patternArray)</td></tr>
-<tr class="separator:adfda6a44ff383414d4496ce783bfb03b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3be0cf404e8a741337201c4e4acd9b1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_megarena_thumbnail.html#ac3be0cf404e8a741337201c4e4acd9b1">compute</a> (Eigen::ArrayXXd &amp;phase1, Eigen::ArrayXXd &amp;phase2, const Eigen::ArrayXXd &amp;patternArray)</td></tr>
+<tr class="separator:ac3be0cf404e8a741337201c4e4acd9b1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac31c4cdda7b6f60864a4706ffc063488"><td class="memItemLeft" align="right" valign="top"><a id="ac31c4cdda7b6f60864a4706ffc063488"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>computeSTD2</b> (Eigen::ArrayXXd image)</td></tr>
 <tr class="separator:ac31c4cdda7b6f60864a4706ffc063488"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aed3e812fe9f97155e2e16f50692e0096"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_megarena_thumbnail.html#aed3e812fe9f97155e2e16f50692e0096">computeThumbnail</a> (<a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane1, <a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane2, const Eigen::ArrayXXd &amp;patternArray, double deltaPhase=PI/3)</td></tr>
-<tr class="separator:aed3e812fe9f97155e2e16f50692e0096"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40cbd8f27c76972613d0af8277887e73"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_megarena_thumbnail.html#a40cbd8f27c76972613d0af8277887e73">computeThumbnail</a> (Eigen::ArrayXXd &amp;phase1, Eigen::ArrayXXd &amp;phase2, const Eigen::ArrayXXd &amp;patternArray, double deltaPhase=PI/3)</td></tr>
+<tr class="separator:a40cbd8f27c76972613d0af8277887e73"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a9871b4e101347e16b2e3ed75cdadb84d"><td class="memItemLeft" align="right" valign="top"><a id="a9871b4e101347e16b2e3ed75cdadb84d"></a>
 void&#160;</td><td class="memItemRight" valign="bottom"><b>computeThumbnailTotal</b> (<a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane1, <a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a> plane2, const Eigen::ArrayXXd &amp;patternArray, double deltaPhase)</td></tr>
 <tr class="separator:a9871b4e101347e16b2e3ed75cdadb84d"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -187,8 +187,8 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 
 <p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8hpp_source.html#l00017">17</a> of file <a class="el" href="_megarena_thumbnail_8hpp_source.html">MegarenaThumbnail.hpp</a>.</p>
 </div><h2 class="groupheader">Member Function Documentation</h2>
-<a id="adfda6a44ff383414d4496ce783bfb03b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#adfda6a44ff383414d4496ce783bfb03b">&#9670;&nbsp;</a></span>compute()</h2>
+<a id="ac3be0cf404e8a741337201c4e4acd9b1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac3be0cf404e8a741337201c4e4acd9b1">&#9670;&nbsp;</a></span>compute()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -196,14 +196,14 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
         <tr>
           <td class="memname">void vernier::MegarenaThumbnail::compute </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a>&#160;</td>
-          <td class="paramname"><em>plane1</em>, </td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>phase1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a>&#160;</td>
-          <td class="paramname"><em>plane2</em>, </td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>phase2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -221,8 +221,8 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 <p>Computes the thumbnail and fill the arrays and vectors prepared in the resize method</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">plane1</td><td>first plane of the unwrapped phase (in the first direction) </td></tr>
-    <tr><td class="paramname">plane2</td><td>second plane of the unwrapped phase (in the second direction) </td></tr>
+    <tr><td class="paramname">phase1</td><td>first image phase of the unwrapped phase (in the first direction) </td></tr>
+    <tr><td class="paramname">phase2</td><td>second image phase of the unwrapped phase (in the second direction) </td></tr>
     <tr><td class="paramname">patternArray</td><td>array that will receive the thumbnail </td></tr>
   </table>
   </dd>
@@ -232,8 +232,8 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 
 </div>
 </div>
-<a id="aed3e812fe9f97155e2e16f50692e0096"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#aed3e812fe9f97155e2e16f50692e0096">&#9670;&nbsp;</a></span>computeThumbnail()</h2>
+<a id="a40cbd8f27c76972613d0af8277887e73"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40cbd8f27c76972613d0af8277887e73">&#9670;&nbsp;</a></span>computeThumbnail()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -241,14 +241,14 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
         <tr>
           <td class="memname">void vernier::MegarenaThumbnail::computeThumbnail </td>
           <td>(</td>
-          <td class="paramtype"><a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a>&#160;</td>
-          <td class="paramname"><em>plane1</em>, </td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>phase1</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
           <td></td>
-          <td class="paramtype"><a class="el" href="classvernier_1_1_phase_plane.html">PhasePlane</a>&#160;</td>
-          <td class="paramname"><em>plane2</em>, </td>
+          <td class="paramtype">Eigen::ArrayXXd &amp;&#160;</td>
+          <td class="paramname"><em>phase2</em>, </td>
         </tr>
         <tr>
           <td class="paramkey"></td>
@@ -272,8 +272,8 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 <p>Computes the thumbnail and stores it in an array This method is used in intern for the compute function</p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
-    <tr><td class="paramname">plane1</td><td>first plane of the unwrapped phase (in the first direction) </td></tr>
-    <tr><td class="paramname">plane2</td><td>second plane of the unwrapped phase (in the second direction) </td></tr>
+    <tr><td class="paramname">phase1</td><td>first image phase of the unwrapped phase (in the first direction) </td></tr>
+    <tr><td class="paramname">phase2</td><td>second image phase of the unwrapped phase (in the second direction) </td></tr>
     <tr><td class="paramname">patternArray</td><td>array that will receive the thumbnail </td></tr>
   </table>
   </dd>
@@ -365,7 +365,7 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 </div><div class="memdoc">
 <p>Graphical feedback of thumbnail Method used to display the thumbnail </p>
 
-<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00371">371</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00364">364</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
 
 </div>
 </div>
@@ -423,7 +423,7 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 </div><div class="memdoc">
 <p>Displays with an arrow the orientation of the code ans where to pinpoint the position (0,0) </p>
 
-<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00753">753</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00746">746</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
 
 </div>
 </div>
@@ -443,7 +443,7 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 </div><div class="memdoc">
 <p>Method used to display the coding cell and the code orientation </p>
 
-<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00739">739</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00732">732</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
 
 </div>
 </div>
@@ -464,7 +464,7 @@ Eigen::ArrayXXd&#160;</td><td class="memItemRight" valign="bottom"><b>codeIntens
 </div><div class="memdoc">
 <p>Method used to display the coded sequence in regard of the thumbnail size </p>
 
-<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00693">693</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_megarena_thumbnail_8cpp_source.html#l00686">686</a> of file <a class="el" href="_megarena_thumbnail_8cpp_source.html">MegarenaThumbnail.cpp</a>.</p>
 
 </div>
 </div>
