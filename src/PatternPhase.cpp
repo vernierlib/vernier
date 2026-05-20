@@ -86,10 +86,11 @@ namespace vernier {
         mainPeak2.setConstant(-1);
 
         applyBandPassCut(source, minFrequency, maxFrequency);
-        source.block(0, 0, source.rows() /2 , source.cols()) = 0.0;
 
         cv::Mat wrapper(source.cols(), source.rows(), CV_64F, source.data());
         cv::GaussianBlur(wrapper, wrapper, cv::Size(smoothingKernelSize, smoothingKernelSize), smoothingKernelSize / 6.0);
+
+        source.block(0, 0, source.rows() /2 , source.cols()) = 0.0;
 
         int row, col;
         source.maxCoeff(&row, &col);
