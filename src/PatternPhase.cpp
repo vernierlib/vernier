@@ -291,14 +291,10 @@ namespace vernier {
     }
 
     PhasePlane PatternPhase::getPlane1() {
-        PhasePlane plane1;
-        plane1 = regressionPlane.compute(unwrappedPhase1);
         return plane1;
     }
 
     PhasePlane PatternPhase::getPlane2() {
-        PhasePlane plane2;
-        plane2 = regressionPlane.compute(unwrappedPhase2);
         return plane2;
     }
 
