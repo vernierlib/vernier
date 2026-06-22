@@ -19,7 +19,7 @@ namespace vernier {
 
     void array2image8UC4(const Eigen::ArrayXXd & array, cv::Mat & image) {
         Eigen::MatrixXd matrix;
-        matrix = (array.array()-array.minCoeff())/array.maxCoeff();
+        matrix = (array.array()-array.minCoeff())/(array.maxCoeff() - array.minCoeff());
 
         cv::Mat image64d;
         cv::eigen2cv(matrix, image64d);
