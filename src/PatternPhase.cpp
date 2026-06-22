@@ -25,7 +25,7 @@ namespace vernier {
             spectrum.resize(nRows, nCols);
             spectrumShifted.resize(nRows, nCols);
             spectrumFiltered1.resize(nRows, nCols);
-            spectrumFiltered1.resize(nRows, nCols);
+            spectrumFiltered2.resize(nRows, nCols);
             phase1.resize(nRows, nCols);
             phase2.resize(nRows, nCols);
             unwrappedPhase1.resize(nRows, nCols);
