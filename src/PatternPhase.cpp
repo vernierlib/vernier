@@ -69,7 +69,7 @@ namespace vernier {
         unwrappedPhase1 = phase1.arg();
         quartersUnwrapPhase(unwrappedPhase1);
 
-        // Compute unwrapped plase from peak 2
+        // Compute unwrapped phase from peak 2
         applyGaussianFilter(spectrumFiltered2, mainPeak2(1), mainPeak2(0), sigma);
         ifft.compute(spectrumFiltered2, phase2);
         shift(phase2);
