@@ -106,6 +106,8 @@ namespace vernier {
             double distance = std::hypot(vx, vy);
             double centerAngle = std::atan2(vy, vx);
             double widthAngle = 2.0 * std::atan2(3.0 * sigma, distance);
+
+            applyRingBand(source, distance * 0.5, distance * 2.0);
             applyAngularCut(source, centerAngle, widthAngle);
 
             source.maxCoeff(&row, &col);

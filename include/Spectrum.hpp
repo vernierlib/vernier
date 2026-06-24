@@ -35,8 +35,30 @@ namespace vernier {
         }
     }
 
+    /** Remove outside the frequency ring filter [minRadius, maxRadius] (hard cut).
+     *
+     *  \param array: shifted spectrum
+     *  \param minRadius: inner radius of the ring to keep
+     *  \param maxRadius: outer radius of the ring to keep
+     */
+    template<typename _Scalar, int _Rows, int _Cols>
+    void applyRingBand(Eigen::Array<_Scalar, _Rows, _Cols>& array, double minRadius, double maxRadius) {
+        ASSERT(array.rows() > 0 && array.cols() > 0);
+        int centerX = array.rows() / 2;
+        int centerY = array.cols() / 2;
+
+        for (int col = 0; col < array.cols(); ++col) {
+            for (int row = 0; row < array.rows(); ++row) {
+                double r = std::hypot(row - centerX, col - centerY);
+                if (r < minRadius || r > maxRadius) {
+                    array(row, col) = _Scalar();
+                }
+            }
+        }
+    }
+
     /** Remove a angular sector filter (hard cut).
-     * 
+     *
      *  \param array: array to apply the filter
      *  \param centerAngle: center of the sector to remove (in radians)
      *  \param widthAngle: width of the sector to remove (in radians)
