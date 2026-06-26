@@ -25,7 +25,7 @@ namespace vernier {
             spectrum.resize(nRows, nCols);
             spectrumShifted.resize(nRows, nCols);
             spectrumFiltered1.resize(nRows, nCols);
-            spectrumFiltered1.resize(nRows, nCols);
+            spectrumFiltered2.resize(nRows, nCols);
             phase1.resize(nRows, nCols);
             phase2.resize(nRows, nCols);
             unwrappedPhase1.resize(nRows, nCols);
@@ -69,7 +69,7 @@ namespace vernier {
         unwrappedPhase1 = phase1.arg();
         quartersUnwrapPhase(unwrappedPhase1);
 
-        // Compute unwrapped plase from peak 2
+        // Compute unwrapped phase from peak 2
         applyGaussianFilter(spectrumFiltered2, mainPeak2(1), mainPeak2(0), sigma);
         ifft.compute(spectrumFiltered2, phase2);
         shift(phase2);
@@ -175,8 +175,8 @@ namespace vernier {
         //cv::imshow("phase 2", phase2HSV);
         //cv::imwrite("D:/Nextcloud2/classic3Dpatterns/analysis_scripts/perspectivePhaseEvolution/phaseMap.png", phase2HSV);
 
-        for (int i = 0; i < phase1img.rows - 1; i++) {
-            for (int j = 0; j < phase1img.cols - 1; j++) {
+        for (int i = 0; i < phase2img.rows - 1; i++) {
+            for (int j = 0; j < phase2img.cols - 1; j++) {
                 double dXdV = -(phaseCropped(i + 1, j) - phaseCropped(i, j)) * a / (pow(a, 2) + pow(b, 2));
                 double dYdV = (phaseCropped(i, j + 1) - phaseCropped(i, j)) * b / (pow(a, 2) + pow(b, 2));
                 phaseDerived.at<double>(i, j) = dXdV + dYdV;
