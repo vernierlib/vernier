@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['squares_345',['squares',['../classvernier_1_1_square_detector.html#acf0f2f1e00cbae8935727b2ad31fb01c',1,'vernier::SquareDetector']]]
+  ['squares_343',['squares',['../classvernier_1_1_square_detector.html#acf0f2f1e00cbae8935727b2ad31fb01c',1,'vernier::SquareDetector']]]
 ];
