@@ -77,7 +77,7 @@ namespace vernier {
                     dy = plane1.getPosition(physicalPeriod, 0.0, 0.0);
                 }
 
-                double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+                double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
                 double xImg = (centerX - image8U.cols / 2);
                 double yImg = (centerY - image8U.rows / 2);
                 double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;
@@ -86,7 +86,7 @@ namespace vernier {
                 Pose pose = Pose(x, y, alpha, pixelSize);
 
                 if (numberHalfPeriods % 4 == 1) {
-                    unsigned long id = readNumber(code, image8U, patternPhase.getPixelPeriod() / 2.0);
+                    unsigned long id = readNumber(code, image8U, plane1.getPixelicPeriod() / 2.0);
                     markers.insert(std::make_pair(id, pose));
                 } else {
                     markers.insert(std::make_pair(i, pose));
@@ -174,7 +174,7 @@ namespace vernier {
     void HPCodePatternDetector::draw(cv::Mat & image) {
         PatternDetector::draw(image);
         for (std::map<int, Pose>::iterator it = markers.begin(); it != markers.end(); it++) {
-            double length = 2 * patternPhase.getPixelPeriod() * this->numberHalfPeriods / 4;
+            double length = 2 * patternPhase.getPlane1().getPixelicPeriod() * this->numberHalfPeriods / 4;
             it->second.draw(image, length, to_string(it->first));
         }
     }

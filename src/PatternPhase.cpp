@@ -76,9 +76,6 @@ namespace vernier {
 
         unwrappedPhase2 = phase2.arg();
         quartersUnwrapPhase(unwrappedPhase2);
-
-        plane1 = regressionPlane.compute(unwrappedPhase1);
-        plane2 = regressionPlane.compute(unwrappedPhase2);
     }
 
     void PatternPhase::peaksSearch(Eigen::ArrayXXd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
@@ -131,6 +128,7 @@ namespace vernier {
         cv::Mat phase1img(phaseCropped.rows(), phaseCropped.cols(), CV_64FC1, phaseCropped.data());
         cv::Mat phaseResult(phase1img.rows, phase1img.cols, CV_64FC1);
 
+        PhasePlane plane1 = getPlane1();
         double a = plane1.getA();
         double b = plane1.getB();
 
@@ -162,6 +160,7 @@ namespace vernier {
         phase2img.convertTo(phase2BGR, CV_8UC3);
         cv::cvtColor(phase2BGR, phase2BGR, cv::COLOR_GRAY2BGR);
 
+        PhasePlane plane2 = getPlane1();
         a = plane2.getA();
         b = plane2.getB();
 
@@ -346,10 +345,6 @@ namespace vernier {
             this->smoothingKernelSize = smoothingKernelSize;
     }
 
-    double PatternPhase::getPixelPeriod() {
-        return plane1.getPixelicPeriod();
-    }
-
     int PatternPhase::getNRows() {
         return spectrum.rows();
     }
@@ -359,23 +354,17 @@ namespace vernier {
     }
 
     void PatternPhase::rotate90() {
-        std::swap(plane1, plane2);
         std::swap(unwrappedPhase1, unwrappedPhase2);
-        plane1.flip();
         unwrappedPhase1 *= -1.0;
     }
 
     void PatternPhase::rotate180() {
-        plane1.flip();
-        plane2.flip();
         unwrappedPhase1 *= -1.0;
         unwrappedPhase2 *= -1.0;
     }
 
     void PatternPhase::rotate270() {
-        std::swap(plane1, plane2);
         std::swap(unwrappedPhase1, unwrappedPhase2);
-        plane2.flip();
         unwrappedPhase2 *= -1.0;
     }
 

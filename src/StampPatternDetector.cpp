@@ -76,7 +76,7 @@ namespace vernier {
                     double dy = -plane2.getPosition(physicalPeriod, 0.0, 0.0, periodShift2);
                     double alpha = plane1.getAngle();
 
-                    double pixelSize = physicalPeriod / patternPhase.getPixelPeriod();
+                    double pixelSize = physicalPeriod / plane1.getPixelicPeriod();
                     double xImg = (centerX - this->image64F.cols/2);
                     double yImg = (centerY - this->image64F.rows/2);
                     double x = pixelSize * (xImg * cos(alpha) - yImg * sin(-alpha)) + dx;

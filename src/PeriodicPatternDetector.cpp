@@ -226,7 +226,7 @@ namespace vernier {
         } else if (attribute == "sigma") {
             return patternPhase.getSigma();
         } else if (attribute == "approxPixelPeriod") {
-            return patternPhase.getPixelPeriod();
+            return patternPhase.getPlane1().getPixelicPeriod();
         } else {
             return PatternDetector::getDouble(attribute);
         }

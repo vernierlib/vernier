@@ -20,6 +20,8 @@ namespace vernier {
         os << value;
         return os.str();
     }
+    
+    std::string removeExtension(const std::string& filename);
 
     void drawCameraFrame(cv::Mat & image);
     

@@ -38,8 +38,6 @@ namespace vernier {
         Eigen::ArrayXXcd phase1, phase2;
         Eigen::ArrayXXd unwrappedPhase1, unwrappedPhase2;
         
-        PhasePlane plane1, plane2;
-        
         double sigma = 3.0;
         double minPeakPower = 0.00001;
         double minFrequency = 20;
@@ -158,9 +156,6 @@ namespace vernier {
 
         /** Sets the size of the gaussian smoothing filter */
         void setSmoothingKernelSize(int smoothingKernelSize);
-
-        /** Returns the length of the detected period in pixels */
-        double getPixelPeriod();
 
         int getNRows();
 

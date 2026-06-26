@@ -73,7 +73,7 @@ namespace vernier {
         double phiCenter = getPhase(y, x);
         return (1.0 / std::sqrt(a * a + b * b)) * (phiCenter + (double) (periodShift));
     }
-
+    
     void PhasePlane::flip() {
         a = -a;
         b = -b;

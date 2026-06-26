@@ -8,6 +8,14 @@
 
 namespace vernier {
 
+    std::string removeExtension(const std::string& filename) {
+        const auto pos = filename.find_last_of('.');
+        if (pos == std::string::npos)
+            return filename;
+
+        return filename.substr(0, pos);
+    }
+
     void drawCameraFrame(cv::Mat& image) {
         int cx = image.cols / 2;
         int cy = image.rows / 2;
@@ -19,7 +27,7 @@ namespace vernier {
 
     void array2image8UC4(const Eigen::ArrayXXd & array, cv::Mat & image) {
         Eigen::MatrixXd matrix;
-        matrix = (array.array()-array.minCoeff())/array.maxCoeff();
+        matrix = (array.array() - array.minCoeff()) / array.maxCoeff();
 
         cv::Mat image64d;
         cv::eigen2cv(matrix, image64d);
@@ -61,7 +69,6 @@ namespace vernier {
         cv::normalize(grayImage, grayImage, 1.0, 0, cv::NORM_MINMAX);
         cv2eigen(grayImage, array);
     }
-
 
     void arrayShow(const std::string windowTitle, const Eigen::ArrayXXd & array) {
         cv::Mat image;
