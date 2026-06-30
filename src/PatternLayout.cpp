@@ -166,13 +166,14 @@ namespace vernier {
         file << "</desc>" << std::endl;
         std::vector<Rectangle> rectangleList;
         toRectangleVector(rectangleList);
+        size_t progressStep = std::max<size_t>(1, rectangleList.size() / 100);
         for (int i = 0; i < rectangleList.size(); i++) {
             file << "<rect x=\"" << rectangleList[i].x + leftMargin << "\" ";
             file << "y=\"" << rectangleList[i].y + topMargin << "\" ";
             file << "width=\"" << rectangleList[i].width << "\" ";
             file << "height=\"" << rectangleList[i].height << "\" ";
             file << "fill=\"black\" />" << std::endl;
-            if (i % (rectangleList.size() / 100) == 0) {
+            if (i % progressStep == 0) {
                 std::cout << " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
@@ -199,11 +200,12 @@ namespace vernier {
         file << "int main() {" << std::endl;
         std::vector<Rectangle> rectangleList;
         toRectangleVector(rectangleList);
+        size_t progressStep = std::max<size_t>(1, rectangleList.size() / 100);
         for (int i = 0; i < rectangleList.size(); i++) {
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + leftMargin) << "," << -1000 * (rectangleList[i].y + topMargin) << ");" << std::endl;
             file << "layout->drawing->point(" << 1000 * (rectangleList[i].x + leftMargin + rectangleList[i].width) << "," << -1000 * (rectangleList[i].y + topMargin + rectangleList[i].height) << ");" << std::endl;
             file << "layout->drawing->box();" << std::endl;
-            if (i % (rectangleList.size() / 100) == 0) {
+            if (i % progressStep == 0) {
                 std::cout << " \r Writing " << filename << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
@@ -225,10 +227,11 @@ namespace vernier {
         // one cell for the pattern
         gdstk::Cell * cell = new gdstk::Cell();
         cell->init(name.c_str());
+        size_t progressStep = std::max<size_t>(1, rectangleList.size() / 100);
         for (int i = 0; i < rectangleList.size(); i++) {
             gdstk::Polygon * polygon = new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{rectangleList[i].x + leftMargin, -(rectangleList[i].y + topMargin)}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width + leftMargin, -(rectangleList[i].y + rectangleList[i].height + topMargin)}, gdstk::make_tag(1, 1)));
             cell->polygon_array.append(polygon);
-            if (rectangleList.size()> 100 && i % (rectangleList.size() / 100) == 0) {
+            if (i % progressStep == 0) {
                 std::cout << " \r Building cell " << name << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
