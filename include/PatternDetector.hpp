@@ -42,6 +42,8 @@ namespace vernier {
         /** Default constructor */
         PatternDetector();
 
+        virtual ~PatternDetector() = default;
+
         /** Initializes a pattern detector from a JSON file */
         void loadFromJSON(const std::string filename);
 
