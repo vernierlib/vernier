@@ -13,6 +13,7 @@
 #include "BitmapPatternDetector.hpp"
 #include "HPCodePatternDetector.hpp"
 #include "StampPatternDetector.hpp"
+#include <memory>
 
 namespace vernier {
 
@@ -27,18 +28,18 @@ namespace vernier {
          *   
          *   \param classname: name of the pattern detector (PeriodicPattern, MegarenaPattern, BitmapPattern, HPCodePattern).
          **/
-        static PatternDetector* newInstance(const std::string& classname) {
-            PatternDetector* detector;
+        static std::unique_ptr<PatternDetector> newInstance(const std::string& classname) {
+            std::unique_ptr<PatternDetector> detector;
             if (classname == "PeriodicPattern") {
-                detector = new PeriodicPatternDetector();
+                detector.reset(new PeriodicPatternDetector());
             } else if (classname == "MegarenaPattern") {
-                detector = new MegarenaPatternDetector();
+                detector.reset(new MegarenaPatternDetector());
             } else if (classname == "BitmapPattern") {
-                detector = new BitmapPatternDetector();
+                detector.reset(new BitmapPatternDetector());
             } else if (classname == "HPCodePattern") {
-                detector = new HPCodePatternDetector();
+                detector.reset(new HPCodePatternDetector());
             } else if (classname == "StampPattern") {
-                detector = new StampPatternDetector();
+                detector.reset(new StampPatternDetector());
             } else {
                 throw Exception(classname + " is not a valid class name for a pattern detector.");
             }
@@ -49,12 +50,12 @@ namespace vernier {
          *
          *   \param filename: name of the JSON document to load
          **/
-        static PatternDetector * loadFromJSON(const std::string& filename) {
+        static std::unique_ptr<PatternDetector> loadFromJSON(const std::string& filename) {
             BufferedReader bufferedReader(filename);
             rapidjson::Document document;
             bufferedReader.parseJSON(document);
             std::string classname = document.MemberBegin()->name.GetString();
-            PatternDetector* detector = newInstance(classname);
+            std::unique_ptr<PatternDetector> detector = newInstance(classname);
             detector->readJSON(document.MemberBegin()->value);
             return detector;
         }
