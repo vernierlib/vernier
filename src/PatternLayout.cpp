@@ -190,7 +190,7 @@ namespace vernier {
 
     void PatternLayout::saveToLayoutEditorMacro(std::string filename) {
         if (filename == "") {
-            filename = classname + ".svg";
+            filename = classname + ".layout";
         }
 
         std::ofstream file;
@@ -253,7 +253,7 @@ namespace vernier {
 
     void PatternLayout::saveToGDS(std::string filename) {
         if (filename == "") {
-            filename = classname + ".oas";
+            filename = classname + ".gds";
         }
 
         gdstk::Library lib = {};
