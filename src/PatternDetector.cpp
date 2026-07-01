@@ -154,8 +154,6 @@ namespace vernier {
             return description;
         } else if (attribute == "date") {
             return date;
-        } else if (attribute == "description") {
-            return description;
         } else if (attribute == "author") {
             return author;
         } else if (attribute == "unit") {
@@ -166,15 +164,15 @@ namespace vernier {
     }
 
     void PatternDetector::setDouble(const std::string & attribute, double value) {
-        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     void PatternDetector::setInt(const std::string & attribute, int value) {
-        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     void PatternDetector::setBool(const std::string & attribute, bool value) {
-        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     void PatternDetector::setString(const std::string & attribute, std::string value) {
@@ -184,14 +182,12 @@ namespace vernier {
             description = value;
         } else if (attribute == "date") {
             date = value;
-        } else if (attribute == "description") {
-            description = value;
         } else if (attribute == "author") {
             author = value;
         } else if (attribute == "unit") {
             unit = value;
         } else {
-            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
         }
     }
 
