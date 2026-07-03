@@ -16,6 +16,7 @@ namespace vernier {
     private:
         long length;
         char* buffer;
+        std::string filename;
 
     public:
 
@@ -51,6 +52,13 @@ namespace vernier {
          **/
         void release();
 
+
+        /** Parses the buffer as a JSON file and checks that it contains a root object
+         *
+         *   \param document: rapidjson document to fill (the document points into the
+         *   buffer and must not outlive the reader)
+         **/
+        void parseJSON(rapidjson::Document & document);
 
         /** Returns the buffer of the read file
          **/
