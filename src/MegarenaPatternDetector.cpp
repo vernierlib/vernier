@@ -168,26 +168,4 @@ namespace vernier {
         return PeriodicPatternDetector::toString() + ", codeSize: " + to_string(MegarenaBitSequence::codeDepth(bitSequence.cols())) + "bits";
     }
 
-    int MegarenaPatternDetector::getInt(const std::string & attribute) {
-        if (attribute == "codePosition1") {
-            return periodShift1;
-        } else if (attribute == "codePosition2") {
-            return periodShift2;
-        } else {
-            return PeriodicPatternDetector::getInt(attribute);
-        }
-    }
-
-    void* MegarenaPatternDetector::getObject(const std::string & attribute) {
-        if (attribute == "bitSequence") {
-            return &bitSequence;
-        } else if (attribute == "decoding") {
-            return &decoding;
-        } else if (attribute == "thumbnail") {
-            return &thumbnail;
-        } else {
-            return PeriodicPatternDetector::getObject(attribute);
-        }
-    }
-
 }

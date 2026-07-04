@@ -643,101 +643,11 @@ namespace vernier {
         return width;
     }
 
-    void* PatternLayout::getObject(const std::string & attribute) {
-        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-    }
-
-    double PatternLayout::getDouble(const std::string & attribute) {
-        if (attribute == "originX") {
-            return originX;
-        } else if (attribute == "originY") {
-            return originY;
-        } else if (attribute == "leftMargin") {
-            return leftMargin;
-        } else if (attribute == "rightMargin") {
-            return rightMargin;
-        } else if (attribute == "topMargin") {
-            return topMargin;
-        } else if (attribute == "bottomMargin") {
-            return bottomMargin;
-        } else if (attribute == "width") {
-            return width;
-        } else if (attribute == "height") {
-            return height;
-        } else {
-            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-        }
-    }
-
-    int PatternLayout::getInt(const std::string & attribute) {
-        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-    }
-
-    bool PatternLayout::getBool(const std::string & attribute) {
-        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-    }
-
     void PatternLayout::setMargins(double margins) {
         leftMargin = margins;
         rightMargin = margins;
         topMargin = margins;
         bottomMargin = margins;
-    }
-
-    std::string PatternLayout::getString(const std::string & attribute) {
-        if (attribute == "classname") {
-            return classname;
-        } else if (attribute == "description") {
-            return description;
-        } else if (attribute == "date") {
-            return date;
-        } else if (attribute == "author") {
-            return author;
-        } else if (attribute == "unit") {
-            return unit;
-        } else {
-            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-        }
-    }
-
-    void PatternLayout::setDouble(const std::string & attribute, double value) {
-        if (attribute == "leftMargin") {
-            leftMargin = value;
-        } else if (attribute == "rightMargin") {
-            rightMargin = value;
-        } else if (attribute == "topMargin") {
-            topMargin = value;
-        } else if (attribute == "bottomMargin") {
-            bottomMargin = value;
-        } else if (attribute == "margins") {
-            setMargins(value);
-        } else {
-            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-        }
-    }
-
-    void PatternLayout::setInt(const std::string & attribute, int value) {
-        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-    }
-
-    void PatternLayout::setBool(const std::string & attribute, bool value) {
-        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-    }
-
-    void PatternLayout::setString(const std::string & attribute, std::string value) {
-        if (attribute == "classname") {
-            classname = value;
-        } else if (attribute == "description") {
-            description = value;
-        } else if (attribute == "date") {
-            date = value;
-        } else if (attribute == "author") {
-            author = value;
-        } else if (attribute == "unit") {
-            unit = value;
-        } else {
-            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
-        }
     }
 
 

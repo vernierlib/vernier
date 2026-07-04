@@ -120,18 +120,6 @@ namespace vernier {
 
         int getRows();
 
-        void setInt(const std::string & attribute, int value) override;
-
-        void setDouble(const std::string & attribute, double value) override;
-
-        void setBool(const std::string & attribute, bool value) override;
-
-        double getDouble(const std::string & attribute) override;
-
-        bool getBool(const std::string & attribute) override;
-
-        void* getObject(const std::string & attribute) override;
-
     };
 }
 

@@ -250,8 +250,8 @@ void main3dLongFocalPerspective() {
     // Detecting and estimating the pose of the pattern
     MegarenaPatternDetector* detector;
     detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
-    detector->setDouble("sigma", 5);
-    detector->setDouble("cropFactor", 0.8);
+    detector->setSigma(5);
+    detector->setCropFactor(0.8);
     detector->compute(array);
     std::vector<Pose> estimatedPoses = detector->getAll3DPoses();
 

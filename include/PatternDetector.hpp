@@ -87,33 +87,6 @@ namespace vernier {
 
         std::string getClassname();
 
-        /** Returns the attribute address corresponding to the given name */
-        virtual void* getObject(const std::string & attribute);
-
-        /** Returns the attribute value corresponding to the given name */
-        virtual double getDouble(const std::string & attribute);
-
-        /** Returns the attribute value corresponding to the given name */
-        virtual int getInt(const std::string & attribute);
-
-        /** Returns the attribute value corresponding to the given name */
-        virtual bool getBool(const std::string & attribute);
-
-        /** Returns the attribute value corresponding to the given name */
-        virtual std::string getString(const std::string & attribute);
-
-        /** Sets the attribute value corresponding to the given name */
-        virtual void setDouble(const std::string & attribute, double value);
-
-        /** Sets the attribute value corresponding to the given name */
-        virtual void setInt(const std::string & attribute, int value);
-
-        /** Sets the attribute value corresponding to the given name */
-        virtual void setBool(const std::string & attribute, bool value);
-
-        /** Sets the attribute value corresponding to the given name */
-        virtual void setString(const std::string & attribute, std::string value);
-
         friend class Detector;
     };
 

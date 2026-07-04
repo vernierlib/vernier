@@ -38,8 +38,8 @@ void main2d() {
     // Dectecting and estimating the pose of the pattern
     PeriodicPatternDetector* detector;
     detector = new PeriodicPatternDetector(physicalPeriod);
-    detector->setDouble("sigma", 1);
-    detector->setDouble("cropFactor", 0.4);
+    detector->setSigma(1);
+    detector->setCropFactor(0.4);
     detector->compute(array);
 
     // Printing results 
@@ -51,7 +51,7 @@ void main2d() {
     cout << "Estimation of pattern-to-camera transformation matrix:" << endl << detector->get2DPose().getPatternToCameraTransformationMatrix() << endl;
 
     // Showing image and is spectrum
-    PatternPhase *patternPhase = (PatternPhase*) (detector->getObject("patternPhase"));
+    PatternPhase *patternPhase = detector->getPatternPhase();
     arrayShow("Image", array);
     //arrayShow("Phase 1 (wrapped)", patternPhase->getPhase1());
     //arrayShow("Phase 2 (wrapped)", patternPhase->getPhase2());
@@ -90,8 +90,8 @@ void main3dPerspective() {
     // Detecting and estimating the pose of the pattern
     PeriodicPatternDetector* detector;
     detector = new PeriodicPatternDetector(physicalPeriod);
-    detector->setDouble("sigma", 15);
-    detector->setDouble("cropFactor", 0.8);
+    detector->setSigma(15);
+    detector->setCropFactor(0.8);
     detector->compute(array);
       
     Pose pose = detector->get3DPosePerspective(focalLength);

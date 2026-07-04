@@ -50,10 +50,6 @@ namespace vernier {
 
         int getCodeDepth();
         
-        int getInt(const std::string & attribute) override;
-        
-        void* getObject(const std::string & attribute) override;
-
     };
 
 }
