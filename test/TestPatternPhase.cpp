@@ -9,6 +9,8 @@
 #include "PeriodicPatternLayout.hpp"
 #include "eigen-matio/MatioFile.hpp"
 #include <random>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace std;

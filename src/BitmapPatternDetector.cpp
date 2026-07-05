@@ -7,6 +7,8 @@
 #include "BitmapPatternDetector.hpp"
 #include "BitmapThumbnail.hpp"
 #include "PatternLayout.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 

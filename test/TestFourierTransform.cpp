@@ -8,6 +8,7 @@
 #include "UnitTest.hpp"
 #include <complex>
 #include <random>
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace vernier;
 using namespace std;

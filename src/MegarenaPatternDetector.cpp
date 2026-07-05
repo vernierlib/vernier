@@ -6,6 +6,7 @@
 
 #include "MegarenaPatternDetector.hpp"
 #include "MegarenaBitSequence.hpp"
+#include <opencv2/highgui/highgui.hpp>
 
 namespace vernier {
 
