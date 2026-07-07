@@ -12,6 +12,7 @@ option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(BUILD_PYTHON_BINDINGS "Build the Python bindings" ON)
 option(USE_FFTW "Use FFTW" ON)
+option(USE_CUDA "Build the CUDA + cuFFT backend (selectable at runtime)" OFF)
 
 # set build mode type
 set(CMAKE_BUILD_TYPE Release)
@@ -26,6 +27,18 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # position-independent code
 if(BUILD_PYTHON_BINDINGS)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
+endif()
+
+# enable the CUDA + cuFFT backend (compiled in addition to the CPU path)
+if(USE_CUDA)
+  message(STATUS "Enabling CUDA + cuFFT backend.")
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+  set(CMAKE_CUDA_STANDARD 14)
+  set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+  endif()
 endif()
 
 ###############################################################################
