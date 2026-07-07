@@ -48,7 +48,6 @@ namespace vernier {
             }
         }
 
-        //std::cout<< "Peak value (half plane method) : " << mainPeak1.z() <<std::endl;
         if (mainPeak1.z() > 1e-5) { // MAGIC NUMBER
             int PEAK_MASK = 8;
             source.block(mainPeak1.y() - PEAK_MASK, mainPeak1.x() - PEAK_MASK, 2 * PEAK_MASK, 2 * PEAK_MASK) = 0;
@@ -81,10 +80,7 @@ namespace vernier {
         //        }
 
 
-        //        std::cout<<"Image size"<<source.rows()<<"x"<<source.cols()<<std::endl;
         //        
-        //        std::cout<<"Peak 1"<<mainPeak1<<std::endl;
-        //        std::cout<<"Peak 2"<<mainPeak2<<std::endl;
         //        
     }
 

@@ -147,7 +147,6 @@ namespace vernier {
         double mean = cv::mean(sobelX)[0];
         betaSign = (mean > 0) - (mean < 0);
 
-        //std::cout << "mean first direction SOBEL : " << mean << std::endl;
         //cv::normalize(phaseDerived, phaseDerived, 1, 0, cv::NORM_MINMAX);
         //cv::imshow("phase 1 derived", phaseDerived);
 
@@ -185,7 +184,6 @@ namespace vernier {
         cv::Sobel(phaseDerived, sobelY, CV_64F, 0, 1);
         double mean2 = cv::mean(sobelY)[0];
 
-        //std::cout << "mean second direction SOBEL : " << mean2 << std::endl;
         gammaSign = (mean2 > 0) - (mean2 < 0);
     }
 

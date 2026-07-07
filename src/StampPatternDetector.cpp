@@ -53,11 +53,9 @@ namespace vernier {
             Square square = detector.squares[i];
             int diameter = (int) (2 * square.getRadius());
             if (snapshot.cols() < diameter) {
-                std::cout << "The stamp is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
+                std::cerr << "The stamp is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
             }
-            if (diameter < 2 * bitmapThumbnail.size()) {
-                //std::cout << "The stamp is too tiny for pose estimation: increase the picture quality size." << std::endl;
-            } else {
+            if (diameter >= 2 * bitmapThumbnail.size()) {
 
                 int centerX = (int) square.getCenter().x;
                 int centerY = (int) square.getCenter().y;

@@ -40,10 +40,10 @@ namespace vernier {
             
             int diameter = (int) (2 * code.getRadius());
             if (snapshot.cols() < diameter) {
-                std::cout << "The HPCode is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
+                std::cerr << "The HPCode is too large for pose estimation: increase the snapshot size over " << diameter << " pixels." << std::endl;
             }
             if (2 * diameter < numberHalfPeriods) {
-                std::cout << "The HPCode is too tiny for pose estimation: increase the picture quality size." << std::endl;
+                std::cerr << "The HPCode is too tiny for pose estimation: increase the picture quality size." << std::endl;
             }
 
             int centerX = (int) code.center.x;
@@ -112,11 +112,9 @@ namespace vernier {
 
         // Analysing the line
         int dotCount = 7 + (int) std::round((cv::norm(code.top - code.right) / dotSize));
-        //std::cout << "dotCount : " << 7 + (double)(cv::norm(code.top - code.right) / dotSize) << std::endl;
         cv::Mat dataLine(1, dotCount - 14, CV_8U);
         cv::resize(rasterLine, dataLine, dataLine.size(), 0, 0, cv::INTER_AREA);
         cv::threshold(dataLine, dataLine, 0, 255, cv::THRESH_BINARY | cv::THRESH_OTSU);
-        //std::cout << "data line : " << dataLine << std::endl;
         int zeroCount = 0;
         for (int col = 0; col < dataLine.cols; col += 2) {
             if (dataLine.at<unsigned char>(0, col) == 0) {

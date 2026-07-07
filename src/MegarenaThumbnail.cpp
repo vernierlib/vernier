@@ -164,7 +164,6 @@ namespace vernier {
 
                 contrastVec1(contrastVec1.rows() - 1) = (codeIntensity1(index1, 2) - codeIntensity1(index1, 1));
 
-                //std::cout << (codeIntensity1(index1, 2) - codeIntensity1(index1, 1)) / 256.0 << std::endl;
 
                 if (abs(meanCodingDots1(index1) - meanBackRefDots1(index1)) < abs(meanWhiteRefDots1(index1) - meanCodingDots1(index1))) {
                     sequence1(index1) = -1;
@@ -172,7 +171,6 @@ namespace vernier {
                     sequence1(index1) = 1;
                 }
             }
-            //std::cout << "Index1 " << index1 << std::endl;
         }
 
         // sequence 2
@@ -214,7 +212,6 @@ namespace vernier {
                 contrastVec2.conservativeResize(contrastVec2.rows() + 1, contrastVec2.cols());
                 contrastVec2(contrastVec2.rows() - 1) = (codeIntensity2(index2, 2) - codeIntensity2(index2, 1));
 
-                //std::cout << (codeIntensity2(index2, 2) - codeIntensity2(index2, 1)) / 256.0 << std::endl;
 
                 if (abs(meanCodingDots2(index2) - meanBackRefDots2(index2)) < abs(meanWhiteRefDots2(index2) - meanCodingDots2(index2))) {
                     sequence2(index2) = -1;
@@ -661,7 +658,6 @@ namespace vernier {
                     codingLevelSecurity2.conservativeResize(codingLevelSecurity2.rows() + 1, codingLevelSecurity2.cols());
 
                     double contrastLevel = (codeIntensity1(i, 2) - codeIntensity1(i, 1));
-                    //std::cout << codeIntensity1(i, 2) << "     " << codeIntensity1(i, 1) << std::endl;
 
                     codingLevelSecurity2(codingLevelSecurity2.rows() - 1, 0) = contrastLevel;
                     codingLevelSecurity2(codingLevelSecurity2.rows() - 1, 1) = codingLevel2;
@@ -675,7 +671,6 @@ namespace vernier {
                     codingLevelSecurity2(codingLevelSecurity2.rows() - 1, 9) = i;
                     codingLevelSecurity2(codingLevelSecurity2.rows() - 1, 10) = sequence1.rows();
 
-                    //std::cout << numberWhiteRefDots2(i - 2) << std::endl;
                 }
             }
         }
