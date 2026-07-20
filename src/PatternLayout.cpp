@@ -223,29 +223,40 @@ namespace vernier {
 
     gdstk::Cell * PatternLayout::convertToGDSCell(std::string name) {
         if (name == "") {
-            name = classname;
+            name = description;
         }
 
         std::vector<vernier::Rectangle> rectangleList;
         toRectangleVector(rectangleList);
 
+        // one cell for the pattern
         gdstk::Cell * cell = new gdstk::Cell();
         cell->init(name.c_str());
         for (int i = 0; i < rectangleList.size(); i++) {
             gdstk::Polygon * polygon = new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{rectangleList[i].x + leftMargin, -(rectangleList[i].y + topMargin)}, gdstk::Vec2{rectangleList[i].x + rectangleList[i].width + leftMargin, -(rectangleList[i].y + rectangleList[i].height + topMargin)}, gdstk::make_tag(1, 1)));
             cell->polygon_array.append(polygon);
-            if (i % (rectangleList.size() / 100) == 0) {
+            if (rectangleList.size()> 100 && i % (rectangleList.size() / 100) == 0) {
                 std::cout << " \r Building cell " << name << " : " << 100 * i / rectangleList.size() << " %            " << std::flush;
             }
         }
-
-        //        rectangleList.push_back(Rectangle(0.0, 0.0, leftMargin + width + rightMargin, topMargin));
-        //        rectangleList.push_back(Rectangle(0.0, topMargin, leftMargin, height));
-        //        rectangleList.push_back(Rectangle(leftMargin + width, topMargin, rightMargin, height));
-        //        rectangleList.push_back(Rectangle(0.0, topMargin + height, leftMargin + width + rightMargin, bottomMargin));
-
+        
+        // another cell for the frame
+        double totalWidth = width + leftMargin + rightMargin;
+        double totalHeight = height + topMargin + bottomMargin;
+//        cell->polygon_array.append(new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{0.0, 0.0}, gdstk::Vec2{totalWidth, -frameThickness}, gdstk::make_tag(1, 1))));
+//        cell->polygon_array.append(new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{0.0, -totalHeight+frameThickness}, gdstk::Vec2{totalWidth, -totalHeight}, gdstk::make_tag(1, 1))));
+//        cell->polygon_array.append(new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{0.0, -frameThickness}, gdstk::Vec2{frameThickness, -totalHeight+frameThickness}, gdstk::make_tag(1, 1))));
+//        cell->polygon_array.append(new gdstk::Polygon(gdstk::rectangle(gdstk::Vec2{totalWidth-frameThickness, -frameThickness}, gdstk::Vec2{totalWidth, -totalHeight+frameThickness}, gdstk::make_tag(1, 1))));
+        gdstk::Vec2 points[] = {{0, 0}, {totalWidth, 0}, {totalWidth, -totalHeight}, {0, -totalHeight}, {0, 0},
+                     {frameThickness, -frameThickness}, {frameThickness, -totalHeight+frameThickness}, {totalWidth-frameThickness, -totalHeight+frameThickness}, {totalWidth-frameThickness, -frameThickness}, {frameThickness, -frameThickness}};
+        gdstk::Polygon* frame = (gdstk::Polygon*)gdstk::allocate_clear(sizeof(gdstk::Polygon));
+        frame->point_array.extend({.capacity = 0, .count = COUNT(points), .items = points});
+        cell->polygon_array.append(frame);
+        
+        // a last cell for the caption
         gdstk::Array<gdstk::Polygon*> all_text = {};
-        gdstk::text(toString().c_str(), 8 * rectangleList[0].height, gdstk::Vec2{0, -(topMargin + height + bottomMargin + 8 * rectangleList[0].height)}, false, 2, all_text);
+        std::string caption = description;
+        gdstk::text(caption.c_str(), captionHeight, gdstk::Vec2{frameThickness, -frameThickness-captionHeight}, false, 2, all_text);
         cell->polygon_array.extend(all_text);
 
         return cell;

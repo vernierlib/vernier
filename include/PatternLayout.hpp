@@ -47,6 +47,8 @@ namespace vernier {
         double rightMargin;
         double topMargin;
         double bottomMargin;
+        double frameThickness = 50.0;
+        double captionHeight = 50.0;
 
         PatternLayout();
 

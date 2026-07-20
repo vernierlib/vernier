@@ -32,6 +32,7 @@ namespace vernier {
         height = period * (nRows - 0.5);
         originX = 0.5 * width;
         originY = 0.5 * height;
+        description = "PeriodicPattern_s" + to_string(nRows) + "x" + to_string(nCols) + "_p" + to_string(period) + unit;
     }
 
     void PeriodicPatternLayout::writeJSON(std::ofstream & file) {
