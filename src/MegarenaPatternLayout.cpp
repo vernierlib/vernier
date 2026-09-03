@@ -215,22 +215,4 @@ namespace vernier {
         return codeDepth;
     }
 
-    int MegarenaPatternLayout::getInt(const std::string & attribute) {
-        if (attribute == "codeDepth") {
-            return codeDepth;
-        } else {
-            return PeriodicPatternLayout::getInt(attribute);
-        }
-    }
-
-    void* MegarenaPatternLayout::getObject(const std::string & attribute) {
-        if (attribute == "regionOfInterest") {
-            return &regionOfInterest;
-        } else if (attribute == "bitSequence") {
-            return &bitSequence;
-        } else {
-            return PatternLayout::getObject(attribute);
-        }
-    }
-
 }

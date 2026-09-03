@@ -138,32 +138,4 @@ namespace vernier {
         return nCols;
     }
 
-    double PeriodicPatternLayout::getDouble(const std::string & attribute) {
-        if (attribute == "physicalPeriod" || attribute == "period") {
-            return period;
-        } else if (attribute == "dotSize") {
-            return dotSize;
-        } else {
-            return PatternLayout::getDouble(attribute);
-        }
-    }
-
-    int PeriodicPatternLayout::getInt(const std::string & attribute) {
-        if (attribute == "nRows") {
-            return nRows;
-        } else if (attribute == "nCols") {
-            return nCols;
-        } else {
-            return PatternLayout::getInt(attribute);
-        }
-    }
-
-    void PeriodicPatternLayout::setDouble(const std::string & attribute, double value) {
-        if (attribute == "dotSize") {
-            dotSize = value;
-        } else {
-            PatternLayout::setDouble(attribute, value);
-        }
-    }
-
 }

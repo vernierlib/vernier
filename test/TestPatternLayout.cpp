@@ -162,7 +162,7 @@ void runAllTests() {
     UNIT_TEST(areFilesEqual("MegarenaPattern.json", "MegarenaPattern2.json"));
 
     START_UNIT_TEST;
-    FingerprintPatternLayout layout4("data/vernier37x37.png", 9);
+    BitmapPatternLayout layout4("data/vernier37x37.png", 9);
     layout4.saveToJSON("FingerprintPattern.json");
     layout4.saveToSVG();
     layout4.saveToPNG();

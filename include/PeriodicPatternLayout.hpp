@@ -52,12 +52,6 @@ namespace vernier {
         
         int getNCols();
         
-        double getDouble(const std::string & attribute) override;
-
-        int getInt(const std::string & attribute) override;
-        
-        void setDouble(const std::string & attribute, double value) override;
-
     };
 
 }

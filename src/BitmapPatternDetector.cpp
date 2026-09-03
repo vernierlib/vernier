@@ -110,24 +110,4 @@ namespace vernier {
         bitmapThumbnail.showControlImages();
     }
 
-    int BitmapPatternDetector::getInt(const std::string & attribute) {
-        if (attribute == "periodShift1") {
-            return periodShift1;
-        } else if (attribute == "periodShift2") {
-            return periodShift2;
-        } else {
-            return PeriodicPatternDetector::getInt(attribute);
-        }
-    }
-
-    void* BitmapPatternDetector::getObject(const std::string & attribute) {
-        if (attribute == "bitmap") {
-            return &bitmap;
-        } else if (attribute == "thumbnail") {
-            return &(bitmapThumbnail.thumbnail);
-        } else {
-            return PeriodicPatternDetector::getObject(attribute);
-        }
-    }
-
 }

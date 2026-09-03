@@ -60,10 +60,6 @@ namespace vernier {
          */
         MegarenaThumbnail getThumbnail();
 
-        int getInt(const std::string & attribute) override;
-
-        void* getObject(const std::string & attribute) override;
-
     };
 }
 

@@ -82,7 +82,9 @@ namespace vernier {
             throw Exception("The file is not a valid bitmap pattern file, the first row of the bitmap has a wrong format.");
         }
 
+        std::string loadedDescription = description;
         resize(period, nRows, nCols);
+        description = loadedDescription;
         for (rapidjson::SizeType row = 0; row < bitmap.rows(); row++) {
             const rapidjson::Value& value = document["bitmap"][row];
             if (value.IsArray() && value.Size() == bitmap.cols()) {
