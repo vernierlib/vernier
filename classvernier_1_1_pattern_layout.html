@@ -83,12 +83,14 @@ Inheritance diagram for vernier::PatternLayout:</div>
  <div class="center">
   <img src="classvernier_1_1_pattern_layout.png" usemap="#vernier::PatternLayout_map" alt=""/>
   <map id="vernier::PatternLayout_map" name="vernier::PatternLayout_map">
-<area href="classvernier_1_1_custom_pattern_layout.html" title="Layout class for custom patterns (not periodic)" alt="vernier::CustomPatternLayout" shape="rect" coords="0,56,199,80"/>
-<area href="classvernier_1_1_periodic_pattern_layout.html" title="Layout class for periodic patterns." alt="vernier::PeriodicPatternLayout" shape="rect" coords="209,56,408,80"/>
-<area href="classvernier_1_1_bitmap_pattern_layout.html" title="Layout class for bitmap patterns." alt="vernier::BitmapPatternLayout" shape="rect" coords="0,112,199,136"/>
-<area href="classvernier_1_1_h_p_code_pattern_layout.html" title="Layout class for HPCode markers." alt="vernier::HPCodePatternLayout" shape="rect" coords="209,112,408,136"/>
-<area href="classvernier_1_1_megarena_pattern_layout.html" title="Layout class for Megarena patterns." alt="vernier::MegarenaPatternLayout" shape="rect" coords="418,112,617,136"/>
-<area href="classvernier_1_1_fingerprint_pattern_layout.html" title="Layout class for fingerprint patterns." alt="vernier::FingerprintPatternLayout" shape="rect" coords="0,168,199,192"/>
+<area href="classvernier_1_1_checkerboard_layout.html" title="Layout class for checkerboard calibration pattern." alt="vernier::CheckerboardLayout" shape="rect" coords="0,56,195,80"/>
+<area href="classvernier_1_1_custom_pattern_layout.html" title="Layout class for custom patterns (not periodic)" alt="vernier::CustomPatternLayout" shape="rect" coords="205,56,400,80"/>
+<area href="classvernier_1_1_periodic_pattern_layout.html" title="Layout class for periodic patterns." alt="vernier::PeriodicPatternLayout" shape="rect" coords="410,56,605,80"/>
+<area href="classvernier_1_1_bitmap_pattern_layout.html" title="Layout class for bitmap patterns." alt="vernier::BitmapPatternLayout" shape="rect" coords="205,112,400,136"/>
+<area href="classvernier_1_1_h_p_code_pattern_layout.html" title="Layout class for HPCode markers." alt="vernier::HPCodePatternLayout" shape="rect" coords="410,112,605,136"/>
+<area href="classvernier_1_1_megarena_pattern_layout.html" title="Layout class for Megarena patterns." alt="vernier::MegarenaPatternLayout" shape="rect" coords="615,112,810,136"/>
+<area href="classvernier_1_1_stamp_pattern_layout.html" title="Layout class for stamp patterns." alt="vernier::StampPatternLayout" shape="rect" coords="205,168,400,192"/>
+<area href="classvernier_1_1_checker_tag_layout.html" title="Layout class for checker tags." alt="vernier::CheckerTagLayout" shape="rect" coords="205,224,400,248"/>
   </map>
 </div></div>
 <table class="memberdecls">
@@ -198,12 +200,18 @@ std::string&#160;</td><td class="memItemRight" valign="bottom"><b>author</b></td
 <tr class="memitem:a880162c590d3dcd2fc0d2ed727432c51"><td class="memItemLeft" align="right" valign="top"><a id="a880162c590d3dcd2fc0d2ed727432c51"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>bottomMargin</b></td></tr>
 <tr class="separator:a880162c590d3dcd2fc0d2ed727432c51"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a574f7d60957a3fcb8a7e977deec21adb"><td class="memItemLeft" align="right" valign="top"><a id="a574f7d60957a3fcb8a7e977deec21adb"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>captionHeight</b> = 50.0</td></tr>
+<tr class="separator:a574f7d60957a3fcb8a7e977deec21adb"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a93c748db77c85e6cf23fcd67ec4a3aa0"><td class="memItemLeft" align="right" valign="top"><a id="a93c748db77c85e6cf23fcd67ec4a3aa0"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>date</b></td></tr>
 <tr class="separator:a93c748db77c85e6cf23fcd67ec4a3aa0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8b75429344ebb927f541b991dc83c5e8"><td class="memItemLeft" align="right" valign="top"><a id="a8b75429344ebb927f541b991dc83c5e8"></a>
 std::string&#160;</td><td class="memItemRight" valign="bottom"><b>description</b></td></tr>
 <tr class="separator:a8b75429344ebb927f541b991dc83c5e8"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a720cd10bebbbb9a78b4b890b0a613463"><td class="memItemLeft" align="right" valign="top"><a id="a720cd10bebbbb9a78b4b890b0a613463"></a>
+double&#160;</td><td class="memItemRight" valign="bottom"><b>frameThickness</b> = 50.0</td></tr>
+<tr class="separator:a720cd10bebbbb9a78b4b890b0a613463"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae8cd7eed569b97a8a9af6dd6e193cddc"><td class="memItemLeft" align="right" valign="top"><a id="ae8cd7eed569b97a8a9af6dd6e193cddc"></a>
 double&#160;</td><td class="memItemRight" valign="bottom"><b>leftMargin</b></td></tr>
 <tr class="separator:ae8cd7eed569b97a8a9af6dd6e193cddc"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -303,7 +311,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00665">665</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00676">676</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -334,7 +342,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a654bb558c0df322cfceeb25be6646a94">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00639">639</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00650">650</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -365,7 +373,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a3197eb41355d56d80386b1d1c1611161">vernier::PeriodicPatternLayout</a>, and <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#aa63236f408d496b6218157112e1f61fb">vernier::MegarenaPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00661">661</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00672">672</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -404,7 +412,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the intensity (between 0.0 and 1.0) of the pattern at point (x,y) </p>
 
-<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a0b83abf0f2f0c4eb0d136c15ef7c92a5">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a4e126ac86786bba8d106ed2ee77fd187">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_h_p_code_pattern_layout.html#a39b11f23ee61dfe0e33a413704166f3b">vernier::HPCodePatternLayout</a>, <a class="el" href="classvernier_1_1_fingerprint_pattern_layout.html#a6ee65d35886c9686383135e9155cb1d3">vernier::FingerprintPatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#ad93495fd9ec39018636b31ed0ac52b6a">vernier::CustomPatternLayout</a>, and <a class="el" href="classvernier_1_1_bitmap_pattern_layout.html#a30202c917d0714f50f8401f6bdd0d7b5">vernier::BitmapPatternLayout</a>.</p>
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a0b83abf0f2f0c4eb0d136c15ef7c92a5">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a4e126ac86786bba8d106ed2ee77fd187">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_h_p_code_pattern_layout.html#a39b11f23ee61dfe0e33a413704166f3b">vernier::HPCodePatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#ad93495fd9ec39018636b31ed0ac52b6a">vernier::CustomPatternLayout</a>, <a class="el" href="classvernier_1_1_checkerboard_layout.html#a5889a1f21100cb23af8aefb975b0a602">vernier::CheckerboardLayout</a>, and <a class="el" href="classvernier_1_1_bitmap_pattern_layout.html#a30202c917d0714f50f8401f6bdd0d7b5">vernier::BitmapPatternLayout</a>.</p>
 
 </div>
 </div>
@@ -435,7 +443,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a81aec6e5ff67df4a985c474d51eb0b81">vernier::MegarenaPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00635">635</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00646">646</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -474,7 +482,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the phase1 of the pattern at point (x,y) </p>
 
-<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a5c9b6e425a1df17f30e884cb36c77723">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#ad41381029a373ce56fa7d420b3178e1b">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_custom_pattern_layout.html#aafc970cac10bef672b4c5342a204fbe6">vernier::CustomPatternLayout</a>.</p>
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a5c9b6e425a1df17f30e884cb36c77723">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#ad41381029a373ce56fa7d420b3178e1b">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#aafc970cac10bef672b4c5342a204fbe6">vernier::CustomPatternLayout</a>, and <a class="el" href="classvernier_1_1_checkerboard_layout.html#a222cd61a7cafac918cb92588a735b2ab">vernier::CheckerboardLayout</a>.</p>
 
 </div>
 </div>
@@ -513,7 +521,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the phase2 of the pattern at point (x,y) </p>
 
-<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#ababeb60224fe1abd32ed8bba214f1200">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a18285a6c71506840efbe8a3b29a11da7">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_custom_pattern_layout.html#a3ccf1e003d1b27f9fac5d6b412c79431">vernier::CustomPatternLayout</a>.</p>
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#ababeb60224fe1abd32ed8bba214f1200">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a18285a6c71506840efbe8a3b29a11da7">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#a3ccf1e003d1b27f9fac5d6b412c79431">vernier::CustomPatternLayout</a>, and <a class="el" href="classvernier_1_1_checkerboard_layout.html#a696c1c2198f1e39c227d7c5caf38cbfd">vernier::CheckerboardLayout</a>.</p>
 
 </div>
 </div>
@@ -542,7 +550,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00676">676</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00687">687</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -607,7 +615,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </dl>
 <p>OBSOLETE </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00325">325</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00336">336</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -662,7 +670,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00335">335</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00346">346</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -716,7 +724,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00379">379</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00390">390</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -777,7 +785,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00490">490</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00501">501</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -844,7 +852,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00544">544</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00555">555</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -904,7 +912,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00424">424</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00435">435</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -925,7 +933,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Creates a CSV file listing all the dots of the pattern layout </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00297">297</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00308">308</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -946,7 +954,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Creates a SVG file corresponding to the pattern layout </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00254">254</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00265">265</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1009,7 +1017,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Creates a OASIS file corresponding to the pattern layout </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00275">275</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00286">286</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1040,7 +1048,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#a4e24b4b189ba41f09442100b65a41664">vernier::MegarenaPatternLayout</a>, and <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#ac1b8ca70bbe298953efad282790d2b9e">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00611">611</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00622">622</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1100,7 +1108,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00714">714</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00725">725</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1141,7 +1149,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 
 <p>Reimplemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a41c51000406f7acdd4d7cf9e8b777ebb">vernier::PeriodicPatternLayout</a>.</p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00694">694</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00705">705</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1180,7 +1188,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00710">710</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00721">721</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1219,7 +1227,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Sets the attribute value corresponding to the given name </p>
 
-<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00718">718</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_pattern_layout_8cpp_source.html#l00729">729</a> of file <a class="el" href="_pattern_layout_8cpp_source.html">PatternLayout.cpp</a>.</p>
 
 </div>
 </div>
@@ -1248,7 +1256,7 @@ class&#160;</td><td class="memItemRight" valign="bottom"><b>Layout</b></td></tr>
 </div><div class="memdoc">
 <p>Returns a vector listing all the dots of the pattern </p>
 
-<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a0132a4439852a882eb80e89553219b27">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#aee581a9938e396ab4c5dd9800873d712">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_h_p_code_pattern_layout.html#a0e5ba884beccf5c7992a779057db3d26">vernier::HPCodePatternLayout</a>, <a class="el" href="classvernier_1_1_fingerprint_pattern_layout.html#a3094a6c4c759922afb6b37690885e33d">vernier::FingerprintPatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#a880a94ebd7a4e53684a5cf7fca3eaa3b">vernier::CustomPatternLayout</a>, and <a class="el" href="classvernier_1_1_bitmap_pattern_layout.html#af8d1bd616b3ef790c1877527c61c4cd0">vernier::BitmapPatternLayout</a>.</p>
+<p>Implemented in <a class="el" href="classvernier_1_1_periodic_pattern_layout.html#a0132a4439852a882eb80e89553219b27">vernier::PeriodicPatternLayout</a>, <a class="el" href="classvernier_1_1_megarena_pattern_layout.html#aee581a9938e396ab4c5dd9800873d712">vernier::MegarenaPatternLayout</a>, <a class="el" href="classvernier_1_1_h_p_code_pattern_layout.html#a0e5ba884beccf5c7992a779057db3d26">vernier::HPCodePatternLayout</a>, <a class="el" href="classvernier_1_1_custom_pattern_layout.html#a880a94ebd7a4e53684a5cf7fca3eaa3b">vernier::CustomPatternLayout</a>, <a class="el" href="classvernier_1_1_checkerboard_layout.html#aabea20aa8eb4d87c654b0c3d600a5b9d">vernier::CheckerboardLayout</a>, and <a class="el" href="classvernier_1_1_bitmap_pattern_layout.html#af8d1bd616b3ef790c1877527c61c4cd0">vernier::BitmapPatternLayout</a>.</p>
 
 </div>
 </div>
