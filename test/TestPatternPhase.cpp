@@ -97,6 +97,55 @@ void runAllTests2() {
 
 }
 
+void runCudaTests() {
+
+    START_UNIT_TEST;
+
+    if (!PatternPhase::cudaAvailable()) {
+        std::cout << "No CUDA device found, skipping CUDA tests." << std::endl;
+        return;
+    }
+
+    double period = 10.0;
+    PeriodicPatternLayout layout(period, 81, 81);
+    double x = 4.0;
+    double y = 3.0;
+    double alpha = 0.2;
+    double pixelSize = 1.0;
+    Pose patternPose = Pose(x, y, alpha, pixelSize);
+    Eigen::ArrayXXd array(512, 512);
+    layout.renderOrthographicProjection(patternPose, array);
+
+    PatternPhase patternPhase;
+    patternPhase.setSigma(1);
+    patternPhase.setBackend(Backend::CUDA);
+    patternPhase.compute(array);
+
+    UNIT_TEST(areEqual(x, -patternPhase.getPlane1().getPosition(period), 0.001));
+
+    UNIT_TEST(areEqual(y, -patternPhase.getPlane2().getPosition(period), 0.001));
+
+    UNIT_TEST(areEqual(alpha, patternPhase.getPlane1().getAngle(), 0.001));
+
+    // the GPU pipeline must agree with the CPU one well beyond the pose tolerance
+    PatternPhase patternPhaseCpu;
+    patternPhaseCpu.setSigma(1);
+    patternPhaseCpu.compute(array);
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane1().getA(), patternPhase.getPlane1().getA(), 1e-9));
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane1().getB(), patternPhase.getPlane1().getB(), 1e-9));
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane1().getC(), patternPhase.getPlane1().getC(), 1e-9));
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane2().getA(), patternPhase.getPlane2().getA(), 1e-9));
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane2().getB(), patternPhase.getPlane2().getB(), 1e-9));
+
+    UNIT_TEST(areEqual(patternPhaseCpu.getPlane2().getC(), patternPhase.getPlane2().getC(), 1e-9));
+
+}
+
 double speed(unsigned long testCount) {
 
     std::random_device rd;
@@ -130,6 +179,7 @@ double speed(unsigned long testCount) {
 int main(int argc, char** argv) {
 
     runAllTests();
+    runCudaTests();
     //runAllTests2();
 
     return EXIT_SUCCESS;

@@ -111,6 +111,26 @@ Finally, open a terminal and go to the directory of the package
 	% make
 ```
 
+### GPU acceleration with CUDA (optional)
+
+If an NVIDIA GPU and the [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) are available, the phase computation of PatternPhase can run on the GPU with cuFFT. Enable it at build time:
+
+```Shell
+	> cmake .. -DUSE_CUDA=ON
+	> make
+```
+
+The backend is then selectable at runtime and falls back to the CPU by default:
+
+```C++
+	PatternPhase patternPhase;
+	if (PatternPhase::cudaAvailable()) {
+	    patternPhase.setBackend(Backend::CUDA);
+	}
+```
+
+Both backends compute in double precision and give the same results.
+
 ## Getting started
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)

@@ -11,6 +11,7 @@ option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(USE_FFTW "Use FFTW" ON)
+option(USE_CUDA "Build the CUDA + cuFFT backend (selectable at runtime)" OFF)
 
 # set build mode type
 set(CMAKE_BUILD_TYPE Release)
@@ -19,6 +20,18 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # require C++14
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
+
+# enable the CUDA + cuFFT backend (compiled in addition to the CPU path)
+if(USE_CUDA)
+  message(STATUS "Enabling CUDA + cuFFT backend.")
+  enable_language(CUDA)
+  find_package(CUDAToolkit REQUIRED)
+  set(CMAKE_CUDA_STANDARD 14)
+  set(CMAKE_CUDA_STANDARD_REQUIRED ON)
+  if(NOT DEFINED CMAKE_CUDA_ARCHITECTURES)
+    set(CMAKE_CUDA_ARCHITECTURES native)
+  endif()
+endif()
 
 ###############################################################################
 # configuration for windows
