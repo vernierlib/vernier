@@ -96,6 +96,8 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const <a 
 <tr class="separator:a00e6f0ce052b7576bc2aab166adb029c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a224645419068e5079464ea1e4bb01e91"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_buffered_reader.html#a224645419068e5079464ea1e4bb01e91">load</a> (const char *filename)</td></tr>
 <tr class="separator:a224645419068e5079464ea1e4bb01e91"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a032dde0d03b2374dcabdbae0ef70055b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_buffered_reader.html#a032dde0d03b2374dcabdbae0ef70055b">parseJSON</a> (rapidjson::Document &amp;document)</td></tr>
+<tr class="separator:a032dde0d03b2374dcabdbae0ef70055b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2638f49483cdd5683e2c1b9fe999e301"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_buffered_reader.html#a2638f49483cdd5683e2c1b9fe999e301">release</a> ()</td></tr>
 <tr class="separator:a2638f49483cdd5683e2c1b9fe999e301"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a1b0f73d2a1064eabd419f4eacdf3f6b7"><td class="memItemLeft" align="right" valign="top">long&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_buffered_reader.html#a1b0f73d2a1064eabd419f4eacdf3f6b7">size</a> ()</td></tr>
@@ -217,7 +219,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const <a 
 </div><div class="memdoc">
 <p>Returns the buffer of the read file </p>
 
-<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00065">65</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00076">76</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
 
 </div>
 </div>
@@ -248,6 +250,33 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const <a 
 
 </div>
 </div>
+<a id="a032dde0d03b2374dcabdbae0ef70055b"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a032dde0d03b2374dcabdbae0ef70055b">&#9670;&nbsp;</a></span>parseJSON()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void vernier::BufferedReader::parseJSON </td>
+          <td>(</td>
+          <td class="paramtype">rapidjson::Document &amp;&#160;</td>
+          <td class="paramname"><em>document</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Parses the buffer as a JSON file and checks that it contains a root object</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">document</td><td>rapidjson document to fill (the document points into the buffer and must not outlive the reader) </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00066">66</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
+
+</div>
+</div>
 <a id="a2638f49483cdd5683e2c1b9fe999e301"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a2638f49483cdd5683e2c1b9fe999e301">&#9670;&nbsp;</a></span>release()</h2>
 
@@ -264,7 +293,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const <a 
 </div><div class="memdoc">
 <p>Frees the buffer </p>
 
-<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00057">57</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00058">58</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
 
 </div>
 </div>
@@ -284,7 +313,7 @@ bool&#160;</td><td class="memItemRight" valign="bottom"><b>equals</b> (const <a 
 </div><div class="memdoc">
 <p>Returns the size of the buffer read in from the file </p>
 
-<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00069">69</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_buffered_reader_8cpp_source.html#l00080">80</a> of file <a class="el" href="_buffered_reader_8cpp_source.html">BufferedReader.cpp</a>.</p>
 
 </div>
 </div>

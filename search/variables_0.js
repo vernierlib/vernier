@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['alpha_331',['alpha',['../classvernier_1_1_pose.html#ae12248b408008012fce90ff6f9d0be2d',1,'vernier::Pose']]]
+  ['alpha_333',['alpha',['../classvernier_1_1_pose.html#ae12248b408008012fce90ff6f9d0be2d',1,'vernier::Pose']]]
 ];
