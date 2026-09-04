@@ -6,6 +6,8 @@
 
 #include "QRCodeDetector.hpp"
 #include "UnitTest.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 //#include <opencv2/objdetect/graphical_code_detector.hpp>
 
 using namespace vernier;

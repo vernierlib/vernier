@@ -5,6 +5,7 @@
  */
 
 #include "BitmapPatternLayout.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 

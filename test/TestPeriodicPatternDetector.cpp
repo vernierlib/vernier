@@ -6,6 +6,7 @@
 
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
+#include <opencv2/highgui/highgui.hpp>
 
 using namespace vernier;
 using namespace cv;

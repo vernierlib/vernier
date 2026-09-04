@@ -8,6 +8,8 @@
 #include "HPCodePatternLayout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace std;

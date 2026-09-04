@@ -5,6 +5,7 @@
  */
 
 #include "BitmapThumbnail.hpp"
+#include <opencv2/highgui/highgui.hpp>
 //#ifndef WIN32 
 //#include "opencv2/img_hash.hpp"
 //#endif

@@ -6,6 +6,7 @@
 
 #include "MegarenaPatternLayout.hpp"
 #include "MegarenaBitSequence.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
