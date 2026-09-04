@@ -637,8 +637,6 @@ namespace vernier {
             return description;
         } else if (attribute == "date") {
             return date;
-        } else if (attribute == "description") {
-            return description;
         } else if (attribute == "author") {
             return author;
         } else if (attribute == "unit") {
@@ -660,16 +658,16 @@ namespace vernier {
         } else if (attribute == "margins") {
             setMargins(value);
         } else {
-            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
         }
     }
 
     void PatternLayout::setInt(const std::string & attribute, int value) {
-        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     void PatternLayout::setBool(const std::string & attribute, bool value) {
-        std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+        throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
     }
 
     void PatternLayout::setString(const std::string & attribute, std::string value) {
@@ -684,7 +682,7 @@ namespace vernier {
         } else if (attribute == "unit") {
             unit = value;
         } else {
-            std::cout << "The parameter " + attribute + " is not accessible or defined in class " + classname + "." << std::endl;
+            throw Exception("The parameter " + attribute + " is not accessible or defined in class " + classname + ".");
         }
     }
 
