@@ -41,15 +41,8 @@ namespace vernier {
 
     void PatternDetector::loadFromJSON(const std::string filename) {
         BufferedReader bufferedReader(filename);
-
         rapidjson::Document document;
-        document.ParseInsitu(bufferedReader.data());
-        if (!document.IsObject()) {
-            throw Exception(filename + " is not a valid JSON file.");
-        }
-        if (document.MemberBegin() == document.MemberEnd()) {
-            throw Exception(filename + " is empty.");
-        }
+        bufferedReader.parseJSON(document);
         readJSON(document.MemberBegin()->value);
     }
 
