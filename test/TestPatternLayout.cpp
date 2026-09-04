@@ -12,11 +12,9 @@ using namespace vernier;
 using namespace std;
 
 void main0() {
-    PatternLayout *layout;
-    layout = Layout::loadFromJSON("testQRCodePattern.json");
+    std::unique_ptr<PatternLayout> layout = Layout::loadFromJSON("testQRCodePattern.json");
     layout->saveToSVG();
     std::cout << "Genération terminée" << std::endl;
-    delete layout;
 }
 
 void main1() {
