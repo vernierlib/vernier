@@ -34,6 +34,32 @@ namespace vernier {
         }
     }
 
+    FourierTransform::FourierTransform(FourierTransform&& other) noexcept {
+        nRows = other.nRows;
+        nCols = other.nCols;
+        sign = other.sign;
+        plan = other.plan;
+        other.plan = NULL;
+        other.nRows = 0;
+        other.nCols = 0;
+    }
+
+    FourierTransform& FourierTransform::operator=(FourierTransform&& other) noexcept {
+        if (this != &other) {
+            if (plan != NULL) {
+                fftw_destroy_plan(plan);
+            }
+            nRows = other.nRows;
+            nCols = other.nCols;
+            sign = other.sign;
+            plan = other.plan;
+            other.plan = NULL;
+            other.nRows = 0;
+            other.nCols = 0;
+        }
+        return *this;
+    }
+
     void FourierTransform::resize(int nRows, int nCols, int sign) {
         if (nRows <= 0 || nCols <= 0) {
             throw Exception("Can't resize a FourierTransform with rows<=0 or cols<=0");
@@ -120,6 +146,53 @@ namespace vernier {
         if (cosSinTable != NULL) {
             free(cosSinTable);
         }
+    }
+
+    FourierTransform::FourierTransform(FourierTransform&& other) noexcept {
+        nRows = other.nRows;
+        nCols = other.nCols;
+        sign = other.sign;
+        data = other.data;
+        workArea = other.workArea;
+        bitReversal = other.bitReversal;
+        cosSinTable = other.cosSinTable;
+        other.data = NULL;
+        other.workArea = NULL;
+        other.bitReversal = NULL;
+        other.cosSinTable = NULL;
+        other.nRows = 0;
+        other.nCols = 0;
+    }
+
+    FourierTransform& FourierTransform::operator=(FourierTransform&& other) noexcept {
+        if (this != &other) {
+            if (data != NULL) {
+                free(data);
+            }
+            if (workArea != NULL) {
+                free(workArea);
+            }
+            if (bitReversal != NULL) {
+                free(bitReversal);
+            }
+            if (cosSinTable != NULL) {
+                free(cosSinTable);
+            }
+            nRows = other.nRows;
+            nCols = other.nCols;
+            sign = other.sign;
+            data = other.data;
+            workArea = other.workArea;
+            bitReversal = other.bitReversal;
+            cosSinTable = other.cosSinTable;
+            other.data = NULL;
+            other.workArea = NULL;
+            other.bitReversal = NULL;
+            other.cosSinTable = NULL;
+            other.nRows = 0;
+            other.nCols = 0;
+        }
+        return *this;
     }
 
     void FourierTransform::resize(int nRows, int nCols, int sign) {
