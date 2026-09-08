@@ -141,8 +141,7 @@ int exampleCapture() {
     imshow("Camera", frame);
 
     // Detecting and estimating the pose of the pattern
-    PatternDetector* detector;
-    detector = Detector::loadFromJSON("megarenaPattern.json");
+    std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("megarenaPattern.json");
     detector->compute(frame);
 
     // Printing results 
