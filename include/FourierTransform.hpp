@@ -57,6 +57,16 @@ namespace vernier {
          */
         FourierTransform(Eigen::ArrayXcd& array, int sign = FFTW_FORWARD);
 
+        /** Copying is disabled since the instance owns the FFT plans */
+        FourierTransform(const FourierTransform&) = delete;
+
+        FourierTransform& operator=(const FourierTransform&) = delete;
+
+        /** Moving transfers ownership of the FFT plans */
+        FourierTransform(FourierTransform&&) noexcept;
+
+        FourierTransform& operator=(FourierTransform&&) noexcept;
+
         ~FourierTransform();
 
         /** Resizes the FFT plans
