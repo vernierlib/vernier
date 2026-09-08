@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['newinstance_275',['newInstance',['../classvernier_1_1_detector.html#a5d62e38ac391f491d0c821d8004a54d5',1,'vernier::Detector']]]
+  ['newinstance_275',['newInstance',['../classvernier_1_1_detector.html#a6ef60ac06b77964a5f93eea25c46cea3',1,'vernier::Detector']]]
 ];

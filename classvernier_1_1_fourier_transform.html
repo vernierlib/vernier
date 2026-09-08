@@ -75,17 +75,21 @@ $(function() {
 </div><!--header-->
 <div class="contents">
 
-<p>Computes Discrete Fourier Transform on Eigen arrays using FFTW library or Ooura's implementation if FFTW is not available.  
+<p>Computes Discrete Fourier Transform on Eigen arrays using FFTW library.  
  <a href="classvernier_1_1_fourier_transform.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="_fourier_transform_8hpp_source.html">FourierTransform.hpp</a>&gt;</code></p>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
+<tr class="memitem:a6a53a2fda7c6f74344aaca51cda12ab1"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">FourierTransform</a> (const <a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;)=delete</td></tr>
+<tr class="separator:a6a53a2fda7c6f74344aaca51cda12ab1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a8d0c49a4bc16a42960318358eecbbaa9"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a8d0c49a4bc16a42960318358eecbbaa9">FourierTransform</a> (Eigen::ArrayXcd &amp;array, int sign=FFTW_FORWARD)</td></tr>
 <tr class="separator:a8d0c49a4bc16a42960318358eecbbaa9"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6174137f6b8d1b1976bd355f19bb6d2b"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a6174137f6b8d1b1976bd355f19bb6d2b">FourierTransform</a> (Eigen::ArrayXXcd &amp;array, int sign=FFTW_FORWARD)</td></tr>
 <tr class="separator:a6174137f6b8d1b1976bd355f19bb6d2b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a1bd5b3cf157d2279bc8015e380b1568e"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a1bd5b3cf157d2279bc8015e380b1568e">FourierTransform</a> (<a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&amp;) noexcept</td></tr>
+<tr class="separator:a1bd5b3cf157d2279bc8015e380b1568e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a04a83aa4b012c3ab463f1728ddc9e799"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a04a83aa4b012c3ab463f1728ddc9e799">FourierTransform</a> (int nRows, int nCols=1, int sign=FFTW_FORWARD)</td></tr>
 <tr class="separator:a04a83aa4b012c3ab463f1728ddc9e799"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae28d2d1c521d07431ccd4fd466c34ac3"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a> (int sign=FFTW_FORWARD)</td></tr>
@@ -94,6 +98,12 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a408d82e1af3b4fce27dc24102d44049e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af145b29577f75ab0ac6cbfd3fa5796d7"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">compute</a> (const Eigen::ArrayXXcd &amp;in, Eigen::ArrayXXcd &amp;out)</td></tr>
 <tr class="separator:af145b29577f75ab0ac6cbfd3fa5796d7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:adff8d10567ca7a4d53bf0fe52192f42a"><td class="memItemLeft" align="right" valign="top"><a id="adff8d10567ca7a4d53bf0fe52192f42a"></a>
+<a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (const <a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;)=delete</td></tr>
+<tr class="separator:adff8d10567ca7a4d53bf0fe52192f42a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a733a8b24e69bbfb4b41e440995c90d56"><td class="memItemLeft" align="right" valign="top"><a id="a733a8b24e69bbfb4b41e440995c90d56"></a>
+<a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><b>operator=</b> (<a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&amp;) noexcept</td></tr>
+<tr class="separator:a733a8b24e69bbfb4b41e440995c90d56"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5474994389c3e760b62bfea7a9c9aed1"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a5474994389c3e760b62bfea7a9c9aed1">resize</a> (int nRows, int nCols, int sign=FFTW_FORWARD)</td></tr>
 <tr class="separator:a5474994389c3e760b62bfea7a9c9aed1"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a881ee10e763d941a3a1755683e9e4980"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classvernier_1_1_fourier_transform.html#a881ee10e763d941a3a1755683e9e4980">setSign</a> (int sign)</td></tr>
@@ -115,13 +125,13 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
 <tr class="separator:a25ee19e56f0926df0dda260572317f32"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Computes Discrete Fourier Transform on Eigen arrays using FFTW library or Ooura's implementation if FFTW is not available. </p>
+<div class="textblock"><p>Computes Discrete Fourier Transform on Eigen arrays using FFTW library. </p>
 <p>FFT plans are prepared at the construction of the object, then the transforms can be computed without any delays. </p>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8hpp_source.html#l00027">27</a> of file <a class="el" href="_fourier_transform_8hpp_source.html">FourierTransform.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8hpp_source.html#l00021">21</a> of file <a class="el" href="_fourier_transform_8hpp_source.html">FourierTransform.hpp</a>.</p>
 </div><h2 class="groupheader">Constructor &amp; Destructor Documentation</h2>
 <a id="ae28d2d1c521d07431ccd4fd466c34ac3"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae28d2d1c521d07431ccd4fd466c34ac3">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[1/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#ae28d2d1c521d07431ccd4fd466c34ac3">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[1/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -143,12 +153,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00012">12</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00011">11</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a04a83aa4b012c3ab463f1728ddc9e799"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a04a83aa4b012c3ab463f1728ddc9e799">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[2/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a04a83aa4b012c3ab463f1728ddc9e799">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[2/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -188,12 +198,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00019">19</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00018">18</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a6174137f6b8d1b1976bd355f19bb6d2b"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a6174137f6b8d1b1976bd355f19bb6d2b">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[3/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a6174137f6b8d1b1976bd355f19bb6d2b">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[3/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -226,12 +236,12 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00023">23</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00022">22</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
 <a id="a8d0c49a4bc16a42960318358eecbbaa9"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8d0c49a4bc16a42960318358eecbbaa9">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[4/4]</span></h2>
+<h2 class="memtitle"><span class="permalink"><a href="#a8d0c49a4bc16a42960318358eecbbaa9">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[4/6]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -264,7 +274,63 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00027">27</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00026">26</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a6a53a2fda7c6f74344aaca51cda12ab1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6a53a2fda7c6f74344aaca51cda12ab1">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[5/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vernier::FourierTransform::FourierTransform </td>
+          <td>(</td>
+          <td class="paramtype">const <a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">delete</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Copying is disabled since the instance owns the FFT plans </p>
+
+</div>
+</div>
+<a id="a1bd5b3cf157d2279bc8015e380b1568e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1bd5b3cf157d2279bc8015e380b1568e">&#9670;&nbsp;</a></span>FourierTransform() <span class="overload">[6/6]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">vernier::FourierTransform::FourierTransform </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> &amp;&amp;&#160;</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+<p>Moving transfers ownership of the FFT plans </p>
+
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00036">36</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
@@ -303,7 +369,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00073">73</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00098">98</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
@@ -341,7 +407,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00067">67</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00092">92</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
@@ -386,7 +452,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00037">37</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00062">62</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
@@ -413,7 +479,7 @@ int&#160;</td><td class="memItemRight" valign="bottom"><b>sign</b></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00079">79</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="_fourier_transform_8cpp_source.html#l00104">104</a> of file <a class="el" href="_fourier_transform_8cpp_source.html">FourierTransform.cpp</a>.</p>
 
 </div>
 </div>
