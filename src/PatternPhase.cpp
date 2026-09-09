@@ -287,10 +287,6 @@ namespace vernier {
         return backend;
     }
 
-    bool PatternPhase::cudaAvailable() {
-        return vernier::cudaAvailable();
-    }
-
 #ifdef USE_CUDA
     void PatternPhase::computeCuda() {
         double p1[3], p2[3];

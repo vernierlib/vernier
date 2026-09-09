@@ -103,7 +103,7 @@ void runCudaTests() {
 
     START_UNIT_TEST;
 
-    if (!PatternPhase::cudaAvailable()) {
+    if (!cudaAvailable()) {
         std::cout << "No CUDA device found, skipping CUDA tests." << std::endl;
         return;
     }
