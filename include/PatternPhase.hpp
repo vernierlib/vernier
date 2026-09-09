@@ -113,10 +113,6 @@ namespace vernier {
         /** Returns the currently selected backend. */
         Backend getBackend() const;
 
-        /** Returns true if the library was built with CUDA support and a device is
-         * present. Equivalent to the free function vernier::cudaAvailable(). */
-        static bool cudaAvailable();
-
         /** Displays the images to check the spectrum analyse. */
         void showControlImages();
 
