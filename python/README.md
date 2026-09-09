@@ -4,7 +4,7 @@
 [nanobind](https://github.com/wjakob/nanobind) (vendored in `3rdparty/nanobind`).
 It covers the common workflow: build a pattern layout, render an image of it,
 then detect the pattern and read back its pose. Every C++ example has a Python
-port next to this file (see [Examples](#examples)).
+port in `examples/` (see [Examples](#examples)).
 
 ## Building
 
@@ -19,8 +19,20 @@ cmake ..
 make pyvernier
 ```
 
-The module (`pyvernier.cpython-*.so`) lands in `build/python/`, next to the
-examples and `test_vernier.py`.
+The module (`pyvernier.cpython-*.so`) lands in `build/python/`. CMake copies the
+examples, the tests and the images they read next to it, flattening the source
+layout below, so everything runs from `build/python` with no `PYTHONPATH` to set.
+
+## Layout
+
+```
+python/
+├── CMakeLists.txt
+├── README.md
+├── vernier_python.cpp   the nanobind module
+├── examples/            one file per C++ example, plus the CUDA ones
+└── test/                unittest suite
+```
 
 ### With the CUDA backend
 
@@ -68,7 +80,7 @@ if vernier.cudaAvailable():          # built with CUDA *and* a device is present
 built without it or no device is visible, so `cudaAvailable()` is the cheap way
 to fall back to the CPU. `detector.setBackend(...)` is a shortcut for
 `detector.getPatternPhase().setBackend(...)`; a bare `PatternPhase` (see
-`bench_cuda.py`) takes the same call.
+`examples/bench.py`) takes the same call.
 
 Both backends compute in double precision and agree to within rounding.
 
@@ -107,13 +119,13 @@ annotated `(rows, cols, 3)` `uint8` RGB copy, which `showImage()` and
 
 ## Examples
 
-Every C++ example in `examples/` has a Python port of the same name here, plus
-two CUDA-specific ones. Run them from the build directory, where the module and
-the images live:
+`python/examples/` holds a port of every C++ example in the top-level
+`examples/`, under the same name, plus one CUDA-specific example. Run them from
+the build directory, where the module and the images live:
 
 ```bash
 cd build/python
-python3 example.py                   # render a pattern, detect it, print the pose
+python3 detectingPeriodicPattern.py  # render a pattern, detect it, print the pose
 python3 analysingImage.py            # spectrum analysis and phase planes
 python3 detectingMegarenaPattern.py  # pose of a megarena pattern
 python3 detectingMegarenaPattern3D.py
@@ -121,8 +133,8 @@ python3 detectingHPCodePattern.py    # pose of HP code markers
 python3 detectingStampPattern.py     # pose of stamp markers
 python3 generatingPatternLayout.py   # JSON layout -> PNG and SVG
 python3 renderingPatternImage.py     # render a layout at a given pose
-python3 example_cuda.py              # the same detection on the CPU and on the GPU
-python3 bench_cuda.py --size 2048 --iters 50   # CPU vs CUDA timings
+python3 usingCudaBackend.py          # the same detection on the CPU and on the GPU
+python3 bench.py --size 2048 --iters 50   # CPU vs CUDA timings
 ```
 
 The ports print exactly what the C++ examples print. Where the C++ version ends

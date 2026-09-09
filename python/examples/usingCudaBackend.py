@@ -19,7 +19,7 @@ a CUDA device is visible at runtime:
 
 Run it from the build directory where the compiled `pyvernier` module lives:
 
-    cd build/python && python3 example_cuda.py
+    cd build/python && python3 usingCudaBackend.py
 """
 
 import pyvernier as vernier

@@ -42,20 +42,20 @@ if(NOT WIN32)
   target_link_libraries(pyvernier PRIVATE gdstk)
 endif()
 
-# Copy the Python tests and examples next to the built module so they can be run
-# straight from the build tree (the module lands in this binary directory).
-file(GLOB PYTHON_FILES *.py)
-foreach(file ${PYTHON_FILES})
-  get_filename_component(filename ${file} NAME)
-  configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${filename} ${CMAKE_CURRENT_BINARY_DIR}/${filename} COPYONLY)
-endforeach(file)
+# The sources are split into examples/ and test/, but everything is copied flat
+# next to the built module: the examples can then import it and read their images
+# without any PYTHONPATH or path juggling.
+file(GLOB PYTHON_FILES ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.py
+                       ${CMAKE_CURRENT_SOURCE_DIR}/test/*.py)
 
 # The Python examples are ports of the C++ ones and read the same images and JSON
 # layouts, so copy those here too (examples/CMakeLists.txt does the same next to
 # the C++ binaries).
-file(GLOB EXAMPLE_FILES ${CMAKE_SOURCE_DIR}/examples/*.jpg ${CMAKE_SOURCE_DIR}/examples/*.png
-                        ${CMAKE_SOURCE_DIR}/examples/*.json)
-foreach(file ${EXAMPLE_FILES})
+file(GLOB EXAMPLE_DATA_FILES ${CMAKE_SOURCE_DIR}/examples/*.jpg
+                             ${CMAKE_SOURCE_DIR}/examples/*.png
+                             ${CMAKE_SOURCE_DIR}/examples/*.json)
+
+foreach(file ${PYTHON_FILES} ${EXAMPLE_DATA_FILES})
   get_filename_component(filename ${file} NAME)
   configure_file(${file} ${CMAKE_CURRENT_BINARY_DIR}/${filename} COPYONLY)
 endforeach(file)
