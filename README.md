@@ -108,14 +108,23 @@ If an NVIDIA GPU and the [CUDA Toolkit](https://developer.nvidia.com/cuda-toolki
 	> make
 ```
 
-The backend is then selectable at runtime and falls back to the CPU by default:
+The backend is then selectable at runtime and falls back to the CPU by default. Choose it on the detector, and it applies to everything the detector computes:
 
 ```C++
-	PatternPhase patternPhase;
-	if (PatternPhase::cudaAvailable()) {
-	    patternPhase.setBackend(Backend::CUDA);
+	std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
+	if (PatternDetector::cudaAvailable()) {
+	    detector->setBackend(Backend::CUDA);
 	}
+	detector->compute(image);
 ```
+
+The factory can also be told up front, which saves the check when you know what you want:
+
+```C++
+	auto detector = Detector::loadFromJSON("pattern.json", Backend::CUDA);
+```
+
+Selecting a backend the library was not built for, or one with no device fitted, throws and leaves the detector on the backend it was already using. `PatternPhase::setBackend` still exists for code driving the phase computation directly.
 
 Both backends compute in double precision and give the same results.
 

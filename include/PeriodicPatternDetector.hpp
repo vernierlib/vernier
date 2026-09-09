@@ -75,6 +75,10 @@ namespace vernier {
         std::string toString() override;
 
         /** Returns the reference to the pattern phase class */
+        /** Selects the compute backend, forwarding it to the phase computation
+         * this detector and all its subclasses share. */
+        void setBackend(Backend backend) override;
+
         PatternPhase * getPatternPhase() {
             return &patternPhase;
         }

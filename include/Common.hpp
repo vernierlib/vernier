@@ -41,4 +41,29 @@
 #include "Rectangle.hpp"
 #include "BufferedReader.hpp"
 
+namespace vernier {
+
+    /** Compute backend used for the phase computations.
+     *
+     * CUDA is only usable when the library was built with -DUSE_CUDA=ON and a
+     * CUDA device is present at runtime; ask cudaAvailable() before selecting it,
+     * or be ready to catch the exception.
+     */
+    enum class Backend {
+        CPU,
+        CUDA
+    };
+
+    /** Returns true if the library was built with CUDA support and a device is present. */
+    bool cudaAvailable();
+
+    /** Throws if the given backend cannot be used on this build and machine.
+     *
+     * Kept in one place so every layer that accepts a backend rejects an
+     * impossible one the same way, and says why: built without CUDA is a
+     * different problem from built with it but no device fitted.
+     */
+    void requireBackendAvailable(Backend backend);
+}
+
 #endif

@@ -267,25 +267,20 @@ namespace vernier {
     }
 
     void PatternPhase::setBackend(Backend backend) {
+        requireBackendAvailable(backend);
 #ifdef USE_CUDA
         if (backend == Backend::CUDA) {
-            if (!CudaPhaseEngine::available()) {
-                throw Exception("CUDA backend requested but no CUDA device is available.");
-            }
             if (!cudaEngine) {
                 cudaEngine.reset(new CudaPhaseEngine());
             }
+            // The engine can only be sized once the image size is known; if the
+            // backend is chosen before the first compute(), resize() does it.
             if (spectrum.rows() > 0 && spectrum.cols() > 0) {
                 cudaEngine->resize(spectrum.rows(), spectrum.cols());
             }
         }
-        this->backend = backend;
-#else
-        if (backend == Backend::CUDA) {
-            throw Exception("CUDA backend requested but the library was built without USE_CUDA.");
-        }
-        this->backend = backend;
 #endif
+        this->backend = backend;
     }
 
     Backend PatternPhase::getBackend() const {
@@ -293,11 +288,7 @@ namespace vernier {
     }
 
     bool PatternPhase::cudaAvailable() {
-#ifdef USE_CUDA
-        return CudaPhaseEngine::available();
-#else
-        return false;
-#endif
+        return vernier::cudaAvailable();
     }
 
 #ifdef USE_CUDA
