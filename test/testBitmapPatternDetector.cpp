@@ -9,6 +9,8 @@
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace std;
@@ -39,8 +41,7 @@ void main2() {
     //    BitmapPatternLayout layout5("data/HPCode33x33.png", 2);
     //    layout5.saveToJSON("BitmapPatternDetector.json");
 
-    PatternDetector* detector;
-    detector = Detector::loadFromJSON("BitmapPatternDetector.json");
+    std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("BitmapPatternDetector.json");
     cout << detector->toString() << endl;
 
     cv::Mat image = cv::imread("data/QRCode/code18.jpg");

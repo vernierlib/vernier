@@ -9,17 +9,11 @@
 
 #include "Common.hpp"
 
-#ifdef USE_FFTW
 #include <fftw3.h>
-#else
-#define FFTW_FORWARD 1
-#define FFTW_BACKWARD -1
-#endif
 
 namespace vernier {
 
-    /** \brief Computes Discrete Fourier Transform on Eigen arrays using FFTW library
-     * or Ooura's implementation if FFTW is not available.
+    /** \brief Computes Discrete Fourier Transform on Eigen arrays using FFTW library.
      *
      * FFT plans are prepared at the construction of the object, then the transforms 
      * can be computed without any delays.
@@ -57,6 +51,16 @@ namespace vernier {
          */
         FourierTransform(Eigen::ArrayXcd& array, int sign = FFTW_FORWARD);
 
+        /** Copying is disabled since the instance owns the FFT plans */
+        FourierTransform(const FourierTransform&) = delete;
+
+        FourierTransform& operator=(const FourierTransform&) = delete;
+
+        /** Moving transfers ownership of the FFT plans */
+        FourierTransform(FourierTransform&&) noexcept;
+
+        FourierTransform& operator=(FourierTransform&&) noexcept;
+
         ~FourierTransform();
 
         /** Resizes the FFT plans
@@ -93,14 +97,7 @@ namespace vernier {
         int nCols;
         int sign;
 
-#ifdef USE_FFTW
         fftw_plan plan;
-#else
-        double** data;
-        double* workArea;
-        int* bitReversal;
-        double* cosSinTable;
-#endif
     };
 }
 

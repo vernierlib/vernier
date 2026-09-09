@@ -29,9 +29,7 @@
 #include <opencv2/core/core.hpp>
 #include <opencv2/core/types.hpp>
 #include <opencv2/core/eigen.hpp>
-#include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
-#include <opencv2/calib3d.hpp>
 
 #include <rapidjson/document.hpp>
 

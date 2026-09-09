@@ -5,6 +5,7 @@
  */
 
 #include "BitmapPatternLayout.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -14,12 +15,11 @@ namespace vernier {
 
     BitmapPatternLayout::BitmapPatternLayout(double period, int nRows, int nCols) : PeriodicPatternLayout() {
         classname = "BitmapPattern";
-        resize(period, nRows, nCols);
+        resize(period, nRows, nCols);    
     }
 
     BitmapPatternLayout::BitmapPatternLayout(std::string filename, double period) {
         classname = "BitmapPattern";
-        description = "Layout created from " + filename;
         cv::Mat image1 = cv::imread(filename, cv::IMREAD_GRAYSCALE), image;
         image1.convertTo(image, CV_32F);
         cv::normalize(image, image, 1.0, 0, cv::NORM_MINMAX);
@@ -31,11 +31,13 @@ namespace vernier {
                 bitmap(row, col) = (int) (image.at<float>(row, col) > 0.5);
             }
         }
+        description = removeExtension(filename) + "_d" + to_string(dotSize) + unit;
     }
 
     void BitmapPatternLayout::resize(double period, int nRows, int nCols) {
         PeriodicPatternLayout::resize(period, nRows, nCols);
         bitmap.resize(2 * nRows - 1, 2 * nCols - 1);
+        description = "Bitmap_s" + to_string(nRows) + "x" + to_string(nCols) + "_d" + to_string(dotSize) + unit;
     }
 
     void BitmapPatternLayout::writeJSON(std::ofstream & file) {
@@ -81,7 +83,9 @@ namespace vernier {
             throw Exception("The file is not a valid bitmap pattern file, the first row of the bitmap has a wrong format.");
         }
 
+        std::string loadedDescription = description;
         resize(period, nRows, nCols);
+        description = loadedDescription;
         for (rapidjson::SizeType row = 0; row < bitmap.rows(); row++) {
             const rapidjson::Value& value = document["bitmap"][row];
             if (value.IsArray() && value.Size() == bitmap.cols()) {

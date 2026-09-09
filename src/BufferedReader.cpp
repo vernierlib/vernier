@@ -31,6 +31,7 @@ namespace vernier {
 
     void BufferedReader::load(const char * filename) {
         release();
+        this->filename = filename;
 
         FILE *file = fopen(filename, "r");
         if (file == NULL) {
@@ -59,6 +60,16 @@ namespace vernier {
             free(buffer);
             buffer = NULL;
             length = 0;
+        }
+    }
+
+    void BufferedReader::parseJSON(rapidjson::Document & document) {
+        document.ParseInsitu(buffer);
+        if (!document.IsObject()) {
+            throw Exception(filename + " is not a valid JSON file.");
+        }
+        if (document.MemberBegin() == document.MemberEnd()) {
+            throw Exception(filename + " is empty.");
         }
     }
 

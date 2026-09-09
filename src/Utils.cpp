@@ -5,6 +5,7 @@
  */
 
 #include "Utils.hpp"
+#include <opencv2/highgui/highgui.hpp>
 
 namespace vernier {
 

@@ -1,4 +1,6 @@
 #include "Vernier.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace cv;

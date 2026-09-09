@@ -8,6 +8,7 @@
 #include "Spectrum.hpp"
 #include "eigen-matio/MatioFile.hpp"
 #include "UnitTest.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace std;

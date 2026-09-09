@@ -6,6 +6,7 @@
 
 #include "StampPatternDetector.hpp"
 #include "Spatial.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 

@@ -6,6 +6,7 @@
 
 #include "MegarenaPatternLayout.hpp"
 #include "MegarenaBitSequence.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -49,6 +50,7 @@ namespace vernier {
         originX = 0.25 * period;
         originY = 0.25 * period;
         regionOfInterest = Rectangle(0.0, 0.0, width, height);
+        description = "Megarena_b" + to_string(codeDepth) + "_p" + to_string(period) + unit;
     }
 
     void MegarenaPatternLayout::writeJSON(std::ofstream & file) {

@@ -6,6 +6,7 @@
 
 #include "MegarenaThumbnail.hpp"
 #include <iomanip>
+#include <opencv2/highgui/highgui.hpp>
 
 namespace vernier {
 

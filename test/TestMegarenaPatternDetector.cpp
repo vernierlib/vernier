@@ -6,6 +6,8 @@
 
 #include "Vernier.hpp"
 #include "UnitTest.hpp"
+#include <opencv2/highgui/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace cv;
@@ -139,8 +141,7 @@ int exampleCapture() {
     imshow("Camera", frame);
 
     // Detecting and estimating the pose of the pattern
-    PatternDetector* detector;
-    detector = Detector::loadFromJSON("megarenaPattern.json");
+    std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("megarenaPattern.json");
     detector->compute(frame);
 
     // Printing results 
