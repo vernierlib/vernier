@@ -120,17 +120,6 @@ namespace vernier {
         return unit;
     }
 
-    void PatternDetector::setBackend(Backend backend) {
-        // Checked before storing, so a rejected backend leaves the detector on
-        // the one it was already using rather than in a state it cannot honour.
-        requireBackendAvailable(backend);
-        this->backend = backend;
-    }
-
-    Backend PatternDetector::getBackend() const {
-        return backend;
-    }
-
     bool PatternDetector::cudaAvailable() {
         return vernier::cudaAvailable();
     }

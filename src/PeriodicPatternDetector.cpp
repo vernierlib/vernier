@@ -27,10 +27,14 @@ namespace vernier {
     }
 
     void PeriodicPatternDetector::setBackend(Backend backend) {
-        // Apply it first: if the phase computation rejects the backend it throws,
-        // and the base class never records a choice that did not take effect.
+        // The phase computation holds the choice; there is no second copy here to
+        // keep in step. It validates and throws, leaving its previous backend in
+        // place, so a rejected request changes nothing.
         patternPhase.setBackend(backend);
-        PatternDetector::setBackend(backend);
+    }
+
+    Backend PeriodicPatternDetector::getBackend() const {
+        return patternPhase.getBackend();
     }
 
     void PeriodicPatternDetector::computeImage() {

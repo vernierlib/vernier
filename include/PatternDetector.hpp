@@ -22,7 +22,6 @@ namespace vernier {
     protected:
         
         std::string classname;
-        Backend backend = Backend::CPU;
         cv::Mat image32F;
         cv::Mat image64F;
         cv::Mat image8U;
@@ -68,10 +67,15 @@ namespace vernier {
          * May be called before or after the first compute(). Throws if the backend
          * is unavailable, leaving the previous choice in place.
          */
-        virtual void setBackend(Backend backend);
+        virtual void setBackend(Backend backend) = 0;
 
-        /** Returns the compute backend this detector is using. */
-        Backend getBackend() const;
+        /** Returns the compute backend this detector is using.
+         *
+         * Deliberately not backed by a member of this class. A detector reports
+         * whatever its computation is actually set to, so the two cannot drift
+         * apart and be found disagreeing later.
+         */
+        virtual Backend getBackend() const = 0;
 
         /** Returns true if the library was built with CUDA support and a device is
          * present, so setBackend(Backend::CUDA) would succeed. */
