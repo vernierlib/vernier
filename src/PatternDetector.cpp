@@ -120,10 +120,6 @@ namespace vernier {
         return unit;
     }
 
-    bool PatternDetector::cudaAvailable() {
-        return vernier::cudaAvailable();
-    }
-
     std::string PatternDetector::getClassname() {
         return classname;
     }
