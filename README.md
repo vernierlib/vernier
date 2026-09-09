@@ -112,7 +112,7 @@ The backend is then selectable at runtime and falls back to the CPU by default. 
 
 ```C++
 	std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
-	if (PatternDetector::cudaAvailable()) {
+	if (cudaAvailable()) {
 	    detector->setBackend(Backend::CUDA);
 	}
 	detector->compute(image);

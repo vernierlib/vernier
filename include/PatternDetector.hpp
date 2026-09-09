@@ -77,10 +77,6 @@ namespace vernier {
          */
         virtual Backend getBackend() const = 0;
 
-        /** Returns true if the library was built with CUDA support and a device is
-         * present, so setBackend(Backend::CUDA) would succeed. */
-        static bool cudaAvailable();
-
         /** Returns true if patterns have been detected and localized */
         virtual bool patternFound(int id = -1) = 0;
         
