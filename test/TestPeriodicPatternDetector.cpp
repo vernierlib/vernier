@@ -140,12 +140,58 @@ void test2d() {
     TEST_EQUALITY(patternPose, estimatedPose, 0.01)
 }
 
+void testBackendSelection() {
+    START_UNIT_TEST;
+
+    // A caller holding only a PatternDetector must be able to choose the backend
+    // without knowing which detector it is or reaching into its phase engine.
+    std::unique_ptr<PatternDetector> detector = Detector::newInstance("PeriodicPattern");
+
+    UNIT_TEST(detector->getBackend() == Backend::CPU);
+
+    // Selecting CPU always works and is visible through the base interface.
+    detector->setBackend(Backend::CPU);
+    UNIT_TEST(detector->getBackend() == Backend::CPU);
+
+    // The detector's answer must agree with the phase computation it drives,
+    // which is the whole point of moving the switch up here.
+    PeriodicPatternDetector* periodic = dynamic_cast<PeriodicPatternDetector*> (detector.get());
+    UNIT_TEST(periodic != NULL);
+    UNIT_TEST(periodic->getPatternPhase()->getBackend() == detector->getBackend());
+
+    // The factory can choose it up front, which is the shortest thing a user writes.
+    std::unique_ptr<PatternDetector> viaFactory = Detector::newInstance("MegarenaPattern", Backend::CPU);
+    UNIT_TEST(viaFactory->getBackend() == Backend::CPU);
+
+    // Availability is reachable without constructing anything.
+    UNIT_TEST(PatternDetector::cudaAvailable() == cudaAvailable());
+
+    if (cudaAvailable()) {
+        detector->setBackend(Backend::CUDA);
+        UNIT_TEST(detector->getBackend() == Backend::CUDA);
+        UNIT_TEST(periodic->getPatternPhase()->getBackend() == Backend::CUDA);
+    } else {
+        // Asking for a backend this build cannot provide must fail loudly, and
+        // must leave the detector on the one it was already using.
+        bool thrown = false;
+        try {
+            detector->setBackend(Backend::CUDA);
+        } catch (const std::exception& e) {
+            thrown = true;
+        }
+        UNIT_TEST(thrown);
+        UNIT_TEST(detector->getBackend() == Backend::CPU);
+    }
+}
+
 int main(int argc, char** argv) {
 
     //main2d();
 
     //main3dPerspective();
     
+    testBackendSelection();
+
     REPEAT_TEST(test2d(), 10)
 
     return EXIT_SUCCESS;

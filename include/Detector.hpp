@@ -28,7 +28,8 @@ namespace vernier {
          *   
          *   \param classname: name of the pattern detector (PeriodicPattern, MegarenaPattern, BitmapPattern, HPCodePattern).
          **/
-        static std::unique_ptr<PatternDetector> newInstance(const std::string& classname) {
+        static std::unique_ptr<PatternDetector> newInstance(const std::string& classname,
+                Backend backend = Backend::CPU) {
             std::unique_ptr<PatternDetector> detector;
             if (classname == "PeriodicPattern") {
                 detector.reset(new PeriodicPatternDetector());
@@ -43,6 +44,7 @@ namespace vernier {
             } else {
                 throw Exception(classname + " is not a valid class name for a pattern detector.");
             }
+            detector->setBackend(backend);
             return detector;
         }
 
@@ -50,12 +52,13 @@ namespace vernier {
          *
          *   \param filename: name of the JSON document to load
          **/
-        static std::unique_ptr<PatternDetector> loadFromJSON(const std::string& filename) {
+        static std::unique_ptr<PatternDetector> loadFromJSON(const std::string& filename,
+                Backend backend = Backend::CPU) {
             BufferedReader bufferedReader(filename);
             rapidjson::Document document;
             bufferedReader.parseJSON(document);
             std::string classname = document.MemberBegin()->name.GetString();
-            std::unique_ptr<PatternDetector> detector = newInstance(classname);
+            std::unique_ptr<PatternDetector> detector = newInstance(classname, backend);
             detector->readJSON(document.MemberBegin()->value);
             return detector;
         }

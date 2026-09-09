@@ -22,6 +22,7 @@ namespace vernier {
     protected:
         
         std::string classname;
+        Backend backend = Backend::CPU;
         cv::Mat image32F;
         cv::Mat image64F;
         cv::Mat image8U;
@@ -54,6 +55,27 @@ namespace vernier {
         /** Detects and estimates the poses of the patterns in an image stored in a double array          
          */
         void compute(const Eigen::ArrayXXd & array);
+
+        /** Selects the compute backend this detector uses.
+         *
+         * This is the intended place to choose a backend: it applies to whatever
+         * the detector uses internally, so a caller holding a PatternDetector
+         * never has to reach inside it.
+         *
+         *     std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
+         *     detector->setBackend(Backend::CUDA);
+         *
+         * May be called before or after the first compute(). Throws if the backend
+         * is unavailable, leaving the previous choice in place.
+         */
+        virtual void setBackend(Backend backend);
+
+        /** Returns the compute backend this detector is using. */
+        Backend getBackend() const;
+
+        /** Returns true if the library was built with CUDA support and a device is
+         * present, so setBackend(Backend::CUDA) would succeed. */
+        static bool cudaAvailable();
 
         /** Returns true if patterns have been detected and localized */
         virtual bool patternFound(int id = -1) = 0;

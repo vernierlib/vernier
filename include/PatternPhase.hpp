@@ -20,13 +20,6 @@
 
 namespace vernier {
 
-    /** Compute backend used by PatternPhase. CUDA is only available when the library
-     * was built with -DUSE_CUDA=ON and a CUDA device is present at runtime. */
-    enum class Backend {
-        CPU,
-        CUDA
-    };
-
     /** \brief Computes the phase planes of a given pattern
      *
      * All the memory allocation and possible pre-calculations are done at the
@@ -110,13 +103,18 @@ namespace vernier {
         /** Returns true if two peaks with sufficient power have been found */
         bool peaksFound();
 
-        /** Selects the compute backend. Throws if CUDA is requested but unavailable. */
+        /** Selects the compute backend. Throws if CUDA is requested but unavailable.
+         *
+         * Most users should not need this: set the backend on the detector instead
+         * (see PatternDetector::setBackend), which forwards to here. This remains
+         * for code driving PatternPhase directly, such as the bench example. */
         void setBackend(Backend backend);
 
         /** Returns the currently selected backend. */
         Backend getBackend() const;
 
-        /** Returns true if the library was built with CUDA support and a device is present. */
+        /** Returns true if the library was built with CUDA support and a device is
+         * present. Equivalent to the free function vernier::cudaAvailable(). */
         static bool cudaAvailable();
 
         /** Displays the images to check the spectrum analyse. */

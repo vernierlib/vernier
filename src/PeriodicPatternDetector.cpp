@@ -26,6 +26,13 @@ namespace vernier {
         }
     }
 
+    void PeriodicPatternDetector::setBackend(Backend backend) {
+        // Apply it first: if the phase computation rejects the backend it throws,
+        // and the base class never records a choice that did not take effect.
+        patternPhase.setBackend(backend);
+        PatternDetector::setBackend(backend);
+    }
+
     void PeriodicPatternDetector::computeImage() {
         patternPhase.compute(array);
         periodShift1 = 0;
