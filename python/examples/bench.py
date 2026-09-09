@@ -4,18 +4,17 @@
 # Copyright (c) 2018-2025 CNRS, ENSMM, UMLP.
 #
 
-"""CUDA example: time the phase-retrieval stage on the CPU and on the GPU.
+"""Python port of examples/bench.cpp: times the phase-retrieval stage.
 
-Python mirror of `examples/bench.cpp`: it feeds the same synthetic fringe image
-to `PatternPhase` repeatedly and reports the mean and best iteration time for
-each backend. Useful to check what the CUDA backend buys on a given machine and
-image size (the GPU path pays a fixed host/device transfer cost, so it pays off
-on larger images).
+It renders the same image as the C++ version, feeds it to `PatternPhase`
+repeatedly and reports the mean and best iteration time for each backend. Useful
+to check what the CUDA backend buys on a given machine and image size (the GPU
+path pays a fixed host/device transfer cost, so it pays off on larger images).
 
     cd build/python
-    python3 bench_cuda.py                          # both backends, 512x512
-    python3 bench_cuda.py --size 2048 --iters 50
-    python3 bench_cuda.py --backend cuda
+    python3 bench.py                          # both backends, 512x512
+    python3 bench.py --size 2048 --iters 50
+    python3 bench.py --backend cuda
 """
 
 import argparse

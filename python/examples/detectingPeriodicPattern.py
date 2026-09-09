@@ -9,7 +9,7 @@
 This mirrors the C++ TestPeriodicPatternDetector example. Run it from the build
 directory where the compiled `pyvernier` module lives:
 
-    cd build/python && python3 example.py
+    cd build/python && python3 detectingPeriodicPattern.py
 """
 
 import pyvernier as vernier
