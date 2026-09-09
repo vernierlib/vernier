@@ -12,6 +12,10 @@
  *  layout, render an image of it, then detect the pattern and read back its
  *  pose. Images are exchanged as 2-D float64 NumPy arrays, which map directly
  *  onto the Eigen::ArrayXXd used by the library.
+ *
+ *  The phase-retrieval stage (PatternPhase) can run on the CPU or, when the
+ *  library is built with -DUSE_CUDA=ON, on a CUDA device; the backend is
+ *  selected at runtime through `Backend` / `setBackend()`.
  */
 
 #include <nanobind/nanobind.h>
@@ -31,6 +35,15 @@ NB_MODULE(pyvernier, m) {
     // Library errors surface as `pyvernier.VernierError`.
     nb::exception<Exception>(m, "VernierError");
 
+    // ─── Compute backend ─────────────────────────────────────────────────────
+
+    nb::enum_<Backend>(m, "Backend", "Backend running the phase-retrieval pipeline.")
+        .value("CPU", Backend::CPU, "Reference CPU path (FFTW or Ooura).")
+        .value("CUDA", Backend::CUDA, "GPU path (cuFFT + custom kernels).");
+
+    m.def("cudaAvailable", &PatternPhase::cudaAvailable,
+        "True if the library was built with -DUSE_CUDA=ON and a CUDA device is present.");
+
     // ─── Pose ─────────────────────────────────────────────────────────────────
 
     nb::class_<Pose>(m, "Pose", "Pose of a pattern: translations and rotations.")
@@ -49,6 +62,27 @@ NB_MODULE(pyvernier, m) {
         .def_rw("gamma", &Pose::gamma)
         .def("__repr__", &Pose::toString);
 
+    // ─── Phase retrieval ─────────────────────────────────────────────────────
+
+    nb::class_<PatternPhase>(m, "PatternPhase",
+            "Phase-retrieval pipeline: the stage a detector spends its time in, and "
+            "the one the CUDA backend accelerates.")
+        .def(nb::init<>())
+        .def(nb::init<int, int>(), "nRows"_a, "nCols"_a)
+        .def("resize", &PatternPhase::resize, "nRows"_a, "nCols"_a)
+        .def("compute", nb::overload_cast<const Eigen::ArrayXXd&>(&PatternPhase::compute),
+            "image"_a, "Runs the pipeline on a 2-D float64 image array.")
+        .def("setBackend", &PatternPhase::setBackend, "backend"_a,
+            "Selects the backend. Raises VernierError if CUDA is requested but the "
+            "library was built without it or no device is present.")
+        .def("getBackend", &PatternPhase::getBackend)
+        .def_static("cudaAvailable", &PatternPhase::cudaAvailable)
+        .def("peaksFound", &PatternPhase::peaksFound)
+        .def("setSigma", &PatternPhase::setSigma, "sigma"_a)
+        .def("setCropFactor", &PatternPhase::setCropFactor, "cropFactor"_a)
+        .def("getUnwrappedPhase1", &PatternPhase::getUnwrappedPhase1)
+        .def("getUnwrappedPhase2", &PatternPhase::getUnwrappedPhase2);
+
     // ─── Detectors ─────────────────────────────────────────────────────────────
 
     nb::class_<PatternDetector>(m, "PatternDetector")
@@ -62,7 +96,22 @@ NB_MODULE(pyvernier, m) {
     nb::class_<PeriodicPatternDetector, PatternDetector>(m, "PeriodicPatternDetector")
         .def(nb::init<double>(), "physicalPeriod"_a = 1.0)
         .def("setSigma", &PeriodicPatternDetector::setSigma, "sigma"_a)
-        .def("setCropFactor", &PeriodicPatternDetector::setCropFactor, "cropFactor"_a);
+        .def("setCropFactor", &PeriodicPatternDetector::setCropFactor, "cropFactor"_a)
+        // The phase stage is owned by the detector, hence `reference_internal`:
+        // the returned object keeps the detector alive.
+        .def("getPatternPhase", &PeriodicPatternDetector::getPatternPhase,
+            nb::rv_policy::reference_internal,
+            "The underlying phase-retrieval stage (backend selection, phases, ...).")
+        .def("setBackend",
+            [](PeriodicPatternDetector& self, Backend backend) {
+                self.getPatternPhase()->setBackend(backend);
+            },
+            "backend"_a, "Shortcut for `getPatternPhase().setBackend(...)`.")
+        .def("getBackend",
+            [](PeriodicPatternDetector& self) {
+                return self.getPatternPhase()->getBackend();
+            },
+            "Shortcut for `getPatternPhase().getBackend()`.");
 
     nb::class_<MegarenaPatternDetector, PeriodicPatternDetector>(m, "MegarenaPatternDetector")
         .def(nb::init<double, int>(), "physicalPeriod"_a, "codeSize"_a);

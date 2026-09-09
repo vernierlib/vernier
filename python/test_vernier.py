@@ -47,5 +47,44 @@ class TestRoundtrip(unittest.TestCase):
         self.assertAlmostEqual(pose.alpha, 0.2, delta=0.02)
 
 
+class TestBackend(unittest.TestCase):
+    """Backend selection. The CUDA cases only run when the library was built
+    with -DUSE_CUDA=ON and a device is present."""
+
+    def _render(self):
+        layout = vernier.PeriodicPatternLayout(15.0, 31, 31)
+        return layout.renderOrthographicProjection(vernier.Pose(6.0, 3.0, 0.2, 2.0), 512, 512)
+
+    def test_default_is_cpu(self):
+        detector = vernier.PeriodicPatternDetector(15.0)
+        self.assertEqual(detector.getBackend(), vernier.Backend.CPU)
+
+    def test_cuda_request_without_cuda_raises(self):
+        if vernier.cudaAvailable():
+            self.skipTest("CUDA is available here")
+        detector = vernier.PeriodicPatternDetector(15.0)
+        with self.assertRaises(vernier.VernierError):
+            detector.setBackend(vernier.Backend.CUDA)
+
+    @unittest.skipUnless(vernier.cudaAvailable(), "built without CUDA, or no CUDA device")
+    def test_cuda_matches_cpu(self):
+        image = self._render()
+        poses = []
+        for backend in (vernier.Backend.CPU, vernier.Backend.CUDA):
+            detector = vernier.PeriodicPatternDetector(15.0)
+            detector.setSigma(1.0)
+            detector.setCropFactor(0.4)
+            detector.setBackend(backend)
+            self.assertEqual(detector.getBackend(), backend)
+            detector.compute(image)
+            self.assertTrue(detector.patternFound())
+            poses.append(detector.get2DPose())
+
+        # Both backends work in double precision, so they should agree closely.
+        self.assertAlmostEqual(poses[0].x, poses[1].x, delta=1e-6)
+        self.assertAlmostEqual(poses[0].y, poses[1].y, delta=1e-6)
+        self.assertAlmostEqual(poses[0].alpha, poses[1].alpha, delta=1e-9)
+
+
 if __name__ == "__main__":
     unittest.main()

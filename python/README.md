@@ -18,8 +18,19 @@ cmake ..
 make pyvernier
 ```
 
-The module (`pyvernier.cpython-*.so`) lands in `build/python/`, next to
-`example.py` and `test_vernier.py`.
+The module (`pyvernier.cpython-*.so`) lands in `build/python/`, next to the
+examples and `test_vernier.py`.
+
+### With the CUDA backend
+
+Add `-DUSE_CUDA=ON` to get the GPU path compiled in (needs the CUDA toolkit and
+cuFFT). It is selected at runtime, so a build with CUDA still runs on machines
+without a device.
+
+```bash
+cmake -DUSE_CUDA=ON ..
+make pyvernier
+```
 
 ## Usage
 
@@ -40,13 +51,51 @@ if detector.patternFound():
     print(detector.get2DPose())
 ```
 
+### Running on the GPU
+
+The phase-retrieval stage (`PatternPhase`) — FFT, spectrum filtering, peak
+search, inverse FFTs, i.e. where a detection spends its time — has a CUDA
+implementation (cuFFT + custom kernels), picked at runtime. Nothing else in the
+API changes.
+
+```python
+if vernier.cudaAvailable():          # built with CUDA *and* a device is present
+    detector.setBackend(vernier.Backend.CUDA)
+```
+
+`setBackend` raises `VernierError` when CUDA is requested but the library was
+built without it or no device is visible, so `cudaAvailable()` is the cheap way
+to fall back to the CPU. `detector.setBackend(...)` is a shortcut for
+`detector.getPatternPhase().setBackend(...)`; a bare `PatternPhase` (see
+`bench_cuda.py`) takes the same call.
+
+Both backends compute in double precision and agree to within rounding.
+
 ## Exposed API
 
 - `Pose` — `x, y, z, alpha, beta, gamma` (2D and 3D constructors).
 - `PeriodicPatternDetector`, `MegarenaPatternDetector` — `compute(image)`,
-  `patternFound()`, `get2DPose()`, `get3DPose()`.
+  `patternFound()`, `get2DPose()`, `get3DPose()`, `setBackend(backend)`,
+  `getBackend()`, `getPatternPhase()`.
+- `PatternPhase` — `compute(image)`, `resize(rows, cols)`, `setBackend(backend)`,
+  `getBackend()`, `peaksFound()`, `getUnwrappedPhase1/2()`.
+- `Backend` — `Backend.CPU`, `Backend.CUDA`; `cudaAvailable()` at module level.
 - `PeriodicPatternLayout` — `renderOrthographicProjection(pose, rows, cols)`.
 - `VernierError` — exception raised for library errors.
+
+## Examples
+
+Run from the build directory, where the module lives:
+
+```bash
+cd build/python
+python3 example.py           # render a pattern, detect it, print the pose
+python3 example_cuda.py      # the same detection on the CPU and on the GPU
+python3 bench_cuda.py --size 2048 --iters 50   # CPU vs CUDA timings
+```
+
+Both CUDA examples degrade to the CPU path with a message when no GPU backend
+is available, so they run anywhere.
 
 ## Tests
 
@@ -54,3 +103,5 @@ if detector.patternFound():
 cd build/python
 python3 -m unittest test_vernier -v
 ```
+
+The CUDA tests skip themselves when the GPU backend is not available.
