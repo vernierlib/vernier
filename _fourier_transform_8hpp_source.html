@@ -81,68 +81,56 @@ $(function() {
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
 <div class="line"><a name="l00010"></a><span class="lineno">   10</span>&#160;<span class="preprocessor">#include &quot;Common.hpp&quot;</span></div>
 <div class="line"><a name="l00011"></a><span class="lineno">   11</span>&#160; </div>
-<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#ifdef USE_FFTW</span></div>
-<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160;<span class="preprocessor">#include &lt;fftw3.h&gt;</span></div>
-<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160;<span class="preprocessor">#define FFTW_FORWARD 1</span></div>
-<div class="line"><a name="l00016"></a><span class="lineno">   16</span>&#160;<span class="preprocessor">#define FFTW_BACKWARD -1</span></div>
-<div class="line"><a name="l00017"></a><span class="lineno">   17</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00018"></a><span class="lineno">   18</span>&#160; </div>
-<div class="line"><a name="l00019"></a><span class="lineno">   19</span>&#160;<span class="keyword">namespace </span>vernier {</div>
-<div class="line"><a name="l00020"></a><span class="lineno">   20</span>&#160; </div>
-<div class="line"><a name="l00027"></a><span class="lineno"><a class="line" href="classvernier_1_1_fourier_transform.html">   27</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> {</div>
-<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00012"></a><span class="lineno">   12</span>&#160;<span class="preprocessor">#include &lt;fftw3.h&gt;</span></div>
+<div class="line"><a name="l00013"></a><span class="lineno">   13</span>&#160; </div>
+<div class="line"><a name="l00014"></a><span class="lineno">   14</span>&#160;<span class="keyword">namespace </span>vernier {</div>
+<div class="line"><a name="l00015"></a><span class="lineno">   15</span>&#160; </div>
+<div class="line"><a name="l00021"></a><span class="lineno"><a class="line" href="classvernier_1_1_fourier_transform.html">   21</a></span>&#160;    <span class="keyword">class </span><a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a> {</div>
+<div class="line"><a name="l00022"></a><span class="lineno">   22</span>&#160;    <span class="keyword">public</span>:</div>
+<div class="line"><a name="l00023"></a><span class="lineno">   23</span>&#160; </div>
+<div class="line"><a name="l00028"></a><span class="lineno">   28</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160; </div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160; </div>
-<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<span class="keywordtype">int</span> nRows, <span class="keywordtype">int</span> nCols = 1, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
-<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160; </div>
-<div class="line"><a name="l00050"></a><span class="lineno">   50</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(Eigen::ArrayXXcd&amp; array, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
-<div class="line"><a name="l00051"></a><span class="lineno">   51</span>&#160; </div>
-<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(Eigen::ArrayXcd&amp; array, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
-<div class="line"><a name="l00059"></a><span class="lineno">   59</span>&#160; </div>
-<div class="line"><a name="l00061"></a><span class="lineno"><a class="line" href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">   61</a></span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">FourierTransform</a>(<span class="keyword">const</span> <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160; </div>
-<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;) = <span class="keyword">delete</span>;</div>
-<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160; </div>
-<div class="line"><a name="l00066"></a><span class="lineno">   66</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;&amp;) noexcept;</div>
-<div class="line"><a name="l00067"></a><span class="lineno">   67</span>&#160; </div>
-<div class="line"><a name="l00068"></a><span class="lineno">   68</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp; operator=(<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;&amp;) noexcept;</div>
-<div class="line"><a name="l00069"></a><span class="lineno">   69</span>&#160; </div>
-<div class="line"><a name="l00070"></a><span class="lineno">   70</span>&#160;        ~<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>();</div>
-<div class="line"><a name="l00071"></a><span class="lineno">   71</span>&#160; </div>
-<div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#a5474994389c3e760b62bfea7a9c9aed1">resize</a>(<span class="keywordtype">int</span> nRows, <span class="keywordtype">int</span> nCols, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
-<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160; </div>
-<div class="line"><a name="l00085"></a><span class="lineno">   85</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">compute</a>(const Eigen::ArrayXXcd&amp; in, Eigen::ArrayXXcd&amp; out);</div>
-<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160; </div>
-<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">compute</a>(const Eigen::ArrayXcd&amp; in, Eigen::ArrayXcd&amp; out);</div>
-<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160;        </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#a881ee10e763d941a3a1755683e9e4980">setSign</a>(<span class="keywordtype">int</span> sign);</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<span class="keywordtype">int</span> nRows, <span class="keywordtype">int</span> nCols = 1, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160; </div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(Eigen::ArrayXXcd&amp; array, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160; </div>
+<div class="line"><a name="l00052"></a><span class="lineno">   52</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(Eigen::ArrayXcd&amp; array, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
+<div class="line"><a name="l00053"></a><span class="lineno">   53</span>&#160; </div>
+<div class="line"><a name="l00055"></a><span class="lineno"><a class="line" href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">   55</a></span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">FourierTransform</a>(<span class="keyword">const</span> <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00056"></a><span class="lineno">   56</span>&#160; </div>
+<div class="line"><a name="l00057"></a><span class="lineno">   57</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp; operator=(<span class="keyword">const</span> <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;) = <span class="keyword">delete</span>;</div>
+<div class="line"><a name="l00058"></a><span class="lineno">   58</span>&#160; </div>
+<div class="line"><a name="l00060"></a><span class="lineno">   60</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">FourierTransform</a>(<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;&amp;) noexcept;</div>
+<div class="line"><a name="l00061"></a><span class="lineno">   61</span>&#160; </div>
+<div class="line"><a name="l00062"></a><span class="lineno">   62</span>&#160;        <a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp; operator=(<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>&amp;&amp;) noexcept;</div>
+<div class="line"><a name="l00063"></a><span class="lineno">   63</span>&#160; </div>
+<div class="line"><a name="l00064"></a><span class="lineno">   64</span>&#160;        ~<a class="code" href="classvernier_1_1_fourier_transform.html">FourierTransform</a>();</div>
+<div class="line"><a name="l00065"></a><span class="lineno">   65</span>&#160; </div>
+<div class="line"><a name="l00072"></a><span class="lineno">   72</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#a5474994389c3e760b62bfea7a9c9aed1">resize</a>(<span class="keywordtype">int</span> nRows, <span class="keywordtype">int</span> nCols, <span class="keywordtype">int</span> sign = FFTW_FORWARD);</div>
+<div class="line"><a name="l00073"></a><span class="lineno">   73</span>&#160; </div>
+<div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">compute</a>(const Eigen::ArrayXXcd&amp; in, Eigen::ArrayXXcd&amp; out);</div>
+<div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
+<div class="line"><a name="l00086"></a><span class="lineno">   86</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">compute</a>(const Eigen::ArrayXcd&amp; in, Eigen::ArrayXcd&amp; out);</div>
+<div class="line"><a name="l00087"></a><span class="lineno">   87</span>&#160;        </div>
+<div class="line"><a name="l00092"></a><span class="lineno">   92</span>&#160;        <span class="keywordtype">void</span> <a class="code" href="classvernier_1_1_fourier_transform.html#a881ee10e763d941a3a1755683e9e4980">setSign</a>(<span class="keywordtype">int</span> sign);</div>
+<div class="line"><a name="l00093"></a><span class="lineno">   93</span>&#160; </div>
+<div class="line"><a name="l00094"></a><span class="lineno">   94</span>&#160;    protected:</div>
+<div class="line"><a name="l00095"></a><span class="lineno">   95</span>&#160; </div>
+<div class="line"><a name="l00096"></a><span class="lineno">   96</span>&#160;        <span class="keywordtype">int</span> nRows;</div>
+<div class="line"><a name="l00097"></a><span class="lineno">   97</span>&#160;        <span class="keywordtype">int</span> nCols;</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;        <span class="keywordtype">int</span> sign;</div>
 <div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160; </div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;    protected:</div>
-<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160; </div>
-<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;        <span class="keywordtype">int</span> nRows;</div>
-<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;        <span class="keywordtype">int</span> nCols;</div>
-<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;        <span class="keywordtype">int</span> sign;</div>
-<div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160; </div>
-<div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;<span class="preprocessor">#ifdef USE_FFTW</span></div>
-<div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;        fftw_plan plan;</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;<span class="preprocessor">#else</span></div>
-<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160;        <span class="keywordtype">double</span>** data;</div>
-<div class="line"><a name="l00110"></a><span class="lineno">  110</span>&#160;        <span class="keywordtype">double</span>* workArea;</div>
-<div class="line"><a name="l00111"></a><span class="lineno">  111</span>&#160;        <span class="keywordtype">int</span>* bitReversal;</div>
-<div class="line"><a name="l00112"></a><span class="lineno">  112</span>&#160;        <span class="keywordtype">double</span>* cosSinTable;</div>
-<div class="line"><a name="l00113"></a><span class="lineno">  113</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;    };</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;}</div>
-<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
-<div class="line"><a name="l00117"></a><span class="lineno">  117</span>&#160;<span class="preprocessor">#endif</span></div>
-<div class="ttc" id="aclassvernier_1_1_fourier_transform_html"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html">vernier::FourierTransform</a></div><div class="ttdoc">Computes Discrete Fourier Transform on Eigen arrays using FFTW library or Ooura's implementation if F...</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8hpp_source.html#l00027">FourierTransform.hpp:27</a></div></div>
-<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_a5474994389c3e760b62bfea7a9c9aed1"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#a5474994389c3e760b62bfea7a9c9aed1">vernier::FourierTransform::resize</a></div><div class="ttdeci">void resize(int nRows, int nCols, int sign=FFTW_FORWARD)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00063">FourierTransform.cpp:63</a></div></div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;        fftw_plan plan;</div>
+<div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;    };</div>
+<div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;}</div>
+<div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160; </div>
+<div class="line"><a name="l00104"></a><span class="lineno">  104</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="ttc" id="aclassvernier_1_1_fourier_transform_html"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html">vernier::FourierTransform</a></div><div class="ttdoc">Computes Discrete Fourier Transform on Eigen arrays using FFTW library.</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8hpp_source.html#l00021">FourierTransform.hpp:21</a></div></div>
+<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_a5474994389c3e760b62bfea7a9c9aed1"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#a5474994389c3e760b62bfea7a9c9aed1">vernier::FourierTransform::resize</a></div><div class="ttdeci">void resize(int nRows, int nCols, int sign=FFTW_FORWARD)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00062">FourierTransform.cpp:62</a></div></div>
 <div class="ttc" id="aclassvernier_1_1_fourier_transform_html_a6a53a2fda7c6f74344aaca51cda12ab1"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#a6a53a2fda7c6f74344aaca51cda12ab1">vernier::FourierTransform::FourierTransform</a></div><div class="ttdeci">FourierTransform(const FourierTransform &amp;)=delete</div></div>
-<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_a881ee10e763d941a3a1755683e9e4980"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#a881ee10e763d941a3a1755683e9e4980">vernier::FourierTransform::setSign</a></div><div class="ttdeci">void setSign(int sign)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00105">FourierTransform.cpp:105</a></div></div>
-<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_ae28d2d1c521d07431ccd4fd466c34ac3"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">vernier::FourierTransform::FourierTransform</a></div><div class="ttdeci">FourierTransform(int sign=FFTW_FORWARD)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00012">FourierTransform.cpp:12</a></div></div>
-<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_af145b29577f75ab0ac6cbfd3fa5796d7"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">vernier::FourierTransform::compute</a></div><div class="ttdeci">void compute(const Eigen::ArrayXXcd &amp;in, Eigen::ArrayXXcd &amp;out)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00093">FourierTransform.cpp:93</a></div></div>
+<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_a881ee10e763d941a3a1755683e9e4980"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#a881ee10e763d941a3a1755683e9e4980">vernier::FourierTransform::setSign</a></div><div class="ttdeci">void setSign(int sign)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00104">FourierTransform.cpp:104</a></div></div>
+<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_ae28d2d1c521d07431ccd4fd466c34ac3"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#ae28d2d1c521d07431ccd4fd466c34ac3">vernier::FourierTransform::FourierTransform</a></div><div class="ttdeci">FourierTransform(int sign=FFTW_FORWARD)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00011">FourierTransform.cpp:11</a></div></div>
+<div class="ttc" id="aclassvernier_1_1_fourier_transform_html_af145b29577f75ab0ac6cbfd3fa5796d7"><div class="ttname"><a href="classvernier_1_1_fourier_transform.html#af145b29577f75ab0ac6cbfd3fa5796d7">vernier::FourierTransform::compute</a></div><div class="ttdeci">void compute(const Eigen::ArrayXXcd &amp;in, Eigen::ArrayXXcd &amp;out)</div><div class="ttdef"><b>Definition:</b> <a href="_fourier_transform_8cpp_source.html#l00092">FourierTransform.cpp:92</a></div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
