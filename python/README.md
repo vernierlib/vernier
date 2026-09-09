@@ -3,7 +3,8 @@
 `pyvernier` exposes the VERNIER C++ library to Python through
 [nanobind](https://github.com/wjakob/nanobind) (vendored in `3rdparty/nanobind`).
 It covers the common workflow: build a pattern layout, render an image of it,
-then detect the pattern and read back its pose.
+then detect the pattern and read back its pose. Every C++ example has a Python
+port next to this file (see [Examples](#examples)).
 
 ## Building
 
@@ -74,28 +75,61 @@ Both backends compute in double precision and agree to within rounding.
 ## Exposed API
 
 - `Pose` — `x, y, z, alpha, beta, gamma` (2D and 3D constructors).
-- `PeriodicPatternDetector`, `MegarenaPatternDetector` — `compute(image)`,
-  `patternFound()`, `get2DPose()`, `get3DPose()`, `setBackend(backend)`,
-  `getBackend()`, `getPatternPhase()`.
+- `PatternDetector` — `compute(image)`, `patternFound()`, `patternCount()`,
+  `get2DPose()`, `get3DPose()`, `getAll3DPoses()`, `draw(image)`,
+  `showControlImages()`.
+- `PeriodicPatternDetector`, `MegarenaPatternDetector`,
+  `HPCodePatternDetector`, `StampPatternDetector` — the above plus
+  `setSigma()`, `setCropFactor()`, `setBackend(backend)`, `getBackend()`,
+  `getPatternPhase()`; the two marker detectors also expose `markers`, a
+  `{id: Pose}` dict.
 - `PatternPhase` — `compute(image)`, `resize(rows, cols)`, `setBackend(backend)`,
-  `getBackend()`, `peaksFound()`, `getUnwrappedPhase1/2()`.
+  `getBackend()`, `peaksFound()`, `getPlane1/2()`, `getUnwrappedPhase1/2()`,
+  `showControlImages()`.
+- `PhasePlane` — `a, b, c`, `getPosition(physicalPeriod)`.
 - `Backend` — `Backend.CPU`, `Backend.CUDA`; `cudaAvailable()` at module level.
-- `PeriodicPatternLayout` — `renderOrthographicProjection(pose, rows, cols)`.
+- `Layout.loadFromJSON(filename)` — builds the layout described by a JSON file.
+- `PatternLayout` — `renderOrthographicProjection(pose, rows, cols)`,
+  `saveToPNG()`, `saveToSVG()`, `saveToJSON()`; `PeriodicPatternLayout(period,
+  nRows, nCols)` builds one directly (`nRows`/`nCols` must be odd).
+- `readImage(filename)`, `saveImage(filename, image)`, `showImage(name, image)`,
+  `waitKey(delay)` — image I/O and display, so the examples need no extra
+  Python package.
 - `VernierError` — exception raised for library errors.
+
+### Images
+
+Grayscale images are 2-D `float64` arrays with intensities in `[0, 1]`, which is
+what `readImage()` returns and what the detectors expect. `draw()` differs from
+its C++ counterpart: instead of annotating a `cv::Mat` in place it returns an
+annotated `(rows, cols, 3)` `uint8` RGB copy, which `showImage()` and
+`saveImage()` also accept.
 
 ## Examples
 
-Run from the build directory, where the module lives:
+Every C++ example in `examples/` has a Python port of the same name here, plus
+two CUDA-specific ones. Run them from the build directory, where the module and
+the images live:
 
 ```bash
 cd build/python
-python3 example.py           # render a pattern, detect it, print the pose
-python3 example_cuda.py      # the same detection on the CPU and on the GPU
+python3 example.py                   # render a pattern, detect it, print the pose
+python3 analysingImage.py            # spectrum analysis and phase planes
+python3 detectingMegarenaPattern.py  # pose of a megarena pattern
+python3 detectingMegarenaPattern3D.py
+python3 detectingHPCodePattern.py    # pose of HP code markers
+python3 detectingStampPattern.py     # pose of stamp markers
+python3 generatingPatternLayout.py   # JSON layout -> PNG and SVG
+python3 renderingPatternImage.py     # render a layout at a given pose
+python3 example_cuda.py              # the same detection on the CPU and on the GPU
 python3 bench_cuda.py --size 2048 --iters 50   # CPU vs CUDA timings
 ```
 
-Both CUDA examples degrade to the CPU path with a message when no GPU backend
-is available, so they run anywhere.
+The ports print exactly what the C++ examples print. Where the C++ version ends
+with `imshow` / `waitKey`, the Python one only opens windows when passed
+`--show`, so it stays usable on a headless machine. The two CUDA examples fall
+back to the CPU path with a message when no GPU backend is available, so they
+run anywhere.
 
 ## Tests
 

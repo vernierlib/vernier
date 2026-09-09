@@ -11,7 +11,10 @@ Run from the build directory where the module lives:
     cd build/python && python3 -m unittest test_vernier -v
 """
 
+import os
 import unittest
+
+import numpy as np
 
 import pyvernier as vernier
 
@@ -45,6 +48,48 @@ class TestRoundtrip(unittest.TestCase):
         self.assertAlmostEqual(pose.x, 6.0, delta=0.1)
         self.assertAlmostEqual(pose.y, 3.0, delta=0.1)
         self.assertAlmostEqual(pose.alpha, 0.2, delta=0.02)
+
+
+class TestImages(unittest.TestCase):
+    """Image I/O and the annotated images returned by `draw()`. These need the
+    example data files, which CMake copies next to the module."""
+
+    IMAGE = "megarenaPatternImage_8bits_140um.png"
+
+    def test_read_image(self):
+        if not os.path.exists(self.IMAGE):
+            self.skipTest("example images not found in %s" % os.getcwd())
+        image = vernier.readImage(self.IMAGE)
+        self.assertEqual(image.ndim, 2)
+        self.assertEqual(image.dtype, np.float64)
+        # Intensities are normalized to [0, 1], as PatternDetector expects.
+        self.assertGreaterEqual(image.min(), 0.0)
+        self.assertLessEqual(image.max(), 1.0)
+
+    def test_draw_returns_rgb_copy(self):
+        layout = vernier.PeriodicPatternLayout(15.0, 31, 31)
+        image = layout.renderOrthographicProjection(vernier.Pose(6.0, 3.0, 0.2, 2.0), 128, 128)
+        detector = vernier.PeriodicPatternDetector(15.0)
+        detector.compute(image)
+
+        annotated = detector.draw(image)
+        self.assertEqual(annotated.shape, (128, 128, 3))
+        self.assertEqual(annotated.dtype, np.uint8)
+        # The overlay is drawn on a copy, the input array is untouched.
+        self.assertEqual(image.shape, (128, 128))
+
+
+class TestLayout(unittest.TestCase):
+
+    def test_load_from_json(self):
+        if not os.path.exists("megarenaPattern.json"):
+            self.skipTest("example layouts not found in %s" % os.getcwd())
+        layout = vernier.Layout.loadFromJSON("megarenaPattern.json")
+        self.assertIn("Megarena", repr(layout))
+
+    def test_load_from_missing_file_raises(self):
+        with self.assertRaises(vernier.VernierError):
+            vernier.Layout.loadFromJSON("thereIsNoSuchPattern.json")
 
 
 class TestBackend(unittest.TestCase):

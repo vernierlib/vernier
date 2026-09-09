@@ -19,23 +19,25 @@ on larger images).
 """
 
 import argparse
-import math
 import time
-
-import numpy as np
 
 import pyvernier as vernier
 
+PHYSICAL_PERIOD = 15.0  # µm
+PERIODS_PER_IMAGE = 16
+
 
 def synthetic_image(size):
-    """Rotated sinusoidal fringes, the same image as examples/bench.cpp."""
-    period = size / 16.0
-    theta = 0.1
-    rows, cols = np.meshgrid(np.arange(size), np.arange(size), indexing="ij")
-    dx = cols - size / 2.0
-    dy = rows - size / 2.0
-    xp = math.cos(-theta) * dx - math.sin(-theta) * dy
-    return 0.5 + 0.5 * np.cos(2.0 * math.pi * xp / period)
+    """Renders the benchmark image, the same one as examples/bench.cpp.
+
+    Rather than hand-rolling a cosine, this asks the library for a real periodic
+    pattern seen slightly rotated by a virtual camera. The pixel size is chosen
+    so that the image always spans PERIODS_PER_IMAGE periods, whatever `size` is.
+    """
+    layout = vernier.PeriodicPatternLayout(PHYSICAL_PERIOD, 33, 33)
+    pixel_size = PHYSICAL_PERIOD * PERIODS_PER_IMAGE / size
+    pose = vernier.Pose(0.0, 0.0, 0.1, pixel_size)  # x, y, alpha, pixelSize
+    return layout.renderOrthographicProjection(pose, size, size)
 
 
 def bench(image, backend, iters):
