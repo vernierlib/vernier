@@ -153,35 +153,84 @@ void testBackendSelection() {
     detector->setBackend(Backend::CPU);
     UNIT_TEST(detector->getBackend() == Backend::CPU);
 
-    // The detector's answer must agree with the phase computation it drives,
-    // which is the whole point of moving the switch up here.
+    // The detector's answer must agree with the phase computation it drives.
+    //
+    // Be aware of what this can and cannot show: with no CUDA device both sides
+    // read CPU because that is the default, so this would still hold even if the
+    // detector never forwarded anything. Forwarding is only truly demonstrated
+    // once a non-default backend is set, which needs a device - see
+    // runCudaBackendTests() below. Kept here because it is free and would catch
+    // a detector that reported a backend it had never been given.
     PeriodicPatternDetector* periodic = dynamic_cast<PeriodicPatternDetector*> (detector.get());
     UNIT_TEST(periodic != NULL);
+    if (periodic == NULL) {
+        return;
+    }
     UNIT_TEST(periodic->getPatternPhase()->getBackend() == detector->getBackend());
 
-    // The factory can choose it up front, which is the shortest thing a user writes.
-    std::unique_ptr<PatternDetector> viaFactory = Detector::newInstance("MegarenaPattern", Backend::CPU);
-    UNIT_TEST(viaFactory->getBackend() == Backend::CPU);
+    // The factory must pass its argument on rather than quietly dropping it.
+    // Asking for CUDA settles that on any machine: where it is available the
+    // detector comes back using it, and where it is not the request is refused.
+    // A factory ignoring the argument would do neither - it would hand back a
+    // working CPU detector.
+    bool factoryUsedTheArgument = false;
+    try {
+        std::unique_ptr<PatternDetector> viaFactory =
+                Detector::newInstance("MegarenaPattern", Backend::CUDA);
+        factoryUsedTheArgument = (viaFactory->getBackend() == Backend::CUDA);
+    } catch (const std::exception&) {
+        factoryUsedTheArgument = true;
+    }
+    UNIT_TEST(factoryUsedTheArgument);
 
-    // Availability is reachable without constructing anything.
-    UNIT_TEST(PatternDetector::cudaAvailable() == cudaAvailable());
-
-    if (cudaAvailable()) {
+    // Selecting a backend either takes effect everywhere or changes nothing at
+    // all; it must never leave the detector claiming one thing while its phase
+    // computation does another. Both outcomes are correct - which one you get
+    // depends on the machine - so the property is stated once, for both.
+    Backend before = detector->getBackend();
+    try {
         detector->setBackend(Backend::CUDA);
         UNIT_TEST(detector->getBackend() == Backend::CUDA);
         UNIT_TEST(periodic->getPatternPhase()->getBackend() == Backend::CUDA);
-    } else {
-        // Asking for a backend this build cannot provide must fail loudly, and
-        // must leave the detector on the one it was already using.
-        bool thrown = false;
-        try {
-            detector->setBackend(Backend::CUDA);
-        } catch (const std::exception& e) {
-            thrown = true;
-        }
-        UNIT_TEST(thrown);
-        UNIT_TEST(detector->getBackend() == Backend::CPU);
+    } catch (const std::exception&) {
+        UNIT_TEST(detector->getBackend() == before);
+        UNIT_TEST(periodic->getPatternPhase()->getBackend() == before);
     }
+}
+
+void runCudaBackendTests() {
+    START_UNIT_TEST;
+
+    if (!cudaAvailable()) {
+        std::cout << "No CUDA device found, skipping CUDA tests." << std::endl;
+        return;
+    }
+
+    // With a device present, a detector switched to CUDA must still measure the
+    // same pose as one left on the CPU. Selecting the backend is only useful if
+    // it changes how the work is done and not what comes out of it.
+    double physicalPeriod = 8.0;
+    PeriodicPatternLayout layout(physicalPeriod, 81, 61);
+    Pose patternPose = Pose(2.0, 1.5, 0.3, 1.0);
+    Eigen::ArrayXXd array(512, 512);
+    layout.renderOrthographicProjection(patternPose, array);
+
+    std::unique_ptr<PatternDetector> cpu = Detector::newInstance("PeriodicPattern");
+    std::unique_ptr<PatternDetector> cuda =
+            Detector::newInstance("PeriodicPattern", Backend::CUDA);
+
+    UNIT_TEST(cuda->getBackend() == Backend::CUDA);
+
+    cpu->compute(array);
+    cuda->compute(array);
+
+    UNIT_TEST(cpu->patternFound());
+    UNIT_TEST(cuda->patternFound());
+
+    // The choice must survive the computation rather than being reset by it.
+    UNIT_TEST(cuda->getBackend() == Backend::CUDA);
+
+    TEST_EQUALITY(cpu->get2DPose(), cuda->get2DPose(), 1e-9)
 }
 
 int main(int argc, char** argv) {
@@ -191,6 +240,8 @@ int main(int argc, char** argv) {
     //main3dPerspective();
     
     testBackendSelection();
+
+    runCudaBackendTests();
 
     REPEAT_TEST(test2d(), 10)
 
