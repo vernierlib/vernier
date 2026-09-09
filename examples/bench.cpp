@@ -19,7 +19,7 @@ static Eigen::ArrayXXd syntheticImage(int size) {
         for (int col = 0; col < size; col++) {
             double dx = col - cx, dy = row - cy;
             double xp = c * dx - s * dy;
-            img(row, col) = 0.5 + 0.5 * cos(2.0 * M_PI * xp / period);
+            img(row, col) = 0.5 + 0.5 * cos(2.0 * PI * xp / period);
         }
     }
     return img;
