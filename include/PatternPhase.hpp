@@ -106,8 +106,8 @@ namespace vernier {
         /** Selects the compute backend. Throws if CUDA is requested but unavailable.
          *
          * Most users should not need this: set the backend on the detector instead
-         * (see PatternDetector::setBackend), which forwards to here. This remains
-         * for code driving PatternPhase directly, such as the bench example. */
+         * (see PatternDetector::setBackend), which applies it here. This remains
+         * for code driving PatternPhase directly, without a detector around it. */
         void setBackend(Backend backend);
 
         /** Returns the currently selected backend. */
