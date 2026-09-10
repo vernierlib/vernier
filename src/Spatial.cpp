@@ -8,20 +8,70 @@
 
 namespace vernier {
 
+    /** Unwraps one column of the phase map, upward then downward from the central
+     *	row, starting from the phase iteration and phase value carried over by the
+     *	unwrapping of the central row.
+     *
+     *	Every column is independent from the others, which is what makes the four
+     *	quarters parallelizable.
+     */
+    static void unwrapColumn(Eigen::ArrayXXd& wrappedPhase, int col, int origineY, int sizeY,
+            int phaseIteration, double phaseValue) {
+
+        double phaseValuePrevY, difference;
+
+        // Upper part of the column (quarter 3 on the left half, 4 on the right)
+        int phaseIterationY = phaseIteration;
+        double phaseValueNextY = phaseValue;
+        for (int row = origineY; row > 0; row--) {
+            phaseValuePrevY = phaseValueNextY;
+            phaseValueNextY = wrappedPhase(row - 1, col);
+            difference = phaseValueNextY - phaseValuePrevY;
+
+            if (difference > PI) {
+                phaseIterationY = phaseIterationY - 1;
+            } else if (difference <= -PI) {
+                phaseIterationY = phaseIterationY + 1;
+            }
+            wrappedPhase(row - 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
+        }
+
+        // Lower part of the column (quarter 2 on the left half, 1 on the right)
+        phaseIterationY = phaseIteration;
+        phaseValueNextY = phaseValue;
+        for (int row = origineY; row < sizeY - 1; row++) {
+            phaseValuePrevY = phaseValueNextY;
+            phaseValueNextY = wrappedPhase(row + 1, col);
+            difference = phaseValueNextY - phaseValuePrevY;
+
+            if (difference > PI) {
+                phaseIterationY = phaseIterationY - 1;
+            } else if (difference <= -PI) {
+                phaseIterationY = phaseIterationY + 1;
+            }
+            wrappedPhase(row + 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
+        }
+    }
+
     void quartersUnwrapPhase(Eigen::ArrayXXd& wrappedPhase) {
         int sizeX = wrappedPhase.cols();
         int sizeY = wrappedPhase.rows();
         int origineX = (sizeX / 2);
         int origineY = (sizeY / 2);
 
-        int phaseIterationX, phaseIterationY;
-        double phaseValuePrevX, phaseValuePrevY, phaseValueNextX, phaseValueNextY;
-        double difference;
+        // The central row is a prefix scan: it has to stay sequential. The seed
+        // (phase iteration and phase value) handed over to each column is saved
+        // along the way so that the columns can then be unwrapped in parallel.
+        // Columns 0 to origineX are seeded by the left scan, columns origineX to
+        // sizeX-1 by the right one (the central column gets both, in that order).
+        std::vector<int> leftIteration(origineX + 1), rightIteration(sizeX - origineX);
+        std::vector<double> leftValue(origineX + 1), rightValue(sizeX - origineX);
 
-        phaseIterationX = 0;
-        phaseValueNextX = wrappedPhase(origineY, origineX);
+        double phaseValuePrevX, difference;
 
-        // Loop for the left half of the wrapped phase
+        // Left half of the central row
+        int phaseIterationX = 0;
+        double phaseValueNextX = wrappedPhase(origineY, origineX);
         for (int col = origineX; col > 0; col--) {
             phaseValuePrevX = phaseValueNextX;
             phaseValueNextX = wrappedPhase(origineY, col - 1);
@@ -35,72 +85,13 @@ namespace vernier {
             }
             wrappedPhase(origineY, col - 1) = phaseValueNextX + phaseIterationX * 2 * PI;
 
-            // Quarter 3
-            phaseIterationY = phaseIterationX;
-            phaseValueNextY = phaseValueNextX;
-            for (int row = origineY; row > 0; row--) {
-                phaseValuePrevY = phaseValueNextY;
-                phaseValueNextY = wrappedPhase(row - 1, col);
-                difference = phaseValueNextY - phaseValuePrevY;
-
-                if (difference > PI) {
-                    phaseIterationY = phaseIterationY - 1;
-                } else if (difference <= -PI) {
-                    phaseIterationY = phaseIterationY + 1;
-                }
-                wrappedPhase(row - 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
-            }
-
-            // Quarter 2
-            phaseIterationY = phaseIterationX;
-            phaseValueNextY = phaseValueNextX;
-            for (int row = origineY; row < sizeY - 1; row++) {
-                phaseValuePrevY = phaseValueNextY;
-                phaseValueNextY = wrappedPhase(row + 1, col);
-                difference = phaseValueNextY - phaseValuePrevY;
-
-                if (difference > PI) {
-                    phaseIterationY = phaseIterationY - 1;
-                } else if (difference <= -PI) {
-                    phaseIterationY = phaseIterationY + 1;
-                }
-                wrappedPhase(row + 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
-            }
+            leftIteration[col] = phaseIterationX;
+            leftValue[col] = phaseValueNextX;
         }
-        // first row unwrapping
-        // Quarter 3 first row
-        phaseIterationY = phaseIterationX;
-        phaseValueNextY = phaseValueNextX;
-        for (int row = origineY; row > 0; row--) {
-            phaseValuePrevY = phaseValueNextY;
-            phaseValueNextY = wrappedPhase(row - 1, 0);
-            difference = phaseValueNextY - phaseValuePrevY;
+        leftIteration[0] = phaseIterationX;
+        leftValue[0] = phaseValueNextX;
 
-            if (difference > PI) {
-                phaseIterationY = phaseIterationY - 1;
-            } else if (difference <= -PI) {
-                phaseIterationY = phaseIterationY + 1;
-            }
-            wrappedPhase(row - 1, 0) = phaseValueNextY + phaseIterationY * 2 * PI;
-        }
-
-        // Quarter 2 first row
-        phaseIterationY = phaseIterationX;
-        phaseValueNextY = phaseValueNextX;
-        for (int row = origineY; row < sizeY - 1; row++) {
-            phaseValuePrevY = phaseValueNextY;
-            phaseValueNextY = wrappedPhase(row + 1, 0);
-            difference = phaseValueNextY - phaseValuePrevY;
-
-            if (difference > PI) {
-                phaseIterationY = phaseIterationY - 1;
-            } else if (difference <= -PI) {
-                phaseIterationY = phaseIterationY + 1;
-            }
-            wrappedPhase(row + 1, 0) = phaseValueNextY + phaseIterationY * 2 * PI;
-        }
-
-        // Loop for the right half of the wrapped phase
+        // Right half of the central row
         phaseIterationX = 0;
         phaseValueNextX = wrappedPhase(origineY, origineX);
         for (int col = origineX; col < sizeX - 1; col++) {
@@ -116,69 +107,22 @@ namespace vernier {
             }
             wrappedPhase(origineY, col + 1) = phaseValueNextX + phaseIterationX * 2 * PI;
 
-            // Quarter 4
-            phaseIterationY = phaseIterationX;
-            phaseValueNextY = phaseValueNextX;
-            for (int row = origineY; row > 0; row--) {
-                phaseValuePrevY = phaseValueNextY;
-                phaseValueNextY = wrappedPhase(row - 1, col);
-                difference = phaseValueNextY - phaseValuePrevY;
-
-                if (difference > PI) {
-                    phaseIterationY = phaseIterationY - 1;
-                } else if (difference <= -PI) {
-                    phaseIterationY = phaseIterationY + 1;
-                }
-                wrappedPhase(row - 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
-            }
-
-            // Quarter 1
-            phaseIterationY = phaseIterationX;
-            phaseValueNextY = phaseValueNextX;
-            for (int row = origineY; row < sizeY - 1; row++) {
-                phaseValuePrevY = phaseValueNextY;
-                phaseValueNextY = wrappedPhase(row + 1, col);
-                difference = phaseValueNextY - phaseValuePrevY;
-
-                if (difference > PI) {
-                    phaseIterationY = phaseIterationY - 1;
-                } else if (difference <= -PI) {
-                    phaseIterationY = phaseIterationY + 1;
-                }
-                wrappedPhase(row + 1, col) = phaseValueNextY + phaseIterationY * 2 * PI;
-            }
+            rightIteration[col - origineX] = phaseIterationX;
+            rightValue[col - origineX] = phaseValueNextX;
         }
-        // last row unwrapping
-        // Quarter 4 last row
-        phaseIterationY = phaseIterationX;
-        phaseValueNextY = phaseValueNextX;
-        for (int row = origineY; row > 0; row--) {
-            phaseValuePrevY = phaseValueNextY;
-            phaseValueNextY = wrappedPhase(row - 1, sizeX - 1);
-            difference = phaseValueNextY - phaseValuePrevY;
+        rightIteration[sizeX - 1 - origineX] = phaseIterationX;
+        rightValue[sizeX - 1 - origineX] = phaseValueNextX;
 
-            if (difference > PI) {
-                phaseIterationY = phaseIterationY - 1;
-            } else if (difference <= -PI) {
-                phaseIterationY = phaseIterationY + 1;
+        // The four quarters, one column at a time: no column reads or writes
+        // another one, nor the central row.
+#pragma omp parallel for
+        for (int col = 0; col < sizeX; col++) {
+            if (col <= origineX) {
+                unwrapColumn(wrappedPhase, col, origineY, sizeY, leftIteration[col], leftValue[col]);
             }
-            wrappedPhase(row - 1, sizeX - 1) = phaseValueNextY + phaseIterationY * 2 * PI;
-        }
-
-        // Quarter 1 last row
-        phaseIterationY = phaseIterationX;
-        phaseValueNextY = phaseValueNextX;
-        for (int row = origineY; row < sizeY - 1; row++) {
-            phaseValuePrevY = phaseValueNextY;
-            phaseValueNextY = wrappedPhase(row + 1, sizeX - 1);
-            difference = phaseValueNextY - phaseValuePrevY;
-
-            if (difference > PI) {
-                phaseIterationY = phaseIterationY - 1;
-            } else if (difference <= -PI) {
-                phaseIterationY = phaseIterationY + 1;
+            if (col >= origineX) {
+                unwrapColumn(wrappedPhase, col, origineY, sizeY, rightIteration[col - origineX], rightValue[col - origineX]);
             }
-            wrappedPhase(row + 1, sizeX - 1) = phaseValueNextY + phaseIterationY * 2 * PI;
         }
     }
 
