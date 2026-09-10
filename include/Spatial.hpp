@@ -24,8 +24,10 @@ namespace vernier {
      *		|
      *		|direction Y
      *
-     *	The algorithm unwraps first the upper halp of the phase map (i.e. quarters 1 & 2)
-     *	then it unwraps the lower half (i.e. quarters 3 & 4).
+     *	The algorithm first unwraps the central row (sequentially, from the center
+     *	towards both sides), then unwraps every column from that row, upwards and
+     *	downwards. Columns being independent from one another, the four quarters are
+     *	unwrapped in parallel with OpenMP (when available).
      *
      *	\params wrappedPhase: Eigen matrix of the wrapped phase to be unwrapped
      * 
