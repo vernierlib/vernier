@@ -573,6 +573,56 @@ namespace vernier {
         throw Exception("saveToPNG is not implemented for " + this->classname);
     }
 
+    /** Returns true if the cell exists and holds a dot */
+    static bool isDotCell(const cv::Mat & cells, int row, int col) {
+        return row >= 0 && col >= 0 && row < cells.rows && col < cells.cols && cells.at<unsigned char>(row, col) != 0;
+    }
+
+    /** Locates a pixel with respect to the nearest corner of its cell, along one axis */
+    struct CellCorner {
+        int cell; // index of the cell containing the pixel
+        int side; // -1 if the nearest corner is before the pixel, +1 if it is after
+        double distance; // distance from the pixel centre to that corner, in pixels
+    };
+
+    static CellCorner nearestCellCorner(int pixel, int cellSize) {
+        double position = pixel % cellSize + 0.5; // pixel centre inside its cell
+        CellCorner corner;
+        corner.cell = pixel / cellSize;
+        corner.side = (position < 0.5 * cellSize) ? -1 : 1;
+        corner.distance = (corner.side < 0) ? position : cellSize - position;
+        return corner;
+    }
+
+    /** Returns true if the pixel belongs to a dot once the corners are rounded with the given radius (in pixels).
+     * Only the pixels lying in the radius x radius square at the corner of their cell can change:
+     *   - the corner of a dot is rounded when its two edge neighbours are gaps (convex corner),
+     *   - the corner of a gap is filled when its two edge neighbours and its diagonal neighbour are dots (concave corner).
+     * Hence dots sharing an edge merge into one smooth shape, while dots touching only by a corner stay apart. */
+    static bool isDotPixel(const cv::Mat & cells, const CellCorner & y, const CellCorner & x, double radius) {
+        bool dot = isDotCell(cells, y.cell, x.cell);
+        if (x.distance >= radius || y.distance >= radius) {
+            return dot;
+        }
+
+        bool verticalNeighbour = isDotCell(cells, y.cell + y.side, x.cell);
+        bool horizontalNeighbour = isDotCell(cells, y.cell, x.cell + x.side);
+        bool diagonalNeighbour = isDotCell(cells, y.cell + y.side, x.cell + x.side);
+
+        // the rounding arc is centred inside the cell, at (radius, radius) from the corner
+        double dx = radius - x.distance;
+        double dy = radius - y.distance;
+        bool insideArc = dx * dx + dy * dy <= radius * radius;
+
+        if (dot && !verticalNeighbour && !horizontalNeighbour) {
+            return insideArc; // convex corner
+        }
+        if (!dot && verticalNeighbour && horizontalNeighbour && diagonalNeighbour) {
+            return !insideArc; // concave corner
+        }
+        return dot;
+    }
+
     void PatternLayout::writeCellsToPNG(const cv::Mat & cells, std::string filename) {
         if (pngCellSize < 1) {
             throw Exception("The PNG cell size must be at least 1 pixel.");
@@ -580,38 +630,14 @@ namespace vernier {
         if (pngCornerRadius < 0.0 || pngCornerRadius > 0.5) {
             throw Exception("The PNG corner radius must be between 0.0 and 0.5.");
         }
-        int n = pngCellSize;
-        double r = pngCornerRadius * n;
+        double radius = pngCornerRadius * pngCellSize; // in pixels
 
-        auto isDot = [&cells](int row, int col) {
-            return row >= 0 && col >= 0 && row < cells.rows && col < cells.cols && cells.at<unsigned char>(row, col) != 0;
-        };
-
-        cv::Mat image(cells.rows * n, cells.cols * n, CV_8U);
+        cv::Mat image(cells.rows * pngCellSize, cells.cols * pngCellSize, CV_8U);
         for (int row = 0; row < image.rows; row++) {
-            int cellRow = row / n;
-            double v = row % n + 0.5;
-            int rowSide = (v < 0.5 * n) ? -1 : 1; // side of the nearest cell corner
-            double dv = (rowSide < 0) ? v : n - v; // distance to that corner
+            CellCorner y = nearestCellCorner(row, pngCellSize);
             for (int col = 0; col < image.cols; col++) {
-                int cellCol = col / n;
-                double u = col % n + 0.5;
-                int colSide = (u < 0.5 * n) ? -1 : 1;
-                double du = (colSide < 0) ? u : n - u;
-
-                bool dot = isDot(cellRow, cellCol);
-                if (du < r && dv < r) {
-                    bool rowNeighbour = isDot(cellRow + rowSide, cellCol);
-                    bool colNeighbour = isDot(cellRow, cellCol + colSide);
-                    bool diagonal = isDot(cellRow + rowSide, cellCol + colSide);
-                    bool insideArc = (r - du) * (r - du) + (r - dv) * (r - dv) <= r * r;
-                    if (dot && !rowNeighbour && !colNeighbour) {
-                        dot = insideArc; // convex corner
-                    } else if (!dot && rowNeighbour && colNeighbour && diagonal) {
-                        dot = !insideArc; // concave corner
-                    }
-                }
-                image.at<unsigned char>(row, col) = dot ? 255 : 0;
+                CellCorner x = nearestCellCorner(col, pngCellSize);
+                image.at<unsigned char>(row, col) = isDotPixel(cells, y, x, radius) ? 255 : 0;
             }
         }
         if (filename == "") {
