@@ -5,6 +5,7 @@
  */
 
 #include "PatternLayout.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -570,6 +571,53 @@ namespace vernier {
 
     void PatternLayout::saveToPNG(std::string filename) {
         throw Exception("saveToPNG is not implemented for " + this->classname);
+    }
+
+    void PatternLayout::writeCellsToPNG(const cv::Mat & cells, std::string filename) {
+        if (pngCellSize < 1) {
+            throw Exception("The PNG cell size must be at least 1 pixel.");
+        }
+        if (pngCornerRadius < 0.0 || pngCornerRadius > 0.5) {
+            throw Exception("The PNG corner radius must be between 0.0 and 0.5.");
+        }
+        int n = pngCellSize;
+        double r = pngCornerRadius * n;
+
+        auto isDot = [&cells](int row, int col) {
+            return row >= 0 && col >= 0 && row < cells.rows && col < cells.cols && cells.at<unsigned char>(row, col) != 0;
+        };
+
+        cv::Mat image(cells.rows * n, cells.cols * n, CV_8U);
+        for (int row = 0; row < image.rows; row++) {
+            int cellRow = row / n;
+            double v = row % n + 0.5;
+            int rowSide = (v < 0.5 * n) ? -1 : 1; // side of the nearest cell corner
+            double dv = (rowSide < 0) ? v : n - v; // distance to that corner
+            for (int col = 0; col < image.cols; col++) {
+                int cellCol = col / n;
+                double u = col % n + 0.5;
+                int colSide = (u < 0.5 * n) ? -1 : 1;
+                double du = (colSide < 0) ? u : n - u;
+
+                bool dot = isDot(cellRow, cellCol);
+                if (du < r && dv < r) {
+                    bool rowNeighbour = isDot(cellRow + rowSide, cellCol);
+                    bool colNeighbour = isDot(cellRow, cellCol + colSide);
+                    bool diagonal = isDot(cellRow + rowSide, cellCol + colSide);
+                    bool insideArc = (r - du) * (r - du) + (r - dv) * (r - dv) <= r * r;
+                    if (dot && !rowNeighbour && !colNeighbour) {
+                        dot = insideArc; // convex corner
+                    } else if (!dot && rowNeighbour && colNeighbour && diagonal) {
+                        dot = !insideArc; // concave corner
+                    }
+                }
+                image.at<unsigned char>(row, col) = dot ? 255 : 0;
+            }
+        }
+        if (filename == "") {
+            filename = classname + ".png";
+        }
+        cv::imwrite(filename, image);
     }
 
     std::string PatternLayout::getClassname() {
