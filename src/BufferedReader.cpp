@@ -33,7 +33,11 @@ namespace vernier {
         release();
         this->filename = filename;
 
-        FILE *file = fopen(filename, "r");
+        // Binary, so the size ftell reports is the number of bytes fread will
+        // return. In text mode on Windows every CRLF collapses to LF, so fread
+        // returns fewer bytes than were allocated and the tail of the buffer is
+        // left uninitialised.
+        FILE *file = fopen(filename, "rb");
         if (file == NULL) {
             throw Exception("File not found or not accessible.");
         }
@@ -48,6 +52,8 @@ namespace vernier {
         if (buffer != NULL) {
             long result = fread(buffer, 1, length, file);
             buffer[result] = 0;
+            // Trust what was actually read rather than what the size promised.
+            length = result;
         } else {
             throw Exception("Memory allocation error in BufferedReader.");
 
@@ -82,7 +88,9 @@ namespace vernier {
     }
     
     bool BufferedReader::equals(const BufferedReader & other) {
-        return memcmp(buffer, other.buffer, length) == 0;
+        // Compare the lengths first: two files of different sizes are not equal,
+        // and memcmp over the longer of them would read past the shorter buffer.
+        return length == other.length && memcmp(buffer, other.buffer, length) == 0;
     }
     
     bool areFilesEqual(const std::string & filename1, const std::string & filename2) {
