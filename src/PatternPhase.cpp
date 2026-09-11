@@ -33,6 +33,11 @@ namespace vernier {
             unwrappedPhase1.resize(nRows, nCols);
             unwrappedPhase2.resize(nRows, nCols);
             spatial.resize(nRows, nCols);
+#ifdef USE_CUDA
+            if (cudaEngine) {
+                cudaEngine->resize(nRows, nCols);
+            }
+#endif
         }
     }
 
@@ -53,6 +58,12 @@ namespace vernier {
     }
 
     void PatternPhase::compute() {
+#ifdef USE_CUDA
+        if (backend == Backend::CUDA) {
+            computeCuda();
+            return;
+        }
+#endif
         fft.compute(spatial, spectrum);
 
         shift(spectrum, spectrumShifted);
@@ -254,6 +265,45 @@ namespace vernier {
     bool PatternPhase::peaksFound() {
         return (mainPeak1.z() > minPeakPower && mainPeak2.z() > minPeakPower);
     }
+
+    void PatternPhase::setBackend(Backend backend) {
+        requireBackendAvailable(backend);
+#ifdef USE_CUDA
+        if (backend == Backend::CUDA) {
+            if (!cudaEngine) {
+                cudaEngine.reset(new CudaPhaseEngine());
+            }
+            // The engine can only be sized once the image size is known; if the
+            // backend is chosen before the first compute(), resize() does it.
+            if (spectrum.rows() > 0 && spectrum.cols() > 0) {
+                cudaEngine->resize(spectrum.rows(), spectrum.cols());
+            }
+        }
+#endif
+        this->backend = backend;
+    }
+
+    Backend PatternPhase::getBackend() const {
+        return backend;
+    }
+
+#ifdef USE_CUDA
+    void PatternPhase::computeCuda() {
+        double p1[3], p2[3];
+        // The engine runs the whole data-parallel pipeline on the GPU and writes the
+        // wrapped phases (arg) into unwrappedPhase1/2; the sequential unwrap stays here.
+        cudaEngine->compute(spatial.data(), sigma, minPeakPower, minFrequency, maxFrequency,
+                smoothingKernelSize,
+                spectrumShifted.data(), phase1.data(), phase2.data(),
+                unwrappedPhase1.data(), unwrappedPhase2.data(), p1, p2);
+
+        mainPeak1 << p1[0], p1[1], p1[2];
+        mainPeak2 << p2[0], p2[1], p2[2];
+
+        quartersUnwrapPhase(unwrappedPhase1);
+        quartersUnwrapPhase(unwrappedPhase2);
+    }
+#endif
 
     cv::Mat PatternPhase::getImage() {
         cv::Mat image;

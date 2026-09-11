@@ -26,6 +26,17 @@ namespace vernier {
         }
     }
 
+    void PeriodicPatternDetector::setBackend(Backend backend) {
+        // The phase computation holds the choice; there is no second copy here to
+        // keep in step. It validates and throws, leaving its previous backend in
+        // place, so a rejected request changes nothing.
+        patternPhase.setBackend(backend);
+    }
+
+    Backend PeriodicPatternDetector::getBackend() const {
+        return patternPhase.getBackend();
+    }
+
     void PeriodicPatternDetector::computeImage() {
         patternPhase.compute(array);
         periodShift1 = 0;

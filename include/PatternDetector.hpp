@@ -55,6 +55,28 @@ namespace vernier {
          */
         void compute(const Eigen::ArrayXXd & array);
 
+        /** Selects the compute backend this detector uses.
+         *
+         * This is the intended place to choose a backend: it applies to whatever
+         * the detector uses internally, so a caller holding a PatternDetector
+         * never has to reach inside it.
+         *
+         *     std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
+         *     detector->setBackend(Backend::CUDA);
+         *
+         * May be called before or after the first compute(). Throws if the backend
+         * is unavailable, leaving the previous choice in place.
+         */
+        virtual void setBackend(Backend backend) = 0;
+
+        /** Returns the compute backend this detector is using.
+         *
+         * Deliberately not backed by a member of this class. A detector reports
+         * whatever its computation is actually set to, so the two cannot drift
+         * apart and be found disagreeing later.
+         */
+        virtual Backend getBackend() const = 0;
+
         /** Returns true if patterns have been detected and localized */
         virtual bool patternFound(int id = -1) = 0;
         

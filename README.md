@@ -99,6 +99,35 @@ Finally, open a terminal and go to the directory of the package
 	% make
 ```
 
+### GPU acceleration with CUDA (optional)
+
+If an NVIDIA GPU and the [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) are available, the phase computation of PatternPhase can run on the GPU with cuFFT. Enable it at build time:
+
+```Shell
+	> cmake .. -DUSE_CUDA=ON
+	> make
+```
+
+The backend is then selectable at runtime and falls back to the CPU by default. Choose it on the detector, and it applies to everything the detector computes:
+
+```C++
+	std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
+	if (cudaAvailable()) {
+	    detector->setBackend(Backend::CUDA);
+	}
+	detector->compute(image);
+```
+
+The factory can also be told up front, which saves the check when you know what you want:
+
+```C++
+	auto detector = Detector::loadFromJSON("pattern.json", Backend::CUDA);
+```
+
+Selecting a backend the library was not built for, or one with no device fitted, throws and leaves the detector on the backend it was already using. `PatternPhase::setBackend` still exists for code driving the phase computation directly.
+
+Both backends compute in double precision and give the same results.
+
 ## Getting started
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)
