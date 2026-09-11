@@ -104,6 +104,9 @@ Both backends compute in double precision and agree to within rounding.
 - `PatternLayout` — `renderOrthographicProjection(pose, rows, cols)`,
   `saveToPNG()`, `saveToSVG()`, `saveToJSON()`; `PeriodicPatternLayout(period,
   nRows, nCols)` builds one directly (`nRows`/`nCols` must be odd).
+  `pngCellSize` (pixels per half period, default 1) and `pngCornerRadius`
+  (0.0 to 0.5 of a cell, default 0.0) set the PNG resolution and round the
+  corners of the dots, merging adjacent dots into smooth groups.
 - `readImage(filename)`, `saveImage(filename, image)`, `showImage(name, image)`,
   `waitKey(delay)` — image I/O and display, so the examples need no extra
   Python package.

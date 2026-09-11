@@ -109,18 +109,15 @@ namespace vernier {
     }
 
     void PeriodicPatternLayout::saveToPNG(std::string filename) {
-        cv::Mat image(2 * nRows - 1, 2 * nCols - 1, CV_8U);
-        for (int col = 0; col < image.cols; col++) {
+        cv::Mat cells(2 * nRows - 1, 2 * nCols - 1, CV_8U);
+        for (int col = 0; col < cells.cols; col++) {
             double x = col * period * 0.5 + 0.25 * period - originX;
-            for (int row = 0; row < image.rows; row++) {
+            for (int row = 0; row < cells.rows; row++) {
                 double y = row * period * 0.5 + 0.25 * period - originY;
-                image.at<unsigned char>(row, col) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
+                cells.at<unsigned char>(row, col) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
-        if (filename == "") {
-            filename = classname + ".png";
-        }
-        cv::imwrite(filename, image);
+        writeCellsToPNG(cells, filename);
     }
 
     std::string PeriodicPatternLayout::toString() {
