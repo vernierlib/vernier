@@ -22,7 +22,8 @@ foreach(file ${EXAMPLES})
     target_link_libraries(${exampleName} gdstk)
   endif()
 
-  install(PROGRAMS ${CMAKE_CURRENT_BINARY_DIR}/${exampleName} DESTINATION bin RENAME ${CMAKE_PROJECT_NAME}-${exampleName})
+  install(PROGRAMS $<TARGET_FILE:${exampleName}> DESTINATION bin
+          RENAME ${CMAKE_PROJECT_NAME}-${exampleName}${CMAKE_EXECUTABLE_SUFFIX})
   
 endforeach(file)
 
@@ -32,3 +33,7 @@ foreach(file ${FILES})
   get_filename_component(filename ${file} NAME) 
   configure_file(${CMAKE_CURRENT_SOURCE_DIR}/${filename} ${CMAKE_CURRENT_BINARY_DIR}/${filename} COPYONLY)
 endforeach(file)
+
+# The examples read these from the working directory, so they are installed
+# beside the binaries: a packaged example then runs as-is from bin/.
+install(FILES ${FILES} DESTINATION bin)
