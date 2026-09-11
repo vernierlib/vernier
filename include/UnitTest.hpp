@@ -39,7 +39,7 @@ bool areEqual(vernier::Pose a, vernier::Pose b, double tolerance = DEFAULT_DOUBL
 
 template<typename _Scalar, int _Rows, int _Cols>
 bool areEqual(Eigen::Array<_Scalar, _Rows, _Cols>& x, Eigen::Array<_Scalar, _Rows, _Cols>& y, double tolerance = DEFAULT_DOUBLE_EQUALITY_TOLERANCE) {
-    if (y.rows() != y.rows() || x.cols() != y.cols()) {
+    if (x.rows() != y.rows() || x.cols() != y.cols()) {
         return false;
     } else {
         bool result = true;
@@ -58,7 +58,7 @@ bool areEqual(Eigen::Array<_Scalar, _Rows, _Cols>& x, Eigen::Array<_Scalar, _Row
 
 template<typename _Scalar, int _Rows, int _Cols>
 bool areEqual(Eigen::Matrix<_Scalar, _Rows, _Cols>& x, Eigen::Matrix<_Scalar, _Rows, _Cols>& y, double tolerance = DEFAULT_DOUBLE_EQUALITY_TOLERANCE) {
-    if (y.rows() != y.rows() || x.cols() != y.cols()) {
+    if (x.rows() != y.rows() || x.cols() != y.cols()) {
         return false;
     } else {
         bool result = true;
