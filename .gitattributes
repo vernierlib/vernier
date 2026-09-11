@@ -1,0 +1,15 @@
+# Keep binary files byte-exact on every platform.
+#
+# Without this, a Windows checkout (where core.autocrlf defaults to true) is
+# free to decide a file is text and rewrite its line endings. Git's guess is
+# usually right, but "usually" is not a property you want for a 31 MB test
+# fixture or a photomask.
+*.mat  binary
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.oas  binary
+*.gds  binary
+*.dll  binary
+*.lib  binary
+*.exe  binary
