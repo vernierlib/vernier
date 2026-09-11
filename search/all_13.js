@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['_7ebufferedreader_163',['~BufferedReader',['../classvernier_1_1_buffered_reader.html#a68e48ebd099661fe4751cab60811f112',1,'vernier::BufferedReader']]]
+  ['x_0',['x',['../classvernier_1_1_pose.html#ac3699147550a1b2491458ae2887819f6',1,'vernier::Pose']]]
 ];
