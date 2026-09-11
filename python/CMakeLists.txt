@@ -1,0 +1,61 @@
+# Python bindings for the VERNIER library (nanobind).
+#
+# Produces the `pyvernier` extension module wrapping the native C++ classes.
+# nanobind requires C++17, so this target is compiled as C++17 even though the
+# core library targets C++14.
+
+# nanobind needs the Python interpreter and the Development.Module component
+# (headers + linking helpers, without embedding the interpreter).
+find_package(Python 3.8 REQUIRED COMPONENTS Interpreter Development.Module)
+
+# Vendored nanobind (3rdparty/nanobind). A separate binary directory is required
+# because the source lives outside the current directory.
+add_subdirectory(${CMAKE_SOURCE_DIR}/3rdparty/nanobind ${CMAKE_BINARY_DIR}/nanobind)
+
+nanobind_add_module(pyvernier vernier_python.cpp)
+
+# nanobind switches the target to C++17 automatically; make it explicit.
+set_target_properties(pyvernier PROPERTIES CXX_STANDARD 17 CXX_STANDARD_REQUIRED ON)
+
+target_include_directories(pyvernier PRIVATE
+  ${CMAKE_SOURCE_DIR}/include
+  ${CMAKE_SOURCE_DIR}/3rdparty
+  ${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include
+  ${OpenCV_INCLUDE_DIRS})
+
+add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
+
+target_link_libraries(pyvernier PRIVATE vernier ${OpenCV_LIBS})
+
+find_package(Eigen3 REQUIRED)
+target_link_libraries(pyvernier PRIVATE Eigen3::Eigen)
+
+if (USE_FFTW)
+  target_include_directories(pyvernier PRIVATE ${FFTW3_INCLUDE_DIRS})
+  target_link_libraries(pyvernier PRIVATE ${FFTW3_LIBRARIES})
+  target_compile_definitions(pyvernier PRIVATE USE_FFTW)
+else()
+  target_link_libraries(pyvernier PRIVATE ooura)
+endif()
+
+if(NOT WIN32)
+  target_link_libraries(pyvernier PRIVATE gdstk)
+endif()
+
+# The sources are split into examples/ and test/, but everything is copied flat
+# next to the built module: the examples can then import it and read their images
+# without any PYTHONPATH or path juggling.
+file(GLOB PYTHON_FILES ${CMAKE_CURRENT_SOURCE_DIR}/examples/*.py
+                       ${CMAKE_CURRENT_SOURCE_DIR}/test/*.py)
+
+# The Python examples are ports of the C++ ones and read the same images and JSON
+# layouts, so copy those here too (examples/CMakeLists.txt does the same next to
+# the C++ binaries).
+file(GLOB EXAMPLE_DATA_FILES ${CMAKE_SOURCE_DIR}/examples/*.jpg
+                             ${CMAKE_SOURCE_DIR}/examples/*.png
+                             ${CMAKE_SOURCE_DIR}/examples/*.json)
+
+foreach(file ${PYTHON_FILES} ${EXAMPLE_DATA_FILES})
+  get_filename_component(filename ${file} NAME)
+  configure_file(${file} ${CMAKE_CURRENT_BINARY_DIR}/${filename} COPYONLY)
+endforeach(file)
