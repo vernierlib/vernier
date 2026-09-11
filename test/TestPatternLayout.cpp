@@ -7,6 +7,7 @@
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <fstream>
+#include <opencv2/imgcodecs.hpp>
 
 using namespace vernier;
 using namespace std;
@@ -201,11 +202,68 @@ void runAllTests() {
 
 }
 
+void runRoundedPNGTests() {
+
+    START_UNIT_TEST;
+    // 9x9 cells (5x5 dots): an isolated dot, an L-shaped group and two diagonal dots
+    cv::Mat cells = cv::Mat::zeros(9, 9, CV_8U);
+    cells.at<unsigned char>(1, 1) = 255;
+    cells.at<unsigned char>(1, 3) = 255;
+    cells.at<unsigned char>(1, 4) = 255;
+    cells.at<unsigned char>(2, 4) = 255;
+    cells.at<unsigned char>(4, 1) = 255;
+    cells.at<unsigned char>(5, 2) = 255;
+    cv::imwrite("RoundedCells.png", cells);
+    BitmapPatternLayout layout("RoundedCells.png", 10);
+
+    // default settings keep one pixel per cell
+    layout.saveToPNG("RoundedCellsDefault.png");
+    cv::Mat image = cv::imread("RoundedCellsDefault.png", cv::IMREAD_GRAYSCALE);
+    UNIT_TEST(image.size() == cells.size() && cv::countNonZero(image != cells) == 0);
+
+    // square dots are a plain upscaling of the cells
+    layout.pngCellSize = 10;
+    layout.saveToPNG("RoundedCellsSquare.png");
+    image = cv::imread("RoundedCellsSquare.png", cv::IMREAD_GRAYSCALE);
+    cv::Mat upscaled;
+    cv::resize(cells, upscaled, cv::Size(), 10, 10, cv::INTER_NEAREST);
+    UNIT_TEST(cv::countNonZero(image != upscaled) == 0);
+
+    START_UNIT_TEST;
+    layout.pngCornerRadius = 0.3;
+    layout.saveToPNG("RoundedCellsRound.png");
+    image = cv::imread("RoundedCellsRound.png", cv::IMREAD_GRAYSCALE);
+    auto pixel = [&image](int row, int col) {
+        return image.at<unsigned char>(row, col);
+    };
+    UNIT_TEST(image.rows == 90 && image.cols == 90);
+    // isolated dot: rounded corners, full centre
+    UNIT_TEST(pixel(15, 15) == 255 && pixel(10, 10) == 0 && pixel(19, 19) == 0);
+    // L-shaped group: outer corners rounded, joined edge kept straight, inner corner filled
+    UNIT_TEST(pixel(10, 30) == 0 && pixel(10, 49) == 0);
+    UNIT_TEST(pixel(10, 39) == 255 && pixel(10, 40) == 255);
+    UNIT_TEST(pixel(20, 39) == 255 && pixel(25, 35) == 0);
+    // diagonal dots stay separate
+    UNIT_TEST(pixel(49, 19) == 0 && pixel(50, 20) == 0 && pixel(49, 20) == 0 && pixel(50, 19) == 0);
+
+    START_UNIT_TEST;
+    layout.pngCornerRadius = 0.6;
+    bool thrown = false;
+    try {
+        layout.saveToPNG("RoundedCellsInvalid.png");
+    } catch (Exception &) {
+        thrown = true;
+    }
+    UNIT_TEST(thrown);
+}
+
 int main(int argc, char** argv) {
 
     //    main4();
 
     runAllTests();
+
+    runRoundedPNGTests();
 
     return EXIT_SUCCESS;
 }

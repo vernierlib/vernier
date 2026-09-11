@@ -12,6 +12,8 @@ Run from the build directory where the module lives:
 """
 
 import os
+import struct
+import tempfile
 import unittest
 
 import numpy as np
@@ -90,6 +92,24 @@ class TestLayout(unittest.TestCase):
     def test_load_from_missing_file_raises(self):
         with self.assertRaises(vernier.VernierError):
             vernier.Layout.loadFromJSON("thereIsNoSuchPattern.json")
+
+    def test_png_cell_size_and_corner_radius(self):
+        layout = vernier.PeriodicPatternLayout(15.0, 31, 31)
+        self.assertEqual(layout.pngCellSize, 1)
+        self.assertEqual(layout.pngCornerRadius, 0.0)
+        layout.pngCellSize = 8
+        layout.pngCornerRadius = 0.5
+        with tempfile.TemporaryDirectory() as directory:
+            filename = os.path.join(directory, "rounded.png")
+            layout.saveToPNG(filename)
+            with open(filename, "rb") as file:
+                width, height = struct.unpack(">II", file.read(24)[16:24])
+        # 2 * 31 - 1 cells of 8 pixels each
+        self.assertEqual((width, height), (61 * 8, 61 * 8))
+
+        layout.pngCornerRadius = 0.6
+        with self.assertRaises(vernier.VernierError):
+            layout.saveToPNG(os.path.join(tempfile.gettempdir(), "invalid.png"))
 
 
 class TestBackend(unittest.TestCase):
