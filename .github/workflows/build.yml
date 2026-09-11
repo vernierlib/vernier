@@ -1,33 +1,204 @@
-name: tests
+name: build, test and package
 
 on:
   push:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+  workflow_dispatch:
 
 jobs:
-  build-and-test:
-    runs-on: ubuntu-22.04
+  build:
+    name: ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    # Every platform is reported, rather than the first failure hiding the rest.
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Ubuntu 24.04
+            os: ubuntu-24.04
+            package: vernier-ubuntu-24.04
+          # ubuntu-26.04 is still a beta runner image; expect occasional churn.
+          - label: Ubuntu 26.04
+            os: ubuntu-26.04
+            package: vernier-ubuntu-26.04
+          - label: Windows
+            os: windows-latest
+            package: vernier-windows-x64
+          - label: macOS
+            os: macos-latest
+            package: vernier-macos-arm64
+
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
+            libmatio-dev libopencv-dev libqhull-dev libfftw3-dev zlib1g-dev
+
+      # Homebrew's `opencv` is now 5.x, which this library does not compile
+      # against: several imgproc functions it uses were moved. Pinned to 4.x,
+      # the version the README states support for. Note opencv@4 is deprecated
+      # upstream and due to be removed, so OpenCV 5 support is only postponed.
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install opencv@4 eigen fftw libmatio qhull
+          echo "OpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4" >> "$GITHUB_ENV"
+
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: choco install opencv -y --no-progress
+        shell: pwsh
+
+      # Chocolatey does not export a variable for this, and the version is in the
+      # path, so the config file is located rather than hard-coded.
+      - name: Locate OpenCV (Windows)
+        if: runner.os == 'Windows'
+        id: opencv
+        run: |
+          $cfg = Get-ChildItem -Path C:\tools\opencv -Recurse -Filter OpenCVConfig.cmake -ErrorAction SilentlyContinue |
+                 Select-Object -First 1
+          if (-not $cfg) { Write-Error "OpenCVConfig.cmake not found"; exit 1 }
+          "dir=$($cfg.Directory.FullName)" >> $env:GITHUB_OUTPUT
+          $bin = Join-Path $cfg.Directory.FullName "x64\vc16\bin"
+          if (Test-Path $bin) { "bin=$bin" >> $env:GITHUB_OUTPUT } else { "bin=" >> $env:GITHUB_OUTPUT }
+        shell: pwsh
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        run: cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_DOCUMENTATION=OFF
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: >
+          cmake -B build -A x64
+          -DOpenCV_DIR="${{ steps.opencv.outputs.dir }}"
+          -DBUILD_DOCUMENTATION=OFF
+        shell: pwsh
+
+      - name: Build
+        run: cmake --build build --config Release --parallel
+
+      # --timeout turns a hung test into a reported failure instead of letting it
+      # run until the job is killed hours later, and lets the remaining tests run.
+      # The whole suite takes about ten seconds, so 300s only catches a hang.
+      # The DLLs sit outside the test binaries' folder. CMake's Windows branch
+      # edits the system PATH at configure time, which does not reach this step,
+      # so they are put on PATH here instead.
+      # A crash or an uncaught exception normally raises a Windows Error Reporting
+      # dialog, which waits for a person who is never coming: that is why three
+      # tests sat at 300s rather than failing. Turning the dialogs off makes a
+      # dying test die immediately and print why.
+      - name: Silence crash dialogs (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v DontShowUI /t REG_DWORD /d 1 /f
+          reg add "HKLM\SOFTWARE\Microsoft\Windows\Windows Error Reporting" /v Disabled /t REG_DWORD /d 1 /f
+        shell: pwsh
+
+      # Are the fixtures intact after checkout? Windows runners default to
+      # core.autocrlf=true and the repository has no .gitattributes, so git is
+      # free to rewrite these binaries. Compare against the hashes git holds.
+      - name: Check the fixtures survived checkout (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          foreach ($f in "TestFilesMat","TestFilesMatMegarena","TestSpectrumPeak") {
+            $p = "test\data\$f.mat"
+            $h = (Get-FileHash $p -Algorithm SHA256).Hash.ToLower().Substring(0,16)
+            $len = (Get-Item $p).Length
+            Write-Host "$f.mat  size=$len  sha256=$h"
+          }
+          Write-Host "expected: TestFilesMat 31464556 df43fde6ff8de8cd"
+          Write-Host "expected: TestFilesMatMegarena 25218114 e6cf2ee322bb35bd"
+          Write-Host "expected: TestSpectrumPeak 16777344 d4d02aba92f26e78"
+          Write-Host "autocrlf: $(git config --get core.autocrlf)"
+        shell: pwsh
+
+      - name: Run tests (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          $env:PATH = "${{ steps.opencv.outputs.bin }};$env:GITHUB_WORKSPACE\3rdparty\fftw3;$env:PATH"
+          ctest --test-dir build -C Release --output-on-failure --timeout 300
+        shell: pwsh
+
+      - name: Run tests (Unix)
+        if: runner.os != 'Windows'
+        run: ctest --test-dir build -C Release --output-on-failure --timeout 300
+
+      - name: Stage the package
+        run: cmake --install build --config Release --prefix "${{ github.workspace }}/stage/${{ matrix.package }}"
+
+      # matio is only there to read test fixtures. It is not part of the library
+      # and has no business in a release package.
+      - name: Drop test-only files from the package (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd "${{ github.workspace }}/stage/${{ matrix.package }}"
+          rm -f bin/matdump lib/libmatio* include/matio*.h
+
+      - name: Drop test-only files from the package (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cd "${{ github.workspace }}\stage\${{ matrix.package }}"
+          Remove-Item -Force -ErrorAction SilentlyContinue bin\matdump.exe, lib\matio*, include\matio*.h
+        shell: pwsh
+
+      # FFTW ships with this repository, so the examples can carry the DLL they
+      # need. OpenCV does not, and still has to be installed to run them.
+      - name: Add the FFTW runtime (Windows)
+        if: runner.os == 'Windows'
+        run: Copy-Item 3rdparty\fftw3\libfftw3-3.dll "${{ github.workspace }}\stage\${{ matrix.package }}\bin\"
+        shell: pwsh
+
+      - name: Archive (Unix)
+        if: runner.os != 'Windows'
+        run: |
+          cd "${{ github.workspace }}/stage"
+          tar czf "${{ matrix.package }}.tar.gz" "${{ matrix.package }}"
+
+      - name: Archive (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          cd "${{ github.workspace }}\stage"
+          Compress-Archive -Path "${{ matrix.package }}" -DestinationPath "${{ matrix.package }}.zip"
+        shell: pwsh
+
+      - name: Upload the package
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.package }}
+          path: |
+            stage/${{ matrix.package }}.tar.gz
+            stage/${{ matrix.package }}.zip
+          if-no-files-found: error
+          retention-days: 14
+
+  documentation:
+    # Only worth publishing once every platform has built and tested.
+    needs: build
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y build-essential cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev libfftw3-dev doxygen doxygen-latex
+          sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
+            libmatio-dev libopencv-dev libqhull-dev libfftw3-dev zlib1g-dev \
+            doxygen doxygen-latex
 
-      - name: Configure CMake
-        run: cmake -B build -DCMAKE_BUILD_TYPE=Release
+      - name: Build the documentation
+        run: |
+          cmake -B build -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF
+          cmake --build build --parallel
 
-      - name: Build
-        run: cmake --build build --config Release
-
-      - name: Run tests
-        run: cd build && make test
-
-      - name: Deploy documentation
-        if: github.event_name == 'push'
+      - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

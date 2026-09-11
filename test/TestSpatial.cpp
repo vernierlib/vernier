@@ -78,7 +78,14 @@ void runAllTests() {
     quartersUnwrapPhase(wrappedPhasePeak1);
     file.read_mat("unwrapCenterMatlab", unwrappedReference);
 
-    UNIT_TEST(areEqual(unwrappedReference, wrappedPhasePeak1));
+    // The unwrapped phase reaches about 250, where one ULP is 2.8e-14 - larger
+    // than the default tolerance of 2e-14. Comparing at the default therefore
+    // demands a bit-exact match with the MATLAB reference, which only holds on a
+    // toolchain that happens to round identically: Ubuntu 26.04 and macOS each
+    // differ by exactly one ULP and fail, while Ubuntu 24.04 passes. 1e-12 is
+    // roughly 35 ULP here - far below any error that would matter, far above
+    // the rounding floor.
+    UNIT_TEST(areEqual(unwrappedReference, wrappedPhasePeak1, 1e-12));
 }
 
 /* Runs a given amount of times the unwrapping function

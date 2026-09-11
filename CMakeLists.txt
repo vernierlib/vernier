@@ -108,6 +108,12 @@ endif()
 # unit tests
 if(BUILD_TESTS)
   message(STATUS "Adding tests.")
+  # Build matio into the tests rather than beside them. As a DLL it lands in
+  # build/3rdparty/matio/, which is neither the test executables' directory nor
+  # on PATH, so on Windows every test that actually calls matio failed to start
+  # with STATUS_DLL_NOT_FOUND. Linux hid this: CMake sets an RPATH on build-tree
+  # binaries, and Windows has no equivalent.
+  set(MATIO_SHARED OFF CACHE BOOL "" FORCE)
   add_subdirectory(3rdparty/matio)
   add_subdirectory(test)
 

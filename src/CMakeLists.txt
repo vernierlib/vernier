@@ -1,4 +1,4 @@
-file(GLOB HEADERS *.hpp)
+file(GLOB HEADERS ${CMAKE_SOURCE_DIR}/include/*.hpp)
 
 file(GLOB SOURCES *.cpp)
 
@@ -33,5 +33,9 @@ include_directories(${CMAKE_SOURCE_DIR}/3rdparty/gdstk/include)
 install(TARGETS vernier DESTINATION lib)
 
 install(FILES ${HEADERS} DESTINATION include/${CMAKE_PROJECT_NAME})
+
+# Common.hpp includes <rapidjson/document.hpp>, so the bundled copy has to ship
+# with the headers or nothing can be compiled against the installed library.
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/3rdparty/rapidjson DESTINATION include)
 
 
