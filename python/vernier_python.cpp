@@ -22,10 +22,14 @@
 #include <nanobind/ndarray.h>
 #include <nanobind/stl/map.h>
 #include <nanobind/stl/string.h>
+#include <nanobind/stl/unique_ptr.h>
 #include <nanobind/stl/vector.h>
 #include <nanobind/eigen/dense.h>
 
 #include <cstring>
+
+#include <opencv2/highgui.hpp>
+#include <opencv2/imgcodecs.hpp>
 
 #include "Vernier.hpp"
 
@@ -117,7 +121,7 @@ NB_MODULE(pyvernier, m) {
         .value("CPU", Backend::CPU, "Reference CPU path (FFTW or Ooura).")
         .value("CUDA", Backend::CUDA, "GPU path (cuFFT + custom kernels).");
 
-    m.def("cudaAvailable", &PatternPhase::cudaAvailable,
+    m.def("cudaAvailable", &cudaAvailable,
         "True if the library was built with -DUSE_CUDA=ON and a CUDA device is present.");
 
     // ─── Images ──────────────────────────────────────────────────────────────
@@ -203,7 +207,6 @@ NB_MODULE(pyvernier, m) {
             "Selects the backend. Raises VernierError if CUDA is requested but the "
             "library was built without it or no device is present.")
         .def("getBackend", &PatternPhase::getBackend)
-        .def_static("cudaAvailable", &PatternPhase::cudaAvailable)
         .def("peaksFound", &PatternPhase::peaksFound)
         .def("setSigma", &PatternPhase::setSigma, "sigma"_a)
         .def("setCropFactor", &PatternPhase::setCropFactor, "cropFactor"_a)
@@ -292,9 +295,8 @@ NB_MODULE(pyvernier, m) {
         .def("__repr__", &PatternLayout::toString);
 
     nb::class_<Layout>(m, "Layout", "Factory building pattern layouts from JSON files.")
-        // loadFromJSON hands back a new PatternLayout; Python owns it from here.
+        // loadFromJSON returns a unique_ptr, so Python takes ownership of the layout.
         .def_static("loadFromJSON", &Layout::loadFromJSON, "filename"_a,
-            nb::rv_policy::take_ownership,
             "Builds the pattern layout described by a JSON file.");
 
     nb::class_<PeriodicPatternLayout, PatternLayout>(m, "PeriodicPatternLayout")
