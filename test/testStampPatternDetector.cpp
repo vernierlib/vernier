@@ -8,7 +8,7 @@
 #include "Layout.hpp"
 #include "UnitTest.hpp"
 #include <iomanip>
-#include <opencv4/opencv2/core/mat.hpp>
+#include <opencv2/core/mat.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgcodecs.hpp>
 
