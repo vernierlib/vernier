@@ -194,18 +194,15 @@ namespace vernier {
         int rowStart = (int) (regionOfInterest.y / (period * 0.5));
         int rowStop = (int) ((regionOfInterest.y + regionOfInterest.height) / (period * 0.5));
 
-        cv::Mat image(rowStop - rowStart, colStop - colStart, CV_8U);
+        cv::Mat cells(rowStop - rowStart, colStop - colStart, CV_8U);
         for (int col = colStart; col < colStop; col++) {
             double x = col * period * 0.5 + 0.25 * period - originX;
             for (int row = rowStart; row < rowStop; row++) {
                 double y = row * period * 0.5 + 0.25 * period - originY;
-                image.at<unsigned char>(row - rowStart, col - colStart) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
+                cells.at<unsigned char>(row - rowStart, col - colStart) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
-        if (filename == "") {
-            filename = classname + ".png";
-        }
-        cv::imwrite(filename, image);
+        writeCellsToPNG(cells, filename);
     }
 
     std::string MegarenaPatternLayout::toString() {
