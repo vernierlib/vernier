@@ -39,6 +39,11 @@ Users can build and run the unit tests on their platform/compiler.
 The library uses [CMake](https://cmake.org/) as a general build tool and 
 [Doxygen](http://www.doxygen.org) to generate the documentation
 
+**CMake 3.26 or higher is required** (the bundled GDS Toolkit asks for it). Distributions
+that ship an older CMake, such as Ubuntu 22.04 with its 3.22 package, need a newer one from
+[Kitware's APT repository](https://apt.kitware.com/), from pip (`pip install cmake`) or from
+[cmake.org](https://cmake.org/download/).
+
 Many packages are included inside the repositories ([see all dependencies](3rdparty/README.md)).
 
 ### Windows instructions
@@ -87,17 +92,24 @@ Finally, open a terminal and go to the directory of the package
 With macOS, some dependencies must be installed first using homebrew:
 
 ```Shell
-	% brew install autoconfig automake cmake eigen libtool libmatio opencv fftw
+	% brew install autoconf automake cmake eigen libtool libmatio opencv fftw qhull libomp
 ```
+
+Apple clang does not ship OpenMP, so `libomp` is needed for the parallel loops of the
+library. Homebrew keeps it keg-only, which means CMake does not find it on its own: pass
+its prefix to the configure step.
 
 Finally, open a terminal and go to the directory of the package
 
 ```Shell
 	% mkdir build
 	% cd build
-	% cmake ..
+	% cmake .. -DOpenMP_ROOT=$(brew --prefix libomp)
 	% make
 ```
+
+Without it the configure step reports `Could NOT find OpenMP` and carries on; the library
+still builds and runs, only single-threaded.
 
 ## Getting started
 
