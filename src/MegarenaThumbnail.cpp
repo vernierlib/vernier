@@ -20,7 +20,7 @@ namespace vernier {
         double nMax = *std::max_element(stripesValues, stripesValues + 4);
         nMax = nMax / (2 * PI);
 
-        return abs(floor(nMax)) + abs(floor(nMin)) + 1;
+        return std::abs(floor(nMax)) + std::abs(floor(nMin)) + 1;
     }
 
     void MegarenaThumbnail::resize(int length1, int length2) {
@@ -166,7 +166,7 @@ namespace vernier {
                 contrastVec1(contrastVec1.rows() - 1) = (codeIntensity1(index1, 2) - codeIntensity1(index1, 1));
 
 
-                if (abs(meanCodingDots1(index1) - meanBackRefDots1(index1)) < abs(meanWhiteRefDots1(index1) - meanCodingDots1(index1))) {
+                if (std::abs(meanCodingDots1(index1) - meanBackRefDots1(index1)) < std::abs(meanWhiteRefDots1(index1) - meanCodingDots1(index1))) {
                     sequence1(index1) = -1;
                 } else {
                     sequence1(index1) = 1;
@@ -214,7 +214,7 @@ namespace vernier {
                 contrastVec2(contrastVec2.rows() - 1) = (codeIntensity2(index2, 2) - codeIntensity2(index2, 1));
 
 
-                if (abs(meanCodingDots2(index2) - meanBackRefDots2(index2)) < abs(meanWhiteRefDots2(index2) - meanCodingDots2(index2))) {
+                if (std::abs(meanCodingDots2(index2) - meanBackRefDots2(index2)) < std::abs(meanWhiteRefDots2(index2) - meanCodingDots2(index2))) {
                     sequence2(index2) = -1;
                 } else {
                     sequence2(index2) = 1;
@@ -264,12 +264,12 @@ namespace vernier {
                 int phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
 
                 if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
-                    if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) 
-                        && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
+                    if ((std::abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || std::abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) 
+                        && (std::abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || std::abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
                         
                         numberWhiteDots(phaseIteration1, phaseIteration2) += 1;
                         cumulWhiteDots(phaseIteration1, phaseIteration2) += patternArray(row, col);
-                    } else if ((abs(std::fmod(phaseCol, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseCol, 2 * PI)) <= PI + deltaPhase) || (abs(std::fmod(phaseRow, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseRow, 2 * PI)) <= PI + deltaPhase)) {
+                    } else if ((std::abs(std::fmod(phaseCol, 2 * PI)) >= PI - deltaPhase && std::abs(std::fmod(phaseCol, 2 * PI)) <= PI + deltaPhase) || (std::abs(std::fmod(phaseRow, 2 * PI)) >= PI - deltaPhase && std::abs(std::fmod(phaseRow, 2 * PI)) <= PI + deltaPhase)) {
                         numberBackgroundDots(phaseIteration1, phaseIteration2) += 1;
                         cumulBackgroundDots(phaseIteration1, phaseIteration2) += patternArray(row, col);
                     }
@@ -301,10 +301,10 @@ namespace vernier {
                 int phaseIteration2 = round(phaseRow / (2.0 * PI)) + length2 / 2;
 
                 if (phaseIteration1 < cumulBackgroundDots.rows() && phaseIteration2 < cumulBackgroundDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
-                    if ((abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) && (abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
+                    if ((std::abs(std::fmod(phaseCol, 2 * PI)) <= deltaPhase || std::abs(std::fmod(phaseCol, 2 * PI)) >= 2 * PI - deltaPhase) && (std::abs(std::fmod(phaseRow, 2 * PI)) <= deltaPhase || std::abs(std::fmod(phaseRow, 2 * PI)) >= 2 * PI - deltaPhase)) {
                         numberWhiteDots(phaseIteration1, phaseIteration2) += 1;
                         cumulWhiteDots(phaseIteration1, phaseIteration2) += patternArray(row, col);
-                    } else if ((abs(std::fmod(phaseCol, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseCol, 2 * PI)) <= PI + deltaPhase) || (abs(std::fmod(phaseRow, 2 * PI)) >= PI - deltaPhase && abs(std::fmod(phaseRow, 2 * PI)) <= PI + deltaPhase)) {
+                    } else if ((std::abs(std::fmod(phaseCol, 2 * PI)) >= PI - deltaPhase && std::abs(std::fmod(phaseCol, 2 * PI)) <= PI + deltaPhase) || (std::abs(std::fmod(phaseRow, 2 * PI)) >= PI - deltaPhase && std::abs(std::fmod(phaseRow, 2 * PI)) <= PI + deltaPhase)) {
                         numberBackgroundDots(phaseIteration1, phaseIteration2) += 1;
                         cumulBackgroundDots(phaseIteration1, phaseIteration2) += patternArray(row, col);
                     }

@@ -42,7 +42,7 @@ namespace vernier {
                 int phaseIteration2 = round(phaseRow / PI) + thumbnail.rows / 2;
 
                 if (phaseIteration1 < numberWhiteDots.rows() && phaseIteration2 < numberWhiteDots.cols() && phaseIteration1 >= 0 && phaseIteration2 >= 0) {
-                    if ((abs(std::fmod(phaseCol, PI)) <= DELTA_PHASE || abs(std::fmod(phaseCol, PI)) >= PI - DELTA_PHASE) && (abs(std::fmod(phaseRow, PI)) <= DELTA_PHASE || abs(std::fmod(phaseRow, PI)) >= PI - DELTA_PHASE)) {
+                    if ((std::abs(std::fmod(phaseCol, PI)) <= DELTA_PHASE || std::abs(std::fmod(phaseCol, PI)) >= PI - DELTA_PHASE) && (std::abs(std::fmod(phaseRow, PI)) <= DELTA_PHASE || std::abs(std::fmod(phaseRow, PI)) >= PI - DELTA_PHASE)) {
                         numberWhiteDots(phaseIteration1, phaseIteration2) += 1;
                         cumulWhiteDots(phaseIteration1, phaseIteration2) += array(row, col);
                     }

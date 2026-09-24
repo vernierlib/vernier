@@ -23,6 +23,15 @@ jobs:
           - label: Ubuntu 26.04
             os: ubuntu-26.04
             package: vernier-ubuntu-26.04
+          # Linux/aarch64 is not just "Linux with a different word size": the
+          # NEON path through the headers does not make the floating-point
+          # overloads of ::abs visible the way the SSE path does, which silently
+          # broke the megarena absolute decoding there and nowhere else
+          # (issue #38). macOS covers arm64 but with Apple's toolchain and
+          # libc++, so it cannot stand in for this.
+          - label: Ubuntu 24.04 arm64
+            os: ubuntu-24.04-arm
+            package: vernier-ubuntu-24.04-arm64
           - label: Windows
             os: windows-latest
             package: vernier-windows-x64
