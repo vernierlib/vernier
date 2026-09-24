@@ -21,10 +21,10 @@ The coarse but absolute position detection principles differ for the small and l
 
 ![HP code process](images/processHPCodes.jpg)
 
-For the Megarena pattern, a robust phase-based binary decoding procedure has been developed that computes a local adaptive threshold for discriminating between present and absent dots. We thus reconstruct two binary sequences, one for each direction of the pattern, that allows the univocal determination of the position of the area observed with respect to the top-left corner of the whole Megarena pattern. % as shown in Figure~\ref{fig.frames}. 
-A complete presentation of the position decoding method can be found in~\cite{andre2020robust}.
+For the Megarena pattern, a robust phase-based binary decoding procedure has been developed that computes a local adaptive threshold for discriminating between present and absent dots. We thus reconstruct two binary sequences, one for each direction of the pattern, that allows the univocal determination of the position of the area observed with respect to the top-left corner of the whole Megarena pattern. 
+A complete presentation of the position decoding method can be found in [andre2020robust].
 
-This measurement principle is mainly suited for in-plane 3 DoF pose estimation under microscopy orthographic projection. However, long-focal  perspective projection can be used for retrieving complementary out-of-plane pose parameters with a lower resolution. Full out-of-plane pose estimation details and performances can be found in~\cite{andre2022pose}. 
+This measurement principle is mainly suited for in-plane 3 DoF pose estimation under microscopy orthographic projection. However, long-focal  perspective projection can be used for retrieving complementary out-of-plane pose parameters with a lower resolution. Full out-of-plane pose estimation details and performances can be found in [andre2022pose]. 
 
 
 
