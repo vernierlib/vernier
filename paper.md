@@ -11,7 +11,7 @@ authors:
     affiliation: 1
   - name: Antoine N. André
     orcid: 0000-0003-3318-4769
-    affiliation: 1,2
+    affiliation: 2
   - name: Sasha Ballet
     orcid: 0009-0003-6159-7939
     affiliation: 1
