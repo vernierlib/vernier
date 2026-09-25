@@ -49,7 +49,7 @@ Sources and layouts are available on [GitHub](https://github.com/vernierlib/vern
 Computer vision is widely used to track the movement of people and objects in many applications. When the size of the object of interest decreases, pose estimation becomes challenging due to the constraint of microscopy imaging. Unlike regular cameras, microscopes suffer from narrow FoV, short depths of field, low contrasts and out-of-focus blurs, and usual fiducial markers perform poorly in these conditions.                   
 
 Many vision-based methods have been proposed to tackle pose estimation at the small scales. In 2021, Fatikow published a review paper comparing the resolution and the range of state-of-the-art vision-based localization methods [@yao2021review]. The most precise methods use phase correlation and can achieve sub-nanometer resolutions. However, their measurement ranges are still limited by the microscope's FoV. To overcome this limitation, pseudo-periodic patterns can be used to encode the absolute position over centimetric ranges, while using phase measurement to achieve nanometer resolutions [@andre2020sensing; @andre2020robust]. 
-Based on this principle, `VERNIER` proposed processing algorithms for several markers and patterns that ensure reliable performance in various microscopy applications. As shown in the Fatikow's review paper [@yao2021review], this approach outperforms all others in terms of range-to-resolution ratio.  
+Based on this principle, `VERNIER` proposed processing algorithms for several markers and patterns that ensure reliable performance in various microscopy applications. As shown in the Fatikow's review paper [@yao2021review], this approach outperforms all concurrent methods in terms of range-to-resolution ratio.  
 
 The measurement principle is mainly suited for in-plane 3 degrees of freedom (DoF) pose estimation under microscopy orthographic projection. However, long-focal  perspective projection can be used for retrieving complementary out-of-plane pose parameters with a lower resolution. Full out-of-plane pose estimation details and performances can be found in [@andre2022pose]. 
 
@@ -61,7 +61,9 @@ To achieve the measurement of the 6 DoF, the same approach is applied but with a
 
 # Software design
 
-`VERNIER` is written in `C++` and defines a collection of classes for detection and estimating the pose of three kinds of calibrated patterns (Megarena patterns, HP code and Stamp markers). The library is cross-platform. The users can build the examples and unit tests using `CMake`. The library relies on multiple third parties: `OpenCV`, `Eigen`, `FFTW`, `MatIO`, `RapidJSON` and `GDS Tool Kit`.
+`VERNIER` is written in `C++` and provides a class hierarchy for detection and estimating the pose of three kinds of calibrated patterns (Megarena patterns, HP code and Stamp markers). The library is cross-platform. The users can build the examples and unit tests using `CMake`. The library relies on multiple third parties: `OpenCV`, `Eigen`, `FFTW`, `MatIO`, `RapidJSON` and `GDS Tool Kit`. 
+
+The class hierarchy is centered on general periodic pattern processing and then extends to the different types of patterns. All pose estimations rely on the Fourier transforms of the entire image. To achieve fast computation times, the library uses the MIT implementation for CPUs (FFTW) and the NVIDIA implementation for GPUs (cuFFT).
 
 The library also provides a set of classes for rendering synthetic images and exporting layouts of the different markers presented in previous section. The synthetic images are used to test the correct functioning of the detectors. The marker layouts can be exported in `PNG`, `SVG`, `GDS` and `OASIS` formats. These files can be used to print the markers on various supports.
 
@@ -78,7 +80,7 @@ To reach the best resolution, the magnification and the size of the marker shoul
 
 **Metrology of precision manipulators**
 
-One of the major interest of Megarena patterns is to perform the metrology of micro and nano stages and precision manipulators. Indeed, few solutions to measure the 3D pose of the manipulator end-effector at the nanoscale are available. The laser interferometers provide a very high range-to-resolution ratio of approximately 10^9^ but only along the laser's axis. Setups with several interferometers have demonstrated multiple DoF measurement systems [@lee2011design; ortlepp2024high], at the expense of occupied volume and calibration complexity. 
+One of the major interest of Megarena patterns is to perform the metrology of micro and nano stages and precision manipulators. Indeed, few solutions to measure the 3D pose of the manipulator end-effector at the nanoscale are available. The laser interferometers provide a very high range-to-resolution ratio of approximately 10^9^ but only along the laser's axis. Setups with several interferometers have demonstrated multiple DoF measurement systems [@lee2011design; @ortlepp2024high], at the expense of occupied volume and calibration complexity. 
 Moreover, due to the constraints of laser reflection, the range of their angular measurements is very low, not exceeding a magnitude of one milliradian.
 
 The use of Megarena patterns is much simpler and also provides nanometric resolution and centimeter ranges. Moreover, using a DHM, the angular ranges of out-of-plane rotations reach 0.2 rad with resolutions down to 0.1 µrad. 
@@ -118,11 +120,11 @@ In this way, Megarena patterns could also be used in correlative microscopy, to 
 
 # AI usage disclosure
 
-No generative AI tools were used in the development of this software, the writing of this manuscript, or the preparation of supporting materials.
+No generative AI tools were used in the writing of this manuscript, the preparation of supporting materials,  and the development of this software (release v0.0.1 main@0b25da7).
 
 # Acknowledgements
 
-This work has been supported by the ANR project Holo-Control (ANR-21-CE42-0009) and by the Bourgogne-Franche-Comté Region (Nano6D). It has been achieved in the frame of the EIPHI Graduate School (ANR-17-EURE-0002). The encoded targets were realized thanks to the RENATECH technological network and its FEMTO-ST facility MIMENTO. The experiments were conducted within the ROBOTEX network (ANR-21-ESRE-0015) and its FEMTO-ST technological facility CMNR.
+This work has been supported by the ANR project Holo-Control (ANR-21-CE42-0009), the Bourgogne-Franche-Comté Region (Nano6D), and the Open program of CNRS Innovation. It has been achieved in the frame of the EIPHI Graduate School (ANR-17-EURE-0002). The encoded targets were realized thanks to the RENATECH technological network and its FEMTO-ST facility MIMENTO. The experiments were conducted within the ROBOTEX network (ANR-21-ESRE-0015) and its FEMTO-ST technological facility CMNR. 
 
 # References
 
