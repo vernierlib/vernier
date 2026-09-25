@@ -95,7 +95,7 @@ namespace vernier {
                 meanBackRefDots(index1) = cumulBackRefDots(index1) / numberBackRefDots(index1);
                 meanWhiteRefDots(index1) = cumulWhiteRefDots(index1) / numberWhiteRefDots(index1);
 
-                if (abs(meanCodingDots(index1) - meanBackRefDots(index1)) < abs(meanWhiteRefDots(index1) - meanCodingDots(index1))) {
+                if (std::abs(meanCodingDots(index1) - meanBackRefDots(index1)) < std::abs(meanWhiteRefDots(index1) - meanCodingDots(index1))) {
                     sequence(index1, 0) = -1;
                 } else {
                     sequence(index1, 0) = 1;
@@ -141,7 +141,7 @@ namespace vernier {
                 meanBackRefDots(index2) = cumulBackRefDots(index2) / numberBackRefDots(index2);
                 meanWhiteRefDots(index2) = cumulWhiteRefDots(index2) / numberWhiteRefDots(index2);
 
-                if (abs(meanCodingDots(index2) - meanBackRefDots(index2)) < abs(meanWhiteRefDots(index2) - meanCodingDots(index2))) {
+                if (std::abs(meanCodingDots(index2) - meanBackRefDots(index2)) < std::abs(meanWhiteRefDots(index2) - meanCodingDots(index2))) {
                     sequence(index2, 1) = -1;
                 } else {
                     sequence(index2, 1) = 1;

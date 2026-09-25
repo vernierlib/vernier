@@ -33,6 +33,20 @@
 
 #include <rapidjson/document.hpp>
 
+namespace vernier {
+
+    // libstdc++ only declares the floating-point overloads of abs in namespace
+    // std. Whether ::abs(double) also exists depends on the platform: on x86
+    // Eigen pulls <xmmintrin.h> in, which reaches <stdlib.h> and its
+    // "using std::abs", while on aarch64 <arm_neon.h> reaches nothing of the
+    // sort. Unqualified abs(someDouble) therefore silently truncated its
+    // argument through int abs(int) on Linux/aarch64 and broke the megarena
+    // absolute decoding (issue #38). Library code should call std::abs; this
+    // keeps the floating-point overloads reachable for the rest.
+    using std::abs;
+
+}
+
 #include "Exception.hpp"
 #include "Utils.hpp"
 
