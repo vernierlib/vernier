@@ -6,7 +6,6 @@
 
 #include "MegarenaPatternLayout.hpp"
 #include "MegarenaBitSequence.hpp"
-#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -188,7 +187,7 @@ namespace vernier {
         }
     }
 
-    void MegarenaPatternLayout::saveToPNG(std::string filename) {
+    cv::Mat MegarenaPatternLayout::getPNGCells() {
         int colStart = (int) (regionOfInterest.x / (period * 0.5));
         int colStop = (int) ((regionOfInterest.x + regionOfInterest.width) / (period * 0.5));
         int rowStart = (int) (regionOfInterest.y / (period * 0.5));
@@ -202,7 +201,7 @@ namespace vernier {
                 cells.at<unsigned char>(row - rowStart, col - colStart) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
-        writeCellsToPNG(cells, filename);
+        return cells;
     }
 
     std::string MegarenaPatternLayout::toString() {

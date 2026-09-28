@@ -35,10 +35,8 @@ namespace vernier {
 
         virtual void readJSON(const rapidjson::Value & document);
 
-        /** Writes a PNG file from a grid of cells (non-zero = dot, zero = gap). Each cell is drawn as
-         * pngCellSize x pngCellSize pixels, edge-adjacent dots are merged and the corners of the merged
-         * shapes are rounded according to pngRoundness. */
-        void writeCellsToPNG(const cv::Mat & cells, std::string filename);
+        /** Returns the grid of cells drawn by saveToPNG (CV_8U, non-zero = dot, zero = gap) */
+        virtual cv::Mat getPNGCells();
 
         friend class Layout;
 
@@ -54,10 +52,6 @@ namespace vernier {
         double bottomMargin;
         double frameThickness = 50.0;
         double captionHeight = 50.0;
-        /** Number of pixels per cell (half period) in PNG exports */
-        int pngCellSize = 1;
-        /** Roundness of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots */
-        double pngRoundness = 0.0;
 
         PatternLayout();
 
@@ -90,8 +84,14 @@ namespace vernier {
         /** Creates a JSON file corresponding to the pattern layout */
         void saveToJSON(std::string filename = "");
 
-        /** Creates a PNG file corresponding to the pattern layout (requires OpenCV) */
-        virtual void saveToPNG(std::string filename = "");
+        /** Creates a PNG file corresponding to the pattern layout (requires OpenCV).
+         *
+         *	\param filename: name of the PNG file, by default the class name
+         *	\param cellSize: number of pixels per cell (half period)
+         *	\param roundness: roundness of the dots, from 0.0 for square dots to 1.0 for round dots.
+         *      Edge-adjacent dots are merged into one shape whose corners are rounded.
+         */
+        void saveToPNG(std::string filename = "", int cellSize = 1, double roundness = 0.0);
 
         /** Returns the intensity (between 0.0 and 1.0) of the pattern at point (x,y) */
         virtual double getIntensity(double x, double y) = 0;

@@ -569,7 +569,7 @@ namespace vernier {
         return classname;
     }
 
-    void PatternLayout::saveToPNG(std::string filename) {
+    cv::Mat PatternLayout::getPNGCells() {
         throw Exception("saveToPNG is not implemented for " + this->classname);
     }
 
@@ -623,20 +623,21 @@ namespace vernier {
         return dot;
     }
 
-    void PatternLayout::writeCellsToPNG(const cv::Mat & cells, std::string filename) {
-        if (pngCellSize < 1) {
+    void PatternLayout::saveToPNG(std::string filename, int cellSize, double roundness) {
+        if (cellSize < 1) {
             throw Exception("The PNG cell size must be at least 1 pixel.");
         }
-        if (pngRoundness < 0.0 || pngRoundness > 1.0) {
+        if (roundness < 0.0 || roundness > 1.0) {
             throw Exception("The PNG roundness must be between 0.0 and 1.0.");
         }
-        double radius = 0.5 * pngRoundness * pngCellSize; // corner radius in pixels, half a cell makes round dots
+        double radius = 0.5 * roundness * cellSize; // corner radius in pixels, half a cell makes round dots
 
-        cv::Mat image(cells.rows * pngCellSize, cells.cols * pngCellSize, CV_8U);
+        cv::Mat cells = getPNGCells();
+        cv::Mat image(cells.rows * cellSize, cells.cols * cellSize, CV_8U);
         for (int row = 0; row < image.rows; row++) {
-            CellCorner y = nearestCellCorner(row, pngCellSize);
+            CellCorner y = nearestCellCorner(row, cellSize);
             for (int col = 0; col < image.cols; col++) {
-                CellCorner x = nearestCellCorner(col, pngCellSize);
+                CellCorner x = nearestCellCorner(col, cellSize);
                 image.at<unsigned char>(row, col) = isDotPixel(cells, y, x, radius) ? 255 : 0;
             }
         }

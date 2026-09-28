@@ -5,7 +5,6 @@
  */
 
 #include "PeriodicPatternLayout.hpp"
-#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -108,7 +107,7 @@ namespace vernier {
         }
     }
 
-    void PeriodicPatternLayout::saveToPNG(std::string filename) {
+    cv::Mat PeriodicPatternLayout::getPNGCells() {
         cv::Mat cells(2 * nRows - 1, 2 * nCols - 1, CV_8U);
         for (int col = 0; col < cells.cols; col++) {
             double x = col * period * 0.5 + 0.25 * period - originX;
@@ -117,7 +116,7 @@ namespace vernier {
                 cells.at<unsigned char>(row, col) = (unsigned char) (255 * (getIntensity(x, y) > 0.5));
             }
         }
-        writeCellsToPNG(cells, filename);
+        return cells;
     }
 
     std::string PeriodicPatternLayout::toString() {

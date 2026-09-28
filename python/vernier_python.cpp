@@ -289,11 +289,9 @@ NB_MODULE(pyvernier, m) {
             },
             "pose"_a, "rows"_a, "cols"_a,
             "Renders a `rows x cols` image of the layout at the given pose.")
-        .def("saveToPNG", &PatternLayout::saveToPNG, "filename"_a = "")
-        .def_rw("pngCellSize", &PatternLayout::pngCellSize,
-            "Number of pixels per cell (half period) in PNG exports.")
-        .def_rw("pngRoundness", &PatternLayout::pngRoundness,
-            "Roundness of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots.")
+        .def("saveToPNG", &PatternLayout::saveToPNG, "filename"_a = "", "cellSize"_a = 1, "roundness"_a = 0.0,
+            "Saves the layout as a PNG with `cellSize` pixels per cell (half period). `roundness` goes from "
+            "0.0 for square dots to 1.0 for round dots, edge-adjacent dots merging into one smooth shape.")
         .def("saveToSVG", &PatternLayout::saveToSVG, "filename"_a = "")
         .def("saveToJSON", &PatternLayout::saveToJSON, "filename"_a = "")
         .def("__repr__", &PatternLayout::toString);

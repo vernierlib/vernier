@@ -24,6 +24,8 @@ namespace vernier {
 
         void readJSON(const rapidjson::Value & document) override;
 
+        cv::Mat getPNGCells() override;
+
     public:
 
         double dotSize;
@@ -42,8 +44,6 @@ namespace vernier {
 
         void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
 
-        void saveToPNG(const std::string filename = "") override;
-        
         std::string toString() override;
         
         double getPeriod();

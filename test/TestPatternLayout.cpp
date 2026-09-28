@@ -222,16 +222,14 @@ void runRoundedPNGTests() {
     UNIT_TEST(image.size() == cells.size() && cv::countNonZero(image != cells) == 0);
 
     // square dots are a plain upscaling of the cells
-    layout.pngCellSize = 10;
-    layout.saveToPNG("RoundedCellsSquare.png");
+    layout.saveToPNG("RoundedCellsSquare.png", 10);
     image = cv::imread("RoundedCellsSquare.png", cv::IMREAD_GRAYSCALE);
     cv::Mat upscaled;
     cv::resize(cells, upscaled, cv::Size(), 10, 10, cv::INTER_NEAREST);
     UNIT_TEST(cv::countNonZero(image != upscaled) == 0);
 
     START_UNIT_TEST;
-    layout.pngRoundness = 0.6;
-    layout.saveToPNG("RoundedCellsRound.png");
+    layout.saveToPNG("RoundedCellsRound.png", 10, 0.6);
     image = cv::imread("RoundedCellsRound.png", cv::IMREAD_GRAYSCALE);
     auto pixel = [&image](int row, int col) {
         return image.at<unsigned char>(row, col);
@@ -247,10 +245,16 @@ void runRoundedPNGTests() {
     UNIT_TEST(pixel(49, 19) == 0 && pixel(50, 20) == 0 && pixel(49, 20) == 0 && pixel(50, 19) == 0);
 
     START_UNIT_TEST;
-    layout.pngRoundness = 1.2;
     bool thrown = false;
     try {
-        layout.saveToPNG("RoundedCellsInvalid.png");
+        layout.saveToPNG("RoundedCellsInvalid.png", 10, 1.2);
+    } catch (Exception &) {
+        thrown = true;
+    }
+    UNIT_TEST(thrown);
+    thrown = false;
+    try {
+        layout.saveToPNG("RoundedCellsInvalid.png", 0);
     } catch (Exception &) {
         thrown = true;
     }

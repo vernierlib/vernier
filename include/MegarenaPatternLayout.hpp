@@ -24,6 +24,8 @@ namespace vernier {
 
         void readJSON(const rapidjson::Value & document) override;
 
+        cv::Mat getPNGCells() override;
+
     public:
 
         Rectangle regionOfInterest;
@@ -44,8 +46,6 @@ namespace vernier {
 
         double getPhase2(double x, double y) override;
 
-        void saveToPNG(std::string filename = "") override;
-        
         std::string toString() override;
 
         int getCodeDepth();
