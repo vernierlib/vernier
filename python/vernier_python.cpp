@@ -293,7 +293,7 @@ NB_MODULE(pyvernier, m) {
         .def_rw("pngCellSize", &PatternLayout::pngCellSize,
             "Number of pixels per cell (half period) in PNG exports.")
         .def_rw("pngCornerRadius", &PatternLayout::pngCornerRadius,
-            "Corner radius of the dots in PNG exports, as a fraction of the cell size (0.0 to 0.5).")
+            "Corner radius of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots.")
         .def("saveToSVG", &PatternLayout::saveToSVG, "filename"_a = "")
         .def("saveToJSON", &PatternLayout::saveToJSON, "filename"_a = "")
         .def("__repr__", &PatternLayout::toString);

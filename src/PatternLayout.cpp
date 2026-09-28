@@ -627,10 +627,10 @@ namespace vernier {
         if (pngCellSize < 1) {
             throw Exception("The PNG cell size must be at least 1 pixel.");
         }
-        if (pngCornerRadius < 0.0 || pngCornerRadius > 0.5) {
-            throw Exception("The PNG corner radius must be between 0.0 and 0.5.");
+        if (pngCornerRadius < 0.0 || pngCornerRadius > 1.0) {
+            throw Exception("The PNG corner radius must be between 0.0 and 1.0.");
         }
-        double radius = pngCornerRadius * pngCellSize; // in pixels
+        double radius = 0.5 * pngCornerRadius * pngCellSize; // in pixels, half a cell makes round dots
 
         cv::Mat image(cells.rows * pngCellSize, cells.cols * pngCellSize, CV_8U);
         for (int row = 0; row < image.rows; row++) {

@@ -56,7 +56,7 @@ namespace vernier {
         double captionHeight = 50.0;
         /** Number of pixels per cell (half period) in PNG exports */
         int pngCellSize = 1;
-        /** Corner radius of the dots in PNG exports, as a fraction of the cell size (from 0.0 for square dots to 0.5 for round dots) */
+        /** Corner radius of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots */
         double pngCornerRadius = 0.0;
 
         PatternLayout();

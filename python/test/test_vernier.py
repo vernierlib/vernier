@@ -98,7 +98,7 @@ class TestLayout(unittest.TestCase):
         self.assertEqual(layout.pngCellSize, 1)
         self.assertEqual(layout.pngCornerRadius, 0.0)
         layout.pngCellSize = 8
-        layout.pngCornerRadius = 0.5
+        layout.pngCornerRadius = 1.0
         with tempfile.TemporaryDirectory() as directory:
             filename = os.path.join(directory, "rounded.png")
             layout.saveToPNG(filename)
@@ -107,7 +107,7 @@ class TestLayout(unittest.TestCase):
         # 2 * 31 - 1 cells of 8 pixels each
         self.assertEqual((width, height), (61 * 8, 61 * 8))
 
-        layout.pngCornerRadius = 0.6
+        layout.pngCornerRadius = 1.2
         with self.assertRaises(vernier.VernierError):
             layout.saveToPNG(os.path.join(tempfile.gettempdir(), "invalid.png"))
 
