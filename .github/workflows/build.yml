@@ -59,9 +59,24 @@ jobs:
           brew install opencv@4 eigen fftw libmatio qhull
           echo "OpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4" >> "$GITHUB_ENV"
 
+      # When the community feed is down, choco prints "Chocolatey installed 0/0
+      # packages" and still leaves the step green, so a 503 there surfaced as
+      # "OpenCVConfig.cmake not found" in the next step and looked like a build
+      # problem rather than an outage. The install is checked here instead, and
+      # retried, since a feed error is usually over within a minute.
       - name: Install dependencies (Windows)
         if: runner.os == 'Windows'
-        run: choco install opencv -y --no-progress
+        run: |
+          foreach ($attempt in 1..3) {
+            choco install opencv -y --no-progress
+            $cfg = Get-ChildItem -Path C:\tools\opencv -Recurse -Filter OpenCVConfig.cmake -ErrorAction SilentlyContinue |
+                   Select-Object -First 1
+            if ($cfg) { exit 0 }
+            Write-Host "::warning::OpenCV missing after attempt $attempt (choco exit $LASTEXITCODE)"
+            Start-Sleep -Seconds 30
+          }
+          Write-Error "choco install opencv did not produce an OpenCV installation"
+          exit 1
         shell: pwsh
 
       # Chocolatey does not export a variable for this, and the version is in the
