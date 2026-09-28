@@ -73,7 +73,7 @@ OpenCV requires the Media Feature Pack for Windows to run, you may have to insta
 With Linux, some dependencies must be installed first using the package manager:
 
 ```Shell
-	> sudo apt install cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev libfftw3-dev
+	> sudo apt install build-essential cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev libfftw3-dev
 ```
 
 We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
@@ -92,19 +92,19 @@ Finally, open a terminal and go to the directory of the package
 With macOS, some dependencies must be installed first using homebrew:
 
 ```Shell
-	% brew install autoconf automake cmake eigen libtool libmatio opencv fftw qhull libomp
+	% brew install autoconf automake cmake eigen libtool libmatio opencv@4 fftw qhull libomp
 ```
 
-Apple clang does not ship OpenMP, so `libomp` is needed for the parallel loops of the
-library. Homebrew keeps it keg-only, which means CMake does not find it on its own: pass
-its prefix to the configure step.
+OpenCV 5 is not supported yet, hence `opencv@4`. Apple clang does not ship OpenMP, so
+`libomp` is needed for the parallel loops of the library. Homebrew keeps both keg-only,
+which means CMake does not find them on its own: pass their prefixes to the configure step.
 
 Finally, open a terminal and go to the directory of the package
 
 ```Shell
 	% mkdir build
 	% cd build
-	% cmake .. -DOpenMP_ROOT=$(brew --prefix libomp)
+	% cmake .. -DOpenMP_ROOT=$(brew --prefix libomp) -DOpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4
 	% make
 ```
 
