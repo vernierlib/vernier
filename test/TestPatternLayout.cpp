@@ -230,7 +230,7 @@ void runRoundedPNGTests() {
     UNIT_TEST(cv::countNonZero(image != upscaled) == 0);
 
     START_UNIT_TEST;
-    layout.pngCornerRadius = 0.6;
+    layout.pngRoundness = 0.6;
     layout.saveToPNG("RoundedCellsRound.png");
     image = cv::imread("RoundedCellsRound.png", cv::IMREAD_GRAYSCALE);
     auto pixel = [&image](int row, int col) {
@@ -247,7 +247,7 @@ void runRoundedPNGTests() {
     UNIT_TEST(pixel(49, 19) == 0 && pixel(50, 20) == 0 && pixel(49, 20) == 0 && pixel(50, 19) == 0);
 
     START_UNIT_TEST;
-    layout.pngCornerRadius = 1.2;
+    layout.pngRoundness = 1.2;
     bool thrown = false;
     try {
         layout.saveToPNG("RoundedCellsInvalid.png");

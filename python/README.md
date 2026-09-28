@@ -104,7 +104,7 @@ Both backends compute in double precision and agree to within rounding.
 - `PatternLayout` — `renderOrthographicProjection(pose, rows, cols)`,
   `saveToPNG()`, `saveToSVG()`, `saveToJSON()`; `PeriodicPatternLayout(period,
   nRows, nCols)` builds one directly (`nRows`/`nCols` must be odd).
-  `pngCellSize` (pixels per half period, default 1) and `pngCornerRadius`
+  `pngCellSize` (pixels per half period, default 1) and `pngRoundness`
   (0.0 for square dots to 1.0 for round dots, default 0.0) set the PNG
   resolution and round the corners of the dots, merging adjacent dots into
   smooth groups.

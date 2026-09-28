@@ -37,7 +37,7 @@ namespace vernier {
 
         /** Writes a PNG file from a grid of cells (non-zero = dot, zero = gap). Each cell is drawn as
          * pngCellSize x pngCellSize pixels, edge-adjacent dots are merged and the corners of the merged
-         * shapes are rounded with radius pngCornerRadius. */
+         * shapes are rounded according to pngRoundness. */
         void writeCellsToPNG(const cv::Mat & cells, std::string filename);
 
         friend class Layout;
@@ -56,8 +56,8 @@ namespace vernier {
         double captionHeight = 50.0;
         /** Number of pixels per cell (half period) in PNG exports */
         int pngCellSize = 1;
-        /** Corner radius of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots */
-        double pngCornerRadius = 0.0;
+        /** Roundness of the dots in PNG exports, from 0.0 for square dots to 1.0 for round dots */
+        double pngRoundness = 0.0;
 
         PatternLayout();
 
