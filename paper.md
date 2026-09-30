@@ -55,7 +55,7 @@ The measurement principle is mainly suited for in-plane 3 degrees of freedom (Do
 
 To achieve the measurement of the 6 DoF, the same approach is applied but with a digital holographic microscope (DHM). The interferometric character of DHM makes the device highly sensitive to out-of-plane motion and the 6 DoF are measured simultaneously in a single image with a high resolution [@ahmad2024-6DoF]. 
 
-\autoref{fig:features} presents the mean features and metrics of the pose estimation of all marker types. All the metrics have been validated experimentally with precision stages and robots using the 'VERNIER' C++ implementation [@andre2020sensing; @andre2020robust; @andre2022pose] with the exception of the hologram processing, which was performed beforehand using the DHM's software and MATLAB [@ahmad2024-6DoF].
+\autoref{fig:features} presents the mean features and metrics of the pose estimation of all marker types. All the metrics have been validated experimentally with precision stages and robots using the `VERNIER` C++ implementation [@andre2020sensing; @andre2020robust; @andre2022pose] with the exception of the hologram processing, which was performed beforehand using the DHM's software and MATLAB [@ahmad2024-6DoF].
 
 ![Overview of features and metrics of the marker pose estimation with `VERNIER`.\label{fig:features}](assets/panorama.jpg)
 
