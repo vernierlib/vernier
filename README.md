@@ -115,6 +115,10 @@ still builds and runs, only single-threaded.
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)
 
+## Contributing
+
+Bug reports, questions and pull requests are welcome on [GitHub](https://github.com/vernierlib/vernier/issues). See the [contributing guide](CONTRIBUTING.md) for how to report a problem or submit a change, and the [code of conduct](CODE_OF_CONDUCT.md).
+
 ## Licence
 
 The Vernier Library is Free Software in the technical sense defined by the Free Software Foundation, and is distributed under the terms of the [GNU General Public License](LICENSE.txt). 
