@@ -35,6 +35,9 @@ namespace vernier {
 
         virtual void readJSON(const rapidjson::Value & document);
 
+        /** Returns the grid of cells drawn by saveToPNG (CV_8U, non-zero = dot, zero = gap) */
+        virtual cv::Mat getPNGCells();
+
         friend class Layout;
 
     public:
@@ -81,8 +84,14 @@ namespace vernier {
         /** Creates a JSON file corresponding to the pattern layout */
         void saveToJSON(std::string filename = "");
 
-        /** Creates a PNG file corresponding to the pattern layout (requires OpenCV) */
-        virtual void saveToPNG(std::string filename = "");
+        /** Creates a PNG file corresponding to the pattern layout (requires OpenCV).
+         *
+         *	\param filename: name of the PNG file, by default the class name
+         *	\param cellSize: number of pixels per cell (half period)
+         *	\param roundness: roundness of the dots, from 0.0 for square dots to 1.0 for round dots.
+         *      Edge-adjacent dots are merged into one shape whose corners are rounded.
+         */
+        void saveToPNG(std::string filename = "", int cellSize = 1, double roundness = 0.0);
 
         /** Returns the intensity (between 0.0 and 1.0) of the pattern at point (x,y) */
         virtual double getIntensity(double x, double y) = 0;

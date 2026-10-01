@@ -5,6 +5,7 @@
  */
 
 #include "PatternLayout.hpp"
+#include <opencv2/imgcodecs.hpp>
 
 namespace vernier {
 
@@ -568,8 +569,82 @@ namespace vernier {
         return classname;
     }
 
-    void PatternLayout::saveToPNG(std::string filename) {
+    cv::Mat PatternLayout::getPNGCells() {
         throw Exception("saveToPNG is not implemented for " + this->classname);
+    }
+
+    /** Returns true if the cell exists and holds a dot */
+    static bool isDotCell(const cv::Mat & cells, int row, int col) {
+        return row >= 0 && col >= 0 && row < cells.rows && col < cells.cols && cells.at<unsigned char>(row, col) != 0;
+    }
+
+    /** Locates a pixel with respect to the nearest corner of its cell, along one axis */
+    struct CellCorner {
+        int cell; // index of the cell containing the pixel
+        int side; // -1 if the nearest corner is before the pixel, +1 if it is after
+        double distance; // distance from the pixel centre to that corner, in pixels
+    };
+
+    static CellCorner nearestCellCorner(int pixel, int cellSize) {
+        double position = pixel % cellSize + 0.5; // pixel centre inside its cell
+        CellCorner corner;
+        corner.cell = pixel / cellSize;
+        corner.side = (position < 0.5 * cellSize) ? -1 : 1;
+        corner.distance = (corner.side < 0) ? position : cellSize - position;
+        return corner;
+    }
+
+    /** Returns true if the pixel belongs to a dot once the corners are rounded with the given radius (in pixels).
+     * Only the pixels lying in the radius x radius square at the corner of their cell can change:
+     *   - the corner of a dot is rounded when its two edge neighbours are gaps (convex corner),
+     *   - the corner of a gap is filled when its two edge neighbours and its diagonal neighbour are dots (concave corner).
+     * Hence dots sharing an edge merge into one smooth shape, while dots touching only by a corner stay apart. */
+    static bool isDotPixel(const cv::Mat & cells, const CellCorner & y, const CellCorner & x, double radius) {
+        bool dot = isDotCell(cells, y.cell, x.cell);
+        if (x.distance >= radius || y.distance >= radius) {
+            return dot;
+        }
+
+        bool verticalNeighbour = isDotCell(cells, y.cell + y.side, x.cell);
+        bool horizontalNeighbour = isDotCell(cells, y.cell, x.cell + x.side);
+        bool diagonalNeighbour = isDotCell(cells, y.cell + y.side, x.cell + x.side);
+
+        // the rounding arc is centred inside the cell, at (radius, radius) from the corner
+        double dx = radius - x.distance;
+        double dy = radius - y.distance;
+        bool insideArc = dx * dx + dy * dy <= radius * radius;
+
+        if (dot && !verticalNeighbour && !horizontalNeighbour) {
+            return insideArc; // convex corner
+        }
+        if (!dot && verticalNeighbour && horizontalNeighbour && diagonalNeighbour) {
+            return !insideArc; // concave corner
+        }
+        return dot;
+    }
+
+    void PatternLayout::saveToPNG(std::string filename, int cellSize, double roundness) {
+        if (cellSize < 1) {
+            throw Exception("The PNG cell size must be at least 1 pixel.");
+        }
+        if (roundness < 0.0 || roundness > 1.0) {
+            throw Exception("The PNG roundness must be between 0.0 and 1.0.");
+        }
+        double radius = 0.5 * roundness * cellSize; // corner radius in pixels, half a cell makes round dots
+
+        cv::Mat cells = getPNGCells();
+        cv::Mat image(cells.rows * cellSize, cells.cols * cellSize, CV_8U);
+        for (int row = 0; row < image.rows; row++) {
+            CellCorner y = nearestCellCorner(row, cellSize);
+            for (int col = 0; col < image.cols; col++) {
+                CellCorner x = nearestCellCorner(col, cellSize);
+                image.at<unsigned char>(row, col) = isDotPixel(cells, y, x, radius) ? 255 : 0;
+            }
+        }
+        if (filename == "") {
+            filename = classname + ".png";
+        }
+        cv::imwrite(filename, image);
     }
 
     std::string PatternLayout::getClassname() {

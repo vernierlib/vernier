@@ -102,8 +102,12 @@ Both backends compute in double precision and agree to within rounding.
 - `Backend` — `Backend.CPU`, `Backend.CUDA`; `cudaAvailable()` at module level.
 - `Layout.loadFromJSON(filename)` — builds the layout described by a JSON file.
 - `PatternLayout` — `renderOrthographicProjection(pose, rows, cols)`,
-  `saveToPNG()`, `saveToSVG()`, `saveToJSON()`; `PeriodicPatternLayout(period,
-  nRows, nCols)` builds one directly (`nRows`/`nCols` must be odd).
+  `saveToPNG(filename, cellSize, roundness)`, `saveToSVG()`, `saveToJSON()`;
+  `PeriodicPatternLayout(period, nRows, nCols)` builds one directly
+  (`nRows`/`nCols` must be odd). In `saveToPNG`, `cellSize` (pixels per half
+  period, default 1) sets the resolution and `roundness` (0.0 for square dots
+  to 1.0 for round dots, default 0.0) rounds the corners of the dots, merging
+  adjacent dots into smooth groups.
 - `readImage(filename)`, `saveImage(filename, image)`, `showImage(name, image)`,
   `waitKey(delay)` — image I/O and display, so the examples need no extra
   Python package.

@@ -27,8 +27,13 @@ add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
 
 target_link_libraries(pyvernier PRIVATE vernier ${OpenCV_LIBS})
 
-find_package(Eigen3 REQUIRED)
-target_link_libraries(pyvernier PRIVATE Eigen3::Eigen)
+# Eigen comes from the system on Linux/macOS, but Windows has no package to find:
+# there the vendored 3rdparty/Eigen is used, through the include path set above.
+# The root CMakeLists.txt makes the same distinction for the core library.
+if(NOT WIN32)
+  find_package(Eigen3 REQUIRED)
+  target_link_libraries(pyvernier PRIVATE Eigen3::Eigen)
+endif()
 
 if (USE_FFTW)
   target_include_directories(pyvernier PRIVATE ${FFTW3_INCLUDE_DIRS})
