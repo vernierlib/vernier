@@ -47,7 +47,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
-            libmatio-dev libopencv-dev libqhull-dev libfftw3-dev zlib1g-dev
+            libmatio-dev libopencv-dev libqhull-dev zlib1g-dev
 
       # Homebrew's `opencv` is now 5.x, which this library does not compile
       # against: several imgproc functions it uses were moved. Pinned to 4.x,
@@ -56,7 +56,7 @@ jobs:
       - name: Install dependencies (macOS)
         if: runner.os == 'macOS'
         run: |
-          brew install opencv@4 eigen fftw libmatio qhull
+          brew install opencv@4 eigen libmatio qhull
           echo "OpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4" >> "$GITHUB_ENV"
 
       # When the community feed is down, choco prints "Chocolatey installed 0/0
@@ -146,7 +146,7 @@ jobs:
       - name: Run tests (Windows)
         if: runner.os == 'Windows'
         run: |
-          $env:PATH = "${{ steps.opencv.outputs.bin }};$env:GITHUB_WORKSPACE\3rdparty\fftw3;$env:PATH"
+          $env:PATH = "${{ steps.opencv.outputs.bin }};$env:PATH"
           ctest --test-dir build -C Release --output-on-failure --timeout 300
         shell: pwsh
 
@@ -170,13 +170,6 @@ jobs:
         run: |
           cd "${{ github.workspace }}\stage\${{ matrix.package }}"
           Remove-Item -Force -ErrorAction SilentlyContinue bin\matdump.exe, lib\matio*, include\matio*.h
-        shell: pwsh
-
-      # FFTW ships with this repository, so the examples can carry the DLL they
-      # need. OpenCV does not, and still has to be installed to run them.
-      - name: Add the FFTW runtime (Windows)
-        if: runner.os == 'Windows'
-        run: Copy-Item 3rdparty\fftw3\libfftw3-3.dll "${{ github.workspace }}\stage\${{ matrix.package }}\bin\"
         shell: pwsh
 
       - name: Archive (Unix)
@@ -214,7 +207,7 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
-            libmatio-dev libopencv-dev libqhull-dev libfftw3-dev zlib1g-dev \
+            libmatio-dev libopencv-dev libqhull-dev zlib1g-dev \
             doxygen doxygen-latex
 
       - name: Build the documentation
