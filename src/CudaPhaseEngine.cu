@@ -361,8 +361,8 @@ namespace vernier {
         CUDA_CHECK(cudaMalloc(&impl->dResVal, sizeof(double)));
         CUDA_CHECK(cudaMalloc(&impl->dResIdx, sizeof(int)));
 
-        // cuFFT plan dims (nCols, nRows) so the DFT indexing matches FFTW's
-        // fftw_plan_dft_2d(nCols, nRows, ...) over the same column-major buffer.
+        // cuFFT plan dims (nCols, nRows) so the DFT indexing matches the CPU
+        // FourierTransform over the same column-major buffer.
         CUFFT_CHECK(cufftPlan2d(&impl->plan, nCols, nRows, CUFFT_Z2Z));
     }
 
