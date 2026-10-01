@@ -14,7 +14,7 @@ namespace vernier {
     /** \brief GPU implementation of the PatternPhase pipeline (cuFFT + custom kernels).
      *
      * Everything that is data-parallel in PatternPhase::compute() is executed on the
-     * device in double precision (cufftZ2Z), so the numerical domain matches the FFTW
+     * device in double precision (cufftZ2Z), so the numerical domain matches the
      * CPU path: forward FFT, spectrum shift, magnitude, band-pass and angular cuts,
      * peak search, Gaussian filtering, the two inverse FFTs, the checkerboard shift and
      * the phase argument.
@@ -25,7 +25,7 @@ namespace vernier {
      * the .cu file.
      *
      * All buffers are laid out column-major (Eigen default), i.e. element (row, col) is at
-     * index row + col * nRows, exactly as FFTW sees the Eigen arrays on the CPU path.
+     * index row + col * nRows, exactly as the CPU FFT sees the Eigen arrays on the CPU path.
      */
     class CudaPhaseEngine {
     public:

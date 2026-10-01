@@ -13,7 +13,6 @@ option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(BUILD_PYTHON_BINDINGS "Build the Python bindings" ON)
-option(USE_FFTW "Use FFTW" ON)
 option(USE_CUDA "Build the CUDA + cuFFT backend (selectable at runtime)" OFF)
 
 # set build mode type
@@ -47,12 +46,6 @@ endif()
 # configuration for windows
 if(WIN32)
 
-# add FFTW
-set(FFTW3_INCLUDE_DIRS ${CMAKE_SOURCE_DIR}/3rdparty/fftw3)
-set(FFTW3_LIBRARY_DIRS ${CMAKE_SOURCE_DIR}/3rdparty/fftw3)
-set(FFTW3_LIBRARIES ${CMAKE_SOURCE_DIR}/3rdparty/fftw3/libfftw3-3.lib)
-execute_process(COMMAND ${CMAKE_SOURCE_DIR}/3rdparty/pathed/pathed.exe -a ${CMAKE_SOURCE_DIR}/3rdparty/fftw3)
-
 # find OpenCV, you may need to set OpenCV_DIR variable to the absolute path to the directory containing OpenCVConfig.cmake file
 find_package(OpenCV REQUIRED)
 message(STATUS "OpenCV library status:")
@@ -83,17 +76,6 @@ message(STATUS "Eigen library status:")
 #message(STATUS "    config: ${EIGEN3_DIR}")
 message(STATUS "    include path: ${EIGEN3_INCLUDE_DIR}")
 #message(STATUS "    libraries: ${EIGEN3_INCLUDE_LIB}")
-
-# find FFTW
-#find_package(FFTW3 REQUIRED)
-find_package(PkgConfig REQUIRED)
-pkg_search_module(FFTW REQUIRED fftw3 IMPORTED_TARGET)
-include_directories(PkgConfig::FFTW)
-link_libraries(PkgConfig::FFTW)
-message(STATUS "FFTW library status:")
-message(STATUS "    version: ${FFTW_VERSION}")
-message(STATUS "    include path: ${FFTW_INCLUDE_DIRS}")
-message(STATUS "    libraries: ${FFTW_LIBRARIES}")
 
 # find OpenCV
 find_package(OpenCV REQUIRED)
