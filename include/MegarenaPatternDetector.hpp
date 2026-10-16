@@ -62,6 +62,11 @@ namespace vernier {
 
         int getInt(const std::string & attribute) override;
 
+        /** Also returns "quality1" and "quality2", how stable the thumbnail is along
+         * each axis (see MegarenaThumbnail::getQuality1), and "quality", the lower
+         * of the two. */
+        double getDouble(const std::string & attribute) override;
+
         void* getObject(const std::string & attribute) override;
 
     };

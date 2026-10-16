@@ -221,6 +221,82 @@ namespace vernier {
                 }
             }
         }
+
+        // How stable the thumbnail is along each axis: every cell of a coding row
+        // (column) votes for its own bit, and the votes are checked against the
+        // row's (column's) bit.
+        auto cellMean = [](const Eigen::ArrayXXd& cumul, const Eigen::ArrayXXd& number, int row, int col) {
+            return number(row, col) > 0 ? cumul(row, col) / number(row, col) : std::nan("");
+        };
+        auto vote = [&](int row, int col, int neighbourA[2], int neighbourB[2]) {
+            double coding = cellMean(cumulWhiteDots, numberWhiteDots, row, col);
+            double background = cellMean(cumulBackgroundDots, numberBackgroundDots, row, col);
+            double whiteSum = 0.0;
+            int whiteCount = 0;
+            for (int* neighbour : {neighbourA, neighbourB}) {
+                int r = neighbour[0], c = neighbour[1];
+                bool inside = r >= 0 && c >= 0 && r < numberWhiteDots.rows() && c < numberWhiteDots.cols();
+                bool missingCorner = r % 3 == missing1 % 3 && c % 3 == missing2 % 3;
+                if (inside && !missingCorner && numberWhiteDots(r, c) > 0) {
+                    whiteSum += cellMean(cumulWhiteDots, numberWhiteDots, r, c);
+                    whiteCount++;
+                }
+            }
+            if (std::isnan(coding) || std::isnan(background) || whiteCount == 0) {
+                return 0;
+            }
+            double white = whiteSum / whiteCount;
+            return std::abs(coding - background) < std::abs(white - coding) ? -1 : 1;
+        };
+        auto quality = [](int agreeing, int votes) {
+            return votes > 0 ? 2.0 * agreeing / votes - 1.0 : 0.0;
+        };
+
+        int agreeing1 = 0, votes1 = 0;
+        for (int index1 = startIndex1; index1 < stopIndex1; index1++) {
+            if (index1 % 3 != coding1 % 3) {
+                continue;
+            }
+            for (int index2 = startIndex2; index2 < stopIndex2; index2++) {
+                if (index2 % 3 == coding2 % 3) {
+                    continue;
+                }
+                int before[2] = {index1 - 1, index2}, after[2] = {index1 + 1, index2};
+                int bit = vote(index1, index2, before, after);
+                if (bit != 0) {
+                    votes1++;
+                    agreeing1 += bit == sequence1(index1);
+                }
+            }
+        }
+        quality1 = quality(agreeing1, votes1);
+
+        int agreeing2 = 0, votes2 = 0;
+        for (int index2 = startIndex2; index2 < stopIndex2; index2++) {
+            if (index2 % 3 != coding2 % 3) {
+                continue;
+            }
+            for (int index1 = startIndex1; index1 < stopIndex1; index1++) {
+                if (index1 % 3 == coding1 % 3) {
+                    continue;
+                }
+                int before[2] = {index1, index2 - 1}, after[2] = {index1, index2 + 1};
+                int bit = vote(index1, index2, before, after);
+                if (bit != 0) {
+                    votes2++;
+                    agreeing2 += bit == sequence2(index2);
+                }
+            }
+        }
+        quality2 = quality(agreeing2, votes2);
+    }
+
+    double MegarenaThumbnail::getQuality1() {
+        return quality1;
+    }
+
+    double MegarenaThumbnail::getQuality2() {
+        return quality2;
     }
 
     void MegarenaThumbnail::compute(Eigen::ArrayXXd& phase1, Eigen::ArrayXXd& phase2, const Eigen::ArrayXXd& patternArray) {
@@ -845,7 +921,7 @@ namespace vernier {
         numberBackgroundDots.rowwise().reverseInPlace();
         cumulBackgroundDots.transposeInPlace();
         cumulBackgroundDots.rowwise().reverseInPlace();
-
+        std::swap(quality1, quality2);
     }
 
     void MegarenaThumbnail::rotate180() {
@@ -864,5 +940,6 @@ namespace vernier {
         numberBackgroundDots.colwise().reverseInPlace();
         cumulBackgroundDots.transposeInPlace();
         cumulBackgroundDots.colwise().reverseInPlace();
+        std::swap(quality1, quality2);
     }
 }

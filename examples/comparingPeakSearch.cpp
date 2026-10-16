@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     ring.setBool("ringPeakSearch", true);
 
     out << "file,search,found,x,y,alpha,pixel_size,plane1_a,plane1_b,plane2_a,plane2_b,"
-        << "peak1_col,peak1_row,peak2_col,peak2_row" << endl;
+        << "peak1_col,peak1_row,peak2_col,peak2_row,quality1,quality2" << endl;
     int count = 0;
     while (getline(manifest, line)) {
         stringstream row(line);
@@ -79,7 +79,8 @@ int main(int argc, char** argv) {
                 << pose.x << "," << pose.y << "," << pose.alpha << "," << pose.pixelSize << ","
                 << plane1.getA() << "," << plane1.getB() << ","
                 << plane2.getA() << "," << plane2.getB() << ","
-                << peak1.x() << "," << peak1.y() << "," << peak2.x() << "," << peak2.y() << endl;
+                << peak1.x() << "," << peak1.y() << "," << peak2.x() << "," << peak2.y() << ","
+                << detector.getDouble("quality1") << "," << detector.getDouble("quality2") << endl;
         }
         if (++count % 50 == 0) {
             cerr << count << " pictures" << endl;

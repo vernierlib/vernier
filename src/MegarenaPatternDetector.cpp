@@ -175,6 +175,18 @@ namespace vernier {
         }
     }
 
+    double MegarenaPatternDetector::getDouble(const std::string & attribute) {
+        if (attribute == "quality1") {
+            return thumbnail.getQuality1();
+        } else if (attribute == "quality2") {
+            return thumbnail.getQuality2();
+        } else if (attribute == "quality") {
+            return std::min(thumbnail.getQuality1(), thumbnail.getQuality2());
+        } else {
+            return PeriodicPatternDetector::getDouble(attribute);
+        }
+    }
+
     void* MegarenaPatternDetector::getObject(const std::string & attribute) {
         if (attribute == "bitSequence") {
             return &bitSequence;
