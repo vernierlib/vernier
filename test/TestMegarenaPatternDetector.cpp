@@ -265,13 +265,14 @@ void main3dLongFocalPerspective() {
     waitKey(0);
 }
 
-void test2d(int codeSize) {
+void test2d(int codeSize, bool ringPeakSearch = false) {
     START_UNIT_TEST;
 
     // Constructing the layout
     double physicalPeriod = randomDouble(5.0, 10.0);
     PatternLayout* layout = new MegarenaPatternLayout(physicalPeriod, codeSize);
     cout << "  Code size: " << codeSize << endl;
+    cout << "  Ring peak search: " << ringPeakSearch << endl;
     cout << "  Physical period: " << physicalPeriod << endl;
 
     // Setting the pose of the pattern in the camera frame for rendering
@@ -289,6 +290,7 @@ void test2d(int codeSize) {
     // Detecting and estimating the pose of the pattern
     PatternDetector* detector;
     detector = new MegarenaPatternDetector(physicalPeriod, codeSize);
+    detector->setBool("ringPeakSearch", ringPeakSearch);
     detector->compute(array);
     Pose estimatedPose = detector->get2DPose();
 
@@ -298,6 +300,80 @@ void test2d(int codeSize) {
     //            waitKey(0);
 
     TEST_EQUALITY(patternPose, estimatedPose, 0.01)
+}
+
+void testQuality(int codeSize) {
+    START_UNIT_TEST;
+
+    // Constructing the layout
+    double physicalPeriod = randomDouble(5.0, 10.0);
+    MegarenaPatternLayout layout(physicalPeriod, codeSize);
+
+    // Rendering a clean picture of the pattern
+    double x = randomDouble(-layout.getWidth() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double y = randomDouble(-layout.getHeight() + 3 * codeSize*physicalPeriod, -3 * codeSize * physicalPeriod);
+    double alpha = randomDouble(-PI, PI);
+    double pixelSize = randomDouble(1.0, 1.1);
+    Pose patternPose = Pose(x, y, alpha, pixelSize);
+    Eigen::ArrayXXd array(512, 512);
+    layout.renderOrthographicProjection(patternPose, array);
+
+    MegarenaPatternDetector detector(physicalPeriod, codeSize);
+    detector.compute(array);
+    double quality1 = detector.getDouble("quality1");
+    double quality2 = detector.getDouble("quality2");
+    cout << "  Quality: " << quality1 << ", " << quality2 << endl;
+
+    // Nearly every cell of a clean picture agrees with its row's bit
+    UNIT_TEST(quality1 > 0.9 && quality2 > 0.9);
+
+    UNIT_TEST(detector.getDouble("quality") == std::min(quality1, quality2));
+}
+
+void testQualityOfNoise() {
+    START_UNIT_TEST;
+
+    // The phase maps of noise do not fall on any dots, so the cells vote at random
+    Eigen::ArrayXXd array = Eigen::ArrayXXd::Random(512, 512);
+    MegarenaPatternDetector detector(8.0, 8);
+    detector.compute(array);
+    double quality1 = detector.getDouble("quality1");
+    double quality2 = detector.getDouble("quality2");
+    cout << "  Quality: " << quality1 << ", " << quality2 << endl;
+
+    UNIT_TEST(std::abs(quality1) < 0.3 && std::abs(quality2) < 0.3);
+}
+
+void testQualityRotation() {
+    START_UNIT_TEST;
+
+    double physicalPeriod = 8.0;
+    int codeSize = 8;
+    MegarenaPatternLayout layout(physicalPeriod, codeSize);
+    Pose patternPose = Pose(-120 * physicalPeriod, -90 * physicalPeriod, 0.1, 1.0);
+    Eigen::ArrayXXd array(512, 512);
+    layout.renderOrthographicProjection(patternPose, array);
+
+    // Shifting one phase map off the dots makes the two qualities differ
+    PatternPhase patternPhase;
+    patternPhase.compute(array);
+    Eigen::ArrayXXd phase1 = patternPhase.getUnwrappedPhase1();
+    Eigen::ArrayXXd phase2 = patternPhase.getUnwrappedPhase2() + 2.0 * PI / 3.0;
+    MegarenaThumbnail thumbnail;
+    thumbnail.resize(65, 65);
+    thumbnail.compute(phase1, phase2, array);
+    double quality1 = thumbnail.getQuality1();
+    double quality2 = thumbnail.getQuality2();
+    cout << "  Quality: " << quality1 << ", " << quality2 << endl;
+    UNIT_TEST(std::abs(quality1 - quality2) > 0.1);
+
+    // A quarter turn swaps the axes, a half turn keeps them
+    thumbnail.rotate90();
+    UNIT_TEST(thumbnail.getQuality1() == quality2 && thumbnail.getQuality2() == quality1);
+    thumbnail.rotate180();
+    UNIT_TEST(thumbnail.getQuality1() == quality2 && thumbnail.getQuality2() == quality1);
+    thumbnail.rotate270();
+    UNIT_TEST(thumbnail.getQuality1() == quality1 && thumbnail.getQuality2() == quality2);
 }
 
 void test3d(int codeSize) {
@@ -348,6 +424,13 @@ void runAllTests() {
     REPEAT_TEST(test2d(10), 10)
     REPEAT_TEST(test2d(12), 10)
     REPEAT_TEST(test3d(8), 10);
+    REPEAT_TEST(test2d(8, true), 10)
+    REPEAT_TEST(test2d(10, true), 10)
+    REPEAT_TEST(test2d(12, true), 10)
+    REPEAT_TEST(testQuality(8), 10)
+    REPEAT_TEST(testQuality(12), 10)
+    REPEAT_TEST(testQualityOfNoise(), 10)
+    testQualityRotation();
 }
 
 double speed(unsigned long testCount) {

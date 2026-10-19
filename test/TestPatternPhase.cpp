@@ -72,6 +72,45 @@ void runAllTests() {
 
 }
 
+void testRingPeakSearch() {
+
+    START_UNIT_TEST;
+
+    double period = 10.0;
+    PeriodicPatternLayout layout(period, 81, 81);
+    double x = randomDouble(-4.0, 4.0);
+    double y = randomDouble(-4.0, 4.0);
+    double alpha = randomDouble(-0.7, 0.7);
+    double pixelSize = 1.0;
+    Pose patternPose = Pose(x, y, alpha, pixelSize);
+    cout << "  Pattern pose:   " << patternPose.toString() << endl;
+    Eigen::ArrayXXd array(512, 512);
+    layout.renderOrthographicProjection(patternPose, array);
+
+    PatternPhase maximum;
+    maximum.setSigma(1);
+    maximum.compute(array);
+
+    PatternPhase ring;
+    ring.setSigma(1);
+    ring.setRingPeakSearch(true);
+    ring.compute(array);
+
+    UNIT_TEST(ring.peaksFound());
+
+    // On a clean periodic pattern both searches find the carriers in the same bins
+    UNIT_TEST(ring.getPeak1().head<2>() == maximum.getPeak1().head<2>());
+
+    UNIT_TEST(ring.getPeak2().head<2>() == maximum.getPeak2().head<2>());
+
+    UNIT_TEST(areEqual(maximum.getPlane1().getPosition(period), ring.getPlane1().getPosition(period), 0.001));
+
+    UNIT_TEST(areEqual(maximum.getPlane2().getPosition(period), ring.getPlane2().getPosition(period), 0.001));
+
+    UNIT_TEST(areEqual(maximum.getPlane1().getAngle(), ring.getPlane1().getAngle(), 0.001));
+
+}
+
 void runAllTests2() {
 
     Eigen::ArrayXXcd mireMatrix;
@@ -181,8 +220,9 @@ double speed(unsigned long testCount) {
 int main(int argc, char** argv) {
 
     runAllTests();
+    REPEAT_TEST(testRingPeakSearch(), 10)
     runCudaTests();
     //runAllTests2();
 
     return EXIT_SUCCESS;
-}
+}
