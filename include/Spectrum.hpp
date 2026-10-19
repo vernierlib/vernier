@@ -24,11 +24,24 @@ namespace vernier {
         int cols = array.cols();
         int centerX = rows / 2;
         int centerY = cols / 2;
+        double lowSquared = lowFrequency >= 0.0 ? lowFrequency * lowFrequency : -1.0;
+        double highSquared = highFrequency >= 0.0 ? highFrequency * highFrequency : -1.0;
 
+#pragma omp parallel for
         for (int col = 0; col < cols; ++col) {
+            double dCol = col - centerY;
             for (int row = 0; row < rows; ++row) {
-                double distance = std::hypot(row - centerX, col - centerY);
-                if (distance <= lowFrequency || distance > highFrequency) {
+                double dRow = row - centerX;
+                double squared = dRow * dRow + dCol * dCol;
+                bool cut;
+                // squared distances are exact, hypot only settles the near ties
+                if (std::abs(squared - lowSquared) <= 1e-9 * lowSquared || std::abs(squared - highSquared) <= 1e-9 * highSquared) {
+                    double distance = std::hypot(dRow, dCol);
+                    cut = distance <= lowFrequency || distance > highFrequency;
+                } else {
+                    cut = squared < lowSquared || squared > highSquared;
+                }
+                if (cut) {
                     array(row, col) = _Scalar();
                 }
             }
@@ -49,12 +62,29 @@ namespace vernier {
         int centerX = rows / 2;
         int centerY = cols / 2;
         double halfWidthAngle = widthAngle / 2.0;
+        double dirX = std::cos(centerAngle);
+        double dirY = std::sin(centerAngle);
+        double sinHalfWidthSquared = std::sin(halfWidthAngle) * std::sin(halfWidthAngle);
+        bool narrow = halfWidthAngle >= 0.0 && halfWidthAngle < PI / 2;
 
+#pragma omp parallel for
         for (int col = 0; col < cols; ++col) {
+            double dCol = col - centerY;
             for (int row = 0; row < rows; ++row) {
-                double currentAngle = std::atan2(row - centerX, col - centerY);
-                double diff = angleInPiPi(currentAngle - centerAngle);
-                if (std::abs(diff) <= halfWidthAngle || std::abs(diff) >= (PI - halfWidthAngle)) {
+                double dRow = row - centerX;
+                double normSquared = dRow * dRow + dCol * dCol;
+                // inside the sector when the sine to its axis is below sin(halfWidthAngle),
+                // atan2 only settles the near ties
+                double cross = dCol * dirY - dRow * dirX;
+                double margin = cross * cross - sinHalfWidthSquared * normSquared;
+                bool cut;
+                if (narrow && std::abs(margin) > 1e-9 * normSquared) {
+                    cut = margin < 0.0;
+                } else {
+                    double diff = angleInPiPi(std::atan2(dRow, dCol) - centerAngle);
+                    cut = std::abs(diff) <= halfWidthAngle || std::abs(diff) >= (PI - halfWidthAngle);
+                }
+                if (cut) {
                     array(row, col) = _Scalar();
                 }
             }

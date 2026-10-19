@@ -125,6 +125,47 @@ void testPeaksSearch() {
     UNIT_TEST(areEqual(mainPeak2(1), mainPeakRef2(0) - 1));
 }
 
+void testCutsMatchReference() {
+    START_UNIT_TEST;
+
+    int rows = 101, cols = 96;
+    int centerX = rows / 2, centerY = cols / 2;
+    double lows[] = {0.0, 5.0, 20.0, 12.5};
+    double highs[] = {25.0, 40.0, 500.0, 36.06};
+    for (int i = 0; i < 4; i++) {
+        Eigen::ArrayXXd cut = Eigen::ArrayXXd::Ones(rows, cols);
+        applyBandPassCut(cut, lows[i], highs[i]);
+        Eigen::ArrayXXd reference = Eigen::ArrayXXd::Ones(rows, cols);
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                double distance = std::hypot(row - centerX, col - centerY);
+                if (distance <= lows[i] || distance > highs[i]) {
+                    reference(row, col) = 0.0;
+                }
+            }
+        }
+        UNIT_TEST(areEqual(cut, reference, 0.1));
+    }
+
+    // the last cases put the sector edge exactly on pixels, as peaksSearch can
+    double centers[] = {PI, 0.3, -2.0, 0.0, std::atan2(16.0, 9.0)};
+    double widths[] = {PI / 6, 0.05, 1.0, 2.0 * std::atan2(9.0, 30.0), 2.0 * std::atan2(9.0, std::hypot(9.0, 16.0))};
+    for (int i = 0; i < 5; i++) {
+        Eigen::ArrayXXd cut = Eigen::ArrayXXd::Ones(rows, cols);
+        applyAngularCut(cut, centers[i], widths[i]);
+        Eigen::ArrayXXd reference = Eigen::ArrayXXd::Ones(rows, cols);
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                double diff = angleInPiPi(std::atan2(row - centerX, col - centerY) - centers[i]);
+                if (std::abs(diff) <= widths[i] / 2.0 || std::abs(diff) >= (PI - widths[i] / 2.0)) {
+                    reference(row, col) = 0.0;
+                }
+            }
+        }
+        UNIT_TEST(areEqual(cut, reference, 0.1));
+    }
+}
+
 double speedShift(unsigned long testCount) {
     Eigen::ArrayXXcd in = Eigen::ArrayXXcd::Random(1024, 768);
     Eigen::ArrayXXcd out(in);
@@ -176,6 +217,7 @@ int main(int argc, char** argv) {
     testShift();
     testPeakHalfPlane();
     testPeaksSearch();
+    testCutsMatchReference();
     
     //PRINT(speedPeakHalfPlane(1000))
     //PRINT(speedPeaksSearch(1000))
