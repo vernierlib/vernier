@@ -17,9 +17,6 @@ foreach(file ${TESTS})
   add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
   target_link_libraries(${testName} ${OpenCV_LIBS})
   
-  include_directories (${FFTW3_INCLUDE_DIRS})
-  target_link_libraries(${testName} ${FFTW3_LIBRARIES})
-  
   if(NOT WIN32)
     target_link_libraries(${testName} gdstk)
   endif()

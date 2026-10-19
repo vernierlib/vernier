@@ -9,76 +9,67 @@
 
 #include "Common.hpp"
 
-#include <fftw3.h>
-
 namespace vernier {
 
-    /** \brief Computes Discrete Fourier Transform on Eigen arrays using FFTW library.
+    /** \brief Computes Discrete Fourier Transform on Eigen arrays using pocketfft.
      *
-     * FFT plans are prepared at the construction of the object, then the transforms 
-     * can be computed without any delays.
+     * Both directions are unnormalized: a forward then backward transform scales
+     * the data by the number of elements.
      */
     class FourierTransform {
     public:
 
-        /** Constructs the FFT plans for a given size
-         *
-         * \param sign: FFTW_FORWARD (default) or FFTW_BACKWARD
-         */
-        FourierTransform(int sign = FFTW_FORWARD);
+        enum Direction {
+            FORWARD = -1,
+            BACKWARD = 1
+        };
 
-        /** Constructs the FFT plans for a given size
+        /** Constructs the transform for a given size
+         *
+         * \param sign: FORWARD (default) or BACKWARD
+         */
+        FourierTransform(int sign = FORWARD);
+
+        /** Constructs the transform for a given size
          *
          * \param nRows: number of rows of the array
          * \param nCols: number of cols of the array
-         * \param sign: FFTW_FORWARD or FFTW_BACKWARD
+         * \param sign: FORWARD or BACKWARD
          */
-        FourierTransform(int nRows, int nCols = 1, int sign = FFTW_FORWARD);
+        FourierTransform(int nRows, int nCols = 1, int sign = FORWARD);
 
-        /** Constructs the FFT plans for the size of an array
+        /** Constructs the transform for the size of an array
          *
          * \param array: 2-D complex array (only the size of array is used, no
          * transformation is computed at this step)
-         * \param sign: FFTW_FORWARD or FFTW_BACKWARD
+         * \param sign: FORWARD or BACKWARD
          */
-        FourierTransform(Eigen::ArrayXXcd& array, int sign = FFTW_FORWARD);
+        FourierTransform(Eigen::ArrayXXcd& array, int sign = FORWARD);
 
-        /** Constructs the FFT plans for the size of an array
+        /** Constructs the transform for the size of an array
          *
          * \param array: 1-D complex array (only the size of array is used, no
          * transformation is computed at this step)
-         * \param sign: FFTW_FORWARD or FFTW_BACKWARD
+         * \param sign: FORWARD or BACKWARD
          */
-        FourierTransform(Eigen::ArrayXcd& array, int sign = FFTW_FORWARD);
+        FourierTransform(Eigen::ArrayXcd& array, int sign = FORWARD);
 
-        /** Copying is disabled since the instance owns the FFT plans */
-        FourierTransform(const FourierTransform&) = delete;
-
-        FourierTransform& operator=(const FourierTransform&) = delete;
-
-        /** Moving transfers ownership of the FFT plans */
-        FourierTransform(FourierTransform&&) noexcept;
-
-        FourierTransform& operator=(FourierTransform&&) noexcept;
-
-        ~FourierTransform();
-
-        /** Resizes the FFT plans
+        /** Resizes the transform
          *
          * \param nRows: number of rows of the array
          * \param nCols: number of cols of the array
-         * \param sign: FFTW_FORWARD or FFTW_BACKWARD
+         * \param sign: FORWARD or BACKWARD
          */
-        void resize(int nRows, int nCols, int sign = FFTW_FORWARD);
+        void resize(int nRows, int nCols, int sign = FORWARD);
 
-        /** Computes the transform using prepared FFT plan
+        /** Computes the transform
          *
          * \param in: 2-D complex input array
          * \param out: 2-D complex output array
          */
         void compute(const Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out);
 
-        /** Computes the transform using prepared FFT plan
+        /** Computes the transform
          *
          * \param in: 1-D complex input array
          * \param out: 1-D complex output array
@@ -87,7 +78,7 @@ namespace vernier {
         
         /** Set the direction of the FFT
          *
-         * \param sign: FFTW_FORWARD or FFTW_BACKWARD
+         * \param sign: FORWARD or BACKWARD
          */
         void setSign(int sign);
 
@@ -96,8 +87,6 @@ namespace vernier {
         int nRows;
         int nCols;
         int sign;
-
-        fftw_plan plan;
     };
 }
 

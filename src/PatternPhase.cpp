@@ -21,8 +21,8 @@ namespace vernier {
     void PatternPhase::resize(int nRows, int nCols) {
         ASSERT_MSG(nCols > 0 && nRows > 0, "The image is empty.");
         if (nRows != spectrum.rows() || nCols != spectrum.cols()) {
-            fft.resize(nRows, nCols, FFTW_FORWARD);
-            ifft.resize(nRows, nCols, FFTW_BACKWARD);
+            fft.resize(nRows, nCols, FourierTransform::FORWARD);
+            ifft.resize(nRows, nCols, FourierTransform::BACKWARD);
             regressionPlane.resize(nRows, nCols);
             spectrum.resize(nRows, nCols);
             spectrumShifted.resize(nRows, nCols);

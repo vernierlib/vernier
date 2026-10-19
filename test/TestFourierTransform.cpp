@@ -19,7 +19,7 @@ void main1() {
 
     spatial << 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32;
 
-    FourierTransform fft(8, 4, FFTW_FORWARD);
+    FourierTransform fft(8, 4, FourierTransform::FORWARD);
     std::cout << "spatial = " << spatial << std::endl;
 
     fft.compute(spatial, spectral);
@@ -30,7 +30,7 @@ void main1() {
     std::cout << "spectral = " << spectral << std::endl;
     std::cout << "spectral shifted = " << spectralShifted << std::endl;
 
-    FourierTransform ifft(8, 4, FFTW_BACKWARD);
+    FourierTransform ifft(8, 4, FourierTransform::BACKWARD);
 
     fft.compute(spectral, spatial);
 
@@ -122,6 +122,36 @@ void runAllTests() {
 
 
     UNIT_TEST(areEqual(spectral, spectralAnalytic, 1e-12));
+
+    Eigen::ArrayXXcd spatial2D(12, 10);
+    for (int i = 0; i < spatial2D.size(); i++) {
+        spatial2D(i) = std::complex<double>(dist(rd), dist(rd));
+    }
+
+    Eigen::ArrayXXcd spectral2D;
+    FourierTransform fft2D(spatial2D);
+    fft2D.compute(spatial2D, spectral2D);
+
+    Eigen::ArrayXXcd spectral2DAnalytic(spatial2D.rows(), spatial2D.cols());
+    for (int u = 0; u < spatial2D.rows(); u++) {
+        for (int v = 0; v < spatial2D.cols(); v++) {
+            std::complex<double> sum = 0;
+            for (int row = 0; row < spatial2D.rows(); row++) {
+                for (int col = 0; col < spatial2D.cols(); col++) {
+                    double angle = 2 * PI * ((double) u * row / spatial2D.rows() + (double) v * col / spatial2D.cols());
+                    sum += spatial2D(row, col) * std::polar(1.0, -angle);
+                }
+            }
+            spectral2DAnalytic(u, v) = sum;
+        }
+    }
+    UNIT_TEST(areEqual(spectral2D, spectral2DAnalytic, 1e-12));
+
+    Eigen::ArrayXXcd roundTrip;
+    FourierTransform ifft2D(spatial2D, FourierTransform::BACKWARD);
+    ifft2D.compute(spectral2D, roundTrip);
+    roundTrip /= (double) spatial2D.size();
+    UNIT_TEST(areEqual(roundTrip, spatial2D, 1e-12));
 }
 
 double speed(unsigned long testCount) {

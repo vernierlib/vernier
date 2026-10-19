@@ -10,8 +10,9 @@ include_directories (${OpenCV_INCLUDE_DIRS})
 add_definitions(-DOPENCV_DISABLE_EIGEN_TENSOR_SUPPORT)
 target_link_libraries(vernier ${OpenCV_LIBS})
 
-include_directories (${FFTW3_INCLUDE_DIRS})
-target_link_libraries(vernier ${FFTW3_LIBRARIES})
+# pocketfft runs its own thread pool
+find_package(Threads REQUIRED)
+target_link_libraries(vernier Threads::Threads)
 
 if (USE_CUDA)
   file(GLOB CUDA_SOURCES *.cu)

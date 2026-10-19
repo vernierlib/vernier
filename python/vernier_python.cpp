@@ -118,7 +118,7 @@ NB_MODULE(pyvernier, m) {
     // ─── Compute backend ─────────────────────────────────────────────────────
 
     nb::enum_<Backend>(m, "Backend", "Backend running the phase-retrieval pipeline.")
-        .value("CPU", Backend::CPU, "Reference CPU path (FFTW or Ooura).")
+        .value("CPU", Backend::CPU, "Reference CPU path (pocketfft).")
         .value("CUDA", Backend::CUDA, "GPU path (cuFFT + custom kernels).");
 
     m.def("cudaAvailable", &cudaAvailable,

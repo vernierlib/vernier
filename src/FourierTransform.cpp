@@ -6,13 +6,22 @@
 
 #include "FourierTransform.hpp"
 
+#define POCKETFFT_CACHE_SIZE 16
+#if defined(__unix__) || defined(__APPLE__)
+#define POCKETFFT_PTHREADS
+#endif
+#include <pocketfft/pocketfft_hdronly.h>
+
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 namespace vernier {
 
     FourierTransform::FourierTransform(int sign) {
-        plan = NULL;
         nRows = 0;
         nCols = 0;
-        this -> sign = sign;
+        setSign(sign);
     }
 
     FourierTransform::FourierTransform(int rows, int cols, int sign) : FourierTransform() {
@@ -27,82 +36,47 @@ namespace vernier {
         resize(array.rows(), array.cols(), sign);
     }
 
-    FourierTransform::~FourierTransform() {
-        if (plan != NULL) {
-            fftw_destroy_plan(plan);
-        }
-    }
-
-    FourierTransform::FourierTransform(FourierTransform&& other) noexcept {
-        nRows = other.nRows;
-        nCols = other.nCols;
-        sign = other.sign;
-        plan = other.plan;
-        other.plan = NULL;
-        other.nRows = 0;
-        other.nCols = 0;
-    }
-
-    FourierTransform& FourierTransform::operator=(FourierTransform&& other) noexcept {
-        if (this != &other) {
-            if (plan != NULL) {
-                fftw_destroy_plan(plan);
-            }
-            nRows = other.nRows;
-            nCols = other.nCols;
-            sign = other.sign;
-            plan = other.plan;
-            other.plan = NULL;
-            other.nRows = 0;
-            other.nCols = 0;
-        }
-        return *this;
-    }
-
     void FourierTransform::resize(int nRows, int nCols, int sign) {
         if (nRows <= 0 || nCols <= 0) {
             throw Exception("Can't resize a FourierTransform with rows<=0 or cols<=0");
-        } else if (nRows != this->nRows || nCols != this->nCols || sign != this->sign) {
-            if (plan != NULL) {
-                fftw_destroy_plan(plan);
-            }
-
-            this->nRows = nRows;
-            this->nCols = nCols;
-            this->sign = sign;
-
-            fftw_complex* in = (fftw_complex*) fftw_malloc(sizeof (fftw_complex) * nRows * nCols);
-            fftw_complex* out = (fftw_complex*) fftw_malloc(sizeof (fftw_complex) * nRows * nCols);
-
-            #pragma omp critical (fftw_plan_creation) 
-            {
-                if (nRows == 1 || nCols == 1) {
-                    plan = fftw_plan_dft_1d(nRows * nCols, in, out, sign, FFTW_MEASURE);
-                } else {
-                    plan = fftw_plan_dft_2d(nCols, nRows, in, out, sign, FFTW_MEASURE);
-                }
-            }
-            
-
-            fftw_free(in);
-            fftw_free(out);
         }
+        this->nRows = nRows;
+        this->nCols = nCols;
+        setSign(sign);
+    }
+
+    static void transform(const std::complex<double>* in, std::complex<double>* out, int nRows, int nCols, int sign) {
+        // Eigen arrays are column-major, so the data is a row-major nCols x nRows array
+        pocketfft::shape_t shape{(size_t) nCols, (size_t) nRows};
+        pocketfft::stride_t stride{(ptrdiff_t) (nRows * sizeof (std::complex<double>)), (ptrdiff_t) sizeof (std::complex<double>)};
+        pocketfft::shape_t axes{0, 1};
+        // 0 lets pocketfft use every core, unless the caller already runs threads through OpenMP
+        size_t nThreads = 0;
+#ifdef _OPENMP
+        if (omp_in_parallel()) {
+            nThreads = 1;
+        }
+#endif
+        pocketfft::c2c(shape, stride, stride, axes, sign == FourierTransform::FORWARD, in, out, 1.0, nThreads);
     }
 
     void FourierTransform::compute(const Eigen::ArrayXXcd& in, Eigen::ArrayXXcd& out) {
         resize(in.rows(), in.cols(), sign);
         out.resize(nRows, nCols);
-        fftw_execute_dft(plan, (fftw_complex*) in.data(), (fftw_complex*) out.data());
+        transform(in.data(), out.data(), nRows, nCols, sign);
     }
 
     void FourierTransform::compute(const Eigen::ArrayXcd& in, Eigen::ArrayXcd& out) {
         resize(in.rows(), in.cols(), sign);
         out.resize(nRows, nCols);
-        fftw_execute_dft(plan, (fftw_complex*) in.data(), (fftw_complex*) out.data());
+        transform(in.data(), out.data(), nRows, nCols, sign);
     }
 
     void FourierTransform::setSign(int sign) {
-        resize(nRows, nCols, sign);
+        if (sign != FORWARD && sign != BACKWARD) {
+            throw Exception("The sign of a FourierTransform must be FORWARD or BACKWARD");
+        }
+        this->sign = sign;
     }
 
 }
