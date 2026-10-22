@@ -1,0 +1,49 @@
+name: coverage
+
+# Also runs on dev, so PRs into dev get a coverage check against it without
+# going through main.
+on:
+  push:
+    branches: [ "main", "dev" ]
+  pull_request:
+    branches: [ "main", "dev" ]
+  workflow_dispatch:
+
+jobs:
+  coverage:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
+            libmatio-dev libopencv-dev libqhull-dev zlib1g-dev
+          pipx install gcovr
+
+      - name: Build with coverage
+        run: |
+          cmake -B build -DENABLE_COVERAGE=ON -DBUILD_DOCUMENTATION=OFF \
+            -DBUILD_EXAMPLES=OFF -DBUILD_PYTHON_BINDINGS=OFF
+          cmake --build build --parallel
+
+      # The library is built at -O0 here, so the suite takes a few minutes
+      # instead of ten seconds.
+      - name: Run tests
+        run: ctest --test-dir build --output-on-failure --timeout 900 -j "$(nproc)"
+
+      - name: Coverage report
+        run: |
+          gcovr --root . --object-directory build \
+            --filter 'src/' --filter 'include/' \
+            --gcov-ignore-parse-errors=negative_hits.warn \
+            --xml coverage.xml --print-summary
+
+      # Whether a PR lowers coverage too much is decided by Codecov (see
+      # codecov.yml), which posts it as a status check on the PR.
+      - uses: codecov/codecov-action@v5
+        with:
+          files: coverage.xml
+          token: ${{ secrets.CODECOV_TOKEN }}
+          fail_ci_if_error: false
