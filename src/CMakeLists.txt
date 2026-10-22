@@ -4,6 +4,11 @@ file(GLOB SOURCES *.cpp)
 
 add_library(vernier STATIC ${SOURCES})
 
+if (ENABLE_COVERAGE)
+  target_compile_options(vernier PRIVATE --coverage -O0 -g)
+  target_link_options(vernier PUBLIC --coverage)
+endif()
+
 
 
 include_directories (${OpenCV_INCLUDE_DIRS})
