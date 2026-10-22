@@ -70,8 +70,12 @@ namespace vernier {
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
 
-        Eigen::ArrayXXd magnitude = spectrumShifted.abs();
-        peaksSearch(magnitude, mainPeak1, mainPeak2);
+        if (ringPeakSearch) {
+            ringPeaksSearch(mainPeak1, mainPeak2);
+        } else {
+            Eigen::ArrayXXd magnitude = spectrumShifted.abs();
+            peaksSearch(magnitude, mainPeak1, mainPeak2);
+        }
 
         // Compute unwrapped phase from peak 1
         applyGaussianFilter(spectrumFiltered1, mainPeak1(1), mainPeak1(0), sigma);
@@ -129,6 +133,211 @@ namespace vernier {
                     std::swap(mainPeak1, mainPeak2);
                 }
             }
+        }
+    }
+
+    void PatternPhase::ringPeaksSearch(Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2) {
+        mainPeak1.setConstant(-1);
+        mainPeak2.setConstant(-1);
+
+        const int rows = spatial.rows();
+        const int cols = spatial.cols();
+        const double shortSide = std::min(rows, cols);
+
+        // Spectrum of the image less its mean, under a Hann window so that the
+        // image's borders do not draw a cross through the spectrum.
+        const double mean = spatial.real().mean();
+        Eigen::ArrayXXcd windowed(rows, cols), windowedSpectrum(rows, cols), windowedShifted(rows, cols);
+        for (int col = 0; col < cols; ++col) {
+            double hannCol = 0.5 - 0.5 * std::cos(2.0 * PI * (col + 0.5) / cols);
+            for (int row = 0; row < rows; ++row) {
+                double hannRow = 0.5 - 0.5 * std::cos(2.0 * PI * (row + 0.5) / rows);
+                windowed(row, col) = (spatial(row, col).real() - mean) * hannRow * hannCol;
+            }
+        }
+        fft.compute(windowed, windowedSpectrum);
+        shift(windowedSpectrum, windowedShifted);
+        Eigen::ArrayXXd magnitude = windowedShifted.abs();
+
+        // Signed frequencies (fx along the columns, fy along the rows) to the
+        // shifted arrays, wrapping around.
+        auto at = [&](const Eigen::ArrayXXd& array, int fx, int fy) {
+            int row = ((fy + rows / 2) % rows + rows) % rows;
+            int col = ((fx + cols / 2) % cols + cols) % cols;
+            return array(row, col);
+        };
+
+        // Magnitude summed over each 3x3 neighbourhood, so a carrier spread over
+        // a few bins still counts whole.
+        Eigen::ArrayXXd smoothed(rows, cols);
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                double sum = 0.0;
+                for (int dx = -1; dx <= 1; ++dx) {
+                    for (int dy = -1; dy <= 1; ++dy) {
+                        sum += at(magnitude, col - cols / 2 + dx, row - rows / 2 + dy);
+                    }
+                }
+                smoothed(row, col) = sum;
+            }
+        }
+
+        // Radius in cycles per pixel, and rings one bin of the short side wide.
+        auto radius = [&](int fx, int fy) {
+            return std::hypot((double) fx / cols, (double) fy / rows);
+        };
+        const int ringCount = (int) (0.75 * shortSide) + 2;
+        auto ring = [&](int fx, int fy) {
+            return std::min((int) (radius(fx, fy) * shortSide), ringCount - 1);
+        };
+
+        // Each bin over the mean of its ring. A ring quieter than the average one is
+        // held to the average, so the faintest harmonic of an empty high ring cannot
+        // outscore the carrier.
+        std::vector<double> ringSum(ringCount, 0.0);
+        std::vector<int> ringSize(ringCount, 0);
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                int r = ring(col - cols / 2, row - rows / 2);
+                ringSum[r] += smoothed(row, col);
+                ringSize[r]++;
+            }
+        }
+        double ringFloor = 0.0;
+        for (int r = 0; r < ringCount; ++r) {
+            ringSum[r] /= std::max(ringSize[r], 1);
+            ringFloor += ringSum[r];
+        }
+        ringFloor /= ringCount;
+        Eigen::ArrayXXd score(rows, cols);
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                double ringMean = std::max(std::max(ringSum[ring(col - cols / 2, row - rows / 2)], ringFloor), 1e-300);
+                score(row, col) = smoothed(row, col) / ringMean;
+            }
+        }
+
+        // The frequencies a carrier may have: above the lowest few bins and below
+        // 0.35 cycles per pixel.
+        std::vector<std::pair<int, int>> band;
+        for (int col = 0; col < cols; ++col) {
+            for (int row = 0; row < rows; ++row) {
+                int fx = col - cols / 2, fy = row - rows / 2;
+                double r = radius(fx, fy);
+                if (r >= 6.0 / shortSide && r <= 0.35) {
+                    band.push_back({fx, fy});
+                }
+            }
+        }
+        const double prominence = 0.2;
+        auto strength = [&](std::pair<int, int> f) { return at(smoothed, f.first, f.second); };
+        auto scoreOf = [&](std::pair<int, int> f) { return at(score, f.first, f.second); };
+
+        // Local maxima of the band's upper half plane that stand out of their ring,
+        // strongest first.
+        double topScore = 0.0;
+        for (auto f : band) {
+            topScore = std::max(topScore, scoreOf(f));
+        }
+        std::vector<std::pair<int, int>> peaks;
+        for (auto f : band) {
+            bool upper = f.second > 0 || (f.second == 0 && f.first > 0);
+            if (!upper || scoreOf(f) < prominence * topScore) {
+                continue;
+            }
+            bool isMaximum = true;
+            for (int dx = -1; dx <= 1 && isMaximum; ++dx) {
+                for (int dy = -1; dy <= 1 && isMaximum; ++dy) {
+                    if ((dx != 0 || dy != 0) && strength({f.first + dx, f.second + dy}) >= strength(f)) {
+                        isMaximum = false;
+                    }
+                }
+            }
+            if (isMaximum) {
+                peaks.push_back(f);
+            }
+        }
+        std::sort(peaks.begin(), peaks.end(), [&](std::pair<int, int> a, std::pair<int, int> b) {
+            return strength(a) > strength(b);
+        });
+
+        // The carrier a peak stands for: if the spectrum at three times the peak is
+        // more than half as strong, the peak is the code's line at a third of the
+        // carrier, and the strongest bin near the triple is taken instead.
+        auto lift = [&](std::pair<int, int> first) {
+            int tripleX = 3 * first.first, tripleY = 3 * first.second;
+            if (std::abs(tripleX) >= cols / 2 || std::abs(tripleY) >= rows / 2) {
+                return first;
+            }
+            int reach = std::max(2, (int) std::lround(0.1 * std::hypot(tripleX, tripleY)));
+            std::pair<int, int> strongest = {tripleX, tripleY};
+            double strongestValue = 0.0;
+            for (int dx = -reach; dx <= reach; ++dx) {
+                for (int dy = -reach; dy <= reach; ++dy) {
+                    double value = strength({tripleX + dx, tripleY + dy});
+                    if (value > strongestValue) {
+                        strongestValue = value;
+                        strongest = {tripleX + dx, tripleY + dy};
+                    }
+                }
+            }
+            double near = 0.0;
+            for (int dx = -2; dx <= 2; ++dx) {
+                for (int dy = -2; dy <= 2; ++dy) {
+                    near = std::max(near, strength({tripleX + dx, tripleY + dy}));
+                }
+            }
+            return near > 0.5 * strength(first) ? strongest : first;
+        };
+
+        // The crossing carrier: the strongest peak standing out of its ring at 0.7
+        // to 1.4 times the first one's radius and more than 60 degrees from it.
+        auto partner = [&](std::pair<int, int> first, std::pair<int, int>& second) {
+            double k1x = (double) first.first / cols, k1y = (double) first.second / rows;
+            double firstRadius = radius(first.first, first.second);
+            std::vector<std::pair<int, int>> candidates;
+            double candidatesTop = 0.0;
+            for (auto f : band) {
+                double kx = (double) f.first / cols, ky = (double) f.second / rows;
+                double r = radius(f.first, f.second);
+                double cosine = (kx * k1x + ky * k1y) / (r * firstRadius);
+                if (r >= 0.7 * firstRadius && r < 1.4 * firstRadius && std::abs(cosine) < 0.5) {
+                    candidates.push_back(f);
+                    candidatesTop = std::max(candidatesTop, scoreOf(f));
+                }
+            }
+            bool found = false;
+            for (auto f : candidates) {
+                if (scoreOf(f) >= prominence * candidatesTop && (!found || strength(f) > strength(second))) {
+                    second = f;
+                    found = true;
+                }
+            }
+            return found;
+        };
+
+        // The first peak that has a partner gives the pair, both put back in the
+        // upper half plane and stored as peaksSearch stores them.
+        for (auto peak : peaks) {
+            std::pair<int, int> first = lift(peak), second;
+            if (!partner(first, second)) {
+                continue;
+            }
+            auto store = [&](std::pair<int, int> f, Eigen::Vector3d& mainPeak) {
+                if (f.second < 0 || (f.second == 0 && f.first < 0)) {
+                    f = {-f.first, -f.second};
+                }
+                int row = f.second + rows / 2, col = f.first + cols / 2;
+                mainPeak.x() = col;
+                mainPeak.y() = row;
+                mainPeak.z() = std::abs(spectrumShifted(row, col)) / cols / rows;
+            };
+            store(first, mainPeak1);
+            store(second, mainPeak2);
+            if (mainPeak1.x() < mainPeak2.x()) {
+                std::swap(mainPeak1, mainPeak2);
+            }
+            return;
         }
     }
 
@@ -266,6 +475,14 @@ namespace vernier {
         return (mainPeak1.z() > minPeakPower && mainPeak2.z() > minPeakPower);
     }
 
+    Eigen::Vector3d PatternPhase::getPeak1() {
+        return mainPeak1;
+    }
+
+    Eigen::Vector3d PatternPhase::getPeak2() {
+        return mainPeak2;
+    }
+
     void PatternPhase::setBackend(Backend backend) {
         requireBackendAvailable(backend);
 #ifdef USE_CUDA
@@ -393,6 +610,14 @@ namespace vernier {
 
     void PatternPhase::setSmoothingKernelSize(int smoothingKernelSize) {
             this->smoothingKernelSize = smoothingKernelSize;
+    }
+
+    bool PatternPhase::getRingPeakSearch() {
+        return ringPeakSearch;
+    }
+
+    void PatternPhase::setRingPeakSearch(bool ringPeakSearch) {
+        this->ringPeakSearch = ringPeakSearch;
     }
 
     int PatternPhase::getNRows() {

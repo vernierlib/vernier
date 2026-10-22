@@ -53,6 +53,7 @@ namespace vernier {
         double minFrequency = 20;
         double maxFrequency = 500;
         int smoothingKernelSize = 3;
+        bool ringPeakSearch = false;
 
         void compute();
 
@@ -95,6 +96,19 @@ namespace vernier {
 
         void peaksSearch(Eigen::ArrayXXd& source, Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2);
 
+        /** Finds the two carrier peaks by scoring each spectral peak against its ring
+         *
+         * The spectrum of the mean-removed, Hann-windowed image is summed over 3x3
+         * bins, then each bin is divided by the mean of all the bins at the same
+         * distance from the centre (its ring). The local maxima that stand out of
+         * their ring are taken strongest first; a peak with a strong peak at three
+         * times its frequency (the megarena code's line at a third of the carrier)
+         * is replaced by it; the second carrier is the strongest peak at 0.7 to 1.4
+         * times the first one's radius and more than 60 degrees from it. The peaks
+         * are returned like peaksSearch's, in the shifted spectrum.
+         */
+        void ringPeaksSearch(Eigen::Vector3d& mainPeak1, Eigen::Vector3d& mainPeak2);
+
         /** Computes the phase gradients to find the sign of the out-of-plane
          * angles (works only with slight perspective projection)
          */
@@ -102,6 +116,12 @@ namespace vernier {
 
         /** Returns true if two peaks with sufficient power have been found */
         bool peaksFound();
+
+        /** Returns the first peak found: column and row in the shifted spectrum, power */
+        Eigen::Vector3d getPeak1();
+
+        /** Returns the second peak found: column and row in the shifted spectrum, power */
+        Eigen::Vector3d getPeak2();
 
         /** Selects the compute backend. Throws if CUDA is requested but unavailable.
          *
@@ -182,6 +202,13 @@ namespace vernier {
 
         /** Sets the size of the gaussian smoothing filter */
         void setSmoothingKernelSize(int smoothingKernelSize);
+
+        /** Returns true if the carriers are found by ringPeaksSearch */
+        bool getRingPeakSearch();
+
+        /** Selects ringPeaksSearch (true) or peaksSearch (false, the default). The
+         * CUDA backend keeps its own peak search whatever this says. */
+        void setRingPeakSearch(bool ringPeakSearch);
 
         int getNRows();
 

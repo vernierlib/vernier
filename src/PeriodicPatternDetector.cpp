@@ -257,10 +257,17 @@ namespace vernier {
     }
 
     bool PeriodicPatternDetector::getBool(const std::string & attribute) {
+        if (attribute == "ringPeakSearch") {
+            return patternPhase.getRingPeakSearch();
+        }
         return PatternDetector::getBool(attribute);
     }
 
     void PeriodicPatternDetector::setBool(const std::string & attribute, bool value) {
-        PatternDetector::setBool(attribute, value);
+        if (attribute == "ringPeakSearch") {
+            patternPhase.setRingPeakSearch(value);
+        } else {
+            PatternDetector::setBool(attribute, value);
+        }
     }
 }

@@ -24,6 +24,7 @@ namespace vernier {
         Eigen::VectorXd numberWhiteRefDots1, cumulWhiteRefDots1, numberBackRefDots1, cumulBackRefDots1, numberCodingDots1, cumulCodingDots1, meanCodingDots1, meanBackRefDots1, meanWhiteRefDots1;
         Eigen::VectorXd numberWhiteRefDots2, cumulWhiteRefDots2, numberBackRefDots2, cumulBackRefDots2, numberCodingDots2, cumulCodingDots2, meanCodingDots2, meanBackRefDots2, meanWhiteRefDots2;
         int MSB1, MSB2;
+        double quality1 = 0.0, quality2 = 0.0;
         MegarenaCell cell;
 
     public:
@@ -105,6 +106,19 @@ namespace vernier {
         int getMSB1();
 
         int getMSB2();
+
+        /** Returns how stable the thumbnail is along the first axis, from 0 to 1
+         *
+         * Every cell of a coding row votes for its own bit, by the rule the row's bit
+         * is read with: its dot against the dots on either side and its background.
+         * The quality is 2 a - 1, a being the share of the votes that agree with their
+         * row's bit: 1 when every cell agrees, about 0 when the cells vote at random,
+         * as when the phase maps do not fall on the dots.
+         */
+        double getQuality1();
+
+        /** Returns how stable the thumbnail is along the second axis (see getQuality1) */
+        double getQuality2();
 
         Eigen::ArrayXXd getNumberWhiteDots();
 
