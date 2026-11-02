@@ -89,38 +89,30 @@ The ideal setup consists only of a microscope and a piece of a Megarena pattern 
 For example, the method has been used to evaluate the accuracy of a precision hexapod, showing that it is able to follow millimeter trajectories with deviations of less than one micrometer [@ahmad2024-6DoF]. It has also been employed to evaluate the accuracy of a serial 6-DoF manipulator over a point matrix of 10 by 10 centimeters [@andre2020sensing]. 
 Megarena patterns can also be used to measure the repeatability of positioning of stages and manipulators. For instance, in [@Gallardo2021turning; @Mauze2020nanometer], the method is used to evaluate the precision of parallel continuum robots.
 
-Beyond stages and manipulators metrology, the method could also be useful for measuring the deviation of CNC machines and vision measuring machines.
-
 **Multi-DoF stage automation**
 
 The Megarena patterns can also be used as position sensor to directly control the position of the motion platform of a multi-DoF manipulator during its operation. This ensures the actual position of the end-effector regardless of the errors introduced by assembly of stages, guidance, compliance, and backlash in the mechanical axis. It could also help to identify and correct cross-axis coupling and unwanted motion in multi-DoF systems, as proposed in [@Tan2015accuracy]. 
-
-As no internal additional sensors are required, pattern-based direct measurement can be applied to an existing manipulator to improve its accuracy and to carry on precision tasks such as micro-assembly. 
 
 **Micro-assembly**
 
 Micro-assembly requires two parts to be positioned relatively to each other with high precision. To make assemblies with errors lower than a micrometer, the joint sensors of the manipulators are not sufficient and it is necessary to use visual servoing to control the relative position of the parts. To that extent, markers are placed on each of the parts to assemble and their relative position is monitored in real time during the assembly process. 
 In [@andre2022automating], two HP code markers are used to align and bond two parts of a microfluidic chip. This automated assembly achieved a positioning accuracy of better than 50 nm.
 
-Beyond this assembly example, HP code and Stamp markers could also be useful for wafer alignment in photolithography processes, die assembly in the semiconductor industry, and stitching in high-resolution 3D printing and laser processing.
-
 **Micro-force measurement**
 
 Another key application in microrobotics is simultaneous force and displacement sensing. Force sensing has always been an issue for micro- and nanoscale applications. Force ranges from a few mN to a few hundred mN are typically required for manipulation, assembly and characterization tasks in most fields.
 
-In [@andre2022automating], two HP code markers have been attached to a compliant mechanism. The relative motion between the markers gives an image of the compression force, while the relative position of the markers to the camera frame gives the displacement of the mechanism base. This force sensor has been used experimentally to perform automated compression tests on individual synthetic and natural fibers, providing very rich information and allowing to better understand the mechanical fiber behavior  [@govilas2024mechanical].
+In [@andre2022automating], two HP code markers have been attached to a compliant mechanism. The relative motion between the markers gives an image of the compression force, while the relative position of the markers to the camera frame gives the displacement of the mechanism base. This force sensor has been used experimentally to perform automated compression tests on individual synthetic and natural fibers, providing very rich information and allowing to better understand the mechanical fiber behavior [@govilas2024mechanical].
 
-Previous experiments with this method have shown resolution measurements down to 50 nN with experimental ranges of 50 mN  [@Guelpa2015vision]. The same principle has also been applied to multiple directions force sensing in  [@Tiwari2021high].
+Previous experiments with this method have shown resolution measurements down to 50 nN with experimental ranges of 50 mN [@Guelpa2015vision]. The same principle has also been applied to multiple directions force sensing in [@Tiwari2021high].
 
 **Correlative Microscopy**
 
-The pattern-based position measurement was initially developed to perform the repositioning of Petri dishes under a microscope for live cell monitoring  [@galeano2011position]. Thanks to a pattern similar in principle to the Megarena, regions of interest of a culture dish were easily retrieved after transfers from a cell incubator to the microscope stage. Thanks to this approach, images of single cells can be captured at different time steps in a repeatable manner, as the cells can be identified based on their absolute position in the Petri dish.
-
-In this way, Megarena patterns could also be used in correlative microscopy, to retrieve the position of the very same cell or tissue area and image it with various modalities (e.g. electron, confocal, fluorescent microscopes).
+The pattern-based position measurement was initially developed to perform the repositioning of Petri dishes under a microscope for live cell monitoring  [@galeano2011position]. Thanks to a pattern similar in principle to the Megarena, regions of interest of a culture dish were easily retrieved after transfers from a cell incubator to the microscope stage. Thanks to this approach, images of single cells can be captured at different time steps in a repeatable manner, as the cells can be identified based on their absolute position in the Petri dish and can also be imaged with various modalities (e.g., electron, confocal, fluorescent microscopes).
 
 # AI usage disclosure
 
-No generative AI tools were used in the writing of this manuscript, the preparation of supporting materials,  and the development of this software (release v0.0.1 main@0b25da7).
+No generative AI tools were used in the writing of this manuscript, the preparation of supporting materials,  and the development of this software.
 
 # Acknowledgements
 
