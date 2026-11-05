@@ -24,19 +24,9 @@ The implemented methods are described in the following papers:
 
 3. A. André et al., Pose Measurement at Small Scale by Spectral Analysis of Periodic Patterns, *International Journal of Computer Vision*, vol. 130, 2022.
 
-## Compatibility
-
-The Vernier library is cross-platform and requires a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
-
-* visual C++ 2019/2022 on Windows (64-bit)
-* clang 19.1.7 on macOS 15 Sequoia
-* gcc 11.4 on Ubuntu 22.04 (64-bit)
-
-Users can build and run the unit tests on their platform/compiler.
-
 ## Installation
 
-The library uses [CMake](https://cmake.org/) as a general build tool and 
+The library is cross-platform and requires a C++14 compiler. It uses [CMake](https://cmake.org/) as a general build tool and 
 [Doxygen](http://www.doxygen.org) to generate the documentation
 
 **CMake 3.26 or higher is required** (the bundled GDS Toolkit asks for it). Distributions
@@ -161,7 +151,7 @@ For general publications, we suggest referencing: A. André et al., Sensing One 
 
 The Vernier Library is written and maintained by researchers with the FEMTO-ST Institute located in Besançon, France.
 
-Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau
+Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau, Sasha Ballet
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
