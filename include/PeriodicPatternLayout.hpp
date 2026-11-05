@@ -26,6 +26,16 @@ namespace vernier {
 
         cv::Mat getPNGCells() override;
 
+        /** Returns 1 if the cell (row, col) is a dot and 0 otherwise.
+         *
+         *  The pattern is a grid of 2*nRows-1 by 2*nCols-1 square cells of dotSize side,
+         *  any cell outside the grid is blank. */
+        virtual int getCell(int row, int col);
+
+        /** Returns the intensity at point (x,y) by cosine interpolation between the four
+         *  cells around the point, so that adjacent dots merge into one smooth shape. */
+        double interpolateCells(double x, double y);
+
     public:
 
         double dotSize;
