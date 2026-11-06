@@ -24,19 +24,9 @@ The implemented methods are described in the following papers:
 
 3. A. André et al., Pose Measurement at Small Scale by Spectral Analysis of Periodic Patterns, *International Journal of Computer Vision*, vol. 130, 2022.
 
-## Compatibility
-
-The Vernier library is cross-platform and requires a C++14 compiler. Some platform/compiler combinations which have been tested are shown as follows.
-
-* visual C++ 2019/2022 on Windows (64-bit)
-* clang 19.1.7 on macOS 15 Sequoia
-* gcc 11.4 on Ubuntu 22.04 (64-bit)
-
-Users can build and run the unit tests on their platform/compiler.
-
 ## Installation
 
-The library uses [CMake](https://cmake.org/) as a general build tool and 
+The library is cross-platform and requires a C++14 compiler. It uses [CMake](https://cmake.org/) as a general build tool and 
 [Doxygen](http://www.doxygen.org) to generate the documentation
 
 **CMake 3.26 or higher is required** (the bundled GDS Toolkit asks for it). Distributions
@@ -73,7 +63,7 @@ OpenCV requires the Media Feature Pack for Windows to run, you may have to insta
 With Linux, some dependencies must be installed first using the package manager:
 
 ```Shell
-	> sudo apt install build-essential cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev libfftw3-dev
+	> sudo apt install cmake libeigen3-dev libtool libmatio-dev libopencv-dev libqhull-dev
 ```
 
 We recommend to compile opencv from sources to ensure using the right version (4.6 and higher).
@@ -92,32 +82,57 @@ Finally, open a terminal and go to the directory of the package
 With macOS, some dependencies must be installed first using homebrew:
 
 ```Shell
-	% brew install autoconf automake cmake eigen libtool libmatio opencv@4 fftw qhull libomp
+	% brew install autoconf automake cmake eigen libtool libmatio opencv qhull libomp
 ```
 
-OpenCV 5 is not supported yet, hence `opencv@4`. Apple clang does not ship OpenMP, so
-`libomp` is needed for the parallel loops of the library. Homebrew keeps both keg-only,
-which means CMake does not find them on its own: pass their prefixes to the configure step.
+Apple clang does not ship OpenMP, so `libomp` is needed for the parallel loops of the
+library. Homebrew keeps it keg-only, which means CMake does not find it on its own: pass
+its prefix to the configure step.
 
 Finally, open a terminal and go to the directory of the package
 
 ```Shell
 	% mkdir build
 	% cd build
-	% cmake .. -DOpenMP_ROOT=$(brew --prefix libomp) -DOpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4
+	% cmake .. -DOpenMP_ROOT=$(brew --prefix libomp)
 	% make
 ```
 
 Without it the configure step reports `Could NOT find OpenMP` and carries on; the library
 still builds and runs, only single-threaded.
 
+### GPU acceleration with CUDA (optional)
+
+If an NVIDIA GPU and the [CUDA Toolkit](https://developer.nvidia.com/cuda-toolkit) are available, the phase computation of PatternPhase can run on the GPU with cuFFT. Enable it at build time:
+
+```Shell
+	> cmake .. -DUSE_CUDA=ON
+	> make
+```
+
+The backend is then selectable at runtime and falls back to the CPU by default. Choose it on the detector, and it applies to everything the detector computes:
+
+```C++
+	std::unique_ptr<PatternDetector> detector = Detector::loadFromJSON("pattern.json");
+	if (cudaAvailable()) {
+	    detector->setBackend(Backend::CUDA);
+	}
+	detector->compute(image);
+```
+
+The factory can also be told up front, which saves the check when you know what you want:
+
+```C++
+	auto detector = Detector::loadFromJSON("pattern.json", Backend::CUDA);
+```
+
+Selecting a backend the library was not built for, or one with no device fitted, throws and leaves the detector on the backend it was already using. `PatternPhase::setBackend` still exists for code driving the phase computation directly.
+
+Both backends compute in double precision and give the same results.
+
 ## Getting started
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)
-
-## Contributing
-
-Bug reports, questions and pull requests are welcome on [GitHub](https://github.com/vernierlib/vernier/issues). See the [contributing guide](CONTRIBUTING.md) for how to report a problem or submit a change, and the [code of conduct](CODE_OF_CONDUCT.md).
 
 ## Licence
 
@@ -136,7 +151,7 @@ For general publications, we suggest referencing: A. André et al., Sensing One 
 
 The Vernier Library is written and maintained by researchers with the FEMTO-ST Institute located in Besançon, France.
 
-Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau
+Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau, Sasha Ballet
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
