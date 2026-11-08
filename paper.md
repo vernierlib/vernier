@@ -48,10 +48,10 @@ Sources and layouts are available on [GitHub](https://github.com/vernierlib/vern
 # State of the field                                                                                          
 Computer vision is widely used to track the movement of people and objects in many applications. When the size of the object of interest decreases, pose estimation becomes challenging due to the constraint of microscopy imaging. Unlike regular cameras, microscopes suffer from narrow FoV, short depths of field, low contrasts and out-of-focus blurs, and usual fiducial markers perform poorly in these conditions.                   
 
-Many vision-based methods have been proposed to tackle pose estimation at the small scales. In 2021, Fatikow published a review paper comparing the resolution and the range of state-of-the-art vision-based localization methods [@yao2021review]. The most precise methods use phase correlation and can achieve sub-nanometer resolutions. However, their measurement ranges are still limited by the microscope's FoV. To overcome this limitation, pseudo-periodic patterns can be used to encode the absolute position over centimetric ranges, while using phase measurement to achieve nanometer resolutions [@andre2020sensing; @andre2020robust]. 
+Many vision-based methods have been proposed to tackle pose estimation at the small scales. In 2021, Yao et al. [-@yao2021review] published a review paper comparing the resolution and the range of state-of-the-art vision-based localization methods. The most precise methods use phase correlation and can achieve sub-nanometer resolutions. However, their measurement ranges are still limited by the microscope's FoV. To overcome this limitation, pseudo-periodic patterns can be used to encode the absolute position over centimetric ranges, while using phase measurement to achieve nanometer resolutions [@andre2020sensing; @andre2020robust]. 
 Based on this principle, `VERNIER` proposed processing algorithms for several markers and patterns that ensure reliable performance in various microscopy applications. As reported in Fatikow's survey paper [@yao2021review], this approach achieves a better range-to-resolution ratio compared with other methods, including HORIBA's proprietary NanoGPS solution [@acher2021efficient].  
 
-The measurement principle is mainly suited for in-plane 3 degrees of freedom (DoF) pose estimation under microscopy orthographic projection. However, long-focal  perspective projection can be used for retrieving complementary out-of-plane pose parameters with a lower resolution. Full out-of-plane pose estimation details and performances can be found in [@andre2022pose]. 
+The measurement principle is mainly suited for in-plane 3 degrees of freedom (DoF) pose estimation under microscopy orthographic projection. However, long-focal  perspective projection can be used for retrieving complementary out-of-plane pose parameters with a lower resolution. Full out-of-plane pose estimation details and performances can be found in André et al. [-@andre2022pose]. 
 
 To achieve the measurement of the 6 DoF, the same approach is applied but with a digital holographic microscope (DHM). The interferometric character of DHM makes the device highly sensitive to out-of-plane motion and the 6 DoF are measured simultaneously in a single image with a high resolution [@ahmad2024-6DoF]. 
 
@@ -65,7 +65,7 @@ To achieve the measurement of the 6 DoF, the same approach is applied but with a
 
 The class hierarchy is centered on general periodic pattern processing and then extends to the different types of patterns. All pose estimations rely on the Fourier transforms of the entire image. To achieve fast computation times, the current version of the library uses the MIT implementation (FFTW). Future releases will support GPU-based Fourier transform processing.
 
-The library also provides a set of classes for rendering synthetic images and exporting layouts of the different markers presented in previous section. The synthetic images are used to test the correct functioning of the detectors. The marker layouts can be exported in `PNG`, `SVG`, `GDS` and `OASIS` formats. These files can be used to print the markers on various supports.
+The library also provides a set of classes for rendering synthetic images and exporting layouts of the different markers presented in the previous section. The synthetic images are used to test the correct functioning of the detectors. The marker layouts can be exported in `PNG`, `SVG`, `GDS` and `OASIS` formats. These files can be used to print the markers on various supports.
 
 As the measurement method is based on the phase of the periodic pattern, the position accuracy is directly related to the scale and quality of the pattern fabrication. 
 To obtain calibrated measures, all the patterns have been realized using a high-resolution maskless aligner (Heidelberg MLA150) on quartz or glass substrates within the [MIMENTO facility](https://platforms.femto-st.fr/centrale-technologie-mimento/). 
@@ -87,26 +87,26 @@ The use of Megarena patterns is much simpler and also provides nanometric resolu
 The ideal setup consists only of a microscope and a piece of a Megarena pattern attached to the end effector of the manipulator. 
 
 For example, the method has been used to evaluate the accuracy of a precision hexapod, showing that it is able to follow millimeter trajectories with deviations of less than one micrometer [@ahmad2024-6DoF]. It has also been employed to evaluate the accuracy of a serial 6-DoF manipulator over a point matrix of 10 by 10 centimeters [@andre2020sensing]. 
-Megarena patterns can also be used to measure the repeatability of positioning of stages and manipulators. For instance, in [@Gallardo2021turning; @Mauze2020nanometer], the method is used to evaluate the precision of parallel continuum robots.
+Megarena patterns can also be used to measure the repeatability of positioning of stages and manipulators. For instance, in Gallardo et al. [-@Gallardo2021turning] and Mauzé et al. [-@Mauze2020nanometer], the method is used to evaluate the precision of parallel continuum robots.
 
 **Multi-DoF stage automation**
 
-The Megarena patterns can also be used as position sensor to directly control the position of the motion platform of a multi-DoF manipulator during its operation. This ensures the actual position of the end-effector regardless of the errors introduced by assembly of stages, guidance, compliance, and backlash in the mechanical axis. It could also help to identify and correct cross-axis coupling and unwanted motion in multi-DoF systems, as proposed in [@Tan2015accuracy]. 
+The Megarena patterns can also be used as position sensors to directly control the position of the motion platform of a multi-DoF manipulator during its operation. This ensures the actual position of the end-effector regardless of the errors introduced by assembly of stages, guidance, compliance, and backlash in the mechanical axis. It could also help to identify and correct cross-axis coupling and unwanted motion in multi-DoF systems, as proposed by Tan et al. [-@Tan2015accuracy]. 
 
 **Micro-assembly**
 
-Micro-assembly requires two parts to be positioned relatively to each other with high precision. To make assemblies with errors lower than a micrometer, the joint sensors of the manipulators are not sufficient and it is necessary to use visual servoing to control the relative position of the parts. To that extent, markers are placed on each of the parts to assemble and their relative position is monitored in real time during the assembly process. 
-In [@andre2022automating], two HP code markers are used to align and bond two parts of a microfluidic chip. This automated assembly achieved a positioning accuracy of better than 50 nm.
+Micro-assembly requires two parts to be positioned relative to each other with high precision. To make assemblies with errors lower than a micrometer, the joint sensors of the manipulators are not sufficient and it is necessary to use visual servoing to control the relative position of the parts. To this end, markers are placed on each of the parts to assemble and their relative position is monitored in real time during the assembly process. 
+In their study, André et al. [-@andre2022automating], two HP code markers are used to align and bond two parts of a microfluidic chip. This automated assembly achieved a positioning accuracy of better than 50 nm.
 
 **Micro-force measurement**
 
 Another key application in microrobotics is simultaneous force and displacement sensing. Force sensing has always been an issue for micro- and nanoscale applications. Force ranges from a few mN to a few hundred mN are typically required for manipulation, assembly and characterization tasks in most fields.
 
-In [@andre2022automating], two HP code markers have been attached to a compliant mechanism. The relative motion between the markers gives an image of the compression force, while the relative position of the markers to the camera frame gives the displacement of the mechanism base. This force sensor has been used experimentally to perform automated compression tests on individual synthetic and natural fibers, providing very rich information and allowing to better understand the mechanical fiber behavior [@govilas2024mechanical].
+André et al. [-@andre2022automating] designed a compliant mechanism with two HP code markers engraved on it. The relative motion between the markers gives an image of the compression force, while the relative position of the markers to the camera frame gives the displacement of the mechanism base. This force sensor has been used experimentally to perform automated compression tests on individual synthetic and natural fibers, providing very rich information and allowing to better understand the mechanical fiber behavior [@govilas2024mechanical].
 
-Previous experiments with this method have shown resolution measurements down to 50 nN with experimental ranges of 50 mN [@Guelpa2015vision]. The same principle has also been applied to multiple directions force sensing in [@Tiwari2021high].
+Previous experiments with this method have shown resolution measurements down to 50 nN with experimental ranges of 50 mN [@Guelpa2015vision]. The same principle has also been applied to multiple directions force sensing by Tiwari et al. [-@Tiwari2021high].
 
-**Correlative Microscopy**
+**Correlative microscopy**
 
 The pattern-based position measurement was initially developed to perform the repositioning of Petri dishes under a microscope for live cell monitoring  [@galeano2011position]. Thanks to a pattern similar in principle to the Megarena, regions of interest of a culture dish were easily retrieved after transfers from a cell incubator to the microscope stage. Thanks to this approach, images of single cells can be captured at different time steps in a repeatable manner, as the cells can be identified based on their absolute position in the Petri dish and can also be imaged with various modalities (e.g., electron, confocal, fluorescent microscopes).
 
