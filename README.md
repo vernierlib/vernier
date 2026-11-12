@@ -144,14 +144,20 @@ Non-free licenses are also available for companies that wish to use the Vernier 
 
 We kindly ask you to acknowledge this library in any program or publication in which you use it. 
 
-For general publications, we suggest referencing: A. André et al., Sensing One Nanometer Over Ten Centimeters: A Microencoded Target for Visual In-Plane Position Measurement, 
-*Transactions on Mechatronics*, vol. 25, 2020.
+For general publications, we suggest referencing: 
+
+[P. Sandoz et al. (2026). VERNIER: an open-source library pushing marker pose estimation to nanometric resolutions, *The Journal of Open Source Software*.](https://doi.org/10.21105/joss.11292)
+
+For megarena usages, you may cite also:
+
+[A. André et al. (2020). Sensing One Nanometer Over Ten Centimeters: A Microencoded Target for Visual In-Plane Position Measurement, 
+*Transactions on Mechatronics*, vol. 25.](https://hal.science/hal-03423034/file/a4e72600-7f58-4e66-9f7b-87e9f223823a-author.pdf)
 
 ## About
 
 The Vernier Library is written and maintained by researchers with the FEMTO-ST Institute located in Besançon, France.
 
-Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau, Sasha Ballet
+Authors: Antoine N. André, Guillaume J. Laurent, Patrick Sandoz, Victorien Lanneau, Sasha Ballet.
 
 Contact: [vernier@femto-st.fr](mailto:vernier@femto-st.fr)
 
