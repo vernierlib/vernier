@@ -5,8 +5,9 @@ Matlab. It calls the [C API](../c/README.md) through `loadlibrary`, so there is
 nothing to compile for Matlab itself: the bindings are plain `.m` files, and the
 only binary they need is `vernier_c`, the shared library of the C API.
 
-It covers detection: build a detector, hand it an image, read back the pose of
-the pattern. The layouts, which describe and render patterns and export them for
+It covers detection of every kind of pattern (periodic, megarena, bitmap, stamp
+and HP code): build a detector, hand it an image, read back the pose of the
+pattern. The layouts, which describe and render patterns and export them for
 manufacturing, are only available through the C++ classes and the Python
 bindings.
 
@@ -71,11 +72,18 @@ be passed directly.
     `setSmoothingKernelSize`, `setPhysicalPeriod`, `getPhysicalPeriod`,
     `get3DPosePerspective(focalLength)`.
   - `vernier.MegarenaPatternDetector(physicalPeriod, codeSize)`.
+  - `vernier.BitmapPatternDetector(physicalPeriod, filename)` — the bitmap is
+    read from a PNG file.
+  - `vernier.StampPatternDetector(physicalPeriod, filename, snapshotSize)` —
+    adds `addBitmap(filename)`.
+  - `vernier.HPCodePatternDetector(physicalPeriod[, numberHalfPeriods, snapshotSize])`.
+  - Stamp and HP code detectors locate every marker of an image:
+    `getMarkerIds()` lists their ids, to be passed to `patternFound(id)` and
+    `get2DPose(id)`, and `getMarkers()` returns a `containers.Map` from id to
+    pose.
 - `vernier.Detector.newInstance(classname[, backend])`,
-  `vernier.Detector.loadFromJSON(filename[, backend])` — factories giving
-  access to all the kinds of detectors. As in the C++ library, bitmap, HP code
-  and stamp detectors are periodic ones and are returned as
-  `vernier.PeriodicPatternDetector`.
+  `vernier.Detector.loadFromJSON(filename[, backend])` — factories returning
+  the class matching the kind of pattern.
 - `vernier.cudaAvailable()` — true if the `'CUDA'` backend can be selected.
 - `vernier.Library` — `load()`, `unload()`, `version()`; used by the classes
   above, and to point them at another build of the library.
@@ -115,7 +123,7 @@ them with Matlab on Linux, Windows and macOS (in the `matlab` job).
 
 The tests detect patterns in the images of `data/`, rendered from the C++
 layouts at known poses (see [../c/data/README.md](../c/data/README.md)), and in
-the camera image of the examples.
+the camera images of the examples.
 
 ## Troubleshooting
 

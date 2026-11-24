@@ -25,6 +25,31 @@ else
     fprintf('Pattern not found...\n');
 end
 
+%% Locating HP code markers in a camera image
+
+image = imread('HPCodeImage_20um.png');
+
+detector = vernier.HPCodePatternDetector(20.0, 33, 256);   % physical period (um), code size (half periods), snapshot size (pixels)
+detector.compute(image);
+
+ids = detector.getMarkerIds();
+fprintf('Found %d HP codes\n', numel(ids));
+for id = ids'
+    fprintf('  Code %d at %s\n', id, detector.get2DPose(id).toString());
+end
+
+%% Locating a stamp in a camera image
+
+image = imread('stampPatternImage_15um.jpg');
+
+detector = vernier.StampPatternDetector(15.0, 'stampPattern.png', 820);   % physical period (um), bitmap, snapshot size (pixels)
+detector.compute(image);
+
+markers = detector.getMarkers();                           % containers.Map from stamp id to pose
+for id = cell2mat(markers.keys())
+    fprintf('Stamp %d at %s\n', id, markers(id).toString());
+end
+
 %% Measuring the pose of a periodic pattern, modulo its period
 
 image = imread(fullfile('data', 'periodicPattern.pgm'));

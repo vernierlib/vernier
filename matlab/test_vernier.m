@@ -15,6 +15,7 @@ function test_vernier()
 
 tests = {@testLibrary, @testPose, @testPeriodicPattern, @testNonSquareImage, ...
     @testImageTypes, @testCameraImage, @testParameters, @testMegarenaPattern, ...
+    @testStampPattern, @testHPCodePattern, @testMarkersInCameraImages, ...
     @testFactories, @testErrors, @testBackend, @testUnload};
 for k = 1:numel(tests)
     fprintf('%s... ', func2str(tests{k}));
@@ -112,13 +113,75 @@ assert(detector.patternFound());
 assertPoseNear(detector.get2DPose(), truth, 0.01);
 end
 
+function testStampPattern()
+image = imread(fullfile('data', 'stampPattern.pgm'));
+truth = vernier.Pose(20, -10, 0.3, 1);
+detector = vernier.StampPatternDetector(5, fullfile('data', 'stamp.png'), 460);
+assert(isa(detector, 'vernier.BitmapPatternDetector') && isa(detector, 'vernier.PeriodicPatternDetector'));
+assert(strcmp(detector.getClassname(), 'StampPattern'));
+detector.compute(image);
+assert(detector.patternFound() && detector.patternCount() == 1);
+% the stamp has the id of its bitmap, the first one
+assert(isequal(detector.getMarkerIds(), 0));
+assert(detector.patternFound(0) && ~detector.patternFound(7));
+assertPoseNear(detector.get2DPose(0), truth, 0.05);
+assertPoseNear(detector.get2DPose(), truth, 0.05);
+markers = detector.getMarkers();
+assert(isa(markers, 'containers.Map') && markers.Count == 1 && markers.isKey(0));
+assertPoseNear(markers(0), truth, 0.05);
+detector.addBitmap(fullfile('data', 'stamp.png'));
+
+% a stamp is a bitmap pattern too
+detector = vernier.BitmapPatternDetector(5, fullfile('data', 'stamp.png'));
+assert(strcmp(detector.getClassname(), 'BitmapPattern'));
+detector.compute(image);
+assert(detector.patternFound());
+assertPoseNear(detector.get2DPose(), truth, 0.05);
+end
+
+function testHPCodePattern()
+image = imread(fullfile('data', 'hpcodePattern.pgm'));
+truth = vernier.Pose(12, -7, 0.5, 1);
+detector = vernier.HPCodePatternDetector(8, 33, 256);
+assert(isa(detector, 'vernier.PeriodicPatternDetector'));
+assert(strcmp(detector.getClassname(), 'HPCodePattern'));
+detector.compute(image);
+assert(detector.patternFound() && detector.patternCount() == 1);
+assert(isequal(detector.getMarkerIds(), 0));
+assertPoseNear(detector.get2DPose(0), truth, 0.05);
+end
+
+function testMarkersInCameraImages()
+% two HP codes in a real image, with the poses the C++ library estimates
+image = imread('HPCodeImage_20um.png');
+detector = vernier.HPCodePatternDetector(20, 33, 256);
+detector.compute(image);
+assert(detector.patternCount() == 2);
+assert(isequal(detector.getMarkerIds(), [0; 1]));
+assertPoseNear(detector.get2DPose(0), vernier.Pose(325.407, 131.286, 0.0109354, 2.40894), 0.1);
+assertPoseNear(detector.get2DPose(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657), 0.1);
+markers = detector.getMarkers();
+assert(markers.Count == 2);
+assertPoseNear(markers(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657), 0.1);
+
+% a stamp in a real image
+image = imread('stampPatternImage_15um.jpg');
+detector = vernier.StampPatternDetector(15, 'stampPattern.png', 820);
+detector.compute(image);
+assert(detector.patternFound() && isequal(detector.getMarkerIds(), 0));
+assertPoseNear(detector.get2DPose(0), vernier.Pose(392.09, 11.1902, 0.000135, 0.937845), 0.2);
+end
+
 function testFactories()
 detector = vernier.Detector.newInstance('PeriodicPattern');
 assert(isa(detector, 'vernier.PeriodicPatternDetector'));
-% stamp detectors derive from the periodic pattern detector
 detector = vernier.Detector.newInstance('StampPattern');
-assert(strcmp(class(detector), 'vernier.PeriodicPatternDetector'));
+assert(strcmp(class(detector), 'vernier.StampPatternDetector'));
 assert(strcmp(detector.getClassname(), 'StampPattern'));
+detector = vernier.Detector.newInstance('HPCodePattern');
+assert(strcmp(class(detector), 'vernier.HPCodePatternDetector'));
+detector = vernier.Detector.newInstance('BitmapPattern');
+assert(strcmp(class(detector), 'vernier.BitmapPatternDetector'));
 
 % the megarena detector reads the code size from 'codeSize'
 filename = [tempname() '.json'];
@@ -140,6 +203,11 @@ assertError(@() detector.compute([]), 'vernier:error');
 assertError(@() detector.compute(rand(4, 4, 2)), 'vernier:error');
 assertError(@() detector.setSigma('a'), 'vernier:error');
 assertError(@() vernier.MegarenaPatternDetector(9), 'vernier:error');
+assertError(@() vernier.StampPatternDetector(5), 'vernier:error');
+assertError(@() vernier.StampPatternDetector(5, 'no_such_file.png', 460), 'vernier:error');
+assertError(@() vernier.HPCodePatternDetector(8, 34, 256), 'vernier:error');
+% only stamp and HP code detectors have markers
+assertError(@() detector.getMarkerIds(), 'vernier:error');
 end
 
 function testBackend()

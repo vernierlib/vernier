@@ -2,9 +2,10 @@ classdef PatternDetector < handle
     %PATTERNDETECTOR Base class of the pattern detectors.
     %
     %   Detectors are created with the constructors of the subclasses
-    %   (vernier.PeriodicPatternDetector, vernier.MegarenaPatternDetector) or
-    %   with the factory vernier.Detector (newInstance, loadFromJSON), which
-    %   also gives access to the other kinds of detectors.
+    %   (vernier.PeriodicPatternDetector, vernier.MegarenaPatternDetector,
+    %   vernier.BitmapPatternDetector, vernier.StampPatternDetector,
+    %   vernier.HPCodePatternDetector) or with the factory vernier.Detector
+    %   (newInstance, loadFromJSON).
     %
     %   Typical use:
     %       detector.compute(image);
@@ -106,6 +107,34 @@ classdef PatternDetector < handle
             vernier.Library.check(status);
             for k = count:-1:1
                 poses(k, 1) = vernier.Pose.fromStruct(buffer(k));
+            end
+        end
+
+        function ids = getMarkerIds(obj)
+            %GETMARKERIDS Ids of the markers found by a stamp or HP code
+            %   detector, as a column vector in increasing order. Pass one of
+            %   them to patternFound(id) and get2DPose(id).
+            [status, ~, count] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
+                obj.handle, [], 0, int32(0));
+            vernier.Library.check(status);
+            count = double(count);
+            if count == 0
+                ids = zeros(0, 1);
+                return;
+            end
+            [status, ids, ~] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
+                obj.handle, zeros(count, 1, 'int32'), count, int32(0));
+            vernier.Library.check(status);
+            ids = double(ids(:));
+        end
+
+        function markers = getMarkers(obj)
+            %GETMARKERS Poses of the markers found by a stamp or HP code
+            %   detector, as a containers.Map from marker id to vernier.Pose.
+            markers = containers.Map('KeyType', 'double', 'ValueType', 'any');
+            ids = obj.getMarkerIds();
+            for k = 1:numel(ids)
+                markers(ids(k)) = obj.get2DPose(ids(k));
             end
         end
 

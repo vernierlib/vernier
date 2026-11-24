@@ -23,13 +23,19 @@ configure_file(${CMAKE_SOURCE_DIR}/c/vernier.h ${CMAKE_CURRENT_BINARY_DIR}/verni
 
 # the images the tests and the example read: the bindings expose the detectors
 # only, so they cannot render their own
-file(GLOB FIXTURES ${CMAKE_SOURCE_DIR}/c/data/*.pgm)
+file(GLOB FIXTURES ${CMAKE_SOURCE_DIR}/c/data/*.pgm ${CMAKE_SOURCE_DIR}/c/data/*.png)
 foreach(file ${FIXTURES})
   get_filename_component(filename ${file} NAME)
   configure_file(${file} ${CMAKE_CURRENT_BINARY_DIR}/data/${filename} COPYONLY)
 endforeach(file)
-configure_file(${CMAKE_SOURCE_DIR}/examples/megarenaPatternImage_12bits_9um.jpg
-  ${CMAKE_CURRENT_BINARY_DIR}/megarenaPatternImage_12bits_9um.jpg COPYONLY)
+
+# the camera images of the C++ examples, and the bitmap of the stamps
+set(CAMERA_IMAGES megarenaPatternImage_12bits_9um.jpg HPCodeImage_20um.png
+  stampPatternImage_15um.jpg stampPattern.png)
+foreach(filename ${CAMERA_IMAGES})
+  configure_file(${CMAKE_SOURCE_DIR}/examples/${filename}
+    ${CMAKE_CURRENT_BINARY_DIR}/${filename} COPYONLY)
+endforeach(filename)
 
 # the library itself, next to the package, under the plain name (without the
 # version) that vernier.Library looks for

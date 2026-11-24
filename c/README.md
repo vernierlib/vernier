@@ -72,6 +72,10 @@ vernierDetectorFree(detector);
 - **Poses.** Plain `VernierPose` structs, with `is3D` telling whether `z`,
   `beta` and `gamma` are meaningful. Transformation matrices are written as 16
   doubles, column by column.
+- **Markers.** Stamp and HP code detectors locate every marker of an image.
+  `vernierDetectorGetMarkerIds()` lists their ids, which `PatternFound` and
+  `Get2DPose` then take as `id`; `-1` stands for the first marker, as for the
+  other detectors.
 - **Threads.** The error message is kept per thread. The detectors themselves
   are not thread-safe: do not use one handle from two threads at once.
 
@@ -83,11 +87,15 @@ vernierDetectorFree(detector);
   `vernierPosePatternToCameraMatrix()`.
 - **Detectors** — `vernierDetectorNew()` (by class name),
   `vernierDetectorLoadFromJSON()`, `vernierDetectorNewPeriodic()`,
-  `vernierDetectorNewMegarena()`, `vernierDetectorFree()`,
-  `vernierDetectorCompute()`, `vernierDetectorPatternFound()`,
-  `vernierDetectorPatternCount()`, `vernierDetectorGet2DPose()`,
-  `vernierDetectorGet3DPose()`, `vernierDetectorGetAll3DPoses()`,
-  `vernierDetectorGet3DPosePerspective()`, `vernierDetectorSetBackend()`,
+  `vernierDetectorNewMegarena()`, `vernierDetectorNewBitmap()`,
+  `vernierDetectorNewStamp()`, `vernierDetectorNewHPCode()`,
+  `vernierDetectorFree()`, `vernierDetectorCompute()`,
+  `vernierDetectorPatternFound()`, `vernierDetectorPatternCount()`,
+  `vernierDetectorGet2DPose()`, `vernierDetectorGet3DPose()`,
+  `vernierDetectorGetAll3DPoses()`, `vernierDetectorGet3DPosePerspective()`,
+  `vernierDetectorGetMarkerIds()` and `vernierDetectorAddStampBitmap()` (stamp
+  and HP code detectors, which can locate several markers in one image),
+  `vernierDetectorSetBackend()`,
   `vernierDetectorGetBackend()`, the periodic parameters
   (`SetPhysicalPeriod`, `GetPhysicalPeriod`, `SetSigma`, `SetCropFactor`,
   `SetMaxFrequency`, `SetMinFrequency`, `SetMinPeakPower`,

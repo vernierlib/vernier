@@ -12,10 +12,8 @@ classdef Detector
     %   Both take the compute backend, 'CPU' (the default) or 'CUDA', as an
     %   optional last argument, e.g. vernier.Detector.loadFromJSON(filename, 'CUDA').
     %
-    %   Megarena detectors are returned as vernier.MegarenaPatternDetector.
-    %   Periodic, bitmap, HP code and stamp detectors, which all derive from
-    %   the periodic pattern detector, are returned as
-    %   vernier.PeriodicPatternDetector.
+    %   The detector is returned as the class matching its kind of pattern
+    %   (vernier.MegarenaPatternDetector, vernier.StampPatternDetector, ...).
 
     % This file is part of the VERNIER Library.
     %
@@ -57,10 +55,16 @@ classdef Detector
                 handle, blanks(256), 256);
             vernier.Library.check(status);
             switch vernier.Library.toString(buffer)
-                case {'PeriodicPattern', 'BitmapPattern', 'HPCodePattern', 'StampPattern'}
+                case 'PeriodicPattern'
                     detector = vernier.PeriodicPatternDetector([], handle);
                 case 'MegarenaPattern'
                     detector = vernier.MegarenaPatternDetector([], [], handle);
+                case 'BitmapPattern'
+                    detector = vernier.BitmapPatternDetector([], [], handle);
+                case 'StampPattern'
+                    detector = vernier.StampPatternDetector([], [], [], handle);
+                case 'HPCodePattern'
+                    detector = vernier.HPCodePatternDetector([], [], [], handle);
                 otherwise
                     detector = vernier.PatternDetector(handle);
             end

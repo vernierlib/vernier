@@ -118,7 +118,7 @@ VERNIER_API VernierStatus vernierPosePatternToCameraMatrix(const VernierPose * p
 
 /** Creates a detector from its class name: "PeriodicPattern",
  * "MegarenaPattern", "BitmapPattern", "HPCodePattern" or "StampPattern".
- * Returns NULL on failure, see vernierLastError(), as do the three functions
+ * Returns NULL on failure, see vernierLastError(), as do the other constructors
  * below. */
 VERNIER_API VernierDetector * vernierDetectorNew(const char * classname, VernierBackend backend);
 
@@ -131,6 +131,22 @@ VERNIER_API VernierDetector * vernierDetectorNewPeriodic(double physicalPeriod);
 /** Creates a detector of megarena patterns of the given physical period and
  * code size (in bits). */
 VERNIER_API VernierDetector * vernierDetectorNewMegarena(double physicalPeriod, int codeSize);
+
+/** Creates a detector of bitmap patterns of the given physical period, the
+ * bitmap being read from a PNG file (white dots on a black background). */
+VERNIER_API VernierDetector * vernierDetectorNewBitmap(double physicalPeriod, const char * filename);
+
+/** Creates a detector of stamps of the given physical period. The stamp bitmap
+ * is read from a PNG file and must be square with an odd number of dots.
+ * snapshotSize is the largest diagonal of a stamp in the image, in pixels. */
+VERNIER_API VernierDetector * vernierDetectorNewStamp(double physicalPeriod, const char * filename,
+        int snapshotSize);
+
+/** Creates a detector of HP codes of the given physical period. numberHalfPeriods
+ * is the size of the code in half periods along one direction (4k + 1, e.g. 33
+ * or 37) and snapshotSize the largest size of a code in the image, in pixels. */
+VERNIER_API VernierDetector * vernierDetectorNewHPCode(double physicalPeriod, int numberHalfPeriods,
+        int snapshotSize);
 
 /** Releases a detector. Freeing a null handle is a no-op. */
 VERNIER_API void vernierDetectorFree(VernierDetector * detector);
@@ -159,6 +175,18 @@ VERNIER_API VernierStatus vernierDetectorGet3DPose(VernierDetector * detector, i
  * a null array and a capacity of zero queries that number. */
 VERNIER_API VernierStatus vernierDetectorGetAll3DPoses(VernierDetector * detector, int id,
         VernierPose * poses, int capacity, int * count);
+
+/** Returns the ids of the markers found by a stamp or HP code detector, in
+ * increasing order, to be passed as id to vernierDetectorPatternFound() and
+ * vernierDetectorGet2DPose(). Writes at most capacity ids and always sets count
+ * to the number available, so passing a null array and a capacity of zero
+ * queries that number. */
+VERNIER_API VernierStatus vernierDetectorGetMarkerIds(VernierDetector * detector, int * ids, int capacity,
+        int * count);
+
+/** Adds a bitmap to a stamp detector, read from a PNG file of the same size as
+ * the first one, so that several kinds of stamps are recognised. */
+VERNIER_API VernierStatus vernierDetectorAddStampBitmap(VernierDetector * detector, const char * filename);
 
 /** Returns the 3D pose of a pattern assuming a perspective projection of the
  * given focal length (in pixels). Periodic pattern detectors only. */

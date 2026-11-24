@@ -199,6 +199,76 @@ static void testMegarenaPattern(void) {
     free(image);
 }
 
+static void testStampPattern(void) {
+    VernierPose truth = pose2D(20.0, -10.0, 0.3, 1.0);
+    VernierPose estimated;
+    VernierDetector * detector;
+    int rows = 0;
+    int cols = 0;
+    double * image = readPgm("data/stampPattern.pgm", &rows, &cols);
+    int found = 0;
+    int count = 0;
+    int ids[4] = {-1, -1, -1, -1};
+
+    if (image == NULL) {
+        return;
+    }
+    detector = vernierDetectorNewStamp(5.0, "data/stamp.png", 460);
+    check(detector != NULL, "the stamp detector is created");
+    check(vernierDetectorCompute(detector, image, rows, cols) == VERNIER_OK, "the image is analysed");
+    check(vernierDetectorPatternFound(detector, -1, &found) == VERNIER_OK && found, "a stamp is found");
+    check(vernierDetectorPatternCount(detector, &count) == VERNIER_OK && count == 1, "one stamp is counted");
+    check(vernierDetectorGetMarkerIds(detector, NULL, 0, &count) == VERNIER_OK && count == 1,
+            "the number of markers is queried");
+    check(vernierDetectorGetMarkerIds(detector, ids, 4, &count) == VERNIER_OK && count == 1 && ids[0] == 0,
+            "the stamp has the id of its bitmap");
+    check(vernierDetectorPatternFound(detector, 0, &found) == VERNIER_OK && found, "the stamp is found by id");
+    check(vernierDetectorPatternFound(detector, 7, &found) == VERNIER_OK && !found, "an unknown id is not found");
+    check(vernierDetectorGet2DPose(detector, 0, &estimated) == VERNIER_OK, "the pose is read by id");
+    checkPoseNear(estimated, truth, 0.05, "the estimated stamp pose matches the rendered one");
+    check(vernierDetectorGet2DPose(detector, -1, &estimated) == VERNIER_OK, "the first pose is read");
+    checkPoseNear(estimated, truth, 0.05, "the first pose is the stamp's");
+    check(vernierDetectorAddStampBitmap(detector, "data/stamp.png") == VERNIER_OK, "a bitmap is added");
+    vernierDetectorFree(detector);
+
+    /* a stamp is a bitmap pattern too */
+    detector = vernierDetectorNewBitmap(5.0, "data/stamp.png");
+    check(detector != NULL, "the bitmap detector is created");
+    check(vernierDetectorCompute(detector, image, rows, cols) == VERNIER_OK, "the image is analysed");
+    check(vernierDetectorPatternFound(detector, -1, &found) == VERNIER_OK && found, "the bitmap pattern is found");
+    check(vernierDetectorGet2DPose(detector, -1, &estimated) == VERNIER_OK, "the pose is estimated");
+    checkPoseNear(estimated, truth, 0.05, "the estimated bitmap pose matches the rendered one");
+    vernierDetectorFree(detector);
+    free(image);
+}
+
+static void testHPCodePattern(void) {
+    VernierPose truth = pose2D(12.0, -7.0, 0.5, 1.0);
+    VernierPose estimated;
+    VernierDetector * detector;
+    int rows = 0;
+    int cols = 0;
+    double * image = readPgm("data/hpcodePattern.pgm", &rows, &cols);
+    int found = 0;
+    int count = 0;
+    int id = -1;
+
+    if (image == NULL) {
+        return;
+    }
+    detector = vernierDetectorNewHPCode(8.0, 33, 256);
+    check(detector != NULL, "the HP code detector is created");
+    check(vernierDetectorCompute(detector, image, rows, cols) == VERNIER_OK, "the image is analysed");
+    check(vernierDetectorPatternFound(detector, -1, &found) == VERNIER_OK && found, "a code is found");
+    check(vernierDetectorPatternCount(detector, &count) == VERNIER_OK && count == 1, "one code is counted");
+    check(vernierDetectorGetMarkerIds(detector, &id, 1, &count) == VERNIER_OK && count == 1 && id == 0,
+            "the code id is read");
+    check(vernierDetectorGet2DPose(detector, id, &estimated) == VERNIER_OK, "the pose is read by id");
+    checkPoseNear(estimated, truth, 0.05, "the estimated code pose matches the rendered one");
+    vernierDetectorFree(detector);
+    free(image);
+}
+
 static void testFactories(void) {
     VernierDetector * detector;
     char buffer[256];
@@ -238,6 +308,7 @@ static void testErrors(void) {
     VernierDetector * detector;
     double image[4] = {0.0, 0.0, 0.0, 0.0};
     char buffer[8];
+    int count = 0;
 
     check(vernierDetectorNew("NoSuchPattern", VERNIER_BACKEND_CPU) == NULL, "an unknown class name fails");
     check(strlen(vernierLastError()) > 0, "the failure is described");
@@ -252,6 +323,13 @@ static void testErrors(void) {
             "a short buffer is reported");
     check(strcmp(buffer, "Periodi") == 0, "a short buffer holds the truncated name");
     check(vernierDetectorPatternCount(detector, NULL) == VERNIER_INVALID_ARGUMENT, "a null result is reported");
+    check(vernierDetectorGetMarkerIds(detector, NULL, 0, &count) == VERNIER_ERROR,
+            "a detector without markers has no ids");
+    check(vernierDetectorAddStampBitmap(detector, "data/stamp.png") == VERNIER_ERROR,
+            "only stamp detectors accept bitmaps");
+    check(vernierDetectorNewStamp(5.0, NULL, 460) == NULL, "a null bitmap file name is reported");
+    check(vernierDetectorNewStamp(5.0, "no_such_file.png", 460) == NULL, "a missing bitmap file fails");
+    check(vernierDetectorNewHPCode(8.0, 34, 256) == NULL, "an HP code size that is not 4k + 1 fails");
     check(vernierDetectorPatternCount(NULL, NULL) == VERNIER_INVALID_ARGUMENT, "a null detector is reported");
     if (!vernierCudaAvailable()) {
         VernierBackend backend;
@@ -274,6 +352,8 @@ int main(void) {
         {"testPeriodicPattern", testPeriodicPattern},
         {"testNonSquareImage", testNonSquareImage},
         {"testMegarenaPattern", testMegarenaPattern},
+        {"testStampPattern", testStampPattern},
+        {"testHPCodePattern", testHPCodePattern},
         {"testFactories", testFactories},
         {"testErrors", testErrors}
     };

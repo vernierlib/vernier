@@ -17,6 +17,7 @@
 #include "Vernier.hpp"
 
 #include <cstring>
+#include <map>
 #include <string>
 
 using namespace vernier;
@@ -222,6 +223,41 @@ VernierDetector * vernierDetectorNewMegarena(double physicalPeriod, int codeSize
     });
 }
 
+VernierDetector * vernierDetectorNewBitmap(double physicalPeriod, const char * filename) {
+    if (filename == nullptr) {
+        fail(VERNIER_INVALID_ARGUMENT, "the bitmap file name must not be null.");
+        return nullptr;
+    }
+    return create([&] {
+        return std::unique_ptr<PatternDetector>(new BitmapPatternDetector(physicalPeriod, filename));
+    });
+}
+
+VernierDetector * vernierDetectorNewStamp(double physicalPeriod, const char * filename, int snapshotSize) {
+    if (filename == nullptr) {
+        fail(VERNIER_INVALID_ARGUMENT, "the bitmap file name must not be null.");
+        return nullptr;
+    }
+    if (snapshotSize <= 0) {
+        fail(VERNIER_INVALID_ARGUMENT, "the snapshot size must be positive.");
+        return nullptr;
+    }
+    return create([&] {
+        return std::unique_ptr<PatternDetector>(new StampPatternDetector(physicalPeriod, filename, snapshotSize));
+    });
+}
+
+VernierDetector * vernierDetectorNewHPCode(double physicalPeriod, int numberHalfPeriods, int snapshotSize) {
+    if (snapshotSize <= 0) {
+        fail(VERNIER_INVALID_ARGUMENT, "the snapshot size must be positive.");
+        return nullptr;
+    }
+    return create([&] {
+        return std::unique_ptr<PatternDetector>(
+                new HPCodePatternDetector(physicalPeriod, numberHalfPeriods, snapshotSize));
+    });
+}
+
 void vernierDetectorFree(VernierDetector * detector) {
     delete detector;
 }
@@ -292,6 +328,51 @@ VernierStatus vernierDetectorGetAll3DPoses(VernierDetector * detector, int id, V
         for (int i = 0; i < copied; i++) {
             fromPose(found[i], &poses[i]);
         }
+    });
+}
+
+namespace {
+
+    /** The markers of a stamp or HP code detector, the two kinds that have some. */
+    const std::map<int, Pose> & markersOf(VernierDetector * detector) {
+        PatternDetector * base = detector->detector.get();
+        if (StampPatternDetector * stamp = dynamic_cast<StampPatternDetector *> (base)) {
+            return stamp->markers;
+        }
+        if (HPCodePatternDetector * code = dynamic_cast<HPCodePatternDetector *> (base)) {
+            return code->markers;
+        }
+        throw Exception("only stamp and HP code detectors have markers.");
+    }
+}
+
+VernierStatus vernierDetectorGetMarkerIds(VernierDetector * detector, int * ids, int capacity, int * count) {
+    if (detector == nullptr || count == nullptr) {
+        return fail(VERNIER_INVALID_ARGUMENT, "the detector and the count must not be null.");
+    }
+    if (capacity < 0 || (capacity > 0 && ids == nullptr)) {
+        return fail(VERNIER_INVALID_ARGUMENT, "the capacity must be positive and the ids must not be null.");
+    }
+    return guard([&] {
+        const std::map<int, Pose> & markers = markersOf(detector);
+        *count = (int) markers.size();
+        int copied = 0;
+        for (std::map<int, Pose>::const_iterator it = markers.begin(); it != markers.end() && copied < capacity; ++it) {
+            ids[copied++] = it->first;
+        }
+    });
+}
+
+VernierStatus vernierDetectorAddStampBitmap(VernierDetector * detector, const char * filename) {
+    if (detector == nullptr || filename == nullptr) {
+        return fail(VERNIER_INVALID_ARGUMENT, "the detector and the file name must not be null.");
+    }
+    return guard([&] {
+        StampPatternDetector * stamp = dynamic_cast<StampPatternDetector *> (detector->detector.get());
+        if (stamp == nullptr) {
+            throw Exception("only stamp detectors accept additional bitmaps.");
+        }
+        stamp->addBitmap(filename);
     });
 }
 
