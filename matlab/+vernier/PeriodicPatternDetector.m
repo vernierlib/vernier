@@ -27,14 +27,14 @@ classdef PeriodicPatternDetector < vernier.PatternDetector
         function pose = get3DPosePerspective(obj, focalLength)
             %GET3DPOSEPERSPECTIVE 3D pose of the pattern assuming a perspective
             %   projection with the given focal length (in pixels).
-            [status, pose] = calllib(vernier.Library.alias, 'vernierDetectorGet3DPosePerspective', ...
+            [status, ~, pose] = calllib(vernier.Library.alias, 'vernierDetectorGet3DPosePerspective', ...
                 obj.handle, focalLength, vernier.Pose.emptyStruct());
             vernier.Library.check(status);
             pose = vernier.Pose.fromStruct(pose);
         end
 
         function period = getPhysicalPeriod(obj)
-            [status, period] = calllib(vernier.Library.alias, 'vernierDetectorGetPhysicalPeriod', ...
+            [status, ~, period] = calllib(vernier.Library.alias, 'vernierDetectorGetPhysicalPeriod', ...
                 obj.handle, 0);
             vernier.Library.check(status);
             period = double(period);

@@ -56,7 +56,7 @@ classdef PatternDetector < handle
             if nargin < 2
                 id = -1;
             end
-            [status, found] = calllib(vernier.Library.alias, 'vernierDetectorPatternFound', ...
+            [status, ~, found] = calllib(vernier.Library.alias, 'vernierDetectorPatternFound', ...
                 obj.handle, id, int32(0));
             vernier.Library.check(status);
             found = found ~= 0;
@@ -64,7 +64,7 @@ classdef PatternDetector < handle
 
         function n = patternCount(obj)
             %PATTERNCOUNT Number of detected patterns.
-            [status, n] = calllib(vernier.Library.alias, 'vernierDetectorPatternCount', ...
+            [status, ~, n] = calllib(vernier.Library.alias, 'vernierDetectorPatternCount', ...
                 obj.handle, int32(0));
             vernier.Library.check(status);
             n = double(n);
@@ -93,7 +93,7 @@ classdef PatternDetector < handle
                 id = -1;
             end
             % the count first, then the poses themselves
-            [status, ~, count] = calllib(vernier.Library.alias, 'vernierDetectorGetAll3DPoses', ...
+            [status, ~, ~, count] = calllib(vernier.Library.alias, 'vernierDetectorGetAll3DPoses', ...
                 obj.handle, id, [], 0, int32(0));
             vernier.Library.check(status);
             count = double(count);
@@ -102,7 +102,7 @@ classdef PatternDetector < handle
                 return;
             end
             buffer = repmat(vernier.Pose.emptyStruct(), count, 1);
-            [status, buffer, ~] = calllib(vernier.Library.alias, 'vernierDetectorGetAll3DPoses', ...
+            [status, ~, buffer, ~] = calllib(vernier.Library.alias, 'vernierDetectorGetAll3DPoses', ...
                 obj.handle, id, buffer, count, int32(0));
             vernier.Library.check(status);
             for k = count:-1:1
@@ -114,7 +114,7 @@ classdef PatternDetector < handle
             %GETMARKERIDS Ids of the markers found by a stamp or HP code
             %   detector, as a column vector in increasing order. Pass one of
             %   them to patternFound(id) and get2DPose(id).
-            [status, ~, count] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
+            [status, ~, ~, count] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
                 obj.handle, [], 0, int32(0));
             vernier.Library.check(status);
             count = double(count);
@@ -122,7 +122,7 @@ classdef PatternDetector < handle
                 ids = zeros(0, 1);
                 return;
             end
-            [status, ids, ~] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
+            [status, ~, ids, ~] = calllib(vernier.Library.alias, 'vernierDetectorGetMarkerIds', ...
                 obj.handle, zeros(count, 1, 'int32'), count, int32(0));
             vernier.Library.check(status);
             ids = double(ids(:));
@@ -151,7 +151,7 @@ classdef PatternDetector < handle
 
         function backend = getBackend(obj)
             %GETBACKEND Compute backend used by the detector, 'CPU' or 'CUDA'.
-            [status, backend] = calllib(vernier.Library.alias, 'vernierDetectorGetBackend', ...
+            [status, ~, backend] = calllib(vernier.Library.alias, 'vernierDetectorGetBackend', ...
                 obj.handle, int32(0));
             vernier.Library.check(status);
             backend = vernier.Library.fromBackend(backend);
@@ -193,17 +193,19 @@ classdef PatternDetector < handle
 
     end
 
+    % calllib returns the result of the function, then one output per pointer
+    % argument: the detector handle comes first and is skipped.
     methods (Access = protected)
 
         function pose = poseOf(obj, functionName, id)
-            [status, pose] = calllib(vernier.Library.alias, functionName, ...
+            [status, ~, pose] = calllib(vernier.Library.alias, functionName, ...
                 obj.handle, id, vernier.Pose.emptyStruct());
             vernier.Library.check(status);
             pose = vernier.Pose.fromStruct(pose);
         end
 
         function text = stringOf(obj, functionName)
-            [status, buffer] = calllib(vernier.Library.alias, functionName, ...
+            [status, ~, buffer] = calllib(vernier.Library.alias, functionName, ...
                 obj.handle, blanks(1024), 1024);
             vernier.Library.check(status);
             text = vernier.Library.toString(buffer);

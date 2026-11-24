@@ -51,7 +51,7 @@ classdef Detector
             end
             % the kind of pattern, read before wrapping it in a class that
             % would free the detector when the temporary goes away
-            [status, buffer] = calllib(vernier.Library.alias, 'vernierDetectorGetClassname', ...
+            [status, ~, buffer] = calllib(vernier.Library.alias, 'vernierDetectorGetClassname', ...
                 handle, blanks(256), 256);
             vernier.Library.check(status);
             switch vernier.Library.toString(buffer)

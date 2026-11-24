@@ -57,7 +57,7 @@ classdef Pose
         function s = toString(obj)
             %TOSTRING Returns a string describing the pose.
             vernier.Library.load();
-            [status, buffer] = calllib(vernier.Library.alias, 'vernierPoseToString', ...
+            [status, ~, buffer] = calllib(vernier.Library.alias, 'vernierPoseToString', ...
                 obj.toStruct(), blanks(256), 256);
             vernier.Library.check(status);
             s = vernier.Library.toString(buffer);
@@ -87,7 +87,7 @@ classdef Pose
 
         function T = matrix(obj, functionName)
             vernier.Library.load();
-            [status, values] = calllib(vernier.Library.alias, functionName, obj.toStruct(), zeros(4, 4));
+            [status, ~, values] = calllib(vernier.Library.alias, functionName, obj.toStruct(), zeros(4, 4));
             vernier.Library.check(status);
             T = reshape(values, 4, 4);
         end
