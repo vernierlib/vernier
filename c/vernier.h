@@ -37,14 +37,16 @@
 #include <stddef.h>
 
 /* the library hides everything else, so that only these functions are exported
- * and the C++ internals cannot be bound to by mistake */
+ * and the C++ internals cannot be bound to by mistake. The attributes are only
+ * needed to build the library: callers get a plain declaration, which header
+ * parsers such as Matlab's loadlibrary can read. */
 #if defined(_WIN32)
 #  if defined(VERNIER_C_BUILD)
 #    define VERNIER_API __declspec(dllexport)
 #  else
 #    define VERNIER_API __declspec(dllimport)
 #  endif
-#elif defined(__GNUC__)
+#elif defined(__GNUC__) && defined(VERNIER_C_BUILD)
 #  define VERNIER_API __attribute__((visibility("default")))
 #else
 #  define VERNIER_API
