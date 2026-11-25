@@ -161,18 +161,18 @@ detector = vernier.HPCodePatternDetector(20, 33, 256);
 detector.compute(image);
 assert(detector.patternCount() == 2);
 assert(isequal(detector.getMarkerIds(), [0; 1]));
-assertPoseNear(detector.get2DPose(0), vernier.Pose(325.407, 131.286, 0.0109354, 2.40894),5);
-assertPoseNear(detector.get2DPose(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657),5);
+assertPoseNear(detector.get2DPose(0), vernier.Pose(325.407, 131.286, 0.0109354, 2.40894), 5);
+assertPoseNear(detector.get2DPose(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657), 5);
 markers = detector.getMarkers();
 assert(markers.Count == 2);
-assertPoseNear(markers(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657),5);
+assertPoseNear(markers(1), vernier.Pose(107.308, 327.016, 1.58144, 2.40657), 5);
 
 % a stamp in a real image
 image = imread('stampPatternImage_15um.jpg');
 detector = vernier.StampPatternDetector(15, 'stampPattern.png', 820);
 detector.compute(image);
 assert(detector.patternFound() && isequal(detector.getMarkerIds(), 0));
-assertPoseNear(detector.get2DPose(0), vernier.Pose(392.09, 11.1902, 0.000135, 0.937845),5);
+assertPoseNear(detector.get2DPose(0), vernier.Pose(392.09, 11.1902, 0.000135, 0.937845), 5);
 end
 
 function testFactories()
