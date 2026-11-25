@@ -133,5 +133,15 @@ the camera images of the examples.
   and ship it alongside the package.
 - On Windows the OpenCV DLLs must be on the `PATH` seen by Matlab for
   `vernier_c.dll` to load.
+- On Linux, Matlab loads its own copies of common libraries (libstdc++,
+  libcurl, ...) before the system ones, and `loadlibrary` fails with a message
+  such as `version 'CURL_OPENSSL_4' not found` when a dependency of OpenCV
+  needs the system version. Preload the system libraries when starting Matlab:
+
+  ```bash
+  LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4 matlab
+  ```
+
+  The `matlab` job of the GitHub workflow does the same.
 - Matlab ships its own OpenCV libraries, which may clash with the system ones
   the C API is linked against.

@@ -289,12 +289,14 @@ jobs:
       - name: Build
         run: cmake --build build --config Release --parallel --target vernier_matlab
 
-      # On Linux, Matlab puts its own libstdc++ first, which can be older than
-      # the one vernier_c was compiled with.
+      # On Linux, Matlab puts its own libstdc++ and libcurl first. Its libstdc++
+      # can be older than the one vernier_c was compiled with, and its libcurl
+      # lacks the symbol versions the GDAL behind Ubuntu's OpenCV asks for, so
+      # the system ones are preloaded.
       - name: Test
         uses: matlab-actions/run-command@v3
         env:
-          LD_PRELOAD: ${{ runner.os == 'Linux' && '/usr/lib/x86_64-linux-gnu/libstdc++.so.6' || '' }}
+          LD_PRELOAD: ${{ runner.os == 'Linux' && '/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4' || '' }}
         with:
           command: cd('build/matlab'); test_vernier; vernier_example
 
