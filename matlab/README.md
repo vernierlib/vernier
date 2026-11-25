@@ -143,5 +143,8 @@ the camera images of the examples.
   ```
 
   The `matlab` job of the GitHub workflow does the same.
+- On macOS, Matlab aborts with `OMP: Error #15` when `vernier_c` brings a
+  second OpenMP runtime. Build the library without OpenMP for Matlab
+  (`cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON ..`), as the workflow does.
 - Matlab ships its own OpenCV libraries, which may clash with the system ones
   the C API is linked against.

@@ -269,12 +269,16 @@ jobs:
           if ("${{ steps.opencv.outputs.bin }}") { "${{ steps.opencv.outputs.bin }}" >> $env:GITHUB_PATH }
         shell: pwsh
 
+      # On macOS, Matlab runs its own OpenMP runtime, and a second one loaded
+      # with vernier_c aborts Matlab (OMP Error #15), so the library is built
+      # without OpenMP there.
       - name: Configure (Unix)
         if: runner.os != 'Windows'
         run: >
           cmake -B build -DCMAKE_BUILD_TYPE=Release
           -DBUILD_DOCUMENTATION=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF
           -DBUILD_PYTHON_BINDINGS=OFF
+          ${{ runner.os == 'macOS' && '-DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON' || '' }}
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
