@@ -269,16 +269,12 @@ jobs:
           if ("${{ steps.opencv.outputs.bin }}") { "${{ steps.opencv.outputs.bin }}" >> $env:GITHUB_PATH }
         shell: pwsh
 
-      # On macOS, Matlab runs its own OpenMP runtime, and a second one loaded
-      # with vernier_c aborts Matlab (OMP Error #15), so the library is built
-      # without OpenMP there.
       - name: Configure (Unix)
         if: runner.os != 'Windows'
         run: >
           cmake -B build -DCMAKE_BUILD_TYPE=Release
           -DBUILD_DOCUMENTATION=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF
           -DBUILD_PYTHON_BINDINGS=OFF
-          ${{ runner.os == 'macOS' && '-DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON' || '' }}
 
       - name: Configure (Windows)
         if: runner.os == 'Windows'
@@ -293,14 +289,32 @@ jobs:
       - name: Build
         run: cmake --build build --config Release --parallel --target vernier_matlab
 
-      # On Linux, Matlab puts its own libstdc++ and libcurl first. Its libstdc++
-      # can be older than the one vernier_c was compiled with, and its libcurl
-      # lacks the symbol versions the GDAL behind Ubuntu's OpenCV asks for, so
-      # the system ones are preloaded.
+      # On Linux, Matlab ships its own copies of many system libraries (libstdc++,
+      # libcurl, libxml2, ...) and loads them first, so vernier_c and the libraries
+      # behind Ubuntu's OpenCV would be bound to versions that are not the ones
+      # they were linked against, which fails on their symbol versions. Every
+      # dependency of vernier_c that Matlab also ships is preloaded from the
+      # system instead.
+      - name: Preload the system libraries Matlab duplicates (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          root=$(dirname "$(dirname "$(readlink -f "$(which matlab)")")")
+          preload=""
+          for lib in $(ldd build/c/libvernier_c.so | awk '/=> \//{print $3}'); do
+            name=$(basename "$lib")
+            if [ -e "$root/bin/glnxa64/$name" ] || [ -e "$root/sys/os/glnxa64/$name" ]; then
+              preload="$preload${preload:+:}$lib"
+            fi
+          done
+          echo "Preloading: $preload"
+          echo "LD_PRELOAD=$preload" >> "$GITHUB_ENV"
+
+      # On macOS, Matlab runs its own OpenMP runtime and Homebrew's OpenCV brings
+      # another, which the runtime refuses (OMP Error #15) unless told otherwise.
       - name: Test
         uses: matlab-actions/run-command@v3
         env:
-          LD_PRELOAD: ${{ runner.os == 'Linux' && '/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4' || '' }}
+          KMP_DUPLICATE_LIB_OK: ${{ runner.os == 'macOS' && 'TRUE' || '' }}
         with:
           command: cd('build/matlab'); test_vernier; vernier_example
 

@@ -134,17 +134,28 @@ the camera images of the examples.
 - On Windows the OpenCV DLLs must be on the `PATH` seen by Matlab for
   `vernier_c.dll` to load.
 - On Linux, Matlab loads its own copies of common libraries (libstdc++,
-  libcurl, ...) before the system ones, and `loadlibrary` fails with a message
-  such as `version 'CURL_OPENSSL_4' not found` when a dependency of OpenCV
-  needs the system version. Preload the system libraries when starting Matlab:
+  libcurl, libxml2, ...) before the system ones, and `loadlibrary` fails with
+  a message such as `version 'CURL_OPENSSL_4' not found` when the library or
+  a dependency of OpenCV needs the system version. Preload the system
+  libraries when starting Matlab, for instance every dependency of
+  `libvernier_c.so` that Matlab also ships:
 
   ```bash
-  LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6:/usr/lib/x86_64-linux-gnu/libcurl.so.4 matlab
+  root=/usr/local/MATLAB/R2026b
+  preload=""
+  for lib in $(ldd libvernier_c.so | awk '/=> \//{print $3}'); do
+    name=$(basename "$lib")
+    if [ -e "$root/bin/glnxa64/$name" ] || [ -e "$root/sys/os/glnxa64/$name" ]; then
+      preload="$preload${preload:+:}$lib"
+    fi
+  done
+  LD_PRELOAD="$preload" matlab
   ```
 
   The `matlab` job of the GitHub workflow does the same.
-- On macOS, Matlab aborts with `OMP: Error #15` when `vernier_c` brings a
-  second OpenMP runtime. Build the library without OpenMP for Matlab
-  (`cmake -DCMAKE_DISABLE_FIND_PACKAGE_OpenMP=ON ..`), as the workflow does.
+- On macOS, Matlab aborts with `OMP: Error #15` when `vernier_c` or the
+  Homebrew OpenCV behind it brings a second OpenMP runtime. Start Matlab with
+  `KMP_DUPLICATE_LIB_OK=TRUE` in its environment, as the workflow does, or
+  build OpenCV and the library without OpenMP.
 - Matlab ships its own OpenCV libraries, which may clash with the system ones
   the C API is linked against.
