@@ -226,6 +226,9 @@ classdef PatternDetector < handle
             if ndims(image) == 3 && size(image, 3) == 3
                 image = 0.299 * image(:, :, 1) + 0.587 * image(:, :, 2) + 0.114 * image(:, :, 3);
             end
+            if ~ismatrix(image)
+                error('vernier:error', 'the image must be a 2-D matrix or an M-by-N-by-3 RGB array.');
+            end
         end
 
     end
