@@ -144,6 +144,8 @@ Both backends compute in double precision and give the same results.
 
 Run one of the demo files from the [examples page](https://vernierlib.github.io/vernier/examples.html)
 
+The library can also be used from other languages: through the C API of the `c` directory, which any language able to load a C shared library can call (see [c/README.md](c/README.md)), and from Matlab through the bindings of the `matlab` directory, which are built on top of it (see [matlab/README.md](matlab/README.md)).
+
 ## Licence
 
 The Vernier Library is Free Software in the technical sense defined by the Free Software Foundation, and is distributed under the terms of the [GNU General Public License](LICENSE.txt). 

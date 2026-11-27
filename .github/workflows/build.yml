@@ -195,6 +195,129 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
+  # The Matlab bindings tested against Matlab on every platform. They are plain
+  # .m files calling the C API, so only that shared library is built here and
+  # Matlab is needed to run the tests, not to build them. Matlab is only
+  # licensed for public projects through the MathWorks actions, which is why
+  # the tests go through run-command rather than ctest.
+  matlab:
+    name: Matlab bindings, ${{ matrix.label }}
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: Ubuntu 24.04
+            os: ubuntu-24.04
+          - label: Windows
+            os: windows-latest
+          - label: macOS
+            os: macos-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Set up Matlab
+        uses: matlab-actions/setup-matlab@v3
+
+      - name: Install dependencies (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential cmake libeigen3-dev libtool \
+            libmatio-dev libopencv-dev libqhull-dev zlib1g-dev
+
+      - name: Install dependencies (macOS)
+        if: runner.os == 'macOS'
+        run: |
+          brew install opencv@4 eigen libmatio qhull
+          echo "OpenCV_DIR=$(brew --prefix opencv@4)/lib/cmake/opencv4" >> "$GITHUB_ENV"
+
+      # Checked and retried like in the build job, as the choco feed has outages.
+      - name: Install dependencies (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          foreach ($attempt in 1..3) {
+            choco install opencv -y --no-progress
+            $cfg = Get-ChildItem -Path C:\tools\opencv -Recurse -Filter OpenCVConfig.cmake -ErrorAction SilentlyContinue |
+                   Select-Object -First 1
+            if ($cfg) { exit 0 }
+            Write-Host "::warning::OpenCV missing after attempt $attempt (choco exit $LASTEXITCODE)"
+            Start-Sleep -Seconds 30
+          }
+          Write-Error "choco install opencv did not produce an OpenCV installation"
+          exit 1
+        shell: pwsh
+
+      - name: Locate OpenCV (Windows)
+        if: runner.os == 'Windows'
+        id: opencv
+        run: |
+          $cfg = Get-ChildItem -Path C:\tools\opencv -Recurse -Filter OpenCVConfig.cmake -ErrorAction SilentlyContinue |
+                 Select-Object -First 1
+          if (-not $cfg) { Write-Error "OpenCVConfig.cmake not found"; exit 1 }
+          "dir=$($cfg.Directory.FullName)" >> $env:GITHUB_OUTPUT
+          $bin = Join-Path $cfg.Directory.FullName "x64\vc16\bin"
+          if (Test-Path $bin) { "bin=$bin" >> $env:GITHUB_OUTPUT } else { "bin=" >> $env:GITHUB_OUTPUT }
+        shell: pwsh
+
+      # Matlab loads vernier_c, so it is Matlab that has to find the OpenCV
+      # DLLs on PATH.
+      - name: Put the DLLs on PATH (Windows)
+        if: runner.os == 'Windows'
+        run: |
+          if ("${{ steps.opencv.outputs.bin }}") { "${{ steps.opencv.outputs.bin }}" >> $env:GITHUB_PATH }
+        shell: pwsh
+
+      - name: Configure (Unix)
+        if: runner.os != 'Windows'
+        run: >
+          cmake -B build -DCMAKE_BUILD_TYPE=Release
+          -DBUILD_DOCUMENTATION=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF
+          -DBUILD_PYTHON_BINDINGS=OFF
+
+      - name: Configure (Windows)
+        if: runner.os == 'Windows'
+        run: >
+          cmake -B build -A x64
+          -DOpenCV_DIR="${{ steps.opencv.outputs.dir }}"
+          -DBUILD_DOCUMENTATION=OFF -DBUILD_TESTS=OFF -DBUILD_EXAMPLES=OFF
+          -DBUILD_PYTHON_BINDINGS=OFF
+        shell: pwsh
+
+      # Gathers the package, the C API library and the test images in build/matlab
+      - name: Build
+        run: cmake --build build --config Release --parallel --target vernier_matlab
+
+      # On Linux, Matlab ships its own copies of many system libraries (libstdc++,
+      # libcurl, libxml2, ...) and loads them first, so vernier_c and the libraries
+      # behind Ubuntu's OpenCV would be bound to versions that are not the ones
+      # they were linked against, which fails on their symbol versions. Every
+      # dependency of vernier_c that Matlab also ships is preloaded from the
+      # system instead.
+      - name: Preload the system libraries Matlab duplicates (Linux)
+        if: runner.os == 'Linux'
+        run: |
+          root=$(dirname "$(dirname "$(readlink -f "$(which matlab)")")")
+          preload=""
+          for lib in $(ldd build/c/libvernier_c.so | awk '/=> \//{print $3}'); do
+            name=$(basename "$lib")
+            if [ -e "$root/bin/glnxa64/$name" ] || [ -e "$root/sys/os/glnxa64/$name" ]; then
+              preload="$preload${preload:+:}$lib"
+            fi
+          done
+          echo "Preloading: $preload"
+          echo "LD_PRELOAD=$preload" >> "$GITHUB_ENV"
+
+      # On macOS, Matlab runs its own OpenMP runtime and Homebrew's OpenCV brings
+      # another, which the runtime refuses (OMP Error #15) unless told otherwise.
+      - name: Test
+        uses: matlab-actions/run-command@v3
+        env:
+          KMP_DUPLICATE_LIB_OK: ${{ runner.os == 'macOS' && 'TRUE' || '' }}
+        with:
+          command: cd('build/matlab'); test_vernier; vernier_example
+
   documentation:
     # Only worth publishing once every platform has built and tested.
     needs: build

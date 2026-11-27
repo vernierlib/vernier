@@ -13,6 +13,8 @@ option(BUILD_TESTS "Build tests" ON)
 option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(BUILD_PYTHON_BINDINGS "Build the Python bindings" ON)
+option(BUILD_C_API "Build the C API shared library" ON)
+option(BUILD_MATLAB_BINDINGS "Build the Matlab bindings (on top of the C API)" ON)
 option(USE_CUDA "Build the CUDA + cuFFT backend (selectable at runtime)" OFF)
 
 # set build mode type
@@ -23,10 +25,10 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-# the Python bindings link the static library into a shared module, which
-# requires all the code (library and its static dependencies) to be built as
-# position-independent code
-if(BUILD_PYTHON_BINDINGS)
+# the bindings and the C API link the static library into a shared module,
+# which requires all the code (library and its static dependencies) to be built
+# as position-independent code
+if(BUILD_PYTHON_BINDINGS OR BUILD_MATLAB_BINDINGS OR BUILD_C_API)
   set(CMAKE_POSITION_INDEPENDENT_CODE ON)
 endif()
 
@@ -148,6 +150,23 @@ if(BUILD_TESTS)
 else(BUILD_TESTS)
   message(STATUS "Skiping tests.")
 endif(BUILD_TESTS)
+
+###############################################################################
+# add the C API
+if(BUILD_C_API)
+  message(STATUS "Adding C API.")
+  add_subdirectory(c)
+else(BUILD_C_API)
+  message(STATUS "Skiping C API.")
+endif(BUILD_C_API)
+
+###############################################################################
+# add the Matlab bindings
+if(BUILD_MATLAB_BINDINGS)
+  add_subdirectory(matlab)
+else(BUILD_MATLAB_BINDINGS)
+  message(STATUS "Skiping Matlab bindings.")
+endif(BUILD_MATLAB_BINDINGS)
 
 ###############################################################################
 # documentation generation (doxygen)
