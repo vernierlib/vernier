@@ -14,6 +14,7 @@ option(BUILD_EXAMPLES "Build examples" ON)
 option(BUILD_DOCUMENTATION "Build documentation" ON)
 option(BUILD_PYTHON_BINDINGS "Build the Python bindings" ON)
 option(USE_CUDA "Build the CUDA + cuFFT backend (selectable at runtime)" OFF)
+option(ENABLE_COVERAGE "Instrument the library for code coverage (GCC/Clang)" OFF)
 
 # set build mode type
 set(CMAKE_BUILD_TYPE Release)

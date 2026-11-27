@@ -1,0 +1,15 @@
+coverage:
+  status:
+    # Fail a PR that lowers total coverage by more than 1% compared to its base.
+    project:
+      default:
+        target: auto
+        threshold: 1%
+    # Coverage of the changed lines is reported but does not block.
+    patch:
+      default:
+        informational: true
+
+comment:
+  layout: "condensed_header, diff, flags, files"
+  require_changes: false
