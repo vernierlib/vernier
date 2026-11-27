@@ -10,6 +10,14 @@
 
 namespace vernier {
 
+    static void parallelArg(const Eigen::ArrayXXcd& in, Eigen::ArrayXXd& out) {
+        out.resize(in.rows(), in.cols());
+#pragma omp parallel for
+        for (int col = 0; col < in.cols(); col++) {
+            out.col(col) = in.col(col).arg();
+        }
+    }
+
     PatternPhase::PatternPhase() {
         setSigma(3);
     }
@@ -70,7 +78,15 @@ namespace vernier {
         spectrumFiltered1 = spectrumShifted;
         spectrumFiltered2 = spectrumShifted;
 
-        Eigen::ArrayXXd magnitude = spectrumShifted.abs();
+        // peaksSearch only keeps the lower half, plus the rows its smoothing kernel reaches
+        int nRows = spectrumShifted.rows();
+        int firstRow = std::max(0, nRows / 2 - smoothingKernelSize / 2);
+        Eigen::ArrayXXd magnitude(nRows, spectrumShifted.cols());
+#pragma omp parallel for
+        for (int col = 0; col < magnitude.cols(); col++) {
+            magnitude.col(col).head(firstRow).setZero();
+            magnitude.col(col).tail(nRows - firstRow) = spectrumShifted.col(col).tail(nRows - firstRow).abs();
+        }
         peaksSearch(magnitude, mainPeak1, mainPeak2);
 
         // Compute unwrapped phase from peak 1
@@ -79,7 +95,7 @@ namespace vernier {
         ifft.compute(spectrumFiltered1, phase1);
         shift(phase1);
 
-        unwrappedPhase1 = phase1.arg();
+        parallelArg(phase1, unwrappedPhase1);
         quartersUnwrapPhase(unwrappedPhase1);
 
         // Compute unwrapped phase from peak 2
@@ -87,7 +103,7 @@ namespace vernier {
         ifft.compute(spectrumFiltered2, phase2);
         shift(phase2);
 
-        unwrappedPhase2 = phase2.arg();
+        parallelArg(phase2, unwrappedPhase2);
         quartersUnwrapPhase(unwrappedPhase2);
     }
 
