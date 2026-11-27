@@ -36,6 +36,8 @@ namespace vernier {
 
         double getIntensity(double x, double y) override;
 
+        int getCell(int row, int col) override;
+
         void toRectangleVector(std::vector<Rectangle>& rectangleList) override;
         
         int numberOfWrongEdges();

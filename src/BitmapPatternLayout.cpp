@@ -115,14 +115,14 @@ namespace vernier {
     }
 
     double BitmapPatternLayout::getIntensity(double x, double y) {
-        int col = std::round((x + originX) / dotSize - 0.5);
-        int row = std::round((y + originY) / dotSize - 0.5);
+        return interpolateCells(x, y);
+    }
 
+    int BitmapPatternLayout::getCell(int row, int col) {
         if (col < 0 || row < 0 || col >= bitmap.cols() || row >= bitmap.rows()) {
             return 0;
         } else {
-            //double periodicIntensity = (1 + cos(2 * PI * x / dotSize)) * (1 + cos(2 * PI * y / dotSize)) / 4;
-            return bitmap(row, col); //* periodicIntensity; 
+            return bitmap(row, col);
         }
     }
     

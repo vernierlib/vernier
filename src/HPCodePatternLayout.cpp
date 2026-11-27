@@ -76,25 +76,23 @@ namespace vernier {
     }
 
     double HPCodePatternLayout::getIntensity(double x, double y) {
-        if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
-            return 0;
+        return interpolateCells(x, y);
+    }
+
+    int HPCodePatternLayout::getCell(int row, int col) {
+        if (((col >= 0 && row >= 0 && col < 7 && row < 7) && !(col >= 1 && row >= 1 && col < 6 && row < 6)) ||
+                (col >= 2 && row >= 2 && col < 5 && row < 5) ||
+
+                ((col >= 2 * nCols - 8 && row >= 0 && col < 2 * nCols - 1 && row < 7) && !(col >= 2 * nCols - 7 && row >= 1 && col < 2 * nCols - 2 && row < 6)) ||
+                (col >= 2 * nCols - 6 && row >= 2 && col < 2 * nCols - 3 && row < 5) ||
+
+                ((col >= 0 && row >= 2 * nRows - 8 && col < 7 && row < 2 * nRows - 1) && !(col >= 1 && row >= 2 * nRows - 7 && col < 6 && row < 2 * nRows - 2)) ||
+                (col >= 2 && row >= 2 * nRows - 6 && col < 5 && row < 2 * nRows - 3)
+
+                ) {
+            return 1;
         } else {
-            int col = std::round((x + originX - 0.25 * period) / dotSize);
-            int row = std::round((y + originY - 0.25 * period) / dotSize);
-            if (((col >= 0 && row >= 0 && col < 7 && row < 7) && !(col >= 1 && row >= 1 && col < 6 && row < 6)) ||
-                    (col >= 2 && row >= 2 && col < 5 && row < 5) ||
-
-                    ((col >= 2 * nCols - 8 && row >= 0 && col < 2 * nCols - 1 && row < 7) && !(col >= 2 * nCols - 7 && row >= 1 && col < 2 * nCols - 2 && row < 6)) ||
-                    (col >= 2 * nCols - 6 && row >= 2 && col < 2 * nCols - 3 && row < 5) ||
-
-                    ((col >= 0 && row >= 2 * nRows - 8 && col < 7 && row < 2 * nRows - 1) && !(col >= 1 && row >= 2 * nRows - 7 && col < 6 && row < 2 * nRows - 2)) ||
-                    (col >= 2 && row >= 2 * nRows - 6 && col < 5 && row < 2 * nRows - 3)
-
-                    ) {
-                return 1;
-            } else {
-                return PeriodicPatternLayout::getIntensity(x, y);
-            }
+            return PeriodicPatternLayout::getCell(row, col);
         }
     }
     

@@ -91,6 +91,27 @@ namespace vernier {
         }
     }
 
+    int PeriodicPatternLayout::getCell(int row, int col) {
+        if (row < 0 || col < 0 || row >= 2 * nRows - 1 || col >= 2 * nCols - 1) {
+            return 0;
+        } else {
+            return (row % 2 == 0 && col % 2 == 0 && (row > 0 || col > 0)) ? 1 : 0;
+        }
+    }
+
+    double PeriodicPatternLayout::interpolateCells(double x, double y) {
+        // cell centers are at (index + 0.5) * dotSize, the point lies between two of them on each axis
+        double u = (x + originX) / dotSize - 0.5;
+        double v = (y + originY) / dotSize - 0.5;
+        int col = (int) std::floor(u);
+        int row = (int) std::floor(v);
+        double weightX = 0.5 * (1.0 + std::cos(PI * (u - col)));
+        double weightY = 0.5 * (1.0 + std::cos(PI * (v - row)));
+        double top = weightX * getCell(row, col) + (1.0 - weightX) * getCell(row, col + 1);
+        double bottom = weightX * getCell(row + 1, col) + (1.0 - weightX) * getCell(row + 1, col + 1);
+        return weightY * top + (1.0 - weightY) * bottom;
+    }
+
     double PeriodicPatternLayout::getPhase1(double x, double y) {
         if (x < -0.5 * width || y < -0.5 * height || x > 0.5 * width || y > 0.5 * height) {
             return 0;

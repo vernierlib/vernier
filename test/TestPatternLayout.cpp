@@ -261,6 +261,91 @@ void runRoundedPNGTests() {
     UNIT_TEST(thrown);
 }
 
+void runInterpolationTests() {
+
+    START_UNIT_TEST;
+    // same 9x9 cells as the rounded PNG tests: an isolated dot at (1,1) and adjacent dots at (1,3) and (1,4)
+    cv::Mat cells = cv::Mat::zeros(9, 9, CV_8U);
+    cells.at<unsigned char>(1, 1) = 255;
+    cells.at<unsigned char>(1, 3) = 255;
+    cells.at<unsigned char>(1, 4) = 255;
+    cells.at<unsigned char>(2, 4) = 255;
+    cv::imwrite("InterpolatedCells.png", cells);
+    BitmapPatternLayout layout("InterpolatedCells.png", 10);
+    double dotSize = layout.dotSize;
+    auto cellX = [&](double col) {
+        return (col + 0.5) * dotSize - layout.getOriginX();
+    };
+    auto cellY = [&](double row) {
+        return (row + 0.5) * dotSize - layout.getOriginY();
+    };
+
+    // cell centres keep the exact cell values
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(1), cellY(1)), 1.0));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(2), cellY(1)), 0.0));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(0), cellY(0)), 0.0));
+
+    // cosine fall off from an isolated dot to its blank neighbour
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(1.25), cellY(1)), 0.5 * (1.0 + cos(PI / 4))));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(1.5), cellY(1)), 0.5));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(1.5), cellY(1.5)), 0.25));
+
+    // adjacent dots merge into one flat shape
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(3.5), cellY(1)), 1.0));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(3.75), cellY(1)), 1.0));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(4), cellY(1.5)), 1.0));
+
+    // half a cell past the grid the intensity vanishes
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(-0.5), cellY(1)), 0.0));
+    UNIT_TEST(areEqual(layout.getIntensity(cellX(9), cellY(1)), 0.0));
+
+    START_UNIT_TEST;
+    // an alternating bitmap renders exactly like the periodic pattern
+    double period = randomDouble(5.0, 15.0);
+    cv::Mat alternatingCells = cv::Mat::zeros(13, 17, CV_8U);
+    for (int row = 0; row < alternatingCells.rows; row += 2) {
+        for (int col = 0; col < alternatingCells.cols; col += 2) {
+            alternatingCells.at<unsigned char>(row, col) = (row > 0 || col > 0) ? 255 : 0;
+        }
+    }
+    cv::imwrite("AlternatingCells.png", alternatingCells);
+    BitmapPatternLayout alternating("AlternatingCells.png", period);
+    PeriodicPatternLayout periodic(period, 7, 9);
+    Eigen::ArrayXXd image(64, 64);
+    Pose pose(randomDouble(-2.0, 2.0), randomDouble(-2.0, 2.0), randomDouble(-PI, PI), period / 6.0);
+    alternating.renderOrthographicProjection(pose, image);
+    UNIT_TEST(image.minCoeff() >= 0.0 && image.maxCoeff() <= 1.0);
+    // inside the grid and away from the blank corner, where the periodic layout cuts instead of fading
+    bool same = true;
+    for (int i = 0; i < 1000; i++) {
+        double x = randomDouble(-0.5 * periodic.getWidth(), 0.5 * periodic.getWidth());
+        double y = randomDouble(-0.5 * periodic.getHeight(), 0.5 * periodic.getHeight());
+        if (x < -0.5 * periodic.getWidth() + period && y < -0.5 * periodic.getHeight() + period) {
+            continue;
+        }
+        same = same && areEqual(alternating.getIntensity(x, y), periodic.getIntensity(x, y), 1e-9);
+    }
+    UNIT_TEST(same);
+
+    START_UNIT_TEST;
+    // HPCode finder patterns are flat inside and merge with their ring
+    HPCodePatternLayout hpcode(10, 9);
+    auto hpX = [&](double col) {
+        return (col + 0.5) * hpcode.dotSize - hpcode.getOriginX();
+    };
+    auto hpY = [&](double row) {
+        return (row + 0.5) * hpcode.dotSize - hpcode.getOriginY();
+    };
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(0), hpY(0)), 1.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(0.5), hpY(0)), 1.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(0.5), hpY(0.5)), 0.75));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(1), hpY(1)), 0.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(3), hpY(3)), 1.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(3.5), hpY(3.5)), 1.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(8), hpY(8)), 1.0));
+    UNIT_TEST(areEqual(hpcode.getIntensity(hpX(8.5), hpY(8)), 0.5));
+}
+
 int main(int argc, char** argv) {
 
     //    main4();
@@ -268,6 +353,8 @@ int main(int argc, char** argv) {
     runAllTests();
 
     runRoundedPNGTests();
+
+    runInterpolationTests();
 
     return EXIT_SUCCESS;
 }
